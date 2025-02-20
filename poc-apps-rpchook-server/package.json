@@ -1,0 +1,22 @@
+{
+  "name": "poc-apps-rpchook-server",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard",
+    "lint:fix": "standard --fix",
+    "start": "node index.js"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@hyperswarm/rpc": "^3.3.2",
+    "autobase": "6.5.13",
+    "corestore": "6.18.4",
+    "dotenv": "16.4.7",
+    "graceful-goodbye": "1.3.3",
+    "hyperbee": "2.21.3",
+    "pear-ipc": "3.2.0",
+    "seedbee": "2.0.0",
+    "standard": "17.1.2"
+  }
+}
