@@ -1,3 +1,5 @@
+'use strict'
+
 const IPC = require('pear-ipc')
 const fs = require('fs/promises')
 const path = require('path')

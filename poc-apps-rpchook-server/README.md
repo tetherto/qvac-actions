@@ -132,7 +132,7 @@ The response should look similar to:
 cp .env.example .env.docker
 ```
 
-Then, update the configuration as needed.
+Then, update the configuration as needed. Ensure `CORESTORE_DIR` matches the volume mount path in the Docker run command.
 
 2. Build the Docker image:
 
@@ -143,5 +143,10 @@ docker build -t qvac-poc-rpchook-server .
 3. Run the Docker container:
 
 ```bash
-docker run -d -p 49737:49737/udp --env-file .env.docker --name qvac-poc-rpchook-server qvac-poc-rpchook-server
+docker run -d \
+  -p 49737:49737/udp \
+  --env-file .env.docker \
+  -v qvac-corestore:/app/storage \
+  --name qvac-poc-rpchook-server \
+  qvac-poc-rpchook-server
 ```

@@ -1,3 +1,5 @@
+'use strict'
+
 const Autobase = require('autobase')
 const Corestore = require('corestore')
 const SeedBee = require('seedbee')

@@ -1,3 +1,5 @@
+'use strict'
+
 const RPC = require('@hyperswarm/rpc')
 const Hyperbee = require('hyperbee')
 const crypto = require('crypto')

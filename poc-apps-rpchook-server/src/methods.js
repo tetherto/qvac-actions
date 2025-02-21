@@ -1,3 +1,5 @@
+'use strict'
+
 const { updateCode } = require('./services/git')
 const { stageApp } = require('./services/pear')
 const { updateAutobaseRecord, getOpenState } = require('./services/store')
