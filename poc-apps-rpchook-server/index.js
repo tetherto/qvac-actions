@@ -4,8 +4,8 @@ const RPC = require('@hyperswarm/rpc')
 const Hyperbee = require('hyperbee')
 const crypto = require('crypto')
 const goodbye = require('graceful-goodbye')
-const { getCorestoreInstance } = require('./src/services/store')
-const { triggerDeploy, getState } = require('./src/methods')
+const { getCorestoreInstance } = require('./services/store')
+const { triggerDeploy, getState } = require('./methods')
 
 async function main () {
   const store = await getCorestoreInstance()
