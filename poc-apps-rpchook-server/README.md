@@ -33,6 +33,12 @@ cd pocs
 git clone https://github.com/tetherto/qvac-translation-poc.git
 ```
 
+3. Return to the project root:
+
+```bash
+cd ..
+```
+
 3. Configure Environment Variables
    Create a `.env` file in the project root by copying the provided `.env.example` file:
 
@@ -70,7 +76,7 @@ hp-rpc-cli -s <server-public-key> -m triggerDeploy -d '{"commit": "commit-hash",
    To trigger the deployment of the `marian` PoC application from commit `54c851b8e5302e47bb792256968caeb4f41a28e7` on the `develop2` branch/channel with a timeout of 150 seconds, run:
 
 ```bash
-hp-rpc-cli -s 3b6e501aaacfa506e16739841f9e6e042b7bd4b0107a34c9f61bcf5337a53f15 \
+hp-rpc-cli -s 077ff401dd444a36ebe795814609952c886f5c30d86913f60a15cef3a4949945 \
   -m triggerDeploy \
   -d '{"commit": "54c851b8e5302e47bb792256968caeb4f41a28e7", "branch": "develop2", "poc": "marian"}' \
   -t 150000
