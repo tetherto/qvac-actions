@@ -99,7 +99,7 @@ async function stageApp (directory, channel) {
     if (!packageJson.pear || !packageJson.pear.links) {
       throw new Error('Missing pear or pear.links object in package.json')
     }
-    packageJson.pear.links.worker = workerPearKey
+    packageJson.pear.links.worker = `pear://${workerPearKey}`
 
     await fs.writeFile(
       packageJsonPath,
