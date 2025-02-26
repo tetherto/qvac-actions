@@ -46,7 +46,23 @@ cd ..
 cp .env.example .env
 ```
 
-Then, update the configuration as needed.
+Then, update the following environment variables in the .env file with the appropriate values:
+
+**NPM_TOKEN** – GitHub-provided NPM authentication token with read access to the PoC application repositories.
+
+**MARIAN_POC_DIR** – Full path to the Marian POC directory.
+
+Example: `/home/<user>/qvac-devops/poc-apps-rpchook-server/pocs/qvac-translation-poc`
+
+**CORESTORE_DIR** – Full path to the corestore directory.
+
+Example: `/home/<user>/qvac-devops/poc-apps-rpchook-server/storage`
+
+**SOCKET_PATH** – Full path to the Pear socket file.
+
+• Linux: `/home/<user>/.config/pear/pear.sock`
+
+• macOS: `/Users/<user>/Library/Application Support/pear/pear.sock`
 
 ## Usage
 
