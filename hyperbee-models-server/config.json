@@ -1,0 +1,9 @@
+{
+    "bucketName": "just name without any path",
+    "awsRegion": "eu-central-1",
+    "localBasePath": "where model files will be stored after upload, f.e. q4f16_1",
+    "pairFolders": {
+        "model1": "path to model 1 folder on S3. This folder should contain folders as dates",
+        "model2": "path to model 2 folder on S3. This folder should contain folders as dates"
+    }
+}

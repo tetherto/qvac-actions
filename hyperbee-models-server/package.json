@@ -1,0 +1,29 @@
+{
+  "name": "hyperbee-models-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check-connection": "node scripts/hyperbeeConnectionCheck.js"
+  },
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tetherto/qvac-devops.git"
+  },
+  "author": "tetherto",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "b4a": "^1.6.7",
+    "corestore": "^6.18.4",
+    "debounceify": "^1.1.0",
+    "hyperbee": "^2.20.7",
+    "hypercore": "^10.38.1",
+    "hyperdrive": "^11.13.3",
+    "hyperswarm": "^4.8.4",
+    "localdrive": "^1.12.2",
+    "random-access-memory": "^6.2.1"
+  }
+}
