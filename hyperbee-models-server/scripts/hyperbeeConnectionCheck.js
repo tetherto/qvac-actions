@@ -1,3 +1,5 @@
+'use strict'
+
 const Hyperbee = require('hyperbee')
 const Hypercore = require('hypercore')
 const RAM = require('random-access-memory')
