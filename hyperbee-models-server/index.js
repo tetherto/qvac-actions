@@ -13,15 +13,7 @@ const Hyperbee = require('hyperbee')
 const Localdrive = require('localdrive')
 const debounce = require('debounceify')
 const config = require('./config.json')
-
-const logFile = fs.createWriteStream(path.join(__dirname, 'app.log'), { flags: 'a' })
-
-function log(message) {
-  const timestamp = new Date().toISOString()
-  const logMessage = `[${timestamp}] ${message}\n`
-  process.stdout.write(logMessage)
-  logFile.write(logMessage)
-}
+const logger = require('./logger')
 
 const bucketName = config.bucketName
 const awsRegion = config.awsRegion
@@ -65,7 +57,7 @@ async function listS3Folders(bucketName, basePath) {
 async function getLatestModelFolder(pairBasePath) {
   const folders = await listS3Folders(bucketName, pairBasePath)
   if (folders.length === 0) {
-    log(`No folders found in S3 for path ${pairBasePath}`)
+    logger.warn(`No folders found in S3 for path ${pairBasePath}`)
     return null
   }
   const datedFolders = folders.map(folder => {
@@ -80,14 +72,14 @@ async function getLatestModelFolder(pairBasePath) {
 async function downloadLatestModel(pair, pairBasePath) {
   const latestS3Folder = await getLatestModelFolder(pairBasePath)
   if (!latestS3Folder) {
-    log(`No folders found in S3 for pair ${pair}`)
+    logger.warn(`No folders found in S3 for pair ${pair}`)
     return null
   }
   const latestVersion = path.basename(latestS3Folder.replace(/\/$/, ''))
   const localModelPath = path.join(localBasePath, pair)
   const currentVersion = latestVersions.get(pair)
   if (currentVersion === latestVersion) {
-    log(`Pair ${pair} already has the latest version ${latestVersion}`)
+    logger.info(`Pair ${pair} already has the latest version ${latestVersion}`)
     return null
   }
   await downloadS3Folder(bucketName, latestS3Folder, localModelPath)
@@ -122,9 +114,9 @@ async function downloadS3File(bucketName, key, downloadPath) {
       s3.getObject(params).createReadStream(),
       fs.createWriteStream(downloadPath)
     )
-    log(`Downloaded: ${key}`)
+    logger.info(`Downloaded: ${key}`)
   } catch (error) {
-    log(`Error downloading ${key}: ${error.message}`)
+    logger.error(`Error downloading ${key}: ${error.message}`)
     throw error
   }
 }
@@ -137,9 +129,9 @@ async function downloadS3Folder(bucketName, folderPath, localPath) {
       const downloadPath = path.join(localPath, relativePath)
       await downloadS3File(bucketName, fileKey, downloadPath)
     }))
-    log(`Folder ${folderPath} download complete.`)
+    logger.info(`Folder ${folderPath} download complete.`)
   } catch (error) {
-    log(`Error downloading folder: ${error.message}`)
+    logger.error(`Error downloading folder: ${error.message}`)
   }
 }
 
@@ -150,7 +142,7 @@ async function loadDriveFolder(drive, folder) {
   const mirrorDrive = debounce(async () => {
     const mirror = local.mirror(drive)
     await mirror.done()
-    log(`Mirrored local files: ${JSON.stringify(mirror.count)}`)
+    logger.debug(`Mirrored local files: ${JSON.stringify(mirror.count)}`)
   })
   await mirrorDrive()
 }
@@ -168,23 +160,23 @@ async function initDrive(pair, folder) {
 }
 
 async function checkForUpdates() {
-  log('Checking for new model files...')
+  logger.info('Checking for new model files...')
   for (const [pair, s3BasePath] of Object.entries(pairFolders)) {
     try {
       const localModelPath = await downloadLatestModel(pair, s3BasePath)
       if (localModelPath) {
-        log(`New model files downloaded for pair ${pair}. Updating Hyperdrive...`)
+        logger.info(`New model files downloaded for pair ${pair}. Updating Hyperdrive...`)
         const drive = drives.get(pair)
         if (drive) {
           await loadDriveFolder(drive, path.join(localBasePath, pair))
         } else {
-          log(`Drive for pair ${pair} not found`)
+          logger.warn(`Drive for pair ${pair} not found`)
         }
       } else {
-        log(`No new model files for pair ${pair}`)
+        logger.debug(`No new model files for pair ${pair}`)
       }
     } catch (error) {
-      log(`Error checking updates for pair ${pair}: ${error}`)
+      logger.error(`Error checking updates for pair ${pair}: ${error}`)
     }
   }
 }
@@ -196,10 +188,10 @@ async function scheduleCheck() {
 
 async function main() {
   await db.ready()
-  log(`Hyperbee key: ${b4a.toString(db.key, 'hex')}`)
+  logger.info(`Hyperbee key: ${b4a.toString(db.key, 'hex')}`)
   swarm.on('connection', (conn) => {
     store.replicate(conn)
-    log(`New Connection: ${b4a.toString(conn.remotePublicKey, 'hex')}`)
+    logger.info(`New Connection: ${b4a.toString(conn.remotePublicKey, 'hex')}`)
   })
   const dbDiscovery = swarm.join(db.discoveryKey)
   await dbDiscovery.flushed()
@@ -207,18 +199,18 @@ async function main() {
     fs.mkdirSync(path.join(localBasePath, pair), { recursive: true })
     const drive = await initDrive(pair, path.join(localBasePath, pair))
     drives.set(pair, drive)
-    log(`Drive initialized for pair ${pair} (no initial download).`)
+    logger.info(`Drive initialized for pair ${pair} (no initial download).`)
   }
   await scheduleCheck()
 }
 
 async function handleCleanUp(drives, db) {
   const handleExit = async (signal) => {
-    log(`Received signal: ${signal}`)
+    logger.info(`Received signal: ${signal}`)
     await cleanUp(drives, db)
   }
   process.on('uncaughtException', async (err) => {
-    log(`Uncaught exception: ${err.stack || err}`)
+    logger.error(`Uncaught exception: ${err.stack || err}`)
     await cleanUp(drives, db)
   })
   process.on('SIGINT', handleExit)
@@ -230,9 +222,9 @@ async function cleanUp(drives, db) {
     await Promise.all([...drives.values()].map((dr) => dr.close()))
     await db.close()
     await swarm.destroy()
-    log('Cleanup complete.')
+    logger.info('Cleanup complete.')
   } catch (err) {
-    log(`Error during cleanup: ${err}`)
+    logger.error(`Error during cleanup: ${err}`)
   } finally {
     process.exit(0)
   }
@@ -241,6 +233,6 @@ async function cleanUp(drives, db) {
 main().then(() => {
   handleCleanUp(drives, db)
 }).catch(async (err) => {
-  log(`Error in main function: ${err.stack || err}`)
+  logger.error(`Error in main function: ${err.stack || err}`)
   await cleanUp(drives, db)
 })
