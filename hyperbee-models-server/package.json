@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "standard",
+    "lint:fix": "standard --fix",
+    "test": "brittle mocks/test.js",
     "check-connection": "node scripts/hyperbeeConnectionCheck.js"
   },
   "keywords": [],
@@ -25,5 +27,10 @@
     "hyperswarm": "^4.8.4",
     "localdrive": "^1.12.2",
     "random-access-memory": "^6.2.1"
+  },
+  "devDependencies": {
+    "aws-sdk-mock": "^6.2.1",
+    "brittle": "^3.12.0",
+    "standard": "^17.1.2"
   }
 }

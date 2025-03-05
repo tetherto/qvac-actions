@@ -12,7 +12,7 @@ const levels = {
   error: 'ERROR'
 }
 
-function log(level, message) {
+function log (level, message) {
   const timestamp = new Date().toISOString()
   const logMessage = `[${timestamp}] [${level}] ${message}\n`
   process.stdout.write(logMessage)
