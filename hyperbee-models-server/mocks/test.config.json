@@ -2,16 +2,16 @@
     "bucketName": "test-bucket",
     "awsRegion": "eu-central-1",
     "localBasePath": "mocks/models",
-    "pairFolders": {
-        "model1": "llama_32_3b_q4f16_1/",
-        "model2": "llama_31_8b_q0f32/"
-    },
-    "tags": {
-        "model1": ["type:llm", "model:llama_32", "param:3b", "quant:q4f16_1"],
-        "model2": ["type:llm", "model:llama_31", "param:8b", "quant:q0f32"]
-    },
-    "versions": {
-        "model1": "^0.7.0",
-        "model2": "^1.2.0"
+    "pairs": {
+        "model1": {
+            "s3BasePath": "llama_32_3b_q4f16_1/",
+            "tags": ["type:llm", "model:llama_32", "param:3b", "quant:q4f16_1"],
+            "version": "^0.7.0"
+        },
+        "model2": {
+            "s3BasePath": "llama_31_8b_q0f32/",
+            "tags": ["type:llm", "model:llama_31", "param:8b", "quant:q0f32"],
+            "version": "^1.2.0"
+        }
     }
 }

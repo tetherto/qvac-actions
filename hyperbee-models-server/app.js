@@ -10,7 +10,7 @@ const Localdrive = require('localdrive')
 const debounce = require('debounceify')
 const logger = require('./logger')
 
-let bucketName, s3, pairFolders, localBasePath, tags, versions, store, db, swarm
+let bucketName, s3, pairs, localBasePath, store, db, swarm
 
 const pipelineAsync = util.promisify(pipeline)
 
@@ -132,7 +132,7 @@ async function loadDriveFolder (drive, folder) {
   await mirrorDrive()
 }
 
-async function initDrive (pair, folder) {
+async function initDrive (pair, folder, pairInfo) {
   const nsStore = store.namespace(pair)
   const drive = new Hyperdrive(nsStore)
   await drive.ready()
@@ -141,8 +141,8 @@ async function initDrive (pair, folder) {
 
   const pairConfig = {
     key: b4a.toString(drive.key, 'hex'),
-    tags: tags[pair] || [],
-    version: versions[pair] || ''
+    tags: pairInfo.tags || [],
+    version: pairInfo.version || ''
   }
   await db.put(pair, JSON.stringify(pairConfig))
 
@@ -153,9 +153,9 @@ async function initDrive (pair, folder) {
 
 async function checkForUpdates () {
   logger.info('Checking for new model files...')
-  for (const [pair, s3BasePath] of Object.entries(pairFolders)) {
+  for (const [pair, pairInfo] of Object.entries(pairs)) {
     try {
-      const localModelPath = await downloadLatestModel(pair, s3BasePath)
+      const localModelPath = await downloadLatestModel(pair, pairInfo.s3BasePath)
       if (localModelPath) {
         logger.info(`New model files downloaded for pair ${pair}. Updating Hyperdrive...`)
         const drive = drives.get(pair)
@@ -184,10 +184,8 @@ async function main (config, s3Client, storeInstance, dbInstance, swarmInstance)
   db = dbInstance
   swarm = swarmInstance
 
-  tags = config.tags
-  versions = config.versions
   bucketName = config.bucketName
-  pairFolders = config.pairFolders
+  pairs = config.pairs
   localBasePath = config.localBasePath
 
   await db.ready()
@@ -198,9 +196,9 @@ async function main (config, s3Client, storeInstance, dbInstance, swarmInstance)
   })
   const dbDiscovery = swarm.join(db.discoveryKey)
   await dbDiscovery.flushed()
-  for (const [pair] of Object.entries(pairFolders)) {
+  for (const [pair, pairInfo] of Object.entries(pairs)) {
     fs.mkdirSync(path.join(localBasePath, pair), { recursive: true })
-    const drive = await initDrive(pair, path.join(localBasePath, pair))
+    const drive = await initDrive(pair, path.join(localBasePath, pair), pairInfo)
     drives.set(pair, drive)
     logger.info(`Drive initialized for pair ${pair} (no initial download).`)
   }

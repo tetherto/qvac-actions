@@ -2,16 +2,16 @@
     "bucketName": "just name without any path",
     "awsRegion": "eu-central-1",
     "localBasePath": "where model files will be stored after upload, f.e. q4f16_1",
-    "pairFolders": {
-        "model1": "path to model 1 folder on S3. This folder should contain folders as dates",
-        "model2": "path to model 2 folder on S3. This folder should contain folders as dates"
-    },
-    "tags": {
-        "model1": ["tag1", "tag2", "tag3"],
-        "model2": ["tag1", "tag2", "tag3"]
-    },
-    "versions": {
-        "model1": "model 1 version",
-        "model2": "model 2 version"
+    "pairs": {
+        "model1": {
+            "s3BasePath": "path to model 1 folder on S3. This folder should contain folders as dates",
+            "tags": ["tag1", "tag2", "tag3"],
+            "version": "model 1 version"
+        },
+        "model2": {
+            "s3BasePath": "path to model 2 folder on S3. This folder should contain folders as dates",
+            "tags": ["tag1", "tag2", "tag3"],
+            "version": "model 2 version"
+        }
     }
 }

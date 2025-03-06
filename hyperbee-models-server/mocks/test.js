@@ -88,7 +88,7 @@ test('Verify test output', t => {
   const basePath = path.resolve(__dirname, '..', config.localBasePath)
   t.ok(fs.existsSync(basePath), `Base path exists: ${basePath}`)
 
-  for (const pair of Object.keys(config.pairFolders)) {
+  for (const pair of Object.keys(config.pairs)) {
     const pairFolderPath = path.join(basePath, pair)
     t.ok(fs.existsSync(pairFolderPath), `Folder for ${pair} exists: ${pairFolderPath}`)
 
