@@ -7,7 +7,7 @@ const Hyperswarm = require('hyperswarm')
 const Corestore = require('corestore')
 const Hyperdrive = require('hyperdrive')
 
-async function main() {
+async function main () {
   const core = new Hypercore(RAM, Buffer.from('611120d7cb0b5cd6ba42766ebfd642f50a837799785bfe9db19114cd00b1aece', 'hex'))
   const db = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'binary' })
   await db.ready()
@@ -31,19 +31,15 @@ async function main() {
   const driveKeys = []
   for await (const entry of db.createReadStream()) {
     console.log(JSON.stringify(entry))
-    driveKeys.push(entry.value)
+    const value = JSON.parse(entry.value.toString())
+    console.log('value', value)
+    driveKeys.push(value.key)
   }
-  await checkHyperdrive(driveKeys[0])
-  console.log('checking next hyperdrive')
-  await checkHyperdrive(driveKeys[1])
-  console.log('checking next hyperdrive 2')
-  await checkHyperdrive(driveKeys[2])
-  console.log('checking next hyperdrive 3')
-  await checkHyperdrive(driveKeys[3])
-  console.log('checking next hyperdrive 4')
-  await checkHyperdrive(driveKeys[4])
-  console.log('checking next hyperdrive 5')
-  await checkHyperdrive(driveKeys[5])
+
+  for (let i = 0; i < driveKeys.length; i++) {
+    await checkHyperdrive(driveKeys[i])
+    console.log(`checking next hyperdrive ${i + 1} of ${driveKeys.length}`)
+  }
 }
 
 async function checkHyperdrive (driveKey) {
