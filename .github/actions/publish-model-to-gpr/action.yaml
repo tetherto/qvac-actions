@@ -1,0 +1,44 @@
+name: Publish GPR
+description: "Publish a package to GPR"
+
+inputs:
+  secret-token:
+    description: "Secret token"
+    required: true
+  release:
+    description: "Release Level"
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: "18.x"
+        registry-url: "https://npm.pkg.github.com/"
+        scope: "@tetherto"
+ 
+    - run: echo registry=https://npm.pkg.github.com/tetherto >> .npmrc
+      shell: bash
+
+    - name: Publish to GPR
+      shell: bash
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.secret-token }}
+      run: |
+        SHORT_SHA=$(git rev-parse --short HEAD)
+        PACKAGE_VERSION=$(node -p "require('./package.json').version")
+        if [ -n "${{ inputs.release }}" ]; then
+          VERSION="${PACKAGE_VERSION}-${{ inputs.release }}+${SHORT_SHA}"
+        else
+          VERSION="${PACKAGE_VERSION}"
+        fi
+
+        if [ "$VERSION" != "$PACKAGE_VERSION" ]; then
+          echo "Updating version to $VERSION"
+          npm version $VERSION --no-git-tag-version
+        else
+          echo "Version is unchanged, skipping npm version update"
+        fi
+        
+        npm publish --dry-run
