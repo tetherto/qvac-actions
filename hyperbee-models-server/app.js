@@ -175,7 +175,7 @@ async function checkForUpdates () {
 
 async function scheduleCheck () {
   await checkForUpdates()
-  setTimeout(scheduleCheck, 60 * 60 * 1000)
+  setTimeout(scheduleCheck, 5 * 60 * 1000)
 }
 
 async function main (config, s3Client, storeInstance, dbInstance, swarmInstance) {
