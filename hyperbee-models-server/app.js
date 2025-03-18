@@ -10,7 +10,7 @@ const Localdrive = require('localdrive')
 const debounce = require('debounceify')
 const logger = require('./logger')
 
-let bucketName, s3, pairs, localBasePath, store, db, swarm
+let bucketName, s3, pairs, configPath, localBasePath, store, db, swarm
 
 const pipelineAsync = util.promisify(pipeline)
 
@@ -153,6 +153,9 @@ async function initDrive (pair, folder, pairInfo) {
 
 async function checkForUpdates () {
   logger.info('Checking for new model files...')
+
+  const config = getConfig()
+  pairs = config.pairs
   for (const [pair, pairInfo] of Object.entries(pairs)) {
     try {
       const localModelPath = await downloadLatestModel(pair, pairInfo.s3BasePath)
@@ -178,12 +181,14 @@ async function scheduleCheck () {
   setTimeout(scheduleCheck, 5 * 60 * 1000)
 }
 
-async function main (config, s3Client, storeInstance, dbInstance, swarmInstance) {
+async function main (cfgPath, s3Client, storeInstance, dbInstance, swarmInstance) {
   s3 = s3Client
   store = storeInstance
   db = dbInstance
   swarm = swarmInstance
+  configPath = path.join(__dirname, cfgPath)
 
+  const config = getConfig()
   bucketName = config.bucketName
   pairs = config.pairs
   localBasePath = config.localBasePath
@@ -229,6 +234,10 @@ async function cleanUp (drives, db) {
   } finally {
     process.exit(0)
   }
+}
+
+function getConfig () {
+  return JSON.parse(fs.readFileSync(configPath, 'utf8'))
 }
 
 module.exports = {
