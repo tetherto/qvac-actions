@@ -78,9 +78,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        
-      - name: Install Bare
-        uses: ./github/actions/bare-install
 
       - name: Run integration test
         run: npm run test:integration --if-present
