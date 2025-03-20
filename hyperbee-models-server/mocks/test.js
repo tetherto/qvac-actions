@@ -52,7 +52,6 @@ test('S3 Mocks Setup', t => {
       commonPrefixes.push({ Prefix: '2024-12-27' })
       commonPrefixes.push({ Prefix: '2025-01-13' })
     } else {
-      console.log('adding inference json to object list')
       // Represents config file in the "latest" model folder
       contents.push({ Key: 'inference.config.json' })
     }
