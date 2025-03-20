@@ -11,6 +11,8 @@ const Corestore = require('corestore')
 const Hyperbee = require('hyperbee')
 const { Readable } = require('stream')
 const { main, cleanUp, drives } = require('../app')
+
+const configPath = './mocks/test.config.json'
 const config = require('./test.config.json')
 
 const store = new Corestore(RAM)
@@ -77,7 +79,7 @@ test('S3 Mocks Setup', t => {
 test('Run main function', async (t) => {
   const s3 = new AWS.S3()
 
-  await main(config, s3, store, db, swarm)
+  await main(configPath, s3, store, db, swarm)
   mainHasRun = true
   t.pass('Main function completed without error')
 })
