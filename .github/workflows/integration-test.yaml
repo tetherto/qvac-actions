@@ -1,0 +1,86 @@
+name: Run Integration Tests
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: 'ref'
+        type: string
+      repository:
+        type: string
+
+jobs:
+  run-integration-tests:
+    continue-on-error: true
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.platform }}-${{ matrix.arch }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            platform: linux
+            arch: x64
+          - os: ubuntu-22.04
+            platform: linux
+            arch: arm64
+          - os: ubuntu-22.04
+            platform: android
+            arch: arm64
+          - os: ubuntu-22.04
+            platform: android
+            arch: x86
+          - os: ubuntu-22.04
+            platform: android
+            arch: x86_64
+          - os: macos-14
+            platform: darwin
+            arch: x64
+          - os: macos-14
+            platform: darwin
+            arch: arm64
+          - os: macos-14
+            platform: ios
+            arch: arm64
+          - os: macos-14
+            platform: ios
+            arch: arm64
+            tags: -simulator
+            flags: --simulator
+          - os: macos-14
+            platform: ios
+            arch: x64
+            tags: -simulator
+            flags: --simulator
+          - os: windows-2022
+            platform: win32
+            arch: x64
+          - os: windows-2022
+            platform: win32
+            arch: x86
+          - os: windows-2022
+            platform: win32
+            arch: arm64
+    steps:
+      - if: ${{ matrix.platform == 'windows' }}
+        shell: bash
+        run: git config --system core.longpaths true
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+          repository: ${{ inputs.repository || github.repository }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Bare
+        uses: ./github/actions/setup-bare
+
+      - name: Run integration test
+        run: npm run test:integration --if-present
