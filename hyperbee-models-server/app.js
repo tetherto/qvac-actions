@@ -10,7 +10,7 @@ const Localdrive = require('localdrive')
 const debounce = require('debounceify')
 const logger = require('./logger')
 
-let bucketName, s3, pairs, configPath, localBasePath, store, db, swarm
+let bucketName, s3, models, configPath, localBasePath, store, db, swarm
 
 const pipelineAsync = util.promisify(pipeline)
 
@@ -38,10 +38,10 @@ async function listS3Folders (bucketName, basePath) {
   return folders
 }
 
-async function getLatestModelFolder (pairBasePath) {
-  const folders = await listS3Folders(bucketName, pairBasePath)
+async function getLatestModelFolder (modelBasePath) {
+  const folders = await listS3Folders(bucketName, modelBasePath)
   if (folders.length === 0) {
-    logger.warn(`No folders found in S3 for path ${pairBasePath}`)
+    logger.warn(`No folders found in S3 for path ${modelBasePath}`)
     return null
   }
   const datedFolders = folders.map(folder => {
@@ -53,21 +53,21 @@ async function getLatestModelFolder (pairBasePath) {
   return datedFolders[datedFolders.length - 1].folder
 }
 
-async function downloadLatestModel (pair, pairBasePath) {
-  const latestS3Folder = await getLatestModelFolder(pairBasePath)
+async function downloadLatestModel (model, modelBasePath) {
+  const latestS3Folder = await getLatestModelFolder(modelBasePath)
   if (!latestS3Folder) {
-    logger.warn(`No folders found in S3 for pair ${pair}`)
+    logger.warn(`No folders found in S3 for model ${model}`)
     return null
   }
   const latestVersion = path.basename(latestS3Folder.replace(/\/$/, ''))
-  const localModelPath = path.join(localBasePath, pair)
-  const currentVersion = latestVersions.get(pair)
+  const localModelPath = path.join(localBasePath, model)
+  const currentVersion = latestVersions.get(model)
   if (currentVersion === latestVersion) {
-    logger.info(`Pair ${pair} already has the latest version ${latestVersion}`)
+    logger.info(`Model ${model} already has the latest version ${latestVersion}`)
     return null
   }
   await downloadS3Folder(bucketName, latestS3Folder, localModelPath)
-  latestVersions.set(pair, latestVersion)
+  latestVersions.set(model, latestVersion)
   return localModelPath
 }
 
@@ -94,9 +94,9 @@ async function downloadS3File (bucketName, key, downloadPath) {
   const dir = path.dirname(downloadPath)
   fs.mkdirSync(dir, { recursive: true })
   try {
-    const data = await s3.getObject(params).promise()
+    const data = s3.getObject(params).createReadStream()
     await pipelineAsync(
-      data.createReadStream(),
+      data,
       fs.createWriteStream(downloadPath)
     )
     logger.info(`Downloaded: ${key}`)
@@ -132,19 +132,21 @@ async function loadDriveFolder (drive, folder) {
   await mirrorDrive()
 }
 
-async function initDrive (pair, folder, pairInfo) {
-  const nsStore = store.namespace(pair)
+async function initDrive (model, folder, modelInfo) {
+  const nsStore = store.namespace(model)
   const drive = new Hyperdrive(nsStore)
   await drive.ready()
   await loadDriveFolder(drive, folder)
-  logger.info(`Hyperdrive key for [${pair}]: ${b4a.toString(drive.key, 'hex')}`)
+  await new Promise(resolve => setTimeout(resolve, 1000))
+  const driveVersion = drive.version
+  logger.info(`Hyperdrive key for [${model}]: ${b4a.toString(drive.key, 'hex')} and version: ${driveVersion}`)
 
-  const pairConfig = {
+  const modelConfig = {
     key: b4a.toString(drive.key, 'hex'),
-    tags: pairInfo.tags || [],
-    version: pairInfo.version || ''
+    tags: modelInfo.tags || [],
+    driveVersion
   }
-  await db.put(pair, JSON.stringify(pairConfig))
+  await db.put(model, JSON.stringify(modelConfig))
 
   const discovery = swarm.join(drive.discoveryKey)
   await discovery.flushed()
@@ -155,24 +157,36 @@ async function checkForUpdates () {
   logger.info('Checking for new model files...')
 
   const config = getConfig()
-  pairs = config.pairs
-  for (const [pair, pairInfo] of Object.entries(pairs)) {
+  models = config.models
+  for (const [model, modelInfo] of Object.entries(models)) {
     try {
-      const localModelPath = await downloadLatestModel(pair, pairInfo.s3BasePath)
+      const localModelPath = await downloadLatestModel(model, modelInfo.s3BasePath)
       if (localModelPath) {
-        logger.info(`New model files downloaded for pair ${pair}. Updating Hyperdrive...`)
-        const drive = drives.get(pair)
+        logger.info(`New model files downloaded for model ${model}. Updating Hyperdrive...`)
+        const drive = drives.get(model)
         if (drive) {
-          await loadDriveFolder(drive, path.join(localBasePath, pair))
+          await loadDriveFolder(drive, path.join(localBasePath, model))
+          await updateDriveVersion(drive, model)
         } else {
-          logger.warn(`Drive for pair ${pair} not found`)
+          logger.warn(`Drive for model ${model} not found`)
         }
       } else {
-        logger.debug(`No new model files for pair ${pair}`)
+        logger.debug(`No new model files for model ${model}`)
       }
     } catch (error) {
-      logger.error(`Error checking updates for pair ${pair}: ${error}`)
+      logger.error(`Error checking updates for model ${model}: ${error}`)
     }
+  }
+}
+
+async function updateDriveVersion (drive, model) {
+  const buffer = (await db.get(model)).value
+  const modelJson = buffer.toString()
+  const config = JSON.parse(modelJson)
+  if (drive.version > config.driveVersion) {
+    logger.debug(`new drive version: ${drive.version}`)
+    config.driveVersion = drive.version
+    await db.put(model, JSON.stringify(config))
   }
 }
 
@@ -190,7 +204,7 @@ async function main (cfgPath, s3Client, storeInstance, dbInstance, swarmInstance
 
   const config = getConfig()
   bucketName = config.bucketName
-  pairs = config.pairs
+  models = config.models
   localBasePath = config.localBasePath
 
   await db.ready()
@@ -201,11 +215,11 @@ async function main (cfgPath, s3Client, storeInstance, dbInstance, swarmInstance
   })
   const dbDiscovery = swarm.join(db.discoveryKey)
   await dbDiscovery.flushed()
-  for (const [pair, pairInfo] of Object.entries(pairs)) {
-    fs.mkdirSync(path.join(localBasePath, pair), { recursive: true })
-    const drive = await initDrive(pair, path.join(localBasePath, pair), pairInfo)
-    drives.set(pair, drive)
-    logger.info(`Drive initialized for pair ${pair} (no initial download).`)
+  for (const [model, modelInfo] of Object.entries(models)) {
+    fs.mkdirSync(path.join(localBasePath, model), { recursive: true })
+    const drive = await initDrive(model, path.join(localBasePath, model), modelInfo)
+    drives.set(model, drive)
+    logger.info(`Drive initialized for model ${model} (no initial download).`)
   }
   await scheduleCheck()
 }

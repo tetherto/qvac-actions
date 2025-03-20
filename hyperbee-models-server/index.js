@@ -7,7 +7,7 @@ const Corestore = require('corestore')
 const Hyperbee = require('hyperbee')
 const { main, cleanUp, handleCleanUp, drives } = require('./app')
 
-const configPath = './config.json'
+const configPath = './config.real.json'
 const config = require(configPath)
 
 const s3 = new AWS.S3({ region: config.awsRegion })

@@ -8,7 +8,7 @@ const Corestore = require('corestore')
 const Hyperdrive = require('hyperdrive')
 
 async function main () {
-  const core = new Hypercore(RAM, Buffer.from('611120d7cb0b5cd6ba42766ebfd642f50a837799785bfe9db19114cd00b1aece', 'hex'))
+  const core = new Hypercore(RAM, Buffer.from('7344b16e44bfb783f22d3286c2b17c144b02ea7d5ba8ccdab79166fe9268c12f', 'hex'))
   const db = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'binary' })
   await db.ready()
   const swarm = new Hyperswarm()
@@ -33,16 +33,16 @@ async function main () {
     console.log(JSON.stringify(entry))
     const value = JSON.parse(entry.value.toString())
     console.log('value', value)
-    driveKeys.push(value.key)
+    driveKeys.push({ key: value.key, version: value.driveVersion })
   }
 
   for (let i = 0; i < driveKeys.length; i++) {
-    await checkHyperdrive(driveKeys[i])
+    await checkHyperdrive(driveKeys[i].key, driveKeys[i].version)
     console.log(`checking next hyperdrive ${i + 1} of ${driveKeys.length}`)
   }
 }
 
-async function checkHyperdrive (driveKey) {
+async function checkHyperdrive (driveKey, version) {
   const store = new Corestore(RAM)
   const swarm = new Hyperswarm()
   swarm.on('connection', (conn) => {
@@ -51,18 +51,10 @@ async function checkHyperdrive (driveKey) {
   })
   const client = new Hyperdrive(store, driveKey)
   await client.ready()
-
-  const foundPeers = store.findingPeers()
-
   swarm.join(client.discoveryKey, { client: true, server: false })
 
-  // Awaiting this promise is unnecessary and slow
-  swarm.flush()
-
-  foundPeers()
-
-  await new Promise(resolve => setTimeout(resolve, 5000))
-  for await (const file of client.list('/', { recursive: true })) {
+  const co = client.checkout(version)
+  for await (const file of co.list('/', { recursive: true })) {
     console.log('list', file) // => { key, value }
   }
 }
