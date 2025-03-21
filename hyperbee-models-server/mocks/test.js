@@ -63,15 +63,7 @@ test('S3 Mocks Setup', t => {
     })
   })
 
-  AWSMock.mock('S3', 'getObject', (params, callback) => {
-    const fakeStream = new Readable({ read () { } })
-    fakeStream.push(JSON.stringify(inferenceConfigContent))
-    fakeStream.push(null)
-
-    callback(null, {
-      createReadStream: () => fakeStream
-    })
-  })
+  AWSMock.mock('S3', 'getObject', () => Readable.from([JSON.stringify(inferenceConfigContent)]))
 
   t.pass('S3 mocks set up successfully')
 })
@@ -90,7 +82,7 @@ test('Verify test output', t => {
   const basePath = path.resolve(__dirname, '..', config.localBasePath)
   t.ok(fs.existsSync(basePath), `Base path exists: ${basePath}`)
 
-  for (const pair of Object.keys(config.pairs)) {
+  for (const pair of Object.keys(config.models)) {
     const pairFolderPath = path.join(basePath, pair)
     t.ok(fs.existsSync(pairFolderPath), `Folder for ${pair} exists: ${pairFolderPath}`)
 
@@ -101,7 +93,7 @@ test('Verify test output', t => {
     t.alike(fileContent, inferenceConfigContent, 'inference.config.json content matches expected')
   }
 
-  t.pass('Verification passed for all pairs')
+  t.pass('Verification passed for all models')
 })
 
 test('Cleanup', async (t) => {
