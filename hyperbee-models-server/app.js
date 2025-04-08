@@ -17,6 +17,33 @@ const pipelineAsync = util.promisify(pipeline)
 const drives = new Map()
 const latestVersions = new Map()
 
+function arraysEqual (a, b) {
+  if (a.length !== b.length) return false
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) return false
+  }
+  return true
+}
+
+async function getLocalFiles (dir) {
+  let fileList = []
+  try {
+    const files = await fs.promises.readdir(dir)
+    for (const file of files) {
+      const fullPath = path.join(dir, file)
+      const stat = await fs.promises.stat(fullPath)
+      if (stat.isDirectory()) {
+        fileList = fileList.concat(await getLocalFiles(fullPath))
+      } else if (stat.isFile()) {
+        fileList.push(fullPath)
+      }
+    }
+  } catch (error) {
+    logger.error(`Error reading local files in ${dir}: ${error.message}`)
+  }
+  return fileList
+}
+
 async function listS3Folders (bucketName, basePath) {
   const params = {
     Bucket: bucketName,
@@ -62,9 +89,21 @@ async function downloadLatestModel (model, modelBasePath) {
   const latestVersion = path.basename(latestS3Folder.replace(/\/$/, ''))
   const localModelPath = path.join(localBasePath, model)
   const currentVersion = latestVersions.get(model)
-  if (currentVersion === latestVersion) {
+  const s3Files = await listS3Objects(bucketName, latestS3Folder)
+  const s3FileNames = s3Files.map(key => path.basename(key)).sort()
+  let localFiles = []
+  let localFileNames = []
+  if (fs.existsSync(localModelPath)) {
+    localFiles = await getLocalFiles(localModelPath)
+    localFileNames = localFiles.map(file => path.basename(file)).sort()
+  }
+  if (currentVersion === latestVersion && arraysEqual(s3FileNames, localFileNames) && localFileNames.length > 0) {
     logger.info(`Model ${model} already has the latest version ${latestVersion}`)
     return null
+  }
+  if (fs.existsSync(localModelPath)) {
+    fs.rmSync(localModelPath, { recursive: true, force: true })
+    logger.info(`Deleted existing folder for model ${model}`)
   }
   await downloadS3Folder(bucketName, latestS3Folder, localModelPath)
   latestVersions.set(model, latestVersion)

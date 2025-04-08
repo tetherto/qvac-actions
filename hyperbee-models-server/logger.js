@@ -12,7 +12,7 @@ const levels = {
   error: 'ERROR'
 }
 
-let debug = process?.env?.debug ?? false
+const debug = process?.env?.debug ?? false
 
 function log (level, message) {
   if (level === levels.debug && !debug) return
