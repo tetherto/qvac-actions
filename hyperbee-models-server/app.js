@@ -9,6 +9,7 @@ const b4a = require('b4a')
 const Localdrive = require('localdrive')
 const debounce = require('debounceify')
 const logger = require('./logger')
+const { objectsDeepEqual } = require('./utils/isEqual')
 
 let bucketName, s3, models, configPath, localBasePath, store, db, swarm
 
@@ -16,14 +17,6 @@ const pipelineAsync = util.promisify(pipeline)
 
 const drives = new Map()
 const latestVersions = new Map()
-
-function arraysEqual (a, b) {
-  if (a.length !== b.length) return false
-  for (let i = 0; i < a.length; i++) {
-    if (a[i] !== b[i]) return false
-  }
-  return true
-}
 
 async function getLocalFiles (dir) {
   try {
@@ -102,7 +95,7 @@ async function downloadLatestModel (model, modelBasePath) {
 
   localFiles = await getLocalFiles(localModelPath)
   localFileNames = localFiles.map(file => path.basename(file)).sort()
-  if (currentVersion === latestVersion && arraysEqual(s3FileNames, localFileNames) && localFileNames.length > 0) {
+  if (currentVersion === latestVersion && objectsDeepEqual(s3FileNames, localFileNames) && localFileNames.length > 0) {
     logger.info(`Model ${model} already has the latest version ${latestVersion}`)
     return null
   }
