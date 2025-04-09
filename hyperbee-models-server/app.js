@@ -26,22 +26,28 @@ function arraysEqual (a, b) {
 }
 
 async function getLocalFiles (dir) {
-  let fileList = []
   try {
-    const files = await fs.promises.readdir(dir)
-    for (const file of files) {
+    const entries = await fs.promises.readdir(dir)
+    const filePromises = entries.map(async (file) => {
       const fullPath = path.join(dir, file)
-      const stat = await fs.promises.stat(fullPath)
-      if (stat.isDirectory()) {
-        fileList = fileList.concat(await getLocalFiles(fullPath))
-      } else if (stat.isFile()) {
-        fileList.push(fullPath)
+      try {
+        const stat = await fs.promises.stat(fullPath)
+        if (stat.isDirectory()) {
+          return await getLocalFiles(fullPath)
+        } else if (stat.isFile()) {
+          return fullPath
+        }
+      } catch (statError) {
+        logger.error(`Error reading file ${fullPath}: ${statError.message}`)
+        return null
       }
-    }
+    })
+    const results = await Promise.all(filePromises)
+    return results.flat().filter(Boolean)
   } catch (error) {
     logger.error(`Error reading local files in ${dir}: ${error.message}`)
+    return []
   }
-  return fileList
 }
 
 async function listS3Folders (bucketName, basePath) {
@@ -93,18 +99,15 @@ async function downloadLatestModel (model, modelBasePath) {
   const s3FileNames = s3Files.map(key => path.basename(key)).sort()
   let localFiles = []
   let localFileNames = []
-  if (fs.existsSync(localModelPath)) {
-    localFiles = await getLocalFiles(localModelPath)
-    localFileNames = localFiles.map(file => path.basename(file)).sort()
-  }
+
+  localFiles = await getLocalFiles(localModelPath)
+  localFileNames = localFiles.map(file => path.basename(file)).sort()
   if (currentVersion === latestVersion && arraysEqual(s3FileNames, localFileNames) && localFileNames.length > 0) {
     logger.info(`Model ${model} already has the latest version ${latestVersion}`)
     return null
   }
-  if (fs.existsSync(localModelPath)) {
-    fs.rmSync(localModelPath, { recursive: true, force: true })
-    logger.info(`Deleted existing folder for model ${model}`)
-  }
+  await fs.promises.rm(localModelPath, { recursive: true, force: true })
+  logger.info(`Deleted existing folder for model ${model}`)
   await downloadS3Folder(bucketName, latestS3Folder, localModelPath)
   latestVersions.set(model, latestVersion)
   return localModelPath
