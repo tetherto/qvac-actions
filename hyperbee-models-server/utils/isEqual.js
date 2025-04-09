@@ -35,9 +35,9 @@ const strictEqual = (item, another) => {
 }
 
 /**
- * Dep compare two objects
- * @param {any} obj1 Object to compare
- * @param {any} obj2 compare with
+ * Deep compare two objects
+ * @param {any} obj1
+ * @param {any} obj2
  * @returns {boolean}
  */
 const objectsDeepEqual = (obj1, obj2) => {
