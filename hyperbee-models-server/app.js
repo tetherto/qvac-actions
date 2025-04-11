@@ -9,7 +9,6 @@ const b4a = require('b4a')
 const Localdrive = require('localdrive')
 const debounce = require('debounceify')
 const logger = require('./logger')
-const { objectsDeepEqual } = require('./utils/isEqual')
 
 let bucketName, s3, models, configPath, localBasePath, store, db, swarm
 
@@ -17,31 +16,6 @@ const pipelineAsync = util.promisify(pipeline)
 
 const drives = new Map()
 const latestVersions = new Map()
-
-async function getLocalFiles (dir) {
-  try {
-    const entries = await fs.promises.readdir(dir)
-    const filePromises = entries.map(async (file) => {
-      const fullPath = path.join(dir, file)
-      try {
-        const stat = await fs.promises.stat(fullPath)
-        if (stat.isDirectory()) {
-          return await getLocalFiles(fullPath)
-        } else if (stat.isFile()) {
-          return fullPath
-        }
-      } catch (statError) {
-        logger.error(`Error reading file ${fullPath}: ${statError.message}`)
-        return null
-      }
-    })
-    const results = await Promise.all(filePromises)
-    return results.flat().filter(Boolean)
-  } catch (error) {
-    logger.error(`Error reading local files in ${dir}: ${error.message}`)
-    return []
-  }
-}
 
 async function listS3Folders (bucketName, basePath) {
   const params = {
@@ -88,14 +62,8 @@ async function downloadLatestModel (model, modelBasePath) {
   const latestVersion = path.basename(latestS3Folder.replace(/\/$/, ''))
   const localModelPath = path.join(localBasePath, model)
   const currentVersion = latestVersions.get(model)
-  const s3Files = await listS3Objects(bucketName, latestS3Folder)
-  const s3FileNames = s3Files.map(key => path.basename(key)).sort()
-  let localFiles = []
-  let localFileNames = []
 
-  localFiles = await getLocalFiles(localModelPath)
-  localFileNames = localFiles.map(file => path.basename(file)).sort()
-  if (currentVersion === latestVersion && objectsDeepEqual(s3FileNames, localFileNames) && localFileNames.length > 0) {
+  if (currentVersion === latestVersion) {
     logger.info(`Model ${model} already has the latest version ${latestVersion}`)
     return null
   }
