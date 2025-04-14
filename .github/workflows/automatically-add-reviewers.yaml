@@ -30,7 +30,7 @@ jobs:
             return botComment ? 'exists' : 'not-exists';
 
       - name: Comment to notify potential reviewers
-        # if: steps.check-comment.outputs.result == 'not-exists'
+        if: steps.check-comment.outputs.result == 'not-exists'
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
