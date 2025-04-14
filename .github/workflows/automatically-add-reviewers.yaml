@@ -42,7 +42,7 @@ jobs:
               console.log('Matching comment body:', botComment.body);
             }
             
-            return botComment ? 1 : 0;
+            return botComment ? true : false;
 
       - name: Debug check result
         run: |
@@ -52,7 +52,7 @@ jobs:
           echo "Is draft: ${{ github.event.pull_request.draft }}"
 
       - name: Comment to notify potential reviewers
-        if: steps.check-comment.outputs.result == 0
+        if: steps.check-comment.outputs.result == false
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
