@@ -29,12 +29,27 @@ jobs:
             const reviewers = '${{ inputs.reviewers }}'.split(',');
             const expectedCommentText = `Requesting review from: ${reviewers.map(user => `@${user}`).join(', ')} [auto_pr_review_request]`;
             
+            console.log('All comments:', JSON.stringify(comments.data, null, 2));
+            console.log('Looking for comment containing:', '[auto_pr_review_request]');
+            
             const botComment = comments.data.find(comment => 
               comment.user.login === 'github-actions[bot]' && 
               comment.body.includes('[auto_pr_review_request]')
             );
             
+            console.log('Found matching comment:', botComment ? 'yes' : 'no');
+            if (botComment) {
+              console.log('Matching comment body:', botComment.body);
+            }
+            
             return botComment ? true : false;
+
+      - name: Debug check result
+        run: |
+          echo "Check result: ${{ steps.check-comment.outputs.result }}"
+          echo "PR number: ${{ github.event.pull_request.number }}"
+          echo "Event name: ${{ github.event_name }}"
+          echo "Is draft: ${{ github.event.pull_request.draft }}"
 
       - name: Comment to notify potential reviewers
         if: steps.check-comment.outputs.result == false
@@ -45,9 +60,13 @@ jobs:
             const reviewers = '${{ inputs.reviewers }}'.split(',');
             const commentBody = `Requesting review from: ${reviewers.map(user => `@${user}`).join(', ')} [auto_pr_review_request]`;
 
+            console.log('Creating new comment with body:', commentBody);
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
               body: commentBody
             });
+
+            console.log('Notified external reviewers via PR comment.');
