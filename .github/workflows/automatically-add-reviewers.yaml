@@ -2,19 +2,40 @@ name: Notify External Reviewers via Comment
 
 on:
   pull_request:
-    types: [opened, ready_for_review]
+    types: [opened, ready_for_review, reopened, synchronize, labeled]
 
 jobs:
   notify-reviewers:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     steps:
+      - name: Check for existing comment
+        id: check-comment
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            });
+            const externalReviewers = ['chetasr', 'yuranich', 'vigan-abd', 'natachikhinashvili', 'u011', 'olyasir', 'ignaciolarranaga'];
+            const expectedCommentText = `Requesting review from: ${externalReviewers.map(user => `@${user}`).join(', ')}`;
+            
+            const botComment = comments.data.find(comment => 
+              comment.user.login === 'github-actions[bot]' && 
+              comment.body === expectedCommentText
+            );
+            return botComment ? 'exists' : 'not-exists';
+
       - name: Comment to notify potential reviewers
+        # if: steps.check-comment.outputs.result == 'not-exists'
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const externalReviewers = ['chetasr', 'yuranich', 'vigan-abd', 'natachikhinashvili', 'u011', 'olyasir', 'ignaciolarranaga'];
-
             const commentBody = `Requesting review from: ${externalReviewers.map(user => `@${user}`).join(', ')}`;
 
             await github.rest.issues.createComment({
