@@ -1,0 +1,12 @@
+name: On PR Notify Reviewers
+
+on:
+  pull_request:
+    types: [opened, ready_for_review, reopened, synchronize, labeled]
+
+jobs:
+  notify-reviewers:
+    uses: ./.github/workflows/automatically-add-reviewers.yaml
+    with:
+      reviewers: 'natachikhinashvili,u011'
+    secrets: inherit 

@@ -1,8 +1,13 @@
 name: Notify External Reviewers via Comment
 
 on:
-  pull_request:
-    types: [opened, ready_for_review, reopened, synchronize, labeled]
+  workflow_call:
+    inputs:
+      reviewers:
+        description: 'List of reviewers to notify'
+        required: true
+        type: string
+        default: 'natachikhinashvili,u011,haakari'
 
 jobs:
   notify-reviewers:
@@ -20,12 +25,13 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.issue.number
             });
-            const externalReviewers = ['chetasr', 'yuranich', 'vigan-abd', 'natachikhinashvili', 'u011', 'olyasir', 'ignaciolarranaga'];
-            const expectedCommentText = `Requesting review from: ${externalReviewers.map(user => `@${user}`).join(', ')}`;
+            
+            const reviewers = '${{ inputs.reviewers }}'.split(',');
+            const expectedCommentText = `Requesting review from: ${reviewers.map(user => `@${user}`).join(', ')} [auto_pr_review_request]`;
             
             const botComment = comments.data.find(comment => 
               comment.user.login === 'github-actions[bot]' && 
-              comment.body === expectedCommentText
+              comment.body.includes('[auto_pr_review_request]')
             );
             return botComment ? 'exists' : 'not-exists';
 
@@ -35,8 +41,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const externalReviewers = ['chetasr', 'yuranich', 'vigan-abd', 'natachikhinashvili', 'u011', 'olyasir', 'ignaciolarranaga'];
-            const commentBody = `Requesting review from: ${externalReviewers.map(user => `@${user}`).join(', ')}`;
+            const reviewers = '${{ inputs.reviewers }}'.split(',');
+            const commentBody = `Requesting review from: ${reviewers.map(user => `@${user}`).join(', ')} [auto_pr_review_request]`;
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
