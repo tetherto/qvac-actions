@@ -13,7 +13,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const externalReviewers = ['chetasr', 'yuranch', 'vigan-abd', 'natachikhinashvili', 'u011', 'olyasir', 'ignaciolarranaga'];
+            const externalReviewers = ['chetasr', 'yuranich', 'vigan-abd', 'natachikhinashvili', 'u011', 'olyasir', 'ignaciolarranaga'];
 
             const commentBody = `Requesting review from: ${externalReviewers.map(user => `@${user}`).join(', ')}`;
 
