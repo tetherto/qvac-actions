@@ -62,10 +62,13 @@ async function downloadLatestModel (model, modelBasePath) {
   const latestVersion = path.basename(latestS3Folder.replace(/\/$/, ''))
   const localModelPath = path.join(localBasePath, model)
   const currentVersion = latestVersions.get(model)
+
   if (currentVersion === latestVersion) {
     logger.info(`Model ${model} already has the latest version ${latestVersion}`)
     return null
   }
+  await fs.promises.rm(localModelPath, { recursive: true, force: true })
+  logger.info(`Deleted existing folder for model ${model}`)
   await downloadS3Folder(bucketName, latestS3Folder, localModelPath)
   latestVersions.set(model, latestVersion)
   return localModelPath
