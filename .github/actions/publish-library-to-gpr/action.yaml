@@ -6,7 +6,13 @@ inputs:
     description: "Secret token"
     required: true
   release:
-    description: "Release Level"
+    description: "Use tag. Release stream, temporary here for compatibility with old workflows"
+    required: false
+  tag:
+    description: "Release Stream (npm tag)"
+    required: false
+  path:
+    description: "Path to artifact to publish"
     required: false
 
 runs:
@@ -17,7 +23,7 @@ runs:
         node-version: "18.x"
         registry-url: "https://npm.pkg.github.com/"
         scope: "@tetherto"
- 
+
     - run: echo registry=https://npm.pkg.github.com/tetherto >> .npmrc
       shell: bash
 
@@ -25,20 +31,51 @@ runs:
       shell: bash
       env:
         NODE_AUTH_TOKEN: ${{ inputs.secret-token }}
+        INPUTS_CONTEXT: ${{ toJSON(inputs) }}
       run: |
+        if [ -n "${{ inputs.path }}"  ]; then
+          echo "Changing directory to ${{ inputs.path }}"
+          cd "${{ inputs.path }}"
+        fi
+
+        ### Get tag for NPM, support release for compatibility with old workflows
+        echo "Input context: $INPUTS_CONTEXT"
+
+        TAG="${{ inputs.tag }}"
+        RELEASE="${{ inputs.release }}"
+
+        if [ -z "$RELEASE" ]; then
+          RELEASE="tmp"
+        fi
+        if [ -z "$TAG" ]; then
+          TAG=$RELEASE
+        fi
+
+        ### Set tag to latest if PR was merged to main
+        echo "Base branch: ${{ github.ref }}"
+        echo "Event name: ${{ github.event_name }}"
+
+        if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          echo "PR was merged to main, setting tag to latest"
+          TAG="latest"
+        fi
+
+        ### Set version, if not latest, we do detailed dev version
         SHORT_SHA=$(git rev-parse --short HEAD)
         PACKAGE_VERSION=$(node -p "require('./package.json').version")
-        if [ -n "${{ inputs.release }}" ]; then
-          VERSION="${PACKAGE_VERSION}-${{ inputs.release }}+${SHORT_SHA}"
+
+        if [ "$TAG" = "dev" ] || [ "$TAG" = "tmp" ]; then
+          VERSION="${PACKAGE_VERSION}-tmp.${GITHUB_RUN_ID}"
         else
           VERSION="${PACKAGE_VERSION}"
         fi
 
         if [ "$VERSION" != "$PACKAGE_VERSION" ]; then
           echo "Updating version to $VERSION"
-          npm version $VERSION --no-git-tag-version
-        else
-          echo "Version is unchanged, skipping npm version update"
+          npm version $VERSION --no-git-tag-version --allow-same-version
         fi
-        
-        npm publish --dry-run
+
+        echo "Publishing with tag: $TAG"
+        echo "Publishing version: $VERSION"
+
+        npm publish --tag $TAG
