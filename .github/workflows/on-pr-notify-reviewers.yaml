@@ -8,5 +8,5 @@ jobs:
   notify-reviewers:
     uses: ./.github/workflows/automatically-add-reviewers.yaml
     with:
-      reviewers: 'natachikhinashvili,u011'
-    secrets: inherit 
+      reviewers: 'u011,natachikhinashvili'
+    secrets: inherit
