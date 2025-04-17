@@ -68,9 +68,3 @@ jobs:
           else
             echo "No secret provided."
           fi
-
-  notify-reviewers:
-    uses: ./.github/workflows/automatically-add-reviewers.yaml
-    with:
-      reviewers: 'u011,natachikhinashvili,ignaciolarranaga'
-    secrets: inherit
