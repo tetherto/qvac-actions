@@ -18,7 +18,7 @@ runs:
         node-version: "18.x"
     - run: |
         echo "@tetherto:registry=https://npm.pkg.github.com" > .npmrc
-        echo "//npm.pkg.github.com/:_authToken=${{ inputs.secret-token }}" >> .npmrc
+        echo "//npm.pkg.github.com/:_authToken=${{ inputs.pat-token }}" >> .npmrc
         git config --global url."https://${{ inputs.pat-token }}:@github.com/".insteadOf "https://github.com/"
       shell: bash
     - name: Install dependencies
