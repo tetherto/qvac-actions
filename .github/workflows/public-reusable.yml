@@ -84,7 +84,7 @@ jobs:
   debug-print:
     uses: ./.github/workflows/debugger-reusable.yml
     secrets:
-      pat_token: ${{ secrets.PAT_TOKEN || secrets.GITHUB_TOKEN }}
+      pat_token: ${{ secrets.PAT_TOKEN }}
 
   notify-reviewers:
     if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
