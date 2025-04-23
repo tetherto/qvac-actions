@@ -90,5 +90,5 @@ jobs:
     if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
     uses: ./.github/workflows/automatically-add-reviewers.yaml
     with:
-      reviewers: 'yuranich,chetasr,vigan-abd,u011,natachikhinashvili,ignaciolarranaga'
+      reviewers: 'yuranich,chetasr,vigan-abd,ignaciolarranaga'
     secrets: inherit
