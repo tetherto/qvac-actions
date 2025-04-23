@@ -3,7 +3,7 @@
 const { exec } = require('child_process')
 const util = require('util')
 const execAsync = util.promisify(exec)
-
+const logger = require('../logger')
 /**
  * Updates the repository at the given directory by fetching the latest changes and checking out the specified commit.
  *
@@ -13,13 +13,13 @@ const execAsync = util.promisify(exec)
  */
 async function updateCode (directory, commit) {
   try {
-    console.log(`Updating code in ${directory} to commit ${commit}`)
+    logger.info(`Updating code in ${directory} to commit ${commit}`)
     await execAsync(
       `cd ${directory} && git fetch --all && git checkout ${commit}`
     )
-    console.log(`Checked out commit ${commit} successfully.`)
+    logger.info(`Checked out commit ${commit} successfully.`)
   } catch (error) {
-    console.error('Error updating code:', error)
+    logger.error(`Error updating code: ${error.message}`)
     throw error
   }
 }

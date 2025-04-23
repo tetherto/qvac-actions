@@ -5,6 +5,7 @@ const Corestore = require('corestore')
 const SeedBee = require('seedbee')
 const { corestoreDir } = require('../config')
 const { runBackgroundSeeding, killPrcoess } = require('./pear')
+const logger = require('../logger')
 
 let autobaseInstance = null
 let storeInstance = null
@@ -61,7 +62,7 @@ async function getAutobaseInstance () {
               const key = `${record.poc}:${record.channel}`
               this._state.set(key, record)
             } catch (err) {
-              console.error('Error parsing view entry:', err)
+              logger.error(`Error parsing view entry: ${err.message}`)
             }
           }
         }
@@ -78,7 +79,7 @@ async function getAutobaseInstance () {
       if (typeof view.truncate === 'function') {
         await view.truncate(0)
       } else {
-        console.warn('View does not support truncate')
+        logger.warn('View does not support truncate')
       }
 
       const blocks = Array.from(this._state.values()).map(record =>
@@ -93,7 +94,7 @@ async function getAutobaseInstance () {
 
   await autobaseInstance.ready()
 
-  console.log(
+  logger.info(
     `Autobase instance initialized with public key: ${autobaseInstance.key.toString(
       'hex'
     )}`
@@ -118,7 +119,7 @@ async function updateAutobaseRecord (record) {
     const autobase = await getAutobaseInstance()
     await autobase.append(record)
     await autobase.update()
-    console.log('Autobase updated with new record', record)
+    logger.info(`Autobase updated with new record: ${JSON.stringify(record)}`)
     const pearKeysHb = await updatePearKeysStore(autobase)
 
     await autobase.store.close()
@@ -129,7 +130,7 @@ async function updateAutobaseRecord (record) {
     runBackgroundSeeding(pearKeysHb, record.uiPearKey, record.workerPearKey)
     return pearKeysHb
   } catch (err) {
-    console.error('Error updating record:', err)
+    logger.error(`Error updating record: ${err.message}`)
     throw err
   }
 }
@@ -152,7 +153,7 @@ async function updatePearKeysStore (autobase) {
     if (typeof pearCore.truncate === 'function') {
       await pearCore.truncate(0)
     } else {
-      console.warn('pearKeys core does not support truncate')
+      logger.warn('pearKeys core does not support truncate')
     }
 
     const seedbee = new SeedBee(pearCore)
@@ -170,7 +171,7 @@ async function updatePearKeysStore (autobase) {
             pearKeys.push(record.workerPearKey)
           }
         } catch (err) {
-          console.error('Error parsing view entry:', err)
+          logger.error(`Error parsing view entry: ${err.message}`)
         }
       }
     }
@@ -178,10 +179,9 @@ async function updatePearKeysStore (autobase) {
     for (let i = 0; i < pearKeys.length; i++) {
       await seedbee.put(pearKeys[i], { type: 'core' })
     }
-    console.log('Updated pearKeys core as a SeedBee list with pear key strings')
     return pearCore.key.toString('hex')
   } catch (err) {
-    console.error('Error updating pearKeys core:', err)
+    logger.error(`Error updating pearKeys core: ${err.message}`)
     throw err
   }
 }
@@ -203,7 +203,7 @@ async function getLinearizedView (autobase) {
         const record = JSON.parse(entry.toString('utf8'))
         state.set(`${record.poc}:${record.channel}`, record)
       } catch (err) {
-        console.error('Error parsing view entry:', err)
+        logger.error(`Error parsing view entry: ${err.message}`)
       }
     }
   }
@@ -228,7 +228,7 @@ async function getPearKeys (autobase) {
           pearKeys.push(record.uiPearKey)
         }
       } catch (err) {
-        console.error('Error parsing view entry:', err)
+        logger.error(`Error parsing view entry: ${err.message}`)
       }
     }
   }

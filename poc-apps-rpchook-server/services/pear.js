@@ -9,6 +9,7 @@ const execAsync = util.promisify(exec)
 const mutexify = require('mutexify/promise')
 const { spawn } = require('child_process')
 const { npmToken, corestoreDir, socketPath } = require('../config')
+const logger = require('../logger')
 
 const deployLock = mutexify()
 let simpleSeederProcess = null
@@ -167,7 +168,7 @@ async function runBackgroundSeeding (pearKeysHb, uiPearKey, workerPearKey) {
   const release = await deployLock()
   try {
     if (uiPearKey || workerPearKey) {
-      console.log('Waiting for initial seeders to finish before starting simple-seeder')
+      logger.info('Waiting for initial seeders to complete before starting simple-seeder')
       let waited = 0
       const timeout = 60000
       const interval = 500
@@ -178,7 +179,7 @@ async function runBackgroundSeeding (pearKeysHb, uiPearKey, workerPearKey) {
     }
 
     await killPrcoess('simpleSeeder')
-    console.log('Starting simple-seeder to seed pear keys in autobase')
+    logger.info('Starting simple-seeder to seed pear keys in autobase')
     simpleSeederProcess = spawn('simple-seeder', ['--storage', corestoreDir, pearKeysHb], {
       detached: true
       // stdio: 'ignore'
@@ -186,21 +187,21 @@ async function runBackgroundSeeding (pearKeysHb, uiPearKey, workerPearKey) {
     simpleSeederProcess.unref()
 
     simpleSeederProcess.stdout.on('data', (data) => {
-      console.log(`Simple-Seeder stdout: ${data}`)
+      logger.info(`Simple-Seeder stdout: ${data}`)
     })
     simpleSeederProcess.stderr.on('data', (data) => {
-      console.error(`Simple-Seeder stderr: ${data}`)
+      logger.error(`Simple-Seeder stderr: ${data}`)
     })
     simpleSeederProcess.on('error', (err) => {
-      console.error('Simple-Seeder error:', err)
+      logger.error('Simple-Seeder error:', err)
     })
     simpleSeederProcess.on('exit', (code) => {
-      console.log(`Simple-Seeder process exited with code ${code}`)
+      logger.info(`Simple-Seeder process exited with code ${code}`)
     })
 
-    console.log(`Simple-Seeder process started (PID: ${simpleSeederProcess.pid})`)
+    logger.info(`Simple-Seeder process started (PID: ${simpleSeederProcess.pid})`)
   } catch (err) {
-    console.error('Background seeding error:', err)
+    logger.error('Background seeding error:', err)
   } finally {
     release()
   }
@@ -225,14 +226,14 @@ async function killPrcoess (processName) {
       processInstance = initialWorkerSeederProcess
       break
     default:
-      console.log(`Invalid process kill requested: ${processName}`)
+      logger.info(`Invalid process kill requested: ${processName}`)
       return
   }
 
   if (processInstance && processInstance.pid) {
     try {
       process.kill(processInstance.pid, 0)
-      console.log(`Killing ${processName} process (PID: ${processInstance.pid})`)
+      logger.info(`Killing ${processName} process (PID: ${processInstance.pid})`)
       processInstance.kill()
 
       await new Promise((resolve) => {
@@ -241,9 +242,9 @@ async function killPrcoess (processName) {
       })
     } catch (err) {
       if (err.code === 'ESRCH') {
-        console.log(`${processName} process is already dead`)
+        logger.info(`${processName} process is already dead`)
       } else {
-        console.error(`Error trying to kill ${processName} process:`, err)
+        logger.error(`Error trying to kill ${processName} process:`, err)
       }
       processInstance = null
     }

@@ -6,6 +6,7 @@ const crypto = require('crypto')
 const goodbye = require('graceful-goodbye')
 const { getCorestoreInstance } = require('./services/store')
 const { triggerDeploy, getState } = require('./methods')
+const logger = require('./logger')
 
 async function main () {
   const store = await getCorestoreInstance()
@@ -28,29 +29,27 @@ async function main () {
   rpcServer.respond('triggerDeploy', async (data) => {
     try {
       const params = JSON.parse(data.toString())
-      console.log('triggerDeploy called with params:', params)
+      logger.info(`triggerDeploy called with params: ${JSON.stringify(params)}`)
       const result = await triggerDeploy(params)
       return Buffer.from(JSON.stringify(result))
     } catch (error) {
-      console.error('Error in RPC triggerDeploy:', error)
+      logger.error(`Error in RPC triggerDeploy: ${error.message}`)
       return Buffer.from(JSON.stringify({ error: error.message }))
     }
   })
 
   rpcServer.respond('getState', async () => {
     try {
-      console.log('getState called')
       const state = await getState()
       return Buffer.from(JSON.stringify(state))
     } catch (error) {
-      console.error('Error in RPC getState:', error)
+      logger.error(`Error in RPC getState: ${error.message}`)
       return Buffer.from(JSON.stringify({ error: error.message }))
     }
   })
 
-  console.log(
-    'RPC server listening on public key:',
-    rpcServer.publicKey.toString('hex')
+  logger.info(
+    `RPC server listening on public key: ${rpcServer.publicKey.toString('hex')}`
   )
 
   goodbye(() => {
@@ -65,6 +64,6 @@ async function main () {
 }
 
 main().catch((err) => {
-  console.error('RPC server error:', err)
+  logger.error(`RPC server error: ${err.message}`)
   process.exit(1)
 })
