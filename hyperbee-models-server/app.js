@@ -225,6 +225,7 @@ async function main (cfgPath, s3Client, storeInstance, dbInstance, swarmInstance
     logger.info(`Drive initialized for model ${model} (no initial download).`)
   }
   await scheduleCheck()
+  await printKeyDriveTable()
 }
 
 async function handleCleanUp (drives, db) {
@@ -238,6 +239,24 @@ async function handleCleanUp (drives, db) {
   })
   process.on('SIGINT', handleExit)
   process.on('SIGTERM', handleExit)
+}
+
+async function printKeyDriveTable () {
+  const tableData = [{
+    type: 'bee',
+    key: b4a.toString(db.key, 'hex'),
+    model: 'hyperbee'
+  }]
+
+  for (const [model, drive] of drives.entries()) {
+    tableData.push({
+      type: 'drive',
+      key: b4a.toString(drive.key, 'hex'),
+      model
+    })
+  }
+
+  logger.table(tableData, ['type', 'key', 'model'])
 }
 
 async function cleanUp (drives, db) {
