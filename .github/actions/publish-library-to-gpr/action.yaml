@@ -82,3 +82,25 @@ runs:
         echo "Publishing version: $VERSION"
 
         npm publish --tag $TAG
+        PUBLISH_STATUS=$?
+
+        # Check if npm publish was successful
+        if [ $PUBLISH_STATUS -eq 0 ]; then
+          echo "✅ npm publish successful"
+          
+          # Tag the commit with the version
+          git tag "v$VERSION"
+          echo "✅ Tagged commit with v$VERSION"
+          
+          # Push the tag to the remote repository
+          git push origin "v$VERSION"
+          echo "✅ Pushed tag v$VERSION to remote"
+          
+          echo "Status: SUCCESS"
+        else
+          echo "❌ npm publish failed"
+          echo "Status: FAILED"
+        fi
+
+        # Return the publish status as the exit code
+        exit $PUBLISH_STATUS
