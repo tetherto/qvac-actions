@@ -23,7 +23,7 @@ async function triggerDeploy ({ commit, branch }) {
     )
   }
   await updateCode(qvacExamplesDir, commit)
-  
+
   const validPocs = await getValidPocDirectories(qvacExamplesDir)
   const uiPearKeys = []
   let pocBeeKey = null
