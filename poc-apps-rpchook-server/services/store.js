@@ -24,6 +24,10 @@ async function getCorestoreInstance () {
     return storeInstance
   }
 
+  if (!corestoreDir) {
+    throw new Error('corestoreDir is not set')
+  }
+
   storeInstance = new Corestore(corestoreDir)
   await storeInstance.ready()
   return storeInstance

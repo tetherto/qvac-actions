@@ -3,7 +3,6 @@
 const RPC = require('@hyperswarm/rpc')
 const Hyperbee = require('hyperbee')
 const crypto = require('crypto')
-const goodbye = require('graceful-goodbye')
 const { getCorestoreInstance } = require('./services/store')
 const { triggerDeploy, getState } = require('./methods')
 const logger = require('./logger')
@@ -52,15 +51,31 @@ async function main () {
     `RPC server listening on public key: ${rpcServer.publicKey.toString('hex')}`
   )
 
-  goodbye(() => {
-    if (rpcServer && typeof rpcServer.close === 'function') {
-      rpcServer.close()
+  function handleCleanUp (signal) {
+    return async () => {
+      logger.info(`Shutdown requested (${signal})`)
+      if (rpcServer && typeof rpcServer.close === 'function') {
+        try {
+          await rpcServer.close()
+        } catch (err) {
+          logger.error(`Error closing RPC server: ${err.message}`)
+        }
+      }
+      if (store && typeof store.close === 'function') {
+        try {
+          await store.close()
+        } catch (err) {
+          logger.error(`Error closing store: ${err.message}`)
+        }
+      }
+      logger.info('Cleanup complete, exiting now')
+      process.exit(0)
     }
-    if (store && typeof store.close === 'function') {
-      store.close()
-    }
-    console.log('Graceful shutdown complete')
-  })
+  }
+
+  process.on('SIGINT', handleCleanUp('SIGINT'))
+  process.on('SIGTERM', handleCleanUp('SIGTERM'))
+  process.on('uncaughtException', handleCleanUp('uncaughtException'))
 }
 
 main().catch((err) => {

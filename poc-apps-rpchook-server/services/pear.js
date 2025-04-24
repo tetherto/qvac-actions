@@ -27,134 +27,129 @@ let initialWorkerSeedActive = false
  * @returns {Promise<{uiPearKey: string, workerPearKey: string}>} - The pear keys for the UI and worker.
  */
 async function stageApp (directory, channel) {
-  try {
-    await killPrcoess('sidecar')
-    await killPrcoess('simpleSeeder')
+  await killPrcoess('sidecar')
+  await killPrcoess('simpleSeeder')
 
-    if (initialUISeedActive) {
-      killPrcoess('initialUISeeder')
-      initialUISeedActive = false
+  if (initialUISeedActive) {
+    killPrcoess('initialUISeeder')
+    initialUISeedActive = false
+  }
+
+  if (initialWorkerSeedActive) {
+    killPrcoess('initialWorkerSeeder')
+    initialWorkerSeedActive = false
+  }
+
+  sidecarProcess = spawn('pear', ['sidecar'], {
+    detached: true,
+    stdio: 'ignore'
+  })
+  sidecarProcess.unref()
+  logger.info(`Sidecar process started (PID: ${sidecarProcess.pid})`)
+
+  const client = new IPC.Client({
+    socketPath
+  })
+  await client.ready()
+
+  let workerPearKey = null
+  await execAsync(
+    `cd ${directory}/worker && export NPM_TOKEN=${npmToken} && npm i`
+  )
+  const workerResponse = await client.stage({
+    dir: `${directory}/worker`,
+    channel
+  })
+  for await (const chunk of workerResponse) {
+    if (chunk.tag === 'addendum') {
+      workerPearKey = chunk.data.key
     }
+  }
+  if (!workerPearKey) {
+    throw new Error('Pear key not found during worker staging')
+  }
+  logger.info(`Staged worker successfully: ${workerPearKey}`)
 
-    if (initialWorkerSeedActive) {
-      killPrcoess('initialWorkerSeeder')
-      initialWorkerSeedActive = false
+  initialWorkerSeederProcess = spawn('pear', ['seed', channel, `${directory}/worker`], {
+    detached: true
+    // stdio: 'ignore'
+  })
+  initialWorkerSeederProcess.unref()
+  logger.info(`Initial worker seeder process started (PID: ${initialWorkerSeederProcess.pid})`)
+
+  initialWorkerSeederProcess.stdout.on('data', (data) => {
+    // logger.info(`Initial worker seeder stdout: ${data}`)
+    const announced = /announced/i.test(data)
+    if (announced) {
+      // logger.info('Seeded worker successfully, setting initialWorkerSeedActive to true')
+      initialWorkerSeedActive = true
     }
+  })
+  initialWorkerSeederProcess.stderr.on('data', (data) => {
+    logger.error(`Initial wroker seeder stderr: ${data}`)
+  })
+  initialWorkerSeederProcess.on('error', (err) => {
+    logger.error('Initial worker seeder error:', err)
+  })
 
-    sidecarProcess = spawn('pear', ['sidecar'], {
-      detached: true,
-      stdio: 'ignore'
-    })
-    sidecarProcess.unref()
-    console.log(`Sidecar process started (PID: ${sidecarProcess.pid})`)
+  const packageJsonPath = path.join(directory, 'ui', 'package.json')
+  const packageJsonContent = await fs.readFile(packageJsonPath, 'utf8')
+  const packageJson = JSON.parse(packageJsonContent)
 
-    const client = new IPC.Client({
-      socketPath
-    })
-    await client.ready()
+  if (!packageJson.pear || !packageJson.pear.links) {
+    throw new Error('Missing pear or pear.links object in package.json')
+  }
+  packageJson.pear.links.worker = `pear://${workerPearKey}`
 
-    let workerPearKey = null
-    await execAsync(
-      `cd ${directory}/worker && export NPM_TOKEN=${npmToken} && npm i`
-    )
-    const workerResponse = await client.stage({
-      dir: `${directory}/worker`,
-      channel
-    })
-    for await (const chunk of workerResponse) {
-      if (chunk.tag === 'addendum') {
-        workerPearKey = chunk.data.key
-      }
+  await fs.writeFile(
+    packageJsonPath,
+    JSON.stringify(packageJson, null, 2),
+    'utf8'
+  )
+  // logger.info('Updated UI package.json with worker key')
+
+  let uiPearKey = null
+  await execAsync(
+    `cd ${directory}/ui && export NPM_TOKEN=${npmToken} && npm i`
+  )
+  const uiResponse = await client.stage({
+    dir: `${directory}/ui`,
+    channel
+  })
+  for await (const chunk of uiResponse) {
+    if (chunk.tag === 'addendum') {
+      uiPearKey = chunk.data.key
     }
-    if (!workerPearKey) {
-      throw new Error('Pear key not found during worker staging')
+  }
+  if (!uiPearKey) {
+    throw new Error('Pear key not found in UI stage output')
+  }
+  logger.info(`Staged UI successfully: ${uiPearKey}`)
+
+  initialUISeederProcess = spawn('pear', ['seed', channel, `${directory}/ui`], {
+    detached: true
+    // stdio: 'ignore'
+  })
+  initialUISeederProcess.unref()
+  logger.info(`Initial UI seeder process started (PID: ${initialUISeederProcess.pid})`)
+
+  initialUISeederProcess.stdout.on('data', (data) => {
+    // logger.info(`Initial UI seeder stdout: ${data}`)
+    const announced = /announced/i.test(data)
+    if (announced) {
+      // logger.info('Seeded UI successfully, setting initialUISeedActive to true')
+      initialUISeedActive = true
     }
-    console.log(`Staged worker successfully: ${workerPearKey}`)
-
-    initialWorkerSeederProcess = spawn('pear', ['seed', channel, `${directory}/worker`], {
-      detached: true
-      // stdio: 'ignore'
-    })
-    initialWorkerSeederProcess.unref()
-    console.log(`Initial worker seeder process started (PID: ${initialWorkerSeederProcess.pid})`)
-
-    initialWorkerSeederProcess.stdout.on('data', (data) => {
-      console.log(`Initial worker seeder stdout: ${data}`)
-      const announced = /announced/i.test(data)
-      if (announced) {
-        console.log('Seeded worker successfully, setting initialWorkerSeedActive to true')
-        initialWorkerSeedActive = true
-      }
-    })
-    initialWorkerSeederProcess.stderr.on('data', (data) => {
-      console.error(`Initial wroker seeder stderr: ${data}`)
-    })
-    initialWorkerSeederProcess.on('error', (err) => {
-      console.error('Initial worker seeder error:', err)
-    })
-
-    const packageJsonPath = path.join(directory, 'ui', 'package.json')
-    const packageJsonContent = await fs.readFile(packageJsonPath, 'utf8')
-    const packageJson = JSON.parse(packageJsonContent)
-
-    if (!packageJson.pear || !packageJson.pear.links) {
-      throw new Error('Missing pear or pear.links object in package.json')
-    }
-    packageJson.pear.links.worker = `pear://${workerPearKey}`
-
-    await fs.writeFile(
-      packageJsonPath,
-      JSON.stringify(packageJson, null, 2),
-      'utf8'
-    )
-    console.log('Updated UI package.json with worker key')
-
-    let uiPearKey = null
-    await execAsync(
-      `cd ${directory}/ui && export NPM_TOKEN=${npmToken} && npm i`
-    )
-    const uiResponse = await client.stage({
-      dir: `${directory}/ui`,
-      channel
-    })
-    for await (const chunk of uiResponse) {
-      if (chunk.tag === 'addendum') {
-        uiPearKey = chunk.data.key
-      }
-    }
-    if (!uiPearKey) {
-      throw new Error('Pear key not found in UI stage output')
-    }
-    console.log(`Staged UI successfully: ${uiPearKey}`)
-
-    initialUISeederProcess = spawn('pear', ['seed', channel, `${directory}/ui`], {
-      detached: true
-      // stdio: 'ignore'
-    })
-    initialUISeederProcess.unref()
-    console.log(`Initial UI seeder process started (PID: ${initialUISeederProcess.pid})`)
-
-    initialUISeederProcess.stdout.on('data', (data) => {
-      console.log(`Initial UI seeder stdout: ${data}`)
-      const announced = /announced/i.test(data)
-      if (announced) {
-        console.log('Seeded UI successfully, setting initialUISeedActive to true')
-        initialUISeedActive = true
-      }
-    })
-    initialUISeederProcess.stderr.on('data', (data) => {
-      console.error(`Initial UI seeder stderr: ${data}`)
-    })
-    initialUISeederProcess.on('error', (err) => {
-      console.error('Initial UI seeder error:', err)
-    })
-    return {
-      uiPearKey,
-      workerPearKey
-    }
-  } catch (error) {
-    console.error('Error in stageAndSeed:', error)
-    throw error
+  })
+  initialUISeederProcess.stderr.on('data', (data) => {
+    logger.error(`Initial UI seeder stderr: ${data}`)
+  })
+  initialUISeederProcess.on('error', (err) => {
+    logger.error('Initial UI seeder error:', err)
+  })
+  return {
+    uiPearKey,
+    workerPearKey
   }
 }
 
