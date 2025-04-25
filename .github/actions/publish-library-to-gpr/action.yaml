@@ -88,7 +88,17 @@ runs:
         echo "Publishing with tag: $TAG"
         echo "Publishing version: $VERSION"
 
-        npm publish --tag $TAG
+        echo "Attempting to publish package..."
+        npm publish --tag $TAG --verbose --loglevel verbose || {
+          echo "Failed to publish package. Checking npm configuration:"
+          echo "NPM Registry:"
+          npm config get registry
+          echo "NPM Auth Token exists:"
+          [ -n "$NODE_AUTH_TOKEN" ] && echo "Yes" || echo "No"
+          echo "NPM Config List:"
+          npm config list
+          exit 1
+        }
 
     - name: Configure npm for GitHub Packages
       shell: bash
@@ -147,7 +157,17 @@ runs:
         echo "Publishing with tag: $TAG"
         echo "Publishing version: $VERSION"
 
-        npm publish --tag $TAG
+        echo "Attempting to publish package..."
+        npm publish --tag $TAG --verbose --loglevel verbose || {
+          echo "Failed to publish package. Checking npm configuration:"
+          echo "NPM Registry:"
+          npm config get registry
+          echo "NPM Auth Token exists:"
+          [ -n "$NODE_AUTH_TOKEN" ] && echo "Yes" || echo "No"
+          echo "NPM Config List:"
+          npm config list
+          exit 1
+        }
 
     - name: Configure npm for GitHub Packages
       shell: bash
@@ -206,7 +226,17 @@ runs:
         echo "Publishing with tag: $TAG"
         echo "Publishing version: $VERSION"
 
-        npm publish --tag $TAG
+        echo "Attempting to publish package..."
+        npm publish --tag $TAG --verbose --loglevel verbose || {
+          echo "Failed to publish package. Checking npm configuration:"
+          echo "NPM Registry:"
+          npm config get registry
+          echo "NPM Auth Token exists:"
+          [ -n "$NODE_AUTH_TOKEN" ] && echo "Yes" || echo "No"
+          echo "NPM Config List:"
+          npm config list
+          exit 1
+        }
 
     - name: Publish to GPR
       shell: bash
@@ -260,4 +290,14 @@ runs:
         echo "Publishing with tag: $TAG"
         echo "Publishing version: $VERSION"
 
-        npm publish --tag $TAG
+        echo "Attempting to publish package..."
+        npm publish --tag $TAG --verbose --loglevel verbose || {
+          echo "Failed to publish package. Checking npm configuration:"
+          echo "NPM Registry:"
+          npm config get registry
+          echo "NPM Auth Token exists:"
+          [ -n "$NODE_AUTH_TOKEN" ] && echo "Yes" || echo "No"
+          echo "NPM Config List:"
+          npm config list
+          exit 1
+        }
