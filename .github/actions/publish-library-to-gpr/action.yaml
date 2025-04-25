@@ -79,25 +79,21 @@ runs:
         echo "Publishing version: $VERSION"
 
         npm publish --tag $TAG
-        # PUBLISH_STATUS=$?
+        PUBLISH_STATUS=$?
 
-        # # Check if npm publish was successful
-        # if [ $PUBLISH_STATUS -eq 0 ]; then
-        #   echo "✅ npm publish successful"
-          
-        #   # Tag the commit with the version
-        #   git tag "v$VERSION"
-        #   echo "✅ Tagged commit with v$VERSION"
-          
-        #   # Push the tag to the remote repository
-        #   git push origin "v$VERSION"
-        #   echo "✅ Pushed tag v$VERSION to remote"
-          
-        #   echo "Status: SUCCESS"
-        # else
-        #   echo "❌ npm publish failed"
-        #   echo "Status: FAILED"
-        # fi
+        # Debug output for parameters
+        echo "Debug parameters:"
+        echo "PUBLISH_STATUS: $PUBLISH_STATUS"
+        echo "TAG: $TAG"
+        echo "VERSION: $VERSION"
+        echo "GITHUB_TOKEN permissions: ${{ github.token }}"
 
-        # # Return the publish status as the exit code
-        # exit $PUBLISH_STATUS
+        # Check if npm publish was successful and tag is latest
+        if [ $PUBLISH_STATUS -eq 0 ] && [ "$TAG" = "latest" ]; then
+          echo "✅ npm publish successful"
+          (git tag "v$VERSION" && git push origin "v$VERSION" && echo "✅ Tagged and pushed v$VERSION") || echo "⚠️ Tag operation skipped or failed"
+        else
+          [ $PUBLISH_STATUS -eq 0 ] && echo "✅ npm publish successful" || echo "❌ npm publish failed"
+        fi
+
+        exit $PUBLISH_STATUS
