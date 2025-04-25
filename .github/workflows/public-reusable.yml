@@ -11,14 +11,20 @@ on:
     secrets:
       pat_token:
         required: false
+    outputs:
+      published_version:
+        description: "The version that was published to npm"
+        value: ${{ jobs.pull-request-event.outputs.published_version }}
 
 jobs:
   pull-request-event:
     runs-on: ubuntu-latest
     if:  github.event_name == 'pull_request' || github.event_name == 'pull_request_target' || inputs.debug_mode
     permissions:
-      contents: read
+      contents: write
       packages: write
+    outputs:
+      published_version: ${{ steps.publish-pr.outputs.npm_published_version }}
     steps:
       - name: Echo Step
         run: |
@@ -63,11 +69,15 @@ jobs:
           pat-token: ${{ secrets.PAT_TOKEN }}
           tag: 'dev'
 
+      - name: Echo published version from PR
+        run: |
+          echo "Published version from PR: ${{ steps.publish-pr.outputs.npm_published_version }}"
+
   push-event:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || inputs.debug_mode
     permissions:
-      contents: read
+      contents: write
       packages: write
     steps:
       - uses: actions/checkout@v4
@@ -77,25 +87,9 @@ jobs:
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
 
-  publish-version:
-    needs: [pull-request-event, push-event]
-    if: always() && (needs.pull-request-event.result == 'success' || needs.push-event.result == 'success')
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.set-version.outputs.version }}
-    steps:
-      - name: Set version output
-        id: set-version
+      - name: Echo published version from push
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ] || [ "${{ github.event_name }}" = "pull_request_target" ]; then
-            echo "version=${{ needs.pull-request-event.outputs.npm_published_version }}" >> $GITHUB_OUTPUT
-          else
-            echo "version=${{ needs.push-event.outputs.npm_published_version }}" >> $GITHUB_OUTPUT
-          fi
-      
-      - name: Echo published version
-        run: |
-          echo "Published version: ${{ steps.set-version.outputs.version }}"
+          echo "Published version from push: ${{ steps.publish-push.outputs.npm_published_version }}"
 
   debug-print:
     uses: ./.github/workflows/debugger-reusable.yml

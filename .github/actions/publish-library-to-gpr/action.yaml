@@ -106,3 +106,8 @@ runs:
         fi
 
         exit $PUBLISH_STATUS
+
+    - name: Echo published version
+      shell: bash
+      run: |
+        echo "Published version: ${{ steps.publish.outputs.npm_published_version }}"
