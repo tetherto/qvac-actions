@@ -56,6 +56,7 @@ jobs:
           pat-token: ${{ secrets.PAT_TOKEN }}
 
       - name: Call Publish GPR Action
+        id: publish-pr
         uses: tetherto/qvac-devops/.github/actions/publish-library-to-gpr@production-workflows-tag
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
@@ -71,9 +72,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Publish to GPR
+        id: publish-push
         uses: tetherto/qvac-devops/.github/actions/publish-library-to-gpr@production-workflows-tag
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-version:
+    needs: [pull-request-event, push-event]
+    if: always() && (needs.pull-request-event.result == 'success' || needs.push-event.result == 'success')
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set-version.outputs.version }}
+    steps:
+      - name: Set version output
+        id: set-version
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ] || [ "${{ github.event_name }}" = "pull_request_target" ]; then
+            echo "version=${{ needs.pull-request-event.outputs.npm_published_version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ needs.push-event.outputs.npm_published_version }}" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Echo published version
+        run: |
+          echo "Published version: ${{ steps.set-version.outputs.version }}"
 
   debug-print:
     uses: ./.github/workflows/debugger-reusable.yml
