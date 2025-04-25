@@ -18,6 +18,11 @@ inputs:
     description: "Path to artifact to publish"
     required: false
 
+outputs:
+  npm_published_version:
+    description: "The version that was published to npm"
+    value: ${{ steps.publish.outputs.npm_published_version }}
+
 runs:
   using: composite
   steps:
@@ -28,6 +33,7 @@ runs:
         scope: "@tetherto"
 
     - name: Publish to GPR
+      id: publish
       shell: bash
       env:
         NODE_AUTH_TOKEN: ${{ inputs.secret-token }}
@@ -87,6 +93,9 @@ runs:
         echo "TAG: $TAG"
         echo "VERSION: $VERSION"
         echo "GITHUB_TOKEN permissions: ${{ github.token }}"
+
+        # Output the published version
+        echo "npm_published_version=$VERSION" >> $GITHUB_OUTPUT
 
         # Check if npm publish was successful and tag is latest
         if [ $PUBLISH_STATUS -eq 0 ] && [ "$TAG" = "latest" ]; then
