@@ -34,19 +34,6 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: Run lint and unit tests
-        uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@production-workflows-tag
-        with:
-          secret-token: ${{ secrets.GITHUB_TOKEN }}
-          pat-token: ${{ secrets.PAT_TOKEN }}
-
-      - name: Run integration tests if labeled
-        if: contains(github.event.pull_request.labels.*.name, 'verify')
-        uses: tetherto/qvac-devops/.github/actions/run-lint-and-integration-tests@production-workflows-tag
-        with:
-          secret-token: ${{ secrets.GITHUB_TOKEN }}
-          pat-token: ${{ secrets.PAT_TOKEN }}
-
       - name: Check for disallowed dependencies
         run: |
           deps=$(jq -r '.dependencies, .devDependencies // {} | to_entries[] | .value' package.json)
@@ -61,6 +48,12 @@ jobs:
             echo "::error title=Invalid package name::Package name in package.json must start with @tetherto/"
             exit 1
           fi
+
+      - name: Run tests
+        uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@production-workflows-tag
+        with:
+          secret-token: ${{ secrets.GITHUB_TOKEN }}
+          pat-token: ${{ secrets.PAT_TOKEN }}
 
       - name: Call Publish GPR Action
         uses: tetherto/qvac-devops/.github/actions/publish-library-to-gpr@production-workflows-tag
