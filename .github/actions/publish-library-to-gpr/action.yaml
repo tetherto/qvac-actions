@@ -30,6 +30,134 @@ runs:
     # - run: echo registry=https://npm.pkg.github.com/tetherto >> .npmrc
     #   shell: bash
 
+    - name: Publish to GPR
+      shell: bash
+      continue-on-error: true
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.pat-token }}
+        INPUTS_CONTEXT: ${{ toJSON(inputs) }}
+      run: |
+        if [ -n "${{ inputs.path }}"  ]; then
+          echo "Changing directory to ${{ inputs.path }}"
+          cd "${{ inputs.path }}"
+        fi
+
+        ### Get tag for NPM, support release for compatibility with old workflows
+        echo "Input context: $INPUTS_CONTEXT"
+
+        TAG="${{ inputs.tag }}"
+        RELEASE="${{ inputs.release }}"
+
+        if [ -z "$RELEASE" ]; then
+          RELEASE="tmp"
+        fi
+        if [ -z "$TAG" ]; then
+          TAG=$RELEASE
+        fi
+
+        ### Set tag to latest if PR was merged to main
+        echo "Base branch: ${{ github.ref }}"
+        echo "Event name: ${{ github.event_name }}"
+
+        if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          echo "PR was merged to main, setting tag to latest"
+          TAG="latest"
+        fi
+
+        ### Set version, if not latest, we do detailed dev version
+        SHORT_SHA=$(git rev-parse --short HEAD)
+        PACKAGE_VERSION=$(node -p "require('./package.json').version")
+
+        if [ "$TAG" = "dev" ] || [ "$TAG" = "tmp" ]; then
+          VERSION="${PACKAGE_VERSION}-tmp.${GITHUB_RUN_ID}"
+        else
+          VERSION="${PACKAGE_VERSION}"
+        fi
+
+        if [ "$VERSION" != "$PACKAGE_VERSION" ]; then
+          echo "Updating version to $VERSION"
+          npm version $VERSION --no-git-tag-version --allow-same-version
+        fi
+
+        echo "Publishing with tag: $TAG"
+        echo "Publishing version: $VERSION"
+
+        echo "Attempting to publish package..."
+        npm publish --tag $TAG --verbose --loglevel verbose || {
+          echo "Failed to publish package. Checking npm configuration:"
+          echo "NPM Registry:"
+          npm config get registry
+          echo "NPM Auth Token exists:"
+          [ -n "$NODE_AUTH_TOKEN" ] && echo "Yes" || echo "No"
+          echo "NPM Config List:"
+          npm config list
+          exit 1
+        }
+
+    - name: Publish to GPR
+      shell: bash
+      continue-on-error: true
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.secret-token }}
+        INPUTS_CONTEXT: ${{ toJSON(inputs) }}
+      run: |
+        if [ -n "${{ inputs.path }}"  ]; then
+          echo "Changing directory to ${{ inputs.path }}"
+          cd "${{ inputs.path }}"
+        fi
+
+        ### Get tag for NPM, support release for compatibility with old workflows
+        echo "Input context: $INPUTS_CONTEXT"
+
+        TAG="${{ inputs.tag }}"
+        RELEASE="${{ inputs.release }}"
+
+        if [ -z "$RELEASE" ]; then
+          RELEASE="tmp"
+        fi
+        if [ -z "$TAG" ]; then
+          TAG=$RELEASE
+        fi
+
+        ### Set tag to latest if PR was merged to main
+        echo "Base branch: ${{ github.ref }}"
+        echo "Event name: ${{ github.event_name }}"
+
+        if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          echo "PR was merged to main, setting tag to latest"
+          TAG="latest"
+        fi
+
+        ### Set version, if not latest, we do detailed dev version
+        SHORT_SHA=$(git rev-parse --short HEAD)
+        PACKAGE_VERSION=$(node -p "require('./package.json').version")
+
+        if [ "$TAG" = "dev" ] || [ "$TAG" = "tmp" ]; then
+          VERSION="${PACKAGE_VERSION}-tmp.${GITHUB_RUN_ID}"
+        else
+          VERSION="${PACKAGE_VERSION}"
+        fi
+
+        if [ "$VERSION" != "$PACKAGE_VERSION" ]; then
+          echo "Updating version to $VERSION"
+          npm version $VERSION --no-git-tag-version --allow-same-version
+        fi
+
+        echo "Publishing with tag: $TAG"
+        echo "Publishing version: $VERSION"
+
+        echo "Attempting to publish package..."
+        npm publish --tag $TAG --verbose --loglevel verbose || {
+          echo "Failed to publish package. Checking npm configuration:"
+          echo "NPM Registry:"
+          npm config get registry
+          echo "NPM Auth Token exists:"
+          [ -n "$NODE_AUTH_TOKEN" ] && echo "Yes" || echo "No"
+          echo "NPM Config List:"
+          npm config list
+          exit 1
+        }
+
     - name: Configure npm for GitHub Packages
       shell: bash
       run: |
@@ -173,131 +301,3 @@ runs:
       shell: bash
       run: |
         echo "" > ~/.npmrc
-
-    - name: Publish to GPR
-      shell: bash
-      continue-on-error: true
-      env:
-        NODE_AUTH_TOKEN: ${{ inputs.pat-token }}
-        INPUTS_CONTEXT: ${{ toJSON(inputs) }}
-      run: |
-        if [ -n "${{ inputs.path }}"  ]; then
-          echo "Changing directory to ${{ inputs.path }}"
-          cd "${{ inputs.path }}"
-        fi
-
-        ### Get tag for NPM, support release for compatibility with old workflows
-        echo "Input context: $INPUTS_CONTEXT"
-
-        TAG="${{ inputs.tag }}"
-        RELEASE="${{ inputs.release }}"
-
-        if [ -z "$RELEASE" ]; then
-          RELEASE="tmp"
-        fi
-        if [ -z "$TAG" ]; then
-          TAG=$RELEASE
-        fi
-
-        ### Set tag to latest if PR was merged to main
-        echo "Base branch: ${{ github.ref }}"
-        echo "Event name: ${{ github.event_name }}"
-
-        if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ]; then
-          echo "PR was merged to main, setting tag to latest"
-          TAG="latest"
-        fi
-
-        ### Set version, if not latest, we do detailed dev version
-        SHORT_SHA=$(git rev-parse --short HEAD)
-        PACKAGE_VERSION=$(node -p "require('./package.json').version")
-
-        if [ "$TAG" = "dev" ] || [ "$TAG" = "tmp" ]; then
-          VERSION="${PACKAGE_VERSION}-tmp.${GITHUB_RUN_ID}"
-        else
-          VERSION="${PACKAGE_VERSION}"
-        fi
-
-        if [ "$VERSION" != "$PACKAGE_VERSION" ]; then
-          echo "Updating version to $VERSION"
-          npm version $VERSION --no-git-tag-version --allow-same-version
-        fi
-
-        echo "Publishing with tag: $TAG"
-        echo "Publishing version: $VERSION"
-
-        echo "Attempting to publish package..."
-        npm publish --tag $TAG --verbose --loglevel verbose || {
-          echo "Failed to publish package. Checking npm configuration:"
-          echo "NPM Registry:"
-          npm config get registry
-          echo "NPM Auth Token exists:"
-          [ -n "$NODE_AUTH_TOKEN" ] && echo "Yes" || echo "No"
-          echo "NPM Config List:"
-          npm config list
-          exit 1
-        }
-
-    - name: Publish to GPR
-      shell: bash
-      continue-on-error: true
-      env:
-        NODE_AUTH_TOKEN: ${{ inputs.secret-token }}
-        INPUTS_CONTEXT: ${{ toJSON(inputs) }}
-      run: |
-        if [ -n "${{ inputs.path }}"  ]; then
-          echo "Changing directory to ${{ inputs.path }}"
-          cd "${{ inputs.path }}"
-        fi
-
-        ### Get tag for NPM, support release for compatibility with old workflows
-        echo "Input context: $INPUTS_CONTEXT"
-
-        TAG="${{ inputs.tag }}"
-        RELEASE="${{ inputs.release }}"
-
-        if [ -z "$RELEASE" ]; then
-          RELEASE="tmp"
-        fi
-        if [ -z "$TAG" ]; then
-          TAG=$RELEASE
-        fi
-
-        ### Set tag to latest if PR was merged to main
-        echo "Base branch: ${{ github.ref }}"
-        echo "Event name: ${{ github.event_name }}"
-
-        if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ]; then
-          echo "PR was merged to main, setting tag to latest"
-          TAG="latest"
-        fi
-
-        ### Set version, if not latest, we do detailed dev version
-        SHORT_SHA=$(git rev-parse --short HEAD)
-        PACKAGE_VERSION=$(node -p "require('./package.json').version")
-
-        if [ "$TAG" = "dev" ] || [ "$TAG" = "tmp" ]; then
-          VERSION="${PACKAGE_VERSION}-tmp.${GITHUB_RUN_ID}"
-        else
-          VERSION="${PACKAGE_VERSION}"
-        fi
-
-        if [ "$VERSION" != "$PACKAGE_VERSION" ]; then
-          echo "Updating version to $VERSION"
-          npm version $VERSION --no-git-tag-version --allow-same-version
-        fi
-
-        echo "Publishing with tag: $TAG"
-        echo "Publishing version: $VERSION"
-
-        echo "Attempting to publish package..."
-        npm publish --tag $TAG --verbose --loglevel verbose || {
-          echo "Failed to publish package. Checking npm configuration:"
-          echo "NPM Registry:"
-          npm config get registry
-          echo "NPM Auth Token exists:"
-          [ -n "$NODE_AUTH_TOKEN" ] && echo "Yes" || echo "No"
-          echo "NPM Config List:"
-          npm config list
-          exit 1
-        }
