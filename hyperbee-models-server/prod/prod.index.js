@@ -1,7 +1,7 @@
 'use strict'
 
 const AWS = require('aws-sdk')
-const logger = require('./logger')
+const logger = require('../logger')
 const Hyperswarm = require('hyperswarm')
 const Corestore = require('corestore')
 const Hyperbee = require('hyperbee')
@@ -11,7 +11,7 @@ const configPath = './prod.config.json'
 const config = require(configPath)
 
 const s3 = new AWS.S3({ region: config.awsRegion })
-const store = new Corestore('./storage')
+const store = new Corestore('./storage-prod')
 const core = store.get({ name: 'hyperbee' })
 const db = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'binary' })
 const swarm = new Hyperswarm()
