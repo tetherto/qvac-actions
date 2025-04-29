@@ -34,16 +34,24 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: Run tests
+      - name: Run lint and unit tests
         uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@production-workflows-tag
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Check for git dependencies
+      - name: Run integration tests if labeled
+        if: contains(github.event.pull_request.labels.*.name, 'verify')
+        uses: tetherto/qvac-devops/.github/actions/run-lint-and-integration-tests@production-workflows-tag
+        with:
+          secret-token: ${{ secrets.GITHUB_TOKEN }}
+          pat-token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Check for disallowed dependencies
         run: |
-          if grep -q 'git+https://github.com' package.json; then
-            echo "::error title=GitHub dependency detected::Do not use Git URLs in package.json"
+          deps=$(jq -r '.dependencies, .devDependencies // {} | to_entries[] | .value' package.json)
+          if echo "$deps" | grep -Eq '^(git\+https:\/\/github.com|[0-9]+\.[0-9]+\.[0-9]+-(dev|tmp)[^"]*)$'; then
+            echo "::error title=Disallowed dependency detected::Do not use git URLs or dev/tmp versions in dependencies"
             exit 1
           fi
 
