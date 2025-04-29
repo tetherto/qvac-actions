@@ -8,7 +8,7 @@ const Hyperdrive = require('hyperdrive')
 const b4a = require('b4a')
 const Localdrive = require('localdrive')
 const debounce = require('debounceify')
-const logger = require('./logger')
+const logger = require('../logger')
 
 let bucketName, s3, models, configPath, localBasePath, store, db, swarm
 
