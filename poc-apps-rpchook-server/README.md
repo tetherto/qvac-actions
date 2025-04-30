@@ -74,12 +74,12 @@ hp-rpc-cli -s <server-public-key> -m triggerDeploy -d '{"commit": "commit-hash",
 ```
 
 2. **Example**:
-   To trigger the deployment of PoC applications from commit `949f42191702d4e293fe8a2c909e36b3511f5ea4` on the `main` branch/channel with a timeout of 300 seconds, run:
+   To trigger the deployment of the `translation-app` and `assistant-app` PoC applications from commit `949f42191702d4e293fe8a2c909e36b3511f5ea4` on the `main` branch/channel with a timeout of 300 seconds, run:
 
 ```bash
-hp-rpc-cli -s 5be567eef2dcb21160fffbcde173f72fc3c9eab83b7527162318deab0e423e8d \
+hp-rpc-cli -s 10d6a996238587fbed4842ab63d9ee64668497e34759921cb1cacedc64542683 \
   -m triggerDeploy \
-  -d '{"commit": "949f42191702d4e293fe8a2c909e36b3511f5ea4", "branch": "main"}' \
+  -d '{"apps": ["translation-app", "assistant-app"], "commit": "949f42191702d4e293fe8a2c909e36b3511f5ea4", "branch": "main"}' \
   -t 300000
 ```
 
