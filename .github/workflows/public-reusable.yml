@@ -17,14 +17,12 @@ on:
         value: ${{ jobs.pull-request-event.outputs.published_version }}
 
 jobs:
-  pull-request-event:
+  pull-request-event-checks:
     runs-on: ubuntu-latest
     if:  github.event_name == 'pull_request' || github.event_name == 'pull_request_target' || inputs.debug_mode
     permissions:
-      contents: write
-      packages: write
-    outputs:
-      published_version: ${{ steps.publish-pr.outputs.npm_published_version }}
+      contents: read
+      packages: read
     steps:
       - name: Echo Step
         run: |
@@ -95,6 +93,22 @@ jobs:
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
+
+  pull-request-event:
+    needs: pull-request-event-checks
+    runs-on: ubuntu-latest
+    if:  github.event_name == 'pull_request' || github.event_name == 'pull_request_target' || inputs.debug_mode
+    permissions:
+      contents: write
+      packages: write
+    outputs:
+      published_version: ${{ steps.publish-pr.outputs.npm_published_version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Call Publish GPR Action
         id: publish-pr
