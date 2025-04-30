@@ -51,20 +51,18 @@ jobs:
           git fetch origin ${{ github.event.pull_request.head.sha }}:refs/pr/head
 
       - name: Check PR Status with Target Branch
-        continue-on-error: true
         run: |
-          echo "THIS STEP IS IN DEVELOPMENT"
           echo "🔍 Checking PR status with target branch..."
-          
           TARGET_SHA=${{ github.event.pull_request.base.sha }}
           PR_HEAD_SHA=${{ github.event.pull_request.head.sha }}
           echo "📌 Target SHA: $TARGET_SHA"
           echo "📌 PR Head SHA: $PR_HEAD_SHA"
           
           if ! git merge-base --is-ancestor "$TARGET_SHA" "$PR_HEAD_SHA"; then
-            echo "⚠️  WARNING: This PR is not up to date with target branch"
+            echo "::error title=PR is not up to date::This PR is not up to date with target branch"
             echo "ℹ️  Suggestion: Consider rebasing or merging the latest changes"
             echo "📊 Status: PR is STALE"
+            exit 1
           else
             echo "✅ PR is up to date with target branch"
             echo "📊 Status: PR is CURRENT"
