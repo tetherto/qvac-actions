@@ -34,36 +34,48 @@ jobs:
           echo "repository: ${{ github.event.pull_request.head.repo.full_name }}"
           echo "ref: ${{ github.event.pull_request.head.ref }}"
 
-      - name: Check PR Status with Target Branch
-        run: |
-          echo "THIS STEP IS IN DEVELOPMENT"
-          echo "🔍 Checking PR status with target branch..."
-          TARGET_BRANCH=${{ github.event.pull_request.base.ref }}
-          PR_HEAD_SHA=${{ github.event.pull_request.head.sha }}
-          echo "📌 Target Branch: $TARGET_BRANCH"
-          echo "📌 PR Head SHA: $PR_HEAD_SHA"
-
-          if ! git merge-base --is-ancestor "origin/$TARGET_BRANCH" "$PR_HEAD_SHA"; then
-            echo "⚠️  WARNING: This PR is not up to date with $TARGET_BRANCH"
-            echo "ℹ️  Suggestion: Consider rebasing or merging the latest changes from $TARGET_BRANCH"
-            echo "📊 Status: PR is STALE"
-          else
-            echo "✅ PR is up to date with $TARGET_BRANCH"
-            echo "📊 Status: PR is CURRENT"
-          fi
-
-          echo "🔍 Additional PR Information:"
-          echo "   - Base Branch: ${{ github.event.pull_request.base.ref }}"
-          echo "   - Head Branch: ${{ github.event.pull_request.head.ref }}"
-          echo "   - PR State: ${{ github.event.pull_request.state }}"
-          echo "   - PR Created At: ${{ github.event.pull_request.created_at }}"
-          echo "   - PR Updated At: ${{ github.event.pull_request.updated_at }}"
-
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 0  # Fetch full history for accurate ancestry checks
           token: ${{ secrets.PAT_TOKEN }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Fetch PR head and target branch
+        continue-on-error: true
+        run: |
+          echo "📥 Fetching repository history..."
+          # Fetch target branch (e.g., main)
+          git fetch origin ${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}
+          # Fetch PR head from fork or internal branch
+          git fetch origin ${{ github.event.pull_request.head.sha }}:refs/pr/head
+
+      - name: Check PR Status with Target Branch
+        continue-on-error: true
+        run: |
+          echo "THIS STEP IS IN DEVELOPMENT"
+          echo "🔍 Checking PR status with target branch..."
+          
+          TARGET_SHA=${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA=${{ github.event.pull_request.head.sha }}
+          echo "📌 Target SHA: $TARGET_SHA"
+          echo "📌 PR Head SHA: $PR_HEAD_SHA"
+          
+          if ! git merge-base --is-ancestor "$TARGET_SHA" "$PR_HEAD_SHA"; then
+            echo "⚠️  WARNING: This PR is not up to date with target branch"
+            echo "ℹ️  Suggestion: Consider rebasing or merging the latest changes"
+            echo "📊 Status: PR is STALE"
+          else
+            echo "✅ PR is up to date with target branch"
+            echo "📊 Status: PR is CURRENT"
+          fi
+          
+          echo "🔍 Additional PR Information:"
+          echo "   - Base SHA: ${{ github.event.pull_request.base.sha }}"
+          echo "   - Head SHA: ${{ github.event.pull_request.head.sha }}"
+          echo "   - PR State: ${{ github.event.pull_request.state }}"
+          echo "   - PR Created At: ${{ github.event.pull_request.created_at }}"
+          echo "   - PR Updated At: ${{ github.event.pull_request.updated_at }}"
 
       - name: Check for disallowed dependencies
         run: |
