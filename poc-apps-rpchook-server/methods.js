@@ -17,22 +17,42 @@ const logger = require('./logger')
  * @returns {Promise<object>} Deployment result including Pear keys.
  */
 async function triggerDeploy ({ apps, commit, branch }) {
-  if (!commit || !branch) {
+  if (!commit || !branch || !apps) {
     throw new Error(
-      'Missing required parameters for deployment. Please provide commit, and branch.'
+      'Missing required parameters for deployment. Please provide commit, branch, and apps.'
     )
   }
-  await updateCode(qvacExamplesDir, commit)
-
-  const validPocs = await getValidPocDirectories(qvacExamplesDir)
-  const validRequestedApps = validPocs.filter(poc => apps.includes(poc.name))
-  const invalidRequestedApps = apps.filter(app => !validPocs.some(poc => poc.name === app))
-  if (invalidRequestedApps.length > 0) {
-    logger.error(`The following app(s) were not found and will not be deployed: ${invalidRequestedApps.join(', ')}`)
+  if (!Array.isArray(apps)) {
+    throw new Error('Apps must be an array.')
   }
+
   const uiPearKeys = []
   let pocBeeKey = null
-  for (const poc of validRequestedApps) {
+  const errors = []
+  try {
+    await updateCode(qvacExamplesDir, commit)
+  } catch (err) {
+    logger.error(`Error updating code: ${err.message}`)
+    return {
+      message: 'Error updating code from git',
+      uiPearKeys,
+      pocBeeKey,
+      errors: [err.message]
+    }
+  }
+
+  const validPocs = await getValidPocDirectories(qvacExamplesDir)
+  let appsToDeploy = validPocs
+  if (apps.length > 0) {
+    appsToDeploy = validPocs.filter(poc => apps.includes(poc.name))
+    const invalidRequestedApps = apps.filter(app => !validPocs.some(poc => poc.name === app))
+    if (invalidRequestedApps.length > 0) {
+      const errorMessage = `The following app(s) were not found and will not be deployed: ${invalidRequestedApps.join(', ')}`
+      logger.error(errorMessage)
+      errors.push(errorMessage)
+    }
+  }
+  for (const poc of appsToDeploy) {
     try {
       const keys = await stageApp(poc.path, branch)
       if (!keys.uiPearKey || !keys.workerPearKey) {
@@ -44,14 +64,17 @@ async function triggerDeploy ({ apps, commit, branch }) {
         uiPearKey: keys.uiPearKey
       })
     } catch (err) {
-      logger.error(`Error staging app for ${poc.name}: ${err.message}`)
+      const errorMessage = `Error staging app for ${poc.name}: ${err.message}`
+      logger.error(errorMessage)
+      errors.push(errorMessage)
     }
   }
 
   return {
     message: 'Deployment triggered successfully',
     uiPearKeys,
-    pocBeeKey
+    pocBeeKey,
+    errors: errors.length > 0 ? errors : undefined
   }
 }
 

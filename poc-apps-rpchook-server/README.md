@@ -102,9 +102,17 @@ The response should look similar to:
       "name":"translation-app",
       "uiPearKey":"a-pear-key"
     }
+  ],
+  "errors": [
+    "some error message(s) if any"
   ]
 }
 ```
+
+Note:
+- If no apps are provided `apps: []`, all apps will be deployed.
+- If no errors occur, the `errors` field will not be present in the response.
+- If multiple errors occur, the `errors` field will contain an array of all error messages.
 
 ### Getting the State
 

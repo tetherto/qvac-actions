@@ -12,16 +12,11 @@ const logger = require('../logger')
  * @returns {Promise<void>}
  */
 async function updateCode (directory, commit) {
-  try {
-    logger.info(`Updating code in ${directory} to commit ${commit}`)
-    await execAsync(
+  logger.info(`Updating code in ${directory} to commit ${commit}`)
+  await execAsync(
       `cd ${directory} && git fetch --all && git checkout ${commit}`
-    )
-    logger.info(`Checked out commit ${commit} successfully.`)
-  } catch (error) {
-    logger.error(`Error updating code: ${error.message}`)
-    throw error
-  }
+  )
+  logger.info(`Checked out commit ${commit} successfully.`)
 }
 
 module.exports = { updateCode }
