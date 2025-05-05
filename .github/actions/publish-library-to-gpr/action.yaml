@@ -155,9 +155,14 @@ runs:
         if npm publish --tag ${{ steps.determine_tag.outputs.tag }}; then
           PUBLISH_STATUS=0
           echo "✅ npm publish successful"
+          echo "Published version: ${{ steps.npm_publish.outputs.npm_published_version }}"
+          echo "NPM: published version: ${{ steps.npm_publish.outputs.npm_published_version }}" >> $GITHUB_STEP_SUMMARY
+          echo "::notice title=NPM Published::v${{ steps.determine_version.outputs.version }}"
         else
           PUBLISH_STATUS=1
           echo "❌ npm publish failed"
+          echo "NPM: publish failed" >> $GITHUB_STEP_SUMMARY
+          echo "::error title=NPM Publish Failed::v${{ steps.determine_version.outputs.version }}"
         fi
 
         echo "publish_status=$PUBLISH_STATUS" >> $GITHUB_OUTPUT
@@ -186,12 +191,19 @@ runs:
       run: |
         if [ "${{ steps.npm_publish.outputs.publish_status }}" -eq 0 ]; then
           echo "✅ npm publish successful"
-          echo "Published version: ${{ steps.npm_publish.outputs.npm_published_version }}"
-          echo "NPM: published version: ${{ steps.npm_publish.outputs.npm_published_version }}" >> $GITHUB_STEP_SUMMARY
-          echo "::notice title=NPM Published::v${{ steps.determine_version.outputs.version }}"
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          echo "## Installation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Install from the command line:" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "npm install ${PACKAGE_NAME}@${{ steps.npm_publish.outputs.npm_published_version }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Install via package.json:" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+          echo "\"${PACKAGE_NAME}\": \"${{ steps.npm_publish.outputs.npm_published_version }}\"" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
         else
           echo "❌ npm publish failed"
-          echo "NPM: publish failed" >> $GITHUB_STEP_SUMMARY
-          echo "::error title=NPM Publish Failed::v${{ steps.determine_version.outputs.version }}"
           exit ${{ steps.npm_publish.outputs.publish_status }}
         fi
