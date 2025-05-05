@@ -1,5 +1,5 @@
-name: Publish GPR
-description: "Publish a package to GPR"
+name: NPM Publish
+description: "Publish a package to NPM"
 
 inputs:
   secret-token:
@@ -21,32 +21,29 @@ inputs:
 outputs:
   npm_published_version:
     description: "The version that was published to npm"
-    value: ${{ steps.publish.outputs.npm_published_version }}
+    value: ${{ steps.npm_publish.outputs.npm_published_version }}
 
 runs:
   using: composite
   steps:
+    - name: Print job context for debugging
+      shell: bash
+      env:
+        INPUTS_CONTEXT: ${{ toJSON(inputs) }}
+      run: |
+        echo "Input context: $INPUTS_CONTEXT"
+
     - uses: actions/setup-node@v4
       with:
-        node-version: "18.x"
+        node-version: lts/*
         registry-url: "https://npm.pkg.github.com/"
         scope: "@tetherto"
 
-    - name: Publish to GPR
-      id: publish
+    - name: Determine Tag
+      id: determine_tag
+      working-directory: ${{ inputs.path }}
       shell: bash
-      env:
-        NODE_AUTH_TOKEN: ${{ inputs.secret-token }}
-        INPUTS_CONTEXT: ${{ toJSON(inputs) }}
       run: |
-        if [ -n "${{ inputs.path }}"  ]; then
-          echo "Changing directory to ${{ inputs.path }}"
-          cd "${{ inputs.path }}"
-        fi
-
-        ### Get tag for NPM, support release for compatibility with old workflows
-        echo "Input context: $INPUTS_CONTEXT"
-
         TAG="${{ inputs.tag }}"
         RELEASE="${{ inputs.release }}"
 
@@ -57,7 +54,6 @@ runs:
           TAG=$RELEASE
         fi
 
-        ### Set tag to latest if PR was merged to main
         echo "Base branch: ${{ github.ref }}"
         echo "Event name: ${{ github.event_name }}"
 
@@ -66,48 +62,136 @@ runs:
           TAG="latest"
         fi
 
-        ### Set version, if not latest, we do detailed dev version
-        SHORT_SHA=$(git rev-parse --short HEAD)
-        PACKAGE_VERSION=$(node -p "require('./package.json').version")
+        echo "tag=$TAG" >> $GITHUB_OUTPUT
 
-        if [ "$TAG" = "dev" ] || [ "$TAG" = "tmp" ]; then
-          VERSION="${PACKAGE_VERSION}-tmp.${GITHUB_RUN_ID}"
-        else
-          VERSION="${PACKAGE_VERSION}"
-        fi
-
-        if [ "$VERSION" != "$PACKAGE_VERSION" ]; then
-          echo "Updating version to $VERSION"
-          npm version $VERSION --no-git-tag-version --allow-same-version
-        fi
-
-        echo "Publishing with tag: $TAG"
-        echo "Publishing version: $VERSION"
-
-        npm publish --tag $TAG
-        PUBLISH_STATUS=$?
-
-        # Debug output for parameters
-        echo "Debug parameters:"
-        echo "PUBLISH_STATUS: $PUBLISH_STATUS"
-        echo "TAG: $TAG"
-        echo "VERSION: $VERSION"
-        echo "GITHUB_TOKEN permissions: ${{ github.token }}"
-
-        # Output the published version
-        echo "npm_published_version=$VERSION" >> $GITHUB_OUTPUT
-
-        # Check if npm publish was successful and tag is latest
-        if [ $PUBLISH_STATUS -eq 0 ] && [ "$TAG" = "latest" ]; then
-          echo "✅ npm publish successful"
-          (git tag "v$VERSION" && git push origin "v$VERSION" && echo "✅ Tagged and pushed v$VERSION") || echo "⚠️ Tag operation skipped or failed"
-        else
-          [ $PUBLISH_STATUS -eq 0 ] && echo "✅ npm publish successful" || echo "❌ npm publish failed"
-        fi
-
-        exit $PUBLISH_STATUS
-
-    - name: Echo published version
+    - name: Determine Version
+      id: determine_version
+      working-directory: ${{ inputs.path }}
       shell: bash
       run: |
-        echo "Published version: ${{ steps.publish.outputs.npm_published_version }}"
+        SHORT_SHA=$(git rev-parse --short HEAD)
+        PACKAGE_VERSION=$(node -p "require('./package.json').version")
+        TAG="${{ steps.determine_tag.outputs.tag }}"
+        PR_NUM=""
+        if [ "${{ github.event_name }}" = "pull_request" ] || [ "${{ github.event_name }}" = "pull_request_target" ]; then
+          PR_NUM="${{ github.event.pull_request.number }}"
+        fi
+
+        if [ "$TAG" = "latest" ]; then
+          VERSION="${PACKAGE_VERSION}"
+        elif [ -n "$PR_NUM" ]; then
+          VERSION="${PACKAGE_VERSION}-tmp.pr-${PR_NUM}.runid-${GITHUB_RUN_ID}"
+        else
+          VERSION="${PACKAGE_VERSION}-tmp.runid-${GITHUB_RUN_ID}"
+        fi
+
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "package_version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
+
+    - name: Maybe Update Package Version
+      shell: bash
+      working-directory: ${{ inputs.path }}
+      if: steps.determine_version.outputs.version != steps.determine_version.outputs.package_version
+      run: |
+        echo "Updating version to ${{ steps.determine_version.outputs.version }}"
+        npm version ${{ steps.determine_version.outputs.version }} --no-git-tag-version --allow-same-version
+
+    - name: Check Publish Conditions
+      id: check_publish
+      shell: bash
+      working-directory: ${{ inputs.path }}
+      run: |
+        SHOULD_PUBLISH=false
+
+        # Check if it's a merge event to main
+        if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          echo "✅ Publishing: This is a merge to main"
+          SHOULD_PUBLISH=true
+        fi
+
+        # Check for publish label in PR
+        if [ "${{ github.event_name }}" = "pull_request" ] || [ "${{ github.event_name }}" = "pull_request_target" ]; then
+          if [[ "${{ toJSON(github.event.pull_request.labels.*.name) }}" =~ "publish" ]]; then
+            echo "✅ Publishing: PR has publish label"
+            SHOULD_PUBLISH=true
+          fi
+        fi
+
+        # Check if repo is in always-publish list
+        ALWAYS_PUBLISH_REPOS="qvac-devops \
+          qvac-examples \
+          qvac-ext-lib-mlc \
+          qvac-ext-lib-tokenizers-cpp \
+          qvac-lib-inference-addon-mlc-ecog \
+          qvac-lib-inference-addon-mlc-llama \
+          qvac-lib-inference-addon-mlc-marian \
+          qvac-lib-inference-addon-mlc-whisper \
+          qvac-lib-inference-addon-onnx-ocr-fasttext"
+        REPO_NAME="${{ github.repository }}"
+        REPO_SHORT_NAME=${REPO_NAME#*/}  # Remove owner/ prefix
+
+        if [[ $ALWAYS_PUBLISH_REPOS =~ $REPO_SHORT_NAME ]]; then
+          echo "✅ Publishing: Repository is in always-publish list"
+          SHOULD_PUBLISH=true
+        fi
+
+        if [ "$SHOULD_PUBLISH" = "false" ]; then
+          echo "❌ Skipping publish: No publish conditions met"
+        fi
+
+        echo "should_publish=$SHOULD_PUBLISH" >> $GITHUB_OUTPUT
+
+    - name: Publish to NPM
+      id: npm_publish
+      if: steps.check_publish.outputs.should_publish == 'true'
+      working-directory: ${{ inputs.path }}
+      shell: bash
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.secret-token }}
+      run: |
+        echo "Publishing with tag: ${{ steps.determine_tag.outputs.tag }}"
+        echo "Publishing version: ${{ steps.determine_version.outputs.version }}"
+
+        if npm publish --tag ${{ steps.determine_tag.outputs.tag }}; then
+          PUBLISH_STATUS=0
+          echo "✅ npm publish successful"
+        else
+          PUBLISH_STATUS=1
+          echo "❌ npm publish failed"
+        fi
+
+        echo "publish_status=$PUBLISH_STATUS" >> $GITHUB_OUTPUT
+        echo "npm_published_version=${{ steps.determine_version.outputs.version }}" >> $GITHUB_OUTPUT
+
+    - name: Create Git Tag
+      shell: bash
+      working-directory: ${{ inputs.path }}
+      if: steps.check_publish.outputs.should_publish == 'true' && steps.npm_publish.outputs.publish_status == '0' && steps.determine_tag.outputs.tag == 'latest'
+      run: |
+        git tag "v${{ steps.determine_version.outputs.version }}"
+        if git push origin "v${{ steps.determine_version.outputs.version }}"; then
+          echo "✅ Tagged and pushed v${{ steps.determine_version.outputs.version }}"
+          echo "Git: pushed tag v${{ steps.determine_version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "::notice title=Git Tag Pushed::v${{ steps.determine_version.outputs.version }}"
+        else
+          echo "⚠️ Tag created but push failed for v${{ steps.determine_version.outputs.version }}"
+          echo "Git: tag created but push failed for v${{ steps.determine_version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "::error title=Git Tag Push Failed::v${{ steps.determine_version.outputs.version }}"
+        fi
+
+    - name: Publish Status
+      shell: bash
+      working-directory: ${{ inputs.path }}
+      if: steps.check_publish.outputs.should_publish == 'true'
+      run: |
+        if [ "${{ steps.npm_publish.outputs.publish_status }}" -eq 0 ]; then
+          echo "✅ npm publish successful"
+          echo "Published version: ${{ steps.npm_publish.outputs.npm_published_version }}"
+          echo "NPM: published version: ${{ steps.npm_publish.outputs.npm_published_version }}" >> $GITHUB_STEP_SUMMARY
+          echo "::notice title=NPM Published::v${{ steps.determine_version.outputs.version }}"
+        else
+          echo "❌ npm publish failed"
+          echo "NPM: publish failed" >> $GITHUB_STEP_SUMMARY
+          echo "::error title=NPM Publish Failed::v${{ steps.determine_version.outputs.version }}"
+          exit ${{ steps.npm_publish.outputs.publish_status }}
+        fi
