@@ -109,6 +109,12 @@ runs:
           SHOULD_PUBLISH=true
         fi
 
+        # Check if it's a manual workflow dispatch
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "✅ Publishing: This is a manual workflow dispatch"
+          SHOULD_PUBLISH=true
+        fi
+
         # Check for publish label in PR
         if [ "${{ github.event_name }}" = "pull_request" ] || [ "${{ github.event_name }}" = "pull_request_target" ]; then
           if [[ "${{ toJSON(github.event.pull_request.labels.*.name) }}" =~ "publish" ]]; then
