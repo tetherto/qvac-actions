@@ -53,9 +53,14 @@ async function stageApp (directory, channel) {
   await client.ready()
 
   let workerPearKey = null
-  await execAsync(
-    `cd ${directory}/worker && export NPM_TOKEN=${npmToken} && npm i`
-  )
+  try {
+    await execAsync(
+      `cd ${directory}/worker && export NPM_TOKEN=${npmToken} && npm i`
+    )
+  } catch (err) {
+    const sanitizedError = err.message.replace(new RegExp(npmToken, 'g'), '[REDACTED]')
+    throw new Error(sanitizedError)
+  }
   const workerResponse = await client.stage({
     dir: `${directory}/worker`,
     channel
@@ -109,9 +114,14 @@ async function stageApp (directory, channel) {
   // logger.info('Updated UI package.json with worker key')
 
   let uiPearKey = null
-  await execAsync(
-    `cd ${directory}/ui && export NPM_TOKEN=${npmToken} && npm i`
-  )
+  try {
+    await execAsync(
+      `cd ${directory}/ui && export NPM_TOKEN=${npmToken} && npm i`
+    )
+  } catch (err) {
+    const sanitizedError = err.message.replace(new RegExp(npmToken, 'g'), '[REDACTED]')
+    throw new Error(sanitizedError)
+  }
   const uiResponse = await client.stage({
     dir: `${directory}/ui`,
     channel
