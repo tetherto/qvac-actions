@@ -122,6 +122,7 @@ runs:
           qvac-examples \
           qvac-ext-lib-mlc \
           qvac-ext-lib-tokenizers-cpp \
+          qvac-lib-decoder-audio \
           qvac-lib-inference-addon-mlc-ecog \
           qvac-lib-inference-addon-mlc-llama \
           qvac-lib-inference-addon-mlc-marian \
