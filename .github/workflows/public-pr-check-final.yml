@@ -1,0 +1,22 @@
+name: Validate PR for Quality Standards before merging
+# Shared by multiple projects
+# Used in branch protection rulesets
+
+on:
+  workflow_call:
+
+jobs:
+  validate-pr: # to do checks after other workflows have run
+    if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    steps:
+        - name: Check if verify label is present
+          run: |
+            echo "Labels: ${{ join(github.event.pull_request.labels.*.name, ' ') }}"
+            if [[ ! " ${{ join(github.event.pull_request.labels.*.name, ' ') }} " =~ " verify " ]]; then
+              echo "::error title=PR is not verified::This PR needs the 'verify' label to be merged"
+              exit 1
+            fi
