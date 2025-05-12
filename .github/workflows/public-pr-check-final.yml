@@ -4,6 +4,11 @@ name: Validate PR for Quality Standards before merging
 
 on:
   workflow_call:
+    inputs:
+      tests-status:
+        required: true
+        type: boolean
+        description: 'Status of tests and PR checks'
 
 jobs:
   validate-pr: # to do checks after other workflows have run
@@ -20,3 +25,9 @@ jobs:
               echo "::error title=PR is not verified::This PR needs the 'verify' label to be merged"
               exit 1
             fi
+
+        - name: Check tests status
+          if: ${{ inputs.tests-status != 'true' }}
+          run: |
+            echo "::error title=Tests failed::Some tests or checks have failed"
+            exit 1
