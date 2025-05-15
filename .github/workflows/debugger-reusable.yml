@@ -33,9 +33,9 @@ jobs:
           INPUTS_CONTEXT: ${{ toJSON(inputs) }}
         run: |
           echo "Triggering Event: ${{ github.event_name }}"
+          echo "Inputs Context: $INPUTS_CONTEXT"
           echo "Secrets Context: $SECRETS_CONTEXT"
           echo "Full GitHub Context: $GITHUB_CONTEXT"
-          echo "Inputs Context: $INPUTS_CONTEXT"
           echo "GitHub Ref: ${{ github.ref }}"
           echo "GitHub SHA: ${{ github.sha }}"
           echo "Repository: ${{ github.repository }}"
