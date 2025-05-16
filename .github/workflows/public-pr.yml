@@ -38,7 +38,6 @@ on:
 
 jobs:
   validate-pr: # to do checks after other workflows have run
-    if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -86,6 +85,7 @@ jobs:
           fi
 
       - name: Check if verify label is present
+        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         run: |
           echo "Labels: ${{ join(github.event.pull_request.labels.*.name, ' ') }}"
           if [[ ! " ${{ join(github.event.pull_request.labels.*.name, ' ') }} " =~ " verify " ]]; then
