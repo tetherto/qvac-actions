@@ -5,25 +5,30 @@ name: Validate PR for Quality Standards before merging
 on:
   workflow_call:
     inputs:
+      build-status:
+        required: false
+        type: boolean
+        description: "Status of build process"
+        default: true
       sanity-checks-status:
         required: false
         type: boolean
-        description: 'Status of sanity checks'
+        description: "Status of sanity checks"
         default: true
       integration-tests-status:
         required: false
         type: boolean
-        description: 'Status of integration tests'
+        description: "Status of integration tests"
         default: true
       general-checks-status:
         required: false
         type: boolean
-        description: 'Status of general checks'
+        description: "Status of general checks"
         default: true
       tests-status: # Deprecated, use sanity-checks-status, integration-tests-status, and general-checks-status instead
         required: false
         type: boolean
-        description: 'Status of tests and PR checks'
+        description: "Status of tests and PR checks"
         default: true
 
 jobs:
@@ -34,43 +39,47 @@ jobs:
       contents: read
       packages: read
     steps:
-        - name: Log Trigger Event and Contexts
-          env:
-            SECRETS_CONTEXT: ${{ toJSON(secrets) }}
-            GITHUB_CONTEXT: ${{ toJSON(github) }}
-            INPUTS_CONTEXT: ${{ toJSON(inputs) }}
-          run: |
-            echo "Inputs Context: $INPUTS_CONTEXT"
-            echo "Secrets Context: $SECRETS_CONTEXT"
-            echo "Full GitHub Context: $GITHUB_CONTEXT"
+      - name: Log Trigger Event and Contexts
+        env:
+          SECRETS_CONTEXT: ${{ toJSON(secrets) }}
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+          INPUTS_CONTEXT: ${{ toJSON(inputs) }}
+        run: |
+          echo "Inputs Context: $INPUTS_CONTEXT"
+          echo "Secrets Context: $SECRETS_CONTEXT"
+          echo "Full GitHub Context: $GITHUB_CONTEXT"
 
-        - name: Check tests status
-          run: |
-            failed=0
-            if [[ "${{ inputs.sanity-checks-status }}" != "" && "${{ inputs.sanity-checks-status }}" != "true" ]]; then
-              echo "::error title=Sanity checks failed::Some sanity checks have failed"
-              failed=1
-            fi
-            if [[ "${{ inputs.integration-tests-status }}" != "" && "${{ inputs.integration-tests-status }}" != "true" ]]; then
-              echo "::error title=Integration tests failed::Some integration tests have failed"
-              failed=1
-            fi
-            if [[ "${{ inputs.general-checks-status }}" != "" && "${{ inputs.general-checks-status }}" != "true" ]]; then
-              echo "::error title=General checks failed::Some general checks have failed"
-              failed=1
-            fi
-            if [[ "${{ inputs.tests-status }}" != "" && "${{ inputs.tests-status }}" != "true" ]]; then
-              echo "::error title=Tests failed::Some tests have failed"
-              failed=1
-            fi
-            if [[ $failed -eq 1 ]]; then
-              exit 1
-            fi
+      - name: Check tests status
+        run: |
+          failed=0
+          if [[ "${{ inputs.build-status }}" != "" && "${{ inputs.build-status }}" != "true" ]]; then
+            echo "::error title=Build failed::The build process has failed"
+            failed=1
+          fi
+          if [[ "${{ inputs.sanity-checks-status }}" != "" && "${{ inputs.sanity-checks-status }}" != "true" ]]; then
+            echo "::error title=Sanity checks failed::Some sanity checks have failed"
+            failed=1
+          fi
+          if [[ "${{ inputs.integration-tests-status }}" != "" && "${{ inputs.integration-tests-status }}" != "true" ]]; then
+            echo "::error title=Integration tests failed::Some integration tests have failed"
+            failed=1
+          fi
+          if [[ "${{ inputs.general-checks-status }}" != "" && "${{ inputs.general-checks-status }}" != "true" ]]; then
+            echo "::error title=General checks failed::Some general checks have failed"
+            failed=1
+          fi
+          if [[ "${{ inputs.tests-status }}" != "" && "${{ inputs.tests-status }}" != "true" ]]; then
+            echo "::error title=Tests failed::Some tests have failed"
+            failed=1
+          fi
+          if [[ $failed -eq 1 ]]; then
+            exit 1
+          fi
 
-        - name: Check if verify label is present
-          run: |
-            echo "Labels: ${{ join(github.event.pull_request.labels.*.name, ' ') }}"
-            if [[ ! " ${{ join(github.event.pull_request.labels.*.name, ' ') }} " =~ " verify " ]]; then
-              echo "::error title=PR is not verified::This PR needs the 'verify' label to be merged"
-              exit 1
-            fi
+      - name: Check if verify label is present
+        run: |
+          echo "Labels: ${{ join(github.event.pull_request.labels.*.name, ' ') }}"
+          if [[ ! " ${{ join(github.event.pull_request.labels.*.name, ' ') }} " =~ " verify " ]]; then
+            echo "::error title=PR is not verified::This PR needs the 'verify' label to be merged"
+            exit 1
+          fi
