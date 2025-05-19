@@ -1,6 +1,6 @@
 # qvac-poc-rpchook-server
 
-This RPC server listens for incoming rpchooks requests to stage and seed the desired PoC application.
+This RPC server listens for incoming rpchooks requests to stage and seed all PoC applications within [qvac-examples](https://github.com/tetherto/qvac-examples).
 
 ## Installation
 
@@ -18,28 +18,13 @@ npm install
 
 ## Setup
 
-1. Create the PoC Directory
-   In the root directory of the project, create a folder named pocs to store the PoC application repositories.
+1. Clone the QVAC Examples Repository in the project root:
 
 ```bash
-mkdir pocs
-cd pocs
+git clone https://github.com/tetherto/qvac-examples
 ```
 
-2. Clone a PoC Application Repository
-   For example, to clone the marian PoC application, run:
-
-```bash
-git clone https://github.com/tetherto/qvac-translation-poc.git
-```
-
-3. Return to the project root:
-
-```bash
-cd ..
-```
-
-3. Configure Environment Variables
+2. Configure Environment Variables
    Create a `.env` file in the project root by copying the provided `.env.example` file:
 
 ```bash
@@ -50,9 +35,9 @@ Then, update the following environment variables in the .env file with the appro
 
 **NPM_TOKEN** – GitHub-provided NPM authentication token with read access to the PoC application repositories.
 
-**MARIAN_POC_DIR** – Full path to the Marian POC directory.
+**QVAC_EXAMPLES_DIR** – Full path to the QVAC Examples directory.
 
-Example: `/home/<user>/qvac-devops/poc-apps-rpchook-server/pocs/qvac-translation-poc`
+Example: `/home/<user>/qvac-devops/poc-apps-rpchook-server/qvac-examples`
 
 **CORESTORE_DIR** – Full path to the corestore directory.
 
@@ -85,28 +70,49 @@ RPC server listening on public key: <public-key>
 1. In the terminal, send a deployment request using hp-rpc-cli:
 
 ```bash
-hp-rpc-cli -s <server-public-key> -m triggerDeploy -d '{"commit": "commit-hash", "branch": "desired-channel-name", "poc": "poc-type"}' -t <timeout>
+hp-rpc-cli -s <server-public-key> -m triggerDeploy -d '{"commit": "commit-hash", "branch": "desired-channel-name"}' -t <timeout>
 ```
 
 2. **Example**:
-   To trigger the deployment of the `marian` PoC application from commit `54c851b8e5302e47bb792256968caeb4f41a28e7` on the `develop2` branch/channel with a timeout of 150 seconds, run:
+   To trigger the deployment of the `translation-app` and `assistant-app` PoC applications from commit `949f42191702d4e293fe8a2c909e36b3511f5ea4` on the `main` branch/channel with a timeout of 300 seconds, run:
 
 ```bash
-hp-rpc-cli -s 077ff401dd444a36ebe795814609952c886f5c30d86913f60a15cef3a4949945 \
+hp-rpc-cli -s 10d6a996238587fbed4842ab63d9ee64668497e34759921cb1cacedc64542683 \
   -m triggerDeploy \
-  -d '{"commit": "54c851b8e5302e47bb792256968caeb4f41a28e7", "branch": "develop2", "poc": "marian"}' \
-  -t 150000
+  -d '{"apps": ["translation-app", "assistant-app"], "commit": "949f42191702d4e293fe8a2c909e36b3511f5ea4", "branch": "main"}' \
+  -t 300000
 ```
 
 The response should look similar to:
 
 ```json
 {
-  "message": "Deployment triggered successfully",
-  "pocBeeKey": "4d4e5e06eb5345491191711395c71f01d3f317fc0f49e0413eecf7588aab5a7f",
-  "uiPearKey": "99ab8x7a43ss3tygsitiiw5b1kjog35u6zanmbhmse3rqn84pwco"
+  "message":"Deployment triggered successfully",
+  "pocBeeKey":"a-bee-key",
+  "uiPearKeys":[
+    {
+      "name":"assistant-app",
+      "uiPearKey":"a-pear-key"
+    },
+    {
+      "name":"transcription-app",
+      "uiPearKey":"a-pear-key"
+    },
+    {
+      "name":"translation-app",
+      "uiPearKey":"a-pear-key"
+    }
+  ],
+  "errors": [
+    "some error message(s) if any"
+  ]
 }
 ```
+
+Note:
+- If no apps are provided `apps: []`, all apps will be deployed.
+- If no errors occur, the `errors` field will not be present in the response.
+- If multiple errors occur, the `errors` field will contain an array of all error messages.
 
 ### Getting the State
 
@@ -120,7 +126,7 @@ hp-rpc-cli -s <server-public-key> -m getState -d '{}' -t <timeout>
    To retrieve the open state of the autobase along with the UI pear keys of all currently seeded PoC applications, run:
 
 ```bash
-hp-rpc-cli -s 3b6e501aaacfa506e16739841f9e6e042b7bd4b0107a34c9f61bcf5337a53f15 \
+hp-rpc-cli -s 5be567eef2dcb21160fffbcde173f72fc3c9eab83b7527162318deab0e423e8d \
   -m getState \
   -d '{}' \
   -t 150000
@@ -131,16 +137,16 @@ The response should look similar to:
 ```json
 {
   "linearizedViewState": {
-    "poc:channel": {
-      "poc": "marian",
-      "channel": "develop2",
-      "uiPearKey": "some-pear-key",
-      "workerPearKey": "some-pear-key"
+    "<poc>:<channel>": {
+      "poc": "assistant-app",
+      "channel": "main",
+      "uiPearKey": "a-pear-key",
+      "workerPearKey": "a-pear-key"
     },
     ...
   },
   "uiPearKeys": [
-    "some-pear-key",
+    "a-pear-key",
     ...
   ]
 }
