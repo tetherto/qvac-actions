@@ -23,7 +23,7 @@ let initialWorkerSeedActive = false
  * Stages and seeds the application by connecting to the Pear sidecar.
  *
  * @param {string} directory - The directory containing the app code.
- * @param {string} channel - The channel name (e.g., "main" for production or a branch name).
+ * @param {string} channel - The channel name (e.g., "main" for production or a channel name).
  * @returns {Promise<{uiPearKey: string, workerPearKey: string}>} - The pear keys for the UI and worker.
  */
 async function stageApp (directory, channel) {

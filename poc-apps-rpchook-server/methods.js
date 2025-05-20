@@ -2,7 +2,7 @@
 
 const { updateCode } = require('./services/git')
 const { stageApp } = require('./services/pear')
-const { updateAutobaseRecord, getOpenState } = require('./services/store')
+const { updateAutobaseRecord, getOpenState, getPocDeploymentKeys } = require('./services/store')
 const { qvacExamplesDir } = require('./config')
 const { getValidPocDirectories } = require('./services/scanner')
 const logger = require('./logger')
@@ -13,13 +13,14 @@ const logger = require('./logger')
  * @param {object} params - Deployment parameters.
  * @param {Array<string>} params.apps - Applications to deploy.
  * @param {string} params.commit - Commit hash to deploy.
- * @param {string} params.branch - Branch name for deployment.
+ * @param {string} params.channel - Channel name for deployment.
+ * @param {string} [params.prNumber] - Pull request number to fetch.
  * @returns {Promise<object>} Deployment result including Pear keys.
  */
-async function triggerDeploy ({ apps, commit, branch }) {
-  if (!commit || !branch || !apps) {
+async function triggerDeploy ({ apps, commit, prNumber, channel }) {
+  if (!commit || !channel || !apps) {
     throw new Error(
-      'Missing required parameters for deployment. Please provide commit, branch, and apps.'
+      'Missing required parameters for deployment. Please provide commit, channel, and apps.'
     )
   }
   if (!Array.isArray(apps)) {
@@ -30,7 +31,7 @@ async function triggerDeploy ({ apps, commit, branch }) {
   let pocBeeKey = null
   const errors = []
   try {
-    await updateCode(qvacExamplesDir, commit)
+    await updateCode(qvacExamplesDir, commit, prNumber)
   } catch (err) {
     logger.error(`Error updating code: ${err.message}`)
     return {
@@ -54,11 +55,11 @@ async function triggerDeploy ({ apps, commit, branch }) {
   }
   for (const poc of appsToDeploy) {
     try {
-      const keys = await stageApp(poc.path, branch)
+      const keys = await stageApp(poc.path, channel)
       if (!keys.uiPearKey || !keys.workerPearKey) {
         logger.error(`Failed to obtain Pear keys from staging for ${poc.name}.`)
       }
-      pocBeeKey = await updateAutobaseRecord({ poc: poc.name, channel: branch, uiPearKey: keys.uiPearKey, workerPearKey: keys.workerPearKey })
+      pocBeeKey = await updateAutobaseRecord({ poc: poc.name, channel, uiPearKey: keys.uiPearKey, workerPearKey: keys.workerPearKey })
       uiPearKeys.push({
         name: poc.name,
         uiPearKey: keys.uiPearKey
@@ -87,4 +88,17 @@ async function getState () {
   return state
 }
 
-module.exports = { triggerDeploy, getState }
+/**
+ * Retrieves the deployment keys for a given app and channel from the autobase.
+ *
+ * @param {object} params - Deployment parameters.
+ * @param {string} params.app - The poc application name.
+ * @param {string} params.channel - The channel name.
+ * @returns {Promise<{ poc: string, channel: string, ui: string, worker: string, errors: string[] }>} - The deployment keys.
+ */
+async function getDeploymentKeys ({ app, channel }) {
+  const deploymentKeys = await getPocDeploymentKeys(app, channel)
+  return deploymentKeys
+}
+
+module.exports = { triggerDeploy, getState, getDeploymentKeys }

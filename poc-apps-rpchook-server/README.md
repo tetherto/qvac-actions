@@ -70,16 +70,17 @@ RPC server listening on public key: <public-key>
 1. In the terminal, send a deployment request using hp-rpc-cli:
 
 ```bash
-hp-rpc-cli -s <server-public-key> -m triggerDeploy -d '{"commit": "commit-hash", "branch": "desired-channel-name"}' -t <timeout>
+hp-rpc-cli -s <server-public-key> -m triggerDeploy -d '{"apps": ["app-name"], "commit": "commit-hash", "prNumber": "pull-request-number",
+"channel": "desired-channel-name"}' -t <timeout>
 ```
 
 2. **Example**:
-   To trigger the deployment of the `translation-app` and `assistant-app` PoC applications from commit `949f42191702d4e293fe8a2c909e36b3511f5ea4` on the `main` branch/channel with a timeout of 300 seconds, run:
+   To trigger the deployment of the `translation-app` and `assistant-app` PoC applications from commit `949f42191702d4e293fe8a2c909e36b3511f5ea4` on the `main` channel with a timeout of 300 seconds, run:
 
 ```bash
 hp-rpc-cli -s 10d6a996238587fbed4842ab63d9ee64668497e34759921cb1cacedc64542683 \
   -m triggerDeploy \
-  -d '{"apps": ["translation-app", "assistant-app"], "commit": "949f42191702d4e293fe8a2c909e36b3511f5ea4", "branch": "main"}' \
+  -d '{"apps": ["translation-app"], "commit": "949f42191702d4e293fe8a2c909e36b3511f5ea4", "prNumber": "123", "channel": "main"}' \
   -t 300000
 ```
 
@@ -87,30 +88,30 @@ The response should look similar to:
 
 ```json
 {
-  "message":"Deployment triggered successfully",
-  "pocBeeKey":"a-bee-key",
-  "uiPearKeys":[
+  "message": "Deployment triggered successfully",
+  "pocBeeKey": "a-bee-key",
+  "uiPearKeys": [
     {
-      "name":"assistant-app",
-      "uiPearKey":"a-pear-key"
+      "name": "assistant-app",
+      "uiPearKey": "a-pear-key"
     },
     {
-      "name":"transcription-app",
-      "uiPearKey":"a-pear-key"
+      "name": "transcription-app",
+      "uiPearKey": "a-pear-key"
     },
     {
-      "name":"translation-app",
-      "uiPearKey":"a-pear-key"
+      "name": "translation-app",
+      "uiPearKey": "a-pear-key"
     }
   ],
-  "errors": [
-    "some error message(s) if any"
-  ]
+  "errors": ["some error message(s) if any"]
 }
 ```
 
 Note:
+
 - If no apps are provided `apps: []`, all apps will be deployed.
+- If no prNumber is provided, it will be assumed that the commit is from a branch and not a pull request.
 - If no errors occur, the `errors` field will not be present in the response.
 - If multiple errors occur, the `errors` field will contain an array of all error messages.
 
@@ -151,6 +152,41 @@ The response should look similar to:
   ]
 }
 ```
+
+### Getting Deployment Keys for a given PoC and Channel
+
+1. In the terminal, send a getPocDeploymentKeys request using hp-rpc-cli:
+
+```bash
+hp-rpc-cli -s <server-public-key> -m getDeploymentKeys -d '{"app": "poc-application-name", "channel": "channel-name"}' -t <timeout>
+```
+
+2. **Example**:
+   To retrieve the deployment keys for the `translation-app` PoC application on the `main` channel, run:
+
+```bash
+hp-rpc-cli -s 10d6a996238587fbed4842ab63d9ee64668497e34759921cb1cacedc64542683 \
+  -m getDeploymentKeys \
+  -d '{"app": "translation-app", "channel": "main"}' \
+  -t 150000
+```
+
+The response should look similar to:
+
+```json
+{
+  "app": "translation-app",
+  "channel": "main",
+  "ui": "a-pear-key",
+  "worker": "a-pear-key",
+  "errors": ["some error message(s) if any"]
+}
+```
+
+Note:
+
+- If no deployment keys are found, the `errors` field will contain the message `No deployment keys found`.
+- If multiple errors occur, the `errors` field will contain an array of all error messages.
 
 ## Usage with Docker
 
