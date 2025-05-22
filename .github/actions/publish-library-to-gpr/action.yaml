@@ -31,10 +31,8 @@ runs:
       shell: bash
       env:
         INPUTS_CONTEXT: ${{ toJSON(inputs) }}
-        SECRETS_CONTEXT: ${{ toJSON(secrets) }}
       run: |
         echo "Input context: $INPUTS_CONTEXT"
-        echo "Secrets context: $SECRETS_CONTEXT"
         ls -l ${{ inputs.path }}
         tree ${{ inputs.path }}
 
