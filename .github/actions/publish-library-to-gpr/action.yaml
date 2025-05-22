@@ -151,6 +151,7 @@ runs:
 
         # Check if repo is in always-publish list
         ALWAYS_PUBLISH_REPOS="qvac-devops \
+          qvac-util-transcription \ # TEMPORARY
           qvac-examples \
           qvac-ext-lib-mlc \
           qvac-ext-lib-tokenizers-cpp \
