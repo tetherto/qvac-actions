@@ -110,6 +110,20 @@ runs:
         echo "Updating version to ${{ steps.determine_version.outputs.version }}"
         npm version ${{ steps.determine_version.outputs.version }} --no-git-tag-version --allow-same-version
 
+    - name: Check Version Exists in Registry
+      continue-on-error: true
+      shell: bash
+      working-directory: ${{ inputs.path }}
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.secret-token }}
+      run: |
+        PACKAGE_NAME=$(node -p "require('./package.json').name")
+        VERSION="${{ steps.determine_version.outputs.version }}"
+
+        if npm view "${PACKAGE_NAME}@${VERSION}" version > /dev/null 2>&1; then
+          echo "::error::Version ${VERSION} of ${PACKAGE_NAME} already exists in the registry"
+        fi
+
     - name: Check Publish Conditions
       id: check_publish
       shell: bash
