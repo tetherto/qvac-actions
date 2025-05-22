@@ -31,10 +31,21 @@ runs:
       shell: bash
       env:
         INPUTS_CONTEXT: ${{ toJSON(inputs) }}
+        SECRETS_CONTEXT: ${{ toJSON(secrets) }}
       run: |
         echo "Input context: $INPUTS_CONTEXT"
+        echo "Secrets context: $SECRETS_CONTEXT"
         ls -l ${{ inputs.path }}
         tree ${{ inputs.path }}
+
+    - name: Check PAT Token
+      continue-on-error: true
+      shell: bash
+      run: |
+        if [ -z "${{ inputs.pat-token }}" ]; then
+          echo "::error::PAT token is not set. This will cause issues with GitHub Package Registry authentication."
+          exit 1
+        fi
 
     - uses: actions/setup-node@v4
       with:
