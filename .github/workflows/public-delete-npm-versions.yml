@@ -19,6 +19,10 @@ on:
         description: "Packages to target for deletion, space-separated"
         required: false
         type: string
+      command:
+        description: "Variable field to distinguish triggers and intents"
+        required: false
+        type: string
       dry-run:
         description: "Is dry run? If true, lists versions without deleting."
         required: false
