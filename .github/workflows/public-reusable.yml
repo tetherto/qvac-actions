@@ -40,40 +40,26 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Fetch PR head and target branch
+        id: fetch_pr
         continue-on-error: true
         run: |
-          echo "📥 Fetching repository history..."
-          # Fetch target branch (e.g., main)
           git fetch origin ${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}
-          # Fetch PR head from fork or internal branch
           git fetch origin ${{ github.event.pull_request.head.sha }}:refs/pr/head
 
       - name: Check PR Status with Target Branch
+        continue-on-error: true
+        id: target_branch_checks
         run: |
-          echo "🔍 Checking PR status with target branch..."
           TARGET_SHA=${{ github.event.pull_request.base.sha }}
           PR_HEAD_SHA=${{ github.event.pull_request.head.sha }}
-          echo "📌 Target SHA: $TARGET_SHA"
-          echo "📌 PR Head SHA: $PR_HEAD_SHA"
-          
           if ! git merge-base --is-ancestor "$TARGET_SHA" "$PR_HEAD_SHA"; then
             echo "::error title=PR is not up to date::This PR is not up to date with target branch"
-            echo "ℹ️  Suggestion: Consider rebasing or merging the latest changes"
-            echo "📊 Status: PR is STALE"
             exit 1
-          else
-            echo "✅ PR is up to date with target branch"
-            echo "📊 Status: PR is CURRENT"
           fi
-          
-          echo "🔍 Additional PR Information:"
-          echo "   - Base SHA: ${{ github.event.pull_request.base.sha }}"
-          echo "   - Head SHA: ${{ github.event.pull_request.head.sha }}"
-          echo "   - PR State: ${{ github.event.pull_request.state }}"
-          echo "   - PR Created At: ${{ github.event.pull_request.created_at }}"
-          echo "   - PR Updated At: ${{ github.event.pull_request.updated_at }}"
 
       - name: Check for disallowed dependencies
+        id: check_dependencies
+        continue-on-error: true
         run: |
           deps=$(jq -r '.dependencies, .devDependencies // {} | to_entries[] | .value' package.json)
           if echo "$deps" | grep -Eq '^(git\+https:\/\/github.com|[0-9]+\.[0-9]+\.[0-9]+-(dev|tmp)[^"]*)$'; then
@@ -82,6 +68,8 @@ jobs:
           fi
 
       - name: Check for @tetherto/ prefix in package name
+        id: check_package_name
+        continue-on-error: true
         run: |
           if ! grep -q '"name": "@tetherto/' package.json; then
             echo "::error title=Invalid package name::Package name in package.json must start with @tetherto/"
@@ -89,10 +77,35 @@ jobs:
           fi
 
       - name: Run tests
+        id: run_tests
+        continue-on-error: true
         uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@production-workflows-tag
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Check for errors
+        run: |
+          failed=0
+          if ${{ steps.run_tests.outcome == 'failure' }}; then
+            echo "Step - Lint or unit tests failed"
+            failed=1
+          fi
+          if ${{ steps.check_dependencies.outcome == 'failure' }}; then
+            echo "Step - Check for disallowed dependencies failed"
+            failed=1
+          fi
+          if ${{ steps.target_branch_checks.outcome == 'failure' }}; then
+            echo "Step - Check PR Status with Target Branch failed"
+            failed=1
+          fi
+          if ${{ steps.check_package_name.outcome == 'failure' }}; then
+            echo "Step - Check for @tetherto/ prefix in package name failed"
+            failed=1
+          fi
+          if [ $failed -eq 1 ]; then
+            exit 1
+          fi
 
   pull-request-event:
     needs: pull-request-event-checks
