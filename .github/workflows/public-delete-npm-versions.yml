@@ -126,9 +126,10 @@ jobs:
                [ "${{ inputs.pr-number }}" == "177" ] && \
                [ "${{ github.ref }}" == "refs/heads/temp-pr-validation" ]; then
               echo "Deleting versions for $pkg: $package_ids"
-              gh api --method DELETE -H "Accept: application/vnd.github+json" \
-                "orgs/tetherto/packages/npm/$pkg/versions" \
-                --input <(echo "$delete_versions" | jq -r '.[] | .id' | xargs -I {} echo "{\"id\":{}}")
+              for id in $(echo "$delete_versions" | jq -r '.[] | .id'); do
+                gh api --method DELETE -H "Accept: application/vnd.github+json" \
+                  "orgs/tetherto/packages/npm/$pkg/versions/$id"
+              done
             fi
 
             echo "Check versions after"
