@@ -117,13 +117,19 @@ jobs:
             fi
             package_ids=$(echo "$delete_versions" | jq -r '[.[].id] | join(",")')
 
-            # Commented-out deletion
-            # if [ -n "$package_ids" ] && [ "${{ inputs.dry-run }}" != "true" ]; then
-            #   echo "Deleting versions for $pkg: $package_ids"
-            #   gh api --method DELETE -H "Accept: application/vnd.github+json" \
-            #     "orgs/tetherto/packages/npm/$pkg/versions" \
-            #     --input <(echo "$delete_versions" | jq -r '.[] | .id' | xargs -I {} echo "{\"id\":{}}")
-            # fi
+            echo "Checking package_ids: $package_ids"
+            echo "Checking dry-run: ${{ inputs.dry-run }}"
+            echo "Checking pr-number: ${{ inputs.pr-number }}"
+            echo "Checking ref: ${{ github.ref }}"
+            if [ -n "$package_ids" ] && \
+               [ "${{ inputs.dry-run }}" != "true" ] && \
+               [ "${{ inputs.pr-number }}" == "177" ] && \
+               [ "${{ github.ref }}" == "refs/heads/temp-pr-validation-tester" ]; then
+              echo "Deleting versions for $pkg: $package_ids"
+              # gh api --method DELETE -H "Accept: application/vnd.github+json" \
+              #   "orgs/tetherto/packages/npm/$pkg/versions" \
+              #   --input <(echo "$delete_versions" | jq -r '.[] | .id' | xargs -I {} echo "{\"id\":{}}")
+            fi
 
             echo "Check versions after"
             response=$(gh api --paginate -H "Accept: application/vnd.github+json" \
