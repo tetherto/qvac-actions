@@ -124,7 +124,7 @@ jobs:
               #  [ "${{ inputs.dry-run }}" != "true" ] && \
             if [ -n "$package_ids" ] && \
                [ "${{ inputs.pr-number }}" == "177" ] && \
-               [ "${{ github.ref }}" == "refs/heads/temp-pr-validation-tester" ]; then
+               [ "${{ github.ref }}" == "refs/heads/temp-pr-validation" ]; then
               echo "Deleting versions for $pkg: $package_ids"
               # gh api --method DELETE -H "Accept: application/vnd.github+json" \
               #   "orgs/tetherto/packages/npm/$pkg/versions" \
