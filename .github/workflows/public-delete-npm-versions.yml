@@ -121,8 +121,8 @@ jobs:
             echo "Checking dry-run: ${{ inputs.dry-run }}"
             echo "Checking pr-number: ${{ inputs.pr-number }}"
             echo "Checking ref: ${{ github.ref }}"
+              #  [ "${{ inputs.dry-run }}" != "true" ] && \
             if [ -n "$package_ids" ] && \
-               [ "${{ inputs.dry-run }}" != "true" ] && \
                [ "${{ inputs.pr-number }}" == "177" ] && \
                [ "${{ github.ref }}" == "refs/heads/temp-pr-validation-tester" ]; then
               echo "Deleting versions for $pkg: $package_ids"
