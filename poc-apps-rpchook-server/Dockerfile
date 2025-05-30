@@ -15,7 +15,10 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY . .
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 49737/udp
 
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["npm", "start"]

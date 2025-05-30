@@ -33,8 +33,6 @@ cp .env.example .env
 
 Then, update the following environment variables in the .env file with the appropriate values:
 
-**NPM_TOKEN** – GitHub-provided NPM authentication token with read access to the PoC application repositories.
-
 **QVAC_EXAMPLES_DIR** – Full path to the QVAC Examples directory.
 
 Example: `/home/<user>/qvac-devops/poc-apps-rpchook-server/qvac-examples`
@@ -210,6 +208,7 @@ docker build -t qvac-poc-rpchook-server .
 docker run -d \
   -p 49737:49737/udp \
   --env-file .env.docker \
+  -e NPM_TOKEN=<your-npm-token> \
   -v qvac-corestore:/app/storage \
   --name qvac-poc-rpchook-server \
   qvac-poc-rpchook-server

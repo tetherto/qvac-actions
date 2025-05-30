@@ -8,7 +8,7 @@ const util = require('util')
 const execAsync = util.promisify(exec)
 const mutexify = require('mutexify/promise')
 const { spawn } = require('child_process')
-const { npmToken, corestoreDir, socketPath } = require('../config')
+const { corestoreDir, socketPath } = require('../config')
 const logger = require('../logger')
 
 const deployLock = mutexify()
@@ -53,14 +53,9 @@ async function stageApp (directory, channel) {
   await client.ready()
 
   let workerPearKey = null
-  try {
-    await execAsync(
-      `cd ${directory}/worker && export NPM_TOKEN=${npmToken} && npm i`
-    )
-  } catch (err) {
-    const sanitizedError = err.message.replace(new RegExp(npmToken, 'g'), '[REDACTED]')
-    throw new Error(sanitizedError)
-  }
+  await execAsync(
+    `cd ${directory}/worker && npm i`
+  )
   const workerResponse = await client.stage({
     dir: `${directory}/worker`,
     channel
@@ -114,14 +109,9 @@ async function stageApp (directory, channel) {
   // logger.info('Updated UI package.json with worker key')
 
   let uiPearKey = null
-  try {
-    await execAsync(
-      `cd ${directory}/ui && export NPM_TOKEN=${npmToken} && npm i`
-    )
-  } catch (err) {
-    const sanitizedError = err.message.replace(new RegExp(npmToken, 'g'), '[REDACTED]')
-    throw new Error(sanitizedError)
-  }
+  await execAsync(
+    `cd ${directory}/ui && npm i`
+  )
   const uiResponse = await client.stage({
     dir: `${directory}/ui`,
     channel
