@@ -98,12 +98,12 @@ jobs:
             echo "$version_map" | jq > "${pkg}_versions_before.json"
 
             echo "Identifying versions to delete"
-            if [ -n "${{ inputs.version }}" ]; then
-              delete_versions=$(echo "$response" | jq -c --arg ver "${{ inputs.version }}" \
-                '[.[] | select(.name == $ver) | {name: .name, id: .id}]')
-            elif [ -n "$target_version" ]; then
+            if [ -n "$target_version" ]; then
               delete_versions=$(echo "$response" | jq -c --arg ver "$target_version" \
                 '[.[] | select(.name | contains($ver)) | {name: .name, id: .id}]')
+            elif [ -n "${{ inputs.version }}" ]; then
+              delete_versions=$(echo "$response" | jq -c --arg ver "${{ inputs.version }}" \
+                '[.[] | select(.name == $ver) | {name: .name, id: .id}]')
             else
               delete_versions=$(echo "$response" | jq -c \
                 '[.[] | select(.name | test("tmp"; "i")) | {name: .name, id: .id}]')
@@ -123,8 +123,7 @@ jobs:
             echo "Checking ref: ${{ github.ref }}"
               #  [ "${{ inputs.dry-run }}" != "true" ] && \
             if [ -n "$package_ids" ] && \
-               [ "${{ inputs.pr-number }}" == "177" ] && \
-               [ "${{ github.ref }}" == "refs/heads/temp-pr-validation" ]; then
+               ([ "${{ github.event_name }}" == "pull_request" ] || [ "${{ github.event_name }}" == "pull_request_target" ]); then
               echo "Deleting versions for $pkg: $package_ids"
               for id in $(echo "$delete_versions" | jq -r '.[] | .id'); do
                 gh api --method DELETE -H "Accept: application/vnd.github+json" \
