@@ -199,7 +199,10 @@ Then, update the configuration as needed. Ensure `CORESTORE_DIR` matches the vol
 2. Build the Docker image:
 
 ```bash
-docker build -t qvac-poc-rpchook-server .
+docker build \
+  --build-arg NPM_TOKEN=<your-npm-token> \
+  -t qvac-poc-rpchook-server \
+  .
 ```
 
 3. Run the Docker container:
@@ -208,7 +211,6 @@ docker build -t qvac-poc-rpchook-server .
 docker run -d \
   -p 49737:49737/udp \
   --env-file .env.docker \
-  -e NPM_TOKEN=<your-npm-token> \
   -v qvac-corestore:/app/storage \
   --name qvac-poc-rpchook-server \
   qvac-poc-rpchook-server

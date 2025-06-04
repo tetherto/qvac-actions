@@ -1,5 +1,11 @@
 FROM node:20.15.0-slim
 
+ARG NPM_TOKEN
+
+RUN mkdir -p /root \
+    && echo "@tetherto:registry=https://npm.pkg.github.com" > /root/.npmrc \
+    && echo "//npm.pkg.github.com/:_authToken=${NPM_TOKEN}" >> /root/.npmrc
+
 WORKDIR /app
 
 COPY package*.json ./
@@ -15,10 +21,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY . .
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 49737/udp
 
-ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["npm", "start"]
