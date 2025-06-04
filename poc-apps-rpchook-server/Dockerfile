@@ -1,10 +1,8 @@
 FROM node:20.15.0-slim
 
-ARG NPM_TOKEN
-
 RUN mkdir -p /root \
     && echo "@tetherto:registry=https://npm.pkg.github.com" > /root/.npmrc \
-    && echo "//npm.pkg.github.com/:_authToken=${NPM_TOKEN}" >> /root/.npmrc
+    && echo "//npm.pkg.github.com/:_authToken=\${NPM_TOKEN}" >> /root/.npmrc
 
 WORKDIR /app
 
