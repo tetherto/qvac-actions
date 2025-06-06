@@ -273,9 +273,66 @@ async function getOpenState () {
   }
 }
 
+/**
+ * Retrieves the deployment keys for a given poc and channel from the autobase.
+ *
+ * @param {Autobase} autobase - The Autobase instance.
+ * @param {string} app - The poc application name.
+ * @param {string} channel - The channel name.
+ * @returns {Promise<{ poc: string, channel: string, ui: string, worker: string, errors: string[] }>} - The deployment keys.
+ */
+async function getPocDeploymentKeys (app, channel) {
+  await killPrcoess('simpleSeeder') // Kill the seeder process before reading the autobase
+  const autobase = await getAutobaseInstance()
+  await autobase.update()
+
+  const view = autobase.view
+  const deploymentKeys = {
+    app,
+    channel,
+    ui: undefined,
+    worker: undefined,
+    errors: undefined
+  }
+  for (let i = 0; i < view.length; i++) {
+    const entry = await view.get(i)
+    if (entry) {
+      try {
+        const record = JSON.parse(entry.toString('utf8'))
+        if (record.poc === app && record.channel === channel) {
+          deploymentKeys.ui = record.uiPearKey
+          deploymentKeys.worker = record.workerPearKey
+        }
+        break
+      } catch (err) {
+        logger.error(`Error parsing view entry: ${err.message}`)
+      }
+    }
+  }
+
+  if (!deploymentKeys.ui || !deploymentKeys.worker) {
+    deploymentKeys.errors = ['No deployment keys found']
+  }
+  const pearCore = autobase.store.get({
+    name: 'pearKeys',
+    valueEncoding: 'utf8'
+  })
+  await pearCore.ready()
+  const pearKeysHb = pearCore.key.toString('hex')
+
+  await autobase.store.close()
+  await autobase.close()
+  autobaseInstance = null
+  storeInstance = null
+
+  runBackgroundSeeding(pearKeysHb)
+  return deploymentKeys
+}
+
 module.exports = {
   updateAutobaseRecord,
   getOpenState,
   getAutobaseInstance,
-  getCorestoreInstance
+  getCorestoreInstance,
+  getPocDeploymentKeys
 }

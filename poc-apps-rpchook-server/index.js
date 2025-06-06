@@ -4,7 +4,7 @@ const RPC = require('@hyperswarm/rpc')
 const Hyperbee = require('hyperbee')
 const crypto = require('crypto')
 const { getCorestoreInstance } = require('./services/store')
-const { triggerDeploy, getState } = require('./methods')
+const { triggerDeploy, getState, getDeploymentKeys } = require('./methods')
 const logger = require('./logger')
 
 async function main () {
@@ -43,6 +43,17 @@ async function main () {
       return Buffer.from(JSON.stringify(state))
     } catch (error) {
       logger.error(`Error in RPC getState: ${error.message}`)
+      return Buffer.from(JSON.stringify({ error: error.message }))
+    }
+  })
+
+  rpcServer.respond('getDeploymentKeys', async (data) => {
+    try {
+      const params = JSON.parse(data.toString())
+      const result = await getDeploymentKeys(params)
+      return Buffer.from(JSON.stringify(result))
+    } catch (error) {
+      logger.error(`Error in RPC getDeploymentKeys: ${error.message}`)
       return Buffer.from(JSON.stringify({ error: error.message }))
     }
   })
