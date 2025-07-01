@@ -61,6 +61,10 @@ jobs:
         id: check_dependencies
         continue-on-error: true
         run: |
+          if [ ! -f "package.json" ]; then
+            echo "Skipping: package.json not found"
+            exit 0
+          fi
           deps=$(jq -r '.dependencies, .devDependencies // {} | to_entries[] | .value' package.json)
           if echo "$deps" | grep -Eq '^(git\+https:\/\/github.com|[0-9]+\.[0-9]+\.[0-9]+-(dev|tmp)[^"]*)$'; then
             echo "::error title=Disallowed dependency detected::Do not use git URLs or dev/tmp versions in dependencies"
