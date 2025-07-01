@@ -61,8 +61,8 @@ jobs:
         id: check_dependencies
         continue-on-error: true
         run: |
-          if ! jq -e '.dependencies or .devDependencies' package.json > /dev/null; then
-            echo "No dependencies found in package.json. Skipping check."
+          if ! jq -e '.dependencies and ( .dependencies | length > 0 )' package.json > /dev/null; then
+            echo "↩︎ No runtime dependencies found in package.json. Skipping."
             exit 0
           fi
           deps=$(jq -r '.dependencies, .devDependencies // {} | to_entries[] | .value' package.json)
