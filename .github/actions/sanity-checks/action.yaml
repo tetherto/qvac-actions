@@ -64,7 +64,7 @@ runs:
     - name: Run lint & unit tests
       id: run_tests
       continue-on-error: true
-      uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@temp-cicd-lib-improvements
+      uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@production-workflows-tag
       with:
         secret-token: ${{ inputs.secret-token }}
         pat-token: ${{ inputs.pat-token }}
