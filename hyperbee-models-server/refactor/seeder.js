@@ -1,3 +1,5 @@
+'use strict'
+
 const Corestore = require('corestore')
 const Hyperswarm = require('hyperswarm')
 const Hyperbee = require('hyperbee')

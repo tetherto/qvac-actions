@@ -1,3 +1,5 @@
+'use strict'
+
 const crypto = require('crypto')
 const Corestore = require('corestore')
 const Hyperbee = require('hyperbee')
