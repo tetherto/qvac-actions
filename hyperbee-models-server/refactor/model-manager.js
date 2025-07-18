@@ -4,26 +4,34 @@ const crypto = require('crypto')
 const Corestore = require('corestore')
 const Hyperbee = require('hyperbee')
 const fs = require('fs')
-const logger = require('../logger')
 const path = require('path')
+const AWS = require('aws-sdk')
 
+const logger = require('../logger')
 const { downloadHFModel } = require('./hf')
+const { downloadS3Model } = require('./aws')
 const { generateModelKey, createAddonModelKeysMap, buildInferenceConfig, generateFingerprint } = require('./utils')
 const { ConfigSchema } = require('./validation')
 const { syncDrive } = require('./drive')
 let config = require('./config.json')
 
-const seed = process.env.CORESTORE_SEED
+const seed = process.env.CORESTORE_SEED || 'default-seed-for-development'
 
 const primaryKey = crypto.createHash('sha256')
   .update(seed)
   .digest()
 
-const store = new Corestore('./storage', { primaryKey })
+let s3 = null
+if (config.awsRegion && config.bucketName) {
+  s3 = new AWS.S3({ region: config.awsRegion })
+  logger.info(`AWS S3 client initialized for region: ${config.awsRegion}`)
+}
+let store = new Corestore('./storage', { primaryKey })
 const core = store.get({ name: 'hyperbee' })
-const db = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'utf-8' })
+let db = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'binary' })
 
-const drives = {}
+const driveKeys = {}
+const driveInstances = new Map()
 const keyFile = path.join(__dirname, 'keys.txt')
 
 async function main () {
@@ -60,7 +68,12 @@ async function main () {
 
       let localPath
       if (model.source === 'hf') {
-        localPath = await downloadHFModel(model.path, config.localBasePath)
+        localPath = await downloadHFModel(model.path, config.localBasePath, modelKey)
+      } else if (model.source === 'aws') {
+        if (!s3) {
+          throw new Error('AWS S3 client not initialized. Please provide awsRegion and bucketName in config.json')
+        }
+        localPath = await downloadS3Model(s3, config.bucketName, model.path, config.localBasePath, modelKey)
       } else {
         throw new Error(`Source '${model.source}' not supported. Supported sources are 'hf' and 'aws'. Please check the config.json file for valid sources.`)
       }
@@ -73,7 +86,7 @@ async function main () {
         existingDriveVersion = existingModelRecord.driveVersion
         if (existingModelRecord.fingerprint === fingerprint) {
           await fs.promises.appendFile(keyFile, `${modelKey} ${existingModelRecord.key}\n`)
-          drives[modelKey] = existingModelRecord.key
+          driveKeys[modelKey] = existingModelRecord.key
           logger.info(`Model ${modelKey} already exists locally and on drive with the same fingerprint: ${fingerprint}. Skipping...`)
           continue
         } else {
@@ -87,7 +100,8 @@ async function main () {
       if (drive.version > existingDriveVersion) {
         logger.info(`Model ${modelKey} has a new drive version, previous drive version: ${existingDriveVersion}, new drive version: ${drive.version}`)
       }
-      drives[modelKey] = drive.key
+      driveKeys[modelKey] = drive.key
+      driveInstances.set(modelKey, drive)
 
       const modelRecord = {
         key: drive.key.toString('hex'),
@@ -101,7 +115,7 @@ async function main () {
     }
 
     logger.info('=== Drives Map ===')
-    for (const [modelKey, driveKey] of Object.entries(drives)) {
+    for (const [modelKey, driveKey] of Object.entries(driveKeys)) {
       logger.info(`${modelKey} -> ${driveKey.toString('hex')}`)
     }
     logger.info('==================')
@@ -120,7 +134,98 @@ async function main () {
     logger.info('===========================')
   } catch (error) {
     logger.error(`Error in main function: ${error.stack}`)
+  } finally {
+    await cleanup()
   }
 }
 
-main()
+/**
+ * Cleanup function to close all drives, database, and store connections
+ */
+async function cleanup () {
+  logger.info('Starting cleanup...')
+
+  try {
+    logger.info(`Closing ${driveInstances.size} drive instances...`)
+    for (const [modelKey, drive] of driveInstances.entries()) {
+      try {
+        await drive.close()
+        logger.info(`Closed drive for model: ${modelKey}`)
+      } catch (error) {
+        logger.error(`Error closing drive for model ${modelKey}: ${error.message}`)
+      }
+    }
+    driveInstances.clear()
+
+    if (db) {
+      try {
+        await db.close()
+        logger.info('Database closed successfully')
+      } catch (error) {
+        logger.error(`Error closing database: ${error.message}`)
+      }
+    }
+
+    if (store) {
+      try {
+        await store.close()
+        logger.info('Store closed successfully')
+      } catch (error) {
+        logger.error(`Error closing store: ${error.message}`)
+      }
+    }
+
+    logger.info('Cleanup completed successfully')
+  } catch (error) {
+    logger.error(`Error during cleanup: ${error.message}`)
+  }
+}
+
+/**
+ * Setup signal handlers for graceful shutdown
+ */
+function setupSignalHandlers () {
+  const signals = ['SIGINT', 'SIGTERM', 'SIGQUIT']
+
+  signals.forEach(signal => {
+    process.on(signal, async () => {
+      logger.info(`Received ${signal}, starting graceful shutdown...`)
+      await cleanup()
+      process.exit(0)
+    })
+  })
+
+  process.on('uncaughtException', async (error) => {
+    logger.error(`Uncaught Exception: ${error.message}`)
+    logger.error(error.stack)
+    await cleanup()
+    process.exit(1)
+  })
+
+  process.on('unhandledRejection', async (reason, promise) => {
+    logger.error('Unhandled Rejection at:', promise, 'reason:', reason)
+    await cleanup()
+    process.exit(1)
+  })
+}
+
+async function mainForTesting (configPath, s3Client, storeInstance, dbInstance) {
+  // Override the global variables for testing
+  s3 = s3Client
+  store = storeInstance
+  db = dbInstance
+
+  const resolvedConfigPath = path.resolve(configPath)
+  config = require(resolvedConfigPath)
+
+  await main()
+}
+
+if (require.main === module) {
+  setupSignalHandlers()
+  main()
+}
+
+module.exports = {
+  main: mainForTesting
+}

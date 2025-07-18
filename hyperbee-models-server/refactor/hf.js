@@ -35,9 +35,10 @@ function parseHfDownloadUrl (url) {
  *
  * @param {string} url       - HF model URL
  * @param {string} modelsRoot - where to place the downloaded file
+ * @param {string} modelKey   - unique key to name the local model folder
  * @returns {Promise<string>} local symlink path
  */
-async function downloadHFModel (url, modelsRoot) {
+async function downloadHFModel (url, modelsRoot, modelKey) {
   const { repo, hfPath, revision } = parseHfDownloadUrl(url)
 
   const cachePath = await downloadFileToCacheDir({
@@ -45,7 +46,7 @@ async function downloadHFModel (url, modelsRoot) {
   })
 
   const ext = path.extname(hfPath)
-  const destDir = path.join(modelsRoot, path.basename(hfPath, ext))
+  const destDir = path.join(modelsRoot, modelKey)
   await fs.promises.mkdir(destDir, { recursive: true })
 
   const destFile = path.join(destDir, 'model' + ext)
