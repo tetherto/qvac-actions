@@ -36,7 +36,7 @@ function parseHfDownloadUrl (url) {
  * @param {string} url       - HF model URL
  * @param {string} modelsRoot - where to place the downloaded file
  * @param {string} modelKey   - unique key to name the local model folder
- * @returns {Promise<string>} local symlink path
+ * @returns {Promise<string>} local model folder path
  */
 async function downloadHFModel (url, modelsRoot, modelKey) {
   const { repo, hfPath, revision } = parseHfDownloadUrl(url)

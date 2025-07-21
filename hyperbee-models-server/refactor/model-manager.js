@@ -67,23 +67,19 @@ async function main () {
       }
 
       let localPath
-      let fingerprint
-
       if (model.source === 'hf') {
         localPath = await downloadHFModel(model.path, config.localBasePath, modelKey)
-        fingerprint = await generateFingerprint(localPath)
       } else if (model.source === 'aws') {
         if (!s3) {
           throw new Error('AWS S3 client not initialized. Please provide awsRegion and bucketName in config.json')
         }
-        const result = await downloadS3Model(s3, config.bucketName, model.path, config.localBasePath, modelKey)
-        localPath = result.localPath
-        fingerprint = result.fingerprint
+        localPath = await downloadS3Model(s3, config.bucketName, model.path, config.localBasePath, modelKey)
       } else {
         throw new Error(`Source '${model.source}' not supported. Supported sources are 'hf' and 'aws'. Please check the config.json file for valid sources.`)
       }
 
       await buildInferenceConfig(model.addon, model.tags, localPath)
+      const fingerprint = await generateFingerprint(localPath)
       let existingDriveVersion = -1
       if (existingModelRecord) {
         existingDriveVersion = existingModelRecord.driveVersion

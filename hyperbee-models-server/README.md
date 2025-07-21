@@ -55,55 +55,10 @@ export CORESTORE_SEED="your-custom-seed"
 
 ### Configuration File
 
-Create or modify `refactor/config.json`:
+Copy the appropriate config file to `config.json`:
 
-```json
-{
-  "bucketName": "your-s3-bucket-name",
-  "awsRegion": "us-east-1",
-  "localBasePath": "./models",
-  "addons": [
-    "@qvac/translation-nmtcpp",
-    "@qvac/transcription-whispercpp",
-    "@qvac/translation-llamacpp",
-    "@qvac/llm-llamacpp",
-    "@qvac/embed-llamacpp",
-    "@qvac/vad-onnx"
-  ],
-  "models": [
-    {
-      "source": "hf",
-      "path": "https://huggingface.co/BSC-LT/salamandraTA-2B-instruct-GGUF/blob/main/salamandrata_2b_inst_q8.gguf",
-      "addon": "@qvac/translation-llamacpp",
-      "tags": {
-        "function": "generation",
-        "type": "instruct",
-        "name": "salamandrata",
-        "externalVersion": "1.0.0",
-        "params": "2B",
-        "quantization": "q8",
-        "internalVersion": "1.0.0",
-        "other": ""
-      }
-    },
-    {
-      "source": "aws",
-      "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/en-it/",
-      "addon": "@qvac/translation-nmtcpp",
-      "tags": {
-        "function": "translation",
-        "type": "opus",
-        "name": "marian",
-        "externalVersion": "",
-        "params": "",
-        "quantization": "q4f16_1",
-        "internalVersion": "1.0.0",
-        "other": "en-it"
-      }
-    }
-  ]
-}
-```
+- Production config: `cp prod.config.json config.json`
+- Development config: `cp dev.config.json config.json`
 
 ### Configuration Schema
 
@@ -120,7 +75,7 @@ The system validates configuration using Zod schemas:
 
 ```bash
 # Run the main model manager
-node refactor/model-manager.js
+node model-manager.js
 ```
 
 ### Available Scripts
@@ -151,6 +106,7 @@ npm run check-connection
 6. **Metadata Storage**: Stores model metadata in Hyperbee
 7. **Network Seeding**: Shares drives across the network for replication
 8. **Inference Config**: Generates clean inference.config.json files (excludes internal files)
+9. **Key Export**: Writes model and drive keys to `keys.txt` file for external access
 
 ## Model Key Generation
 
@@ -160,7 +116,7 @@ Models are identified by keys generated from their tags:
 function:type:name:externalVersion:params:quantization:internalVersion:other
 ```
 
-Example: `generation:instruct:salamandrata:1.0.0:2B:q8:1.0.0:`
+Example: `generation:salamandrata:instruct:1.0.0:2B:q8:1.0.0:`
 
 ## Model Caching
 
@@ -174,10 +130,12 @@ The system implements intelligent caching to prevent unnecessary downloads:
 
 ### AWS S3 Models
 
-- **Custom Fingerprinting**: SHA-256 hashes based on date folders (e.g., `2025-04-15`)
-- **Local Storage**: Fingerprints stored in `.s3-fingerprint` files
-- **Smart Comparison**: Downloads only when date version changes
-- **Bandwidth Savings**: Prevents redundant downloads of unchanged models
+- **Dual Fingerprinting**:
+  - **S3 Date Fingerprint**: SHA-256 hash based on date folders (e.g., `2025-04-15`) for download decisions
+  - **Local Folder Fingerprint**: SHA-256 hash of local files (including inference config) for change detection
+- **Smart Download Logic**: Uses S3 fingerprint to determine if download is needed
+- **Change Detection**: Uses local folder fingerprint stored in Hyperbee to detect inference config changes
+- **Bandwidth Savings**: Prevents redundant downloads while maintaining visibility into local file changes
 
 ## Testing
 
@@ -192,7 +150,7 @@ Tests cover:
 - Model downloading from HF and AWS
 - Drive creation and management
 - Fingerprint generation and caching
-- S3 fingerprint functionality and validation
+- S3 fingerprint functionality with dual fingerprinting (S3 date + local folder)
 - Configuration validation
 - Resource cleanup
 - Inference config exclusion of internal files

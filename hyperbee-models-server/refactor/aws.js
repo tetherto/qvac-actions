@@ -223,25 +223,25 @@ async function storeS3Fingerprint (localPath, fingerprint) {
  * @param {string} s3Path - S3 path (can be folder path or specific file)
  * @param {string} modelsRoot - Local directory to save the model
  * @param {string} modelKey - unique key to name the local model folder
- * @returns {Promise<{localPath: string, fingerprint: string}>} Local directory path and fingerprint
+ * @returns {Promise<string>} Local model folder path
  */
 async function downloadS3Model (s3, bucketName, s3Path, modelsRoot, modelKey) {
   try {
-    logger.info(`downloadS3Model: Starting download for path "${s3Path}"`)
+    logger.info(`Starting download for path "${s3Path}"`)
 
     const isFolder = s3Path.endsWith('/') || !path.extname(s3Path)
     logger.info(`Path type: ${isFolder ? 'FOLDER' : 'FILE'} (endsWith('/')=${s3Path.endsWith('/')}, hasExtension=${!!path.extname(s3Path)})`)
 
-    const fingerprint = await generateS3Fingerprint(s3, bucketName, s3Path)
+    const s3Fingerprint = await generateS3Fingerprint(s3, bucketName, s3Path)
     const destDir = path.join(modelsRoot, modelKey)
-    const needsDownload = await needsS3Download(destDir, fingerprint)
+    const needsDownload = await needsS3Download(destDir, s3Fingerprint)
 
     if (!needsDownload) {
-      logger.info(`S3 model already up to date, skipping download. Fingerprint: ${fingerprint}`)
-      return { localPath: destDir, fingerprint }
+      logger.info(`S3 model already up to date, skipping download. S3 Fingerprint: ${s3Fingerprint}`)
+      return destDir
     }
 
-    logger.info(`S3 model needs download. Fingerprint: ${fingerprint}`)
+    logger.info(`S3 model needs download. S3 Fingerprint: ${s3Fingerprint}`)
 
     if (isFolder) {
       logger.info('Treating as folder, will search for latest date subfolder...')
@@ -257,8 +257,8 @@ async function downloadS3Model (s3, bucketName, s3Path, modelsRoot, modelKey) {
 
       await downloadS3Folder(s3, bucketName, latestFolder, destDir)
 
-      await storeS3Fingerprint(destDir, fingerprint)
-      return { localPath: destDir, fingerprint }
+      await storeS3Fingerprint(destDir, s3Fingerprint)
+      return destDir
     } else {
       await fs.promises.mkdir(destDir, { recursive: true })
 
@@ -272,10 +272,10 @@ async function downloadS3Model (s3, bucketName, s3Path, modelsRoot, modelKey) {
       logger.info(`Downloading file: ${s3Path} -> ${destFile}`)
       await downloadS3File(s3, bucketName, s3Path, destFile)
 
-      await storeS3Fingerprint(destDir, fingerprint)
+      await storeS3Fingerprint(destDir, s3Fingerprint)
 
       logger.info(`Downloaded S3 file ${s3Path} -> ${destFile}`)
-      return { localPath: destDir, fingerprint }
+      return destDir
     }
   } catch (error) {
     logger.error(`Error downloading S3 model: ${error.message}`)

@@ -33,7 +33,7 @@ const config = require('./test.config.json')
 
 // Expected configs for each model based on their tags
 const expectedConfigs = {
-  'generation:instruct:salamandrata:1.0.0:2B:q8:1.0.0:': {
+  'generation:salamandrata:instruct:1.0.0:2B:q8:1.0.0:': {
     addon: '@qvac/translation-llamacpp',
     function: 'generation',
     type: 'instruct',
@@ -45,7 +45,7 @@ const expectedConfigs = {
     other: '',
     files: ['model.txt']
   },
-  'translation:opus:marian:1.0.0::q4f16_1:1.0.0:en-it': {
+  'translation:marian:opus:1.0.0::q4f16_1:1.0.0:en-it': {
     addon: '@qvac/translation-nmtcpp',
     function: 'translation',
     type: 'opus',
@@ -89,7 +89,7 @@ AWSMock.mock('S3', 'listObjectsV2', (params, callback) => {
 AWSMock.mock('S3', 'getObject', (params, callback) => {
   if (params.Key.includes('inference.config.json')) {
     // Use the expected config for the AWS model
-    const awsModelConfig = expectedConfigs['translation:opus:marian:1.0.0::q4f16_1:1.0.0:en-it']
+    const awsModelConfig = expectedConfigs['translation:marian:opus:1.0.0::q4f16_1:1.0.0:en-it']
     const jsonContent = JSON.stringify(awsModelConfig)
     const stream = new Readable()
     stream.push(jsonContent)
@@ -123,8 +123,8 @@ test('Verify test output', t => {
   t.ok(fs.existsSync(basePath), `Base path exists: ${basePath}`)
 
   const expectedModelKeys = [
-    'generation:instruct:salamandrata:1.0.0:2B:q8:1.0.0:',
-    'translation:opus:marian:1.0.0::q4f16_1:1.0.0:en-it'
+    'generation:salamandrata:instruct:1.0.0:2B:q8:1.0.0:',
+    'translation:marian:opus:1.0.0::q4f16_1:1.0.0:en-it'
   ]
 
   for (const modelKey of expectedModelKeys) {
@@ -146,33 +146,40 @@ test('Verify S3 fingerprint functionality', async (t) => {
   t.ok(mainHasRun, 'Main must have run before verifying S3 fingerprint')
 
   const basePath = path.resolve(__dirname, '..', config.localBasePath)
-  const awsModelKey = 'translation:opus:marian:1.0.0::q4f16_1:1.0.0:en-it'
+  const awsModelKey = 'translation:marian:opus:1.0.0::q4f16_1:1.0.0:en-it'
   const awsModelPath = path.join(basePath, awsModelKey)
 
-  const fingerprintPath = path.join(awsModelPath, '.s3-fingerprint')
-  t.ok(fs.existsSync(fingerprintPath), `.s3-fingerprint file exists: ${fingerprintPath}`)
+  const s3FingerprintPath = path.join(awsModelPath, '.s3-fingerprint')
+  t.ok(fs.existsSync(s3FingerprintPath), `.s3-fingerprint file exists: ${s3FingerprintPath}`)
 
-  const fingerprint = fs.readFileSync(fingerprintPath, 'utf8').trim()
-  t.ok(fingerprint.length > 0, 'Fingerprint is not empty')
-  t.ok(fingerprint.length === 64, 'Fingerprint is SHA-256 hash (64 characters)')
-  t.ok(/^[a-f0-9]+$/.test(fingerprint), 'Fingerprint is valid hex string')
+  const s3Fingerprint = fs.readFileSync(s3FingerprintPath, 'utf8').trim()
+  t.ok(s3Fingerprint.length > 0, 'S3 fingerprint is not empty')
+  t.ok(s3Fingerprint.length === 64, 'S3 fingerprint is SHA-256 hash (64 characters)')
+  t.ok(/^[a-f0-9]+$/.test(s3Fingerprint), 'S3 fingerprint is valid hex string')
 
   const s3 = new AWS.S3()
   const testPath = config.models[1].path // AWS model path
 
-  const generatedFingerprint = await generateS3Fingerprint(s3, config.bucketName, testPath)
-  t.alike(generatedFingerprint, fingerprint, 'Generated fingerprint matches stored fingerprint')
+  const generatedS3Fingerprint = await generateS3Fingerprint(s3, config.bucketName, testPath)
+  t.alike(generatedS3Fingerprint, s3Fingerprint, 'Generated S3 fingerprint matches stored fingerprint')
 
-  const needsDownload = await needsS3Download(awsModelPath, fingerprint)
-  t.not(needsDownload, 'Should not need download with same fingerprint')
+  const needsDownload = await needsS3Download(awsModelPath, s3Fingerprint)
+  t.not(needsDownload, 'Should not need download with same S3 fingerprint')
 
-  const differentFingerprint = 'a'.repeat(64) // Different SHA-256 hash
-  const needsDownloadDifferent = await needsS3Download(awsModelPath, differentFingerprint)
-  t.ok(needsDownloadDifferent, 'Should need download with different fingerprint')
+  const differentS3Fingerprint = 'a'.repeat(64) // Different SHA-256 hash
+  const needsDownloadDifferent = await needsS3Download(awsModelPath, differentS3Fingerprint)
+  t.ok(needsDownloadDifferent, 'Should need download with different S3 fingerprint')
 
-  const nonExistentPath = path.join(basePath, 'non-existent-model')
-  const needsDownloadNonExistent = await needsS3Download(nonExistentPath, fingerprint)
-  t.ok(needsDownloadNonExistent, 'Should need download for non-existent path')
+  const { generateFingerprint } = require('../refactor/utils')
+  const localFolderFingerprint = await generateFingerprint(awsModelPath)
+  t.ok(localFolderFingerprint.length > 0, 'Local folder fingerprint is not empty')
+  t.ok(localFolderFingerprint.length === 64, 'Local folder fingerprint is SHA-256 hash (64 characters)')
+  t.ok(/^[a-f0-9]+$/.test(localFolderFingerprint), 'Local folder fingerprint is valid hex string')
+
+  t.not(localFolderFingerprint, s3Fingerprint, 'Local folder fingerprint should be different from S3 fingerprint')
+
+  const inferencePath = path.join(awsModelPath, 'inference.config.json')
+  t.ok(fs.existsSync(inferencePath), 'inference.config.json exists for fingerprint calculation')
 
   t.pass('S3 fingerprint functionality verified')
 })
@@ -181,7 +188,7 @@ test('Verify .s3-fingerprint is excluded from inference config', t => {
   t.ok(mainHasRun, 'Main must have run before verifying inference config exclusion')
 
   const basePath = path.resolve(__dirname, '..', config.localBasePath)
-  const awsModelKey = 'translation:opus:marian:1.0.0::q4f16_1:1.0.0:en-it'
+  const awsModelKey = 'translation:marian:opus:1.0.0::q4f16_1:1.0.0:en-it'
   const awsModelPath = path.join(basePath, awsModelKey)
 
   const fingerprintPath = path.join(awsModelPath, '.s3-fingerprint')

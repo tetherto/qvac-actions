@@ -1,0 +1,390 @@
+{
+  "bucketName": "tether-ai-dev",
+  "awsRegion": "eu-central-1",
+  "localBasePath": "./models",
+  "addons": [
+    "@qvac/translation-nmtcpp",
+    "@qvac/transcription-whispercpp",
+    "@qvac/translation-llamacpp",
+    "@qvac/llm-llamacpp",
+    "@qvac/embed-llamacpp",
+    "@qvac/vad-onnx"
+  ],
+  "models": [
+    {
+      "source": "hf",
+      "path": "https://huggingface.co/BSC-LT/salamandraTA-2B-instruct-GGUF/blob/main/salamandrata_2b_inst_q8.gguf",
+      "addon": "@qvac/translation-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "salamandrata",
+        "externalVersion": "1.0.0",
+        "params": "2B",
+        "quantization": "q8",
+        "internalVersion": "1.0.0",
+        "other": ""
+      }
+    },
+    {
+      "source": "hf",
+      "path": "https://huggingface.co/BSC-LT/salamandraTA-2B-instruct-GGUF/blob/main/salamandrata_2b_inst_q4.gguf",
+      "addon": "@qvac/translation-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "salamandrata",
+        "externalVersion": "1.0.0",
+        "params": "2B",
+        "quantization": "q4",
+        "internalVersion": "1.0.0",
+        "other": ""
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/en-it/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "en-it"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/it-en/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "it-en"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/en-de/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "en-de"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/de-en/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "de-en"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/it-de/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "it-de"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/de-it/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "de-it"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/en-es/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "en-es"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/es-en/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "es-en"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/es-de/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "es-de"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/de-es/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "de-es"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/es-it/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "es-it"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/it-es/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "it-es"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/whisper/linux/x64/vulkan/q0f32/",
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "whisper",
+        "name": "tiny",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": ""
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/llama/linux/vulkan/q4f16_1/Llama-3.2-1B-Instruct/",
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "llama",
+        "externalVersion": "3.2",
+        "params": "1B",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": ""
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/llama/linux/vulkan/q4f16_1/Llama-3.2-3B-Instruct/",
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "llama",
+        "externalVersion": "3.2",
+        "params": "3B",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": ""
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/llama/linux/vulkan/q4f16_1/Llama-3.2-3B-Instruct/",
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "llama",
+        "externalVersion": "3.1",
+        "params": "8B",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": ""
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/bert_custom/linux/vulkan/q4f16_1/gte-large/",
+      "addon": "@qvac/embed-llamacpp",
+      "tags": {
+        "function": "embedding",
+        "type": "bert_custom",
+        "name": "gte-large",
+        "externalVersion": "",
+        "params": "355M",
+        "quantization": "q4f16_1",
+        "internalVersion": "0.1.0",
+        "other": ""
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/indictrans2/linux/x64/vulkan/q0f32/en-indic-1B/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "full",
+        "name": "indictrans",
+        "externalVersion": "2",
+        "params": "1B",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "en-hi"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/indictrans2/linux/x64/vulkan/q0f32/indic-en-1B/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "full",
+        "name": "indictrans",
+        "externalVersion": "2",
+        "params": "1B",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "hi-en"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/indictrans2/linux/x64/vulkan/q0f32/indic-indic-1B/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "full",
+        "name": "indictrans",
+        "externalVersion": "2",
+        "params": "1B",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "hi-hi"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/indictrans2/linux/x64/vulkan/q0f32/en-indic-dist-200M/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "dist",
+        "name": "indictrans",
+        "externalVersion": "2",
+        "params": "200M",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "en-hi"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/indictrans2/linux/x64/vulkan/q0f32/indic-en-dist-200M/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "dist",
+        "name": "indictrans",
+        "externalVersion": "2",
+        "params": "200M",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "hi-en"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "qvac_models_compiled/indictrans2/linux/x64/vulkan/q0f32/indic-indic-dist-320M/",
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "dist",
+        "name": "indictrans",
+        "externalVersion": "2",
+        "params": "320M",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "hi-hi"
+      }
+    }
+  ]
+}
