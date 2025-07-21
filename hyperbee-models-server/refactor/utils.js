@@ -31,7 +31,7 @@ async function buildInferenceConfig (modelAddon, modelTags, modelPath) {
     throw new Error(`Model path does not exist: ${modelPath}`)
   }
 
-  const files = await getModelFiles(modelPath, ['inference.config.json'])
+  const files = await getModelFiles(modelPath, ['inference.config.json', '.s3-fingerprint'])
   const inferenceConfig = {
     addon: modelAddon,
     ...modelTags,

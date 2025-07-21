@@ -43,7 +43,7 @@
     },
     {
       "source": "aws",
-      "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/en-it/2025-04-15/",
+      "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/en-it/",
       "addon": "@qvac/translation-nmtcpp",
       "tags": {
         "function": "translation",

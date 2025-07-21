@@ -44,6 +44,5 @@ async function loadDriveFolder (drive, folderPath) {
 }
 
 module.exports = {
-  syncDrive,
-  loadDriveFolder
+  syncDrive
 }
