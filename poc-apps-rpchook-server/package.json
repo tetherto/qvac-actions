@@ -1,5 +1,5 @@
 {
-  "name": "poc-apps-rpchook-server",
+  "name": "@tetherto/poc-apps-rpchook-server",
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
