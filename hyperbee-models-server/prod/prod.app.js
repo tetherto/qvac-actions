@@ -15,50 +15,11 @@ let bucketName, s3, models, configPath, localBasePath, store, db, swarm
 const pipelineAsync = util.promisify(pipeline)
 
 const drives = new Map()
-const latestVersions = new Map()
-
-async function listS3Folders (bucketName, basePath) {
-  const params = {
-    Bucket: bucketName,
-    Prefix: basePath,
-    Delimiter: '/'
-  }
-  let folders = []
-  let isTruncated = true
-  let continuationToken
-  while (isTruncated) {
-    if (continuationToken) params.ContinuationToken = continuationToken
-    const data = await s3.listObjectsV2(params).promise()
-    isTruncated = data.IsTruncated
-    continuationToken = data.NextContinuationToken
-    if (data.CommonPrefixes) {
-      folders = folders.concat(data.CommonPrefixes.map((item) => item.Prefix))
-    }
-  }
-  return folders
-}
-
-async function getLatestModelFolder (modelBasePath) {
-  const folders = await listS3Folders(bucketName, modelBasePath)
-  if (folders.length === 0) {
-    logger.warn(`No folders found in S3 for path ${modelBasePath}`)
-    return null
-  }
-  const datedFolders = folders.map(folder => {
-    const dateStr = path.basename(folder)
-    const dateObj = new Date(dateStr)
-    return { folder, dateObj }
-  })
-  datedFolders.sort((a, b) => a.dateObj - b.dateObj)
-  return datedFolders[datedFolders.length - 1].folder
-}
 
 async function downloadModel (model, modelBasePath) {
-  const localModelPath = path.join(localBasePath, model)
-  await fs.promises.rm(localModelPath, { recursive: true, force: true })
+  await fs.promises.rm(path.join(localBasePath, model), { recursive: true, force: true })
   logger.info(`Deleted existing folder for model ${model}`)
-  await downloadS3Folder(bucketName, modelBasePath, localModelPath)
-  return localModelPath
+  await downloadS3Folder(bucketName, modelBasePath, path.join(localBasePath, model))
 }
 
 async function listS3Objects (bucketName, folderPath) {
@@ -150,7 +111,7 @@ async function checkForUpdates () {
   models = config.models
   for (const [model, modelInfo] of Object.entries(models)) {
     try {
-      const localModelPath = await downloadModel(model, modelInfo.s3BasePath)
+      await downloadModel(model, modelInfo.s3BasePath)
       logger.info(`Model files downloaded for model ${model}. Updating Hyperdrive...`)
       const drive = drives.get(model)
       if (drive) {
