@@ -68,6 +68,7 @@ The system validates configuration using Zod schemas:
 - **Model Sources**: Supported sources are 'hf' (Hugging Face) and 'aws' (AWS S3)
 - **Addons**: Must follow the pattern `@qvac/package-name`
 - **AWS Configuration**: Required when using AWS source models
+- **Drive Keys**: Optional `driveKey` field to skip download and use existing drive
 
 ## Usage
 
@@ -97,16 +98,17 @@ npm run check-connection
 ## Model Management Process
 
 1. **Configuration Validation**: Validates the config.json file against the schema
-2. **Smart Download Logic**:
+2. **Drive Key Check**: If `driveKey` is provided, skips download and uses existing drive
+3. **Smart Download Logic**:
    - **HF Models**: Uses built-in HF Hub caching to skip existing files
    - **AWS Models**: Uses date-based fingerprinting to skip unchanged versions
-3. **Fingerprint Generation**: Creates SHA-256 fingerprints for change detection
-4. **Caching Check**: Skips download if model version hasn't changed
-5. **Drive Creation**: Stores models in Hyperdrive for distributed access
-6. **Metadata Storage**: Stores model metadata in Hyperbee
-7. **Network Seeding**: Shares drives across the network for replication
-8. **Inference Config**: Generates clean inference.config.json files (excludes internal files)
-9. **Key Export**: Writes model and drive keys to `keys.txt` file for external access
+4. **Fingerprint Generation**: Creates SHA-256 fingerprints for change detection
+5. **Caching Check**: Skips download if model version hasn't changed
+6. **Drive Creation**: Stores models in Hyperdrive for distributed access
+7. **Metadata Storage**: Stores model metadata in Hyperbee
+8. **Network Seeding**: Shares drives across the network for replication
+9. **Inference Config**: Generates clean inference.config.json files (excludes internal files)
+10. **Key Export**: Writes model and drive keys to `keys.txt` file for external access
 
 ## Model Key Generation
 
@@ -116,7 +118,37 @@ Models are identified by keys generated from their tags:
 function:type:name:externalVersion:params:quantization:internalVersion:other
 ```
 
-Example: `generation:salamandrata:instruct:1.0.0:2B:q8:1.0.0:`
+Example: `generation:salamandrata:instruct:1.0.0:2B:q8:1.0.0` (without trailing colon when `other` is empty)
+
+## Drive Key Integration
+
+For models with existing Hyperdrive keys, you can specify a `driveKey` in the configuration:
+
+```json
+{
+  "source": "aws",
+  "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/en-it/",
+  "addon": "@qvac/translation-nmtcpp",
+  "tags": {
+    "function": "translation",
+    "type": "opus",
+    "name": "marian",
+    "externalVersion": "",
+    "params": "",
+    "quantization": "q4f16_1",
+    "internalVersion": "1.0.0",
+    "other": "en-it"
+  },
+  "driveKey": "existing-hyperdrive-key-here"
+}
+```
+
+**When `driveKey` is provided:**
+
+- Model download is completely skipped
+- No local files are created
+- No inference config is generated
+- Drive key is stored in Hyperbee with default fingerprint
 
 ## Model Caching
 

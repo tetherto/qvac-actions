@@ -108,7 +108,8 @@ async function generateFingerprint (modelPath) {
  */
 function generateModelKey (tags) {
   const { function: func, type, name, externalVersion, params, quantization, internalVersion, other } = tags
-  return `${func}:${name}:${type}:${externalVersion}:${params}:${quantization}:${internalVersion}:${other}`
+  const baseKey = `${func}:${name}:${type}:${externalVersion}:${params}:${quantization}:${internalVersion}`
+  return other ? `${baseKey}:${other}` : baseKey
 }
 
 /**

@@ -33,6 +33,22 @@
         "internalVersion": "1.0.0",
         "other": "en-it"
       }
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "source": "aws",
+      "path": "models/existing-model/",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "existing",
+        "externalVersion": "1.0.0",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "en-de"
+      },
+      "driveKey": "test-drive-key-1234567890abcdef"
     }
   ]
 }

@@ -33,7 +33,7 @@ const config = require('./test.config.json')
 
 // Expected configs for each model based on their tags
 const expectedConfigs = {
-  'generation:salamandrata:instruct:1.0.0:2B:q8:1.0.0:': {
+  'generation:salamandrata:instruct:1.0.0:2B:q8:1.0.0': {
     addon: '@qvac/translation-llamacpp',
     function: 'generation',
     type: 'instruct',
@@ -123,7 +123,7 @@ test('Verify test output', t => {
   t.ok(fs.existsSync(basePath), `Base path exists: ${basePath}`)
 
   const expectedModelKeys = [
-    'generation:salamandrata:instruct:1.0.0:2B:q8:1.0.0:',
+    'generation:salamandrata:instruct:1.0.0:2B:q8:1.0.0',
     'translation:marian:opus:1.0.0::q4f16_1:1.0.0:en-it'
   ]
 
@@ -208,6 +208,42 @@ test('Verify .s3-fingerprint is excluded from inference config', t => {
   }
 
   t.pass('Inference config exclusion verification passed')
+})
+
+test('Verify model key generation without trailing colon', t => {
+  const { generateModelKey } = require('../refactor/utils')
+
+  // Test with empty 'other' field
+  const tagsWithoutOther = {
+    function: 'generation',
+    type: 'instruct',
+    name: 'salamandrata',
+    externalVersion: '1.0.0',
+    params: '2B',
+    quantization: 'q8',
+    internalVersion: '1.0.0',
+    other: ''
+  }
+
+  const keyWithoutOther = generateModelKey(tagsWithoutOther)
+  t.alike(keyWithoutOther, 'generation:salamandrata:instruct:1.0.0:2B:q8:1.0.0', 'Key without other should not have trailing colon')
+
+  // Test with non-empty 'other' field
+  const tagsWithOther = {
+    function: 'translation',
+    type: 'opus',
+    name: 'marian',
+    externalVersion: '1.0.0',
+    params: '',
+    quantization: 'q4f16_1',
+    internalVersion: '1.0.0',
+    other: 'en-it'
+  }
+
+  const keyWithOther = generateModelKey(tagsWithOther)
+  t.alike(keyWithOther, 'translation:marian:opus:1.0.0::q4f16_1:1.0.0:en-it', 'Key with other should include the other field')
+
+  t.pass('Model key generation verification passed')
 })
 
 test('Cleanup', async (t) => {

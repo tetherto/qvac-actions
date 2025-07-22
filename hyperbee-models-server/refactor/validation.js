@@ -18,7 +18,8 @@ const ModelSchema = z.object({
   source: z.enum(['aws', 'hf']),
   path: z.url().or(z.string().min(1)),
   addon: z.string().regex(/^@qvac\/.+/, 'Addon must start with @qvac/'),
-  tags: ModelTagsSchema
+  tags: ModelTagsSchema,
+  driveKey: z.string().optional()
 })
 
 // Schema for the master configuration
