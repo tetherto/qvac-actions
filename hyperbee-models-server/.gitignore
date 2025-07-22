@@ -4,3 +4,4 @@ app.log
 mocks/models/*
 storage
 models
+keys.txt

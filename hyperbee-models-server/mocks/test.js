@@ -10,8 +10,9 @@ const Corestore = require('corestore')
 const Hyperbee = require('hyperbee')
 const { Readable } = require('stream')
 const logger = require('../logger')
+const { generateFingerprint, generateModelKey } = require('../utils')
 
-const hfModule = require('../refactor/hf')
+const hfModule = require('../hf')
 hfModule.downloadHFModel = async (url, modelsRoot, modelKey) => {
   const destDir = path.join(modelsRoot, modelKey)
   await fs.promises.mkdir(destDir, { recursive: true })
@@ -25,8 +26,8 @@ hfModule.downloadHFModel = async (url, modelsRoot, modelKey) => {
   return destDir
 }
 
-const { main } = require('../refactor/model-manager')
-const { generateS3Fingerprint, needsS3Download } = require('../refactor/aws')
+const { main } = require('../model-manager')
+const { generateS3Fingerprint, needsS3Download } = require('../aws')
 
 const configPath = './mocks/test.config.json'
 const config = require('./test.config.json')
@@ -170,7 +171,6 @@ test('Verify S3 fingerprint functionality', async (t) => {
   const needsDownloadDifferent = await needsS3Download(awsModelPath, differentS3Fingerprint)
   t.ok(needsDownloadDifferent, 'Should need download with different S3 fingerprint')
 
-  const { generateFingerprint } = require('../refactor/utils')
   const localFolderFingerprint = await generateFingerprint(awsModelPath)
   t.ok(localFolderFingerprint.length > 0, 'Local folder fingerprint is not empty')
   t.ok(localFolderFingerprint.length === 64, 'Local folder fingerprint is SHA-256 hash (64 characters)')
@@ -211,8 +211,6 @@ test('Verify .s3-fingerprint is excluded from inference config', t => {
 })
 
 test('Verify model key generation without trailing colon', t => {
-  const { generateModelKey } = require('../refactor/utils')
-
   // Test with empty 'other' field
   const tagsWithoutOther = {
     function: 'generation',

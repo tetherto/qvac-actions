@@ -6,7 +6,7 @@ const Hyperbee = require('hyperbee')
 const Hyperdrive = require('hyperdrive')
 const fs = require('fs')
 const path = require('path')
-const logger = require('../logger')
+const logger = require('./logger')
 const b4a = require('b4a')
 
 const keyFile = path.join(__dirname, 'keys.txt')

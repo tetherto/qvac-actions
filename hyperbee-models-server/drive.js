@@ -5,7 +5,7 @@ const Hyperdrive = require('hyperdrive')
 const Localdrive = require('localdrive')
 const path = require('path')
 const debounce = require('debounceify')
-const logger = require('../logger')
+const logger = require('./logger')
 
 /**
  * Syncs a Hyperdrive for a model. If the drive already exists, it will be updated. If the drive does not exist, it will be created.

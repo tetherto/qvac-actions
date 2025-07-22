@@ -5,7 +5,7 @@ const path = require('path')
 const { pipeline } = require('stream')
 const util = require('util')
 const crypto = require('crypto')
-const logger = require('../logger')
+const logger = require('./logger')
 
 const pipelineAsync = util.promisify(pipeline)
 
