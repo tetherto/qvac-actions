@@ -175,6 +175,7 @@
       "source": "hf",
       "path": "https://huggingface.co/ChristianAzinn/gte-large-gguf/blob/main/gte-large_fp16.gguf",
       "addon": "@qvac/embed-llamacpp",
+      "driveKey": "d1896d9259692818df95bd2480e90c2d057688a4f7c9b1ae13ac7f5ee379d03e",
       "tags": {
         "function": "embedding",
         "type": "bert",

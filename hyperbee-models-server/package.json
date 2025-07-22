@@ -1,5 +1,5 @@
 {
-  "name": "hyperbee-models-server",
+  "name": "@tetherto/hyperbee-models-server",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {

@@ -28,7 +28,7 @@ async function main () {
 
     const dbDiscovery = swarm.join(db.discoveryKey)
     await dbDiscovery.flushed()
-    logger.info('DB discovery broadcasted')
+    logger.info(`DB discovery broadcasted: ${db.discoveryKey.toString('hex')}`)
 
     const keys = fs.readFileSync(keyFile, 'utf8').split('\n').slice(1)
     for (const key of keys) {
