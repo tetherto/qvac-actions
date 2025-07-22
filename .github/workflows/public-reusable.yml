@@ -62,7 +62,19 @@ jobs:
             exit 1
           fi
 
+      - name: Check if package is private
+        id: check-private
+        run: |
+          if jq -e '.private == true' package.json > /dev/null; then
+            echo "Package is private, skipping publish"
+            echo "skip_publish=true" >> $GITHUB_OUTPUT
+          else
+            echo "Package is not private, will publish"
+            echo "skip_publish=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Call Publish GPR Action
+        if: steps.check-private.outputs.skip_publish != 'true'
         uses: tetherto/qvac-devops/.github/actions/publish-library-to-gpr@production-workflows-tag
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
@@ -76,7 +88,20 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
+
+      - name: Check if package is private
+        id: check-private
+        run: |
+          if jq -e '.private == true' package.json > /dev/null; then
+            echo "Package is private, skipping publish"
+            echo "skip_publish=true" >> $GITHUB_OUTPUT
+          else
+            echo "Package is not private, will publish"
+            echo "skip_publish=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Publish to GPR
+        if: steps.check-private.outputs.skip_publish != 'true'
         uses: tetherto/qvac-devops/.github/actions/publish-library-to-gpr@production-workflows-tag
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}

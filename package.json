@@ -19,6 +19,5 @@
     "type": "git",
     "url": "git+https://github.com/tetherto/qvac-devops.git"
   },
-  "author": "tetherto",
-  "license": "ISC"
+  "license": "Apache-2.0"
 }
