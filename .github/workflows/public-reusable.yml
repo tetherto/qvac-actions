@@ -63,6 +63,7 @@ jobs:
           fi
 
       - name: Call Publish GPR Action
+        if: ${{ github.event.pull_request.head.repo.full_name != 'tetherto/qvac-devops' }}
         uses: tetherto/qvac-devops/.github/actions/publish-library-to-gpr@production-workflows-tag
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
@@ -77,6 +78,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Publish to GPR
+        if: ${{ github.event.pull_request.head.repo.full_name != 'tetherto/qvac-devops' }}
         uses: tetherto/qvac-devops/.github/actions/publish-library-to-gpr@production-workflows-tag
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
