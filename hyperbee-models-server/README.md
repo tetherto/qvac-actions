@@ -48,6 +48,7 @@ Set the following environment variables:
 # Required for AWS S3 models
 export AWS_ACCESS_KEY_ID="your-aws-access-key"
 export AWS_SECRET_ACCESS_KEY="your-aws-secret-key"
+export HF_TOKEN="your-huggingface-token" # required for restricted models
 
 # Optional: Custom corestore seed (defaults to 'default-seed-for-development')
 export CORESTORE_SEED="your-custom-seed"

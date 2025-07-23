@@ -42,7 +42,7 @@ async function downloadHFModel (url, modelsRoot, modelKey) {
   const { repo, hfPath, revision } = parseHfDownloadUrl(url)
 
   const cachePath = await downloadFileToCacheDir({
-    repo, path: hfPath, revision
+    repo, path: hfPath, revision, accessToken: process.env.HF_TOKEN
   })
 
   const ext = path.extname(hfPath)
