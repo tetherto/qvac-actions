@@ -2,3 +2,6 @@ node_modules
 package-lock.json
 app.log
 mocks/models/*
+storage
+models
+keys.txt

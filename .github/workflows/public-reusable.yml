@@ -66,7 +66,7 @@ jobs:
         uses: tetherto/qvac-devops/.github/actions/publish-library-to-gpr@production-workflows-tag
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
-          tag: 'dev'
+          tag: "dev"
 
   push-event:
     runs-on: ubuntu-latest

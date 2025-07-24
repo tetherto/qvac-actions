@@ -1,0 +1,41 @@
+{
+  "bucketName": "<bucket-name>",
+  "awsRegion": "<aws-region>",
+  "localBasePath": "./models",
+  "addons": [
+    "@qvac/addon-example-1",
+    "@qvac/addon-example-2"
+  ],
+  "models": [
+    {
+      "source": "hf",
+      "path": "https://huggingface.co/<repo>/<model-name>/blob/<revision>/<file>",
+      "addon": "@qvac/addon-example-1",
+      "tags": {
+        "function": "<function>",
+        "type": "<type>",
+        "name": "<model-name>",
+        "externalVersion": "<model-external-version>",
+        "params": "<params>",
+        "quantization": "<quantization>",
+        "internalVersion": "<qvac-internal-version>",
+        "other": "<other model-specific info>"
+      }
+    },
+    {
+      "source": "aws",
+      "path": "<s3-path>",
+      "addon": "@qvac/addon-example-2",
+      "tags": {
+        "function": "<function>",
+        "type": "<type>",
+        "name": "<model-name>",
+        "externalVersion": "<model-external-version>",
+        "params": "<params>",
+        "quantization": "<quantization>",
+        "internalVersion": "<qvac-internal-version>",
+        "other": "<other model-specific info>"
+      }
+    }
+  ]
+}
