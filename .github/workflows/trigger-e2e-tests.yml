@@ -62,7 +62,7 @@ jobs:
 
             const addonVersion = '${{ inputs.addon_version }}';
             const addonModel = '${{ inputs.addon_model }}';
-            const prNumber = parseInt('${{ inputs.pr_number }}');
+            const prNumber = '${{ inputs.pr_number }}';
             const e2eAppName = '${{ inputs.e2e_app_name }}';
 
             if (!addonVersion) {
