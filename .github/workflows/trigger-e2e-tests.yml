@@ -9,7 +9,7 @@ on:
         type: string
       addon_model:
         description: 'Model to test'
-        required: true
+        required: false
         type: string
       pr_number:
         description: 'PR number from addon repository'
@@ -25,8 +25,7 @@ jobs:
   trigger-e2e-tests:
     name: Trigger E2E Tests (Example Apps)
     runs-on: ubuntu-latest
-    continue-on-error: true # temp, while testing
-    timeout-minutes: 10 # temp, while testing
+    timeout-minutes: 10 
 
     steps:
       - name: Log Workflow Contexts
@@ -48,6 +47,21 @@ jobs:
           echo "Secrets Context: $SECRETS_CONTEXT"
           echo "Full GitHub Context: $GITHUB_CONTEXT"
         
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          submodules: recursive
+
+      - name: Get package name from package.json
+        id: package_name
+        run: |
+          package_name=$(jq -r '.name' package.json)
+          echo "package_name=$package_name" >> $GITHUB_OUTPUT
+
       - name: Trigger E2E tests
         uses: actions/github-script@v7
         env:
@@ -58,7 +72,10 @@ jobs:
           script: |
             console.log('Triggering E2E tests with model package...');
 
-            const { owner, repo } = context.repo;
+            const { owner } = context.repo;
+            // Get package_name from previous step
+            // To support different repo and published package name
+            const package_name = '${{ steps.package_name.outputs.package_name }}';
 
             const addonVersion = '${{ inputs.addon_version }}';
             const addonModel = '${{ inputs.addon_model }}';
@@ -68,18 +85,21 @@ jobs:
             if (!addonVersion) {
               throw new Error('Addon version is not set');
             }
-            
-            if (!addonModel) {
-              throw new Error('Addon model is not set');
-            }
 
             if (!e2eAppName) {
               throw new Error('E2E app name is not set');
             }
 
-            const addonJsonVer = JSON.stringify({
-              ['@'+repo+'-'+addonModel]: addonVersion
-            });
+            let addonJsonVer = ''
+            if (addonModel) {
+              addonJsonVer = JSON.stringify({
+                [package_name + '-' + addonModel]: addonVersion
+              });
+            } else {
+              addonJsonVer = JSON.stringify({
+                [package_name]: addonVersion
+              });
+            }
 
             console.log('--------------Dispatch e2e workflow params--------------');
             console.log('Addon version:', addonVersion);
@@ -88,7 +108,7 @@ jobs:
             console.log('E2E app name:', e2eAppName);
             console.log('PR number:', prNumber);
             console.log('Repo owner:', owner);
-            console.log('Repo name:', repo);
+            console.log('Package name:', package_name);
             console.log('--------------------------------------------------------');
 
             const response = await github.rest.actions.createWorkflowDispatch({
@@ -100,7 +120,7 @@ jobs:
                     package_versions: addonJsonVer,
                     e2e_app_name: e2eAppName,
                     model_name: addonModel,
-                    upstream_repo: repo,
+                    upstream_repo: package_name,
                     upstream_pr_number: prNumber
                 }
             });
