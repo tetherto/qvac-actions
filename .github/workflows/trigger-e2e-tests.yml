@@ -7,10 +7,6 @@ on:
         description: 'Addon npm package version to test'
         required: true
         type: string
-      addon_model:
-        description: 'Model to test'
-        required: true
-        type: string
       pr_number:
         description: 'PR number from addon repository'
         required: false
