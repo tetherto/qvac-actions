@@ -71,30 +71,106 @@ The system validates configuration using Zod schemas:
 - **AWS Configuration**: Required when using AWS source models
 - **Drive Keys**: Optional `driveKey` field to skip download and use existing drive
 
-## Usage
+## Adding New Models
 
-### Running the Model Manager
+Follow this step-by-step process to add, download, and distribute new models:
+
+### 1. Configure Model Entry
+
+Add your model configuration to `prod.config.json` in the appropriate format:
+
+```json
+{
+  "source": "hf", // or "aws" for S3 models
+  "path": "https://huggingface.co/username/repo/resolve/main/model.gguf",
+  "addon": "@qvac/package-name",
+  "tags": {
+    "function": "generation", // e.g., generation, translation, transcription
+    "type": "instruct", // model type
+    "name": "model-name", // model name
+    "externalVersion": "1.0.0", // external version
+    "params": "7B", // parameter count
+    "quantization": "q4", // quantization level
+    "internalVersion": "1.0.0", // internal version
+    "other": "" // additional info (optional)
+  }
+}
+```
+
+### 2. Setup Configuration and Environment
 
 ```bash
-# Run the main model manager
+# Copy production config to active config
+cp prod.config.json config.json
+
+# Set required environment variables (obtain from team lead)
+export CORESTORE_SEED="production-seed"
+export HF_TOKEN="your-huggingface-token"  # for gated models
+export AWS_ACCESS_KEY_ID="your-aws-access-key"
+export AWS_SECRET_ACCESS_KEY="your-aws-secret-key"
+```
+
+**Important**: Add the appropriate `bucketName` and `awsRegion` values to `config.json` (obtain from team lead).
+
+### 3. Download and Process Models
+
+Run the model manager to download models, create Hyperdrive instances, and store metadata:
+
+```bash
 node model-manager.js
 ```
 
-### Available Scripts
+This process will:
+
+- Download models from HuggingFace or AWS S3
+- Generate SHA-256 fingerprints for change detection
+- Create Hyperdrive instances for distributed storage
+- Store model metadata in Hyperbee database
+- Generate inference configuration files
+- Export drive and model keys to `keys.txt`
+
+### 4. Initial Network Seeding
+
+After successful model processing, start the seeding process:
 
 ```bash
-# Run tests
-npm test
+node seeder.js
+```
 
-# Lint code
-npm run lint
+The seeder will:
 
-# Fix linting issues
-npm run lint:fix
+- Read drive keys from `keys.txt`
+- Join the Hyperswarm network
+- Broadcast discovery keys for all models
+- Enable initial replication of model data
 
-# Check Hyperbee connection
+### 5. Share Keys for Replication
+
+1. **Extract Drive Keys**: The `keys.txt` file contains all drive keys needed for replication
+2. **Share with Team Leads**: Pass the drive keys to team leads for network distribution
+3. **Continue Seeding**: Keep `seeder.js` running until confirmation of successful replication across the network
+
+### 6. Monitor and Verify
+
+```bash
+# Check Hyperbee connection and model availability
 npm run check-connection
 ```
+
+### Configuration Requirements by Source
+
+#### Hugging Face Models
+
+- **Path Format**: Full HuggingFace URL (resolve or blob format)
+- **Environment**: `HF_TOKEN` required for gated/restricted models
+- **Example**: `https://huggingface.co/username/repo/resolve/main/model.gguf`
+
+#### AWS S3 Models
+
+- **Path Format**: S3 path (folder or file)
+- **Environment**: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`
+- **Config**: `bucketName` and `awsRegion` in `config.json`
+- **Example**: `qvac_models_compiled/model-name/linux/x64/`
 
 ## Model Management Process
 
@@ -169,6 +245,22 @@ The system implements intelligent caching to prevent unnecessary downloads:
 - **Smart Download Logic**: Uses S3 fingerprint to determine if download is needed
 - **Change Detection**: Uses local folder fingerprint stored in Hyperbee to detect inference config changes
 - **Bandwidth Savings**: Prevents redundant downloads while maintaining visibility into local file changes
+
+## Available Scripts
+
+```bash
+# Run tests
+npm test
+
+# Lint code
+npm run lint
+
+# Fix linting issues
+npm run lint:fix
+
+# Check Hyperbee connection
+npm run check-connection
+```
 
 ## Testing
 
