@@ -9,7 +9,7 @@ const getTmpDir = require('test-tmp')
 
 async function main () {
   const tmpDir = await getTmpDir()
-  const core = new Hypercore(tmpDir, Buffer.from('ffe2d68e4b08491ce66547562609b27170cdbf5d27d597435b055120470a8fe1', 'hex'))
+  const core = new Hypercore(tmpDir, Buffer.from('7504626aaa534ac55d91b4b3067504774ae1457b03ddfbd86d817dd8cfbca8c8', 'hex'))
   const db = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'binary' })
   await db.ready()
   const swarm = new Hyperswarm()
