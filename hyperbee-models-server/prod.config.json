@@ -670,6 +670,44 @@
         }
       ],
       "driveKey": "ac2ce4f678659d82b2bf95f91952930985b809c5e9f3082af5138337d7f03e12"
+    },
+    {
+      "addon": "@qvac/translation-llamacpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "",
+        "internalVersion": "1.0.0",
+        "other": "it-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/ggml-opus-it-en/2025-08-06/ggml-opus-it-en.bin"
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-llamacpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "",
+        "internalVersion": "1.0.0",
+        "other": "en-it"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/ggml-opus-en-it/2025-08-06/ggml-opus-en-it.bin"
+        }
+      ]
     }
   ]
 }
