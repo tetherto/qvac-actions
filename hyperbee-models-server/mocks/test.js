@@ -183,7 +183,7 @@ test('Verify multiple models per drive functionality', t => {
   t.ok(mainHasRun, 'Main must have run before verifying multiple models functionality')
 
   const basePath = path.resolve(__dirname, '..', config.localBasePath)
-  
+
   // Test that multiple models from different drives are processed correctly
   // Each model should have its own folder and inference config based on unique tags
   const salamandrataModelKeys = [
@@ -202,7 +202,7 @@ test('Verify multiple models per drive functionality', t => {
     t.ok(fileContent.addon === '@qvac/translation-llamacpp', `Addon matches for ${modelKey}`)
     t.ok(fileContent.function === 'generation', `Function matches for ${modelKey}`)
     t.ok(fileContent.name === 'salamandrata', `Name matches for ${modelKey}`)
-    
+
     // Check that quantization differs between models
     if (modelKey.includes('q8')) {
       t.ok(fileContent.quantization === 'q8', `Quantization is q8 for ${modelKey}`)
@@ -218,7 +218,7 @@ test('Verify AWS models with multiple sources', t => {
   t.ok(mainHasRun, 'Main must have run before verifying AWS multiple sources')
 
   const basePath = path.resolve(__dirname, '..', config.localBasePath)
-  
+
   // Test that AWS models with different tags are processed correctly
   const marianModelKeys = [
     'translation:marian:opus:1.0.0::q4f16_1:1.0.0:en-it',
@@ -245,11 +245,11 @@ test('Verify drive key functionality with multiple models', t => {
   t.ok(mainHasRun, 'Main must have run before verifying drive key functionality')
 
   const basePath = path.resolve(__dirname, '..', config.localBasePath)
-  
+
   // Test that models with driveKey are handled correctly
   const existingModelKey = 'translation:existing:opus:1.0.0::q4f16_1:1.0.0:en-de:0'
   const existingModelPath = path.join(basePath, existingModelKey)
-  
+
   // Models with driveKey don't create local files, they only create database records
   // So we don't expect the folder to exist
   t.not(fs.existsSync(existingModelPath), `Folder for existing model should not exist: ${existingModelPath}`)
@@ -379,7 +379,7 @@ test('Verify addon model keys map with multiple models', t => {
   // by checking that multiple models are associated with the same addon
   for (const [addon, expectedModelKeys] of Object.entries(expectedAddonModels)) {
     t.ok(expectedModelKeys.length > 1, `Addon ${addon} should have multiple models`)
-    
+
     // Verify that all expected model keys are unique
     const uniqueKeys = new Set(expectedModelKeys)
     t.ok(uniqueKeys.size === expectedModelKeys.length, `All model keys for ${addon} should be unique`)
@@ -404,7 +404,7 @@ test('Verify duplicate model key detection', t => {
 
   const modelKey1 = generateModelKey(duplicateTags)
   const modelKey2 = generateModelKey(duplicateTags)
-  
+
   t.alike(modelKey1, modelKey2, 'Same tags should generate same model key')
   t.alike(modelKey1, 'generation:salamandrata:instruct:1.0.0:2B:q8:1.0.0', 'Model key format is correct')
 
@@ -430,7 +430,7 @@ test('Verify model key generation with indices for multiple models', t => {
   // Test that indices are added correctly
   const modelKey0 = `${baseModelKey}:0`
   const modelKey1 = `${baseModelKey}:1`
-  
+
   t.alike(modelKey0, 'generation:salamandrata:instruct:1.0.0:2B:q8:1.0.0:0', 'Model key with index 0 is correct')
   t.alike(modelKey1, 'generation:salamandrata:instruct:1.0.0:2B:q8:1.0.0:1', 'Model key with index 1 is correct')
   t.not(modelKey0, modelKey1, 'Model keys with different indices should be different')
@@ -452,7 +452,7 @@ test('Verify model key generation with indices for multiple models', t => {
 
   const modelKeyWithOther0 = `${baseModelKeyWithOther}:0`
   const modelKeyWithOther1 = `${baseModelKeyWithOther}:1`
-  
+
   t.alike(modelKeyWithOther0, 'translation:marian:opus:1.0.0::q4f16_1:1.0.0:en-it:0', 'Model key with other field and index 0 is correct')
   t.alike(modelKeyWithOther1, 'translation:marian:opus:1.0.0::q4f16_1:1.0.0:en-it:1', 'Model key with other field and index 1 is correct')
 
