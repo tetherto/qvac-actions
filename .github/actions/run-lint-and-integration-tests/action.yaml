@@ -3,11 +3,15 @@ description: "Run linting and integration tests when verify label is present"
 
 inputs:
   secret-token:
-    description: "Secret token"
+    description: "Secret token (GitHub token for GPR or NPM token for npmjs.org)"
     required: true
   pat-token:
     description: "PAT token"
     required: false
+  registry-type:
+    description: "Registry type: 'gpr' for GitHub Package Registry or 'npm' for npmjs.org"
+    required: false
+    default: "gpr"
 
 runs:
   using: composite
@@ -16,10 +20,18 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version: "18.x"
-    - name: Setup npm authentication
+    - name: Setup npm authentication for GPR
+      if: inputs.registry-type == 'gpr'
       run: |
         echo "@tetherto:registry=https://npm.pkg.github.com" > .npmrc
         echo "//npm.pkg.github.com/:_authToken=${{ inputs.secret-token }}" >> .npmrc
+        git config --global url."https://${{ inputs.pat-token }}:@github.com/".insteadOf "https://github.com/"
+      shell: bash
+    - name: Setup npm authentication for npmjs.org
+      if: inputs.registry-type == 'npm'
+      run: |
+        echo "@qvac:registry=https://registry.npmjs.org" > .npmrc
+        echo "//registry.npmjs.org/:_authToken=${{ inputs.secret-token }}" >> .npmrc
         git config --global url."https://${{ inputs.pat-token }}:@github.com/".insteadOf "https://github.com/"
       shell: bash
     - name: Install dependencies
