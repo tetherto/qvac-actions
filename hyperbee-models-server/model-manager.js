@@ -73,6 +73,11 @@ async function main () {
         if (model.driveKey) {
           logger.info(`Model ${modelKey} has driveKey provided, skipping download and using existing drive: ${model.driveKey}`)
 
+          if (model.driveKey === existingModelRecord?.key && existingModelRecord?.driveVersion === null) {
+            logger.info(`Model ${modelKey} has the same driveKey which user provided, skipping...`)
+            continue
+          }
+
           const defaultFingerprint = '0000000000000000000000000000000000000000000000000000000000000000'
 
           const modelRecord = {
