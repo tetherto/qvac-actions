@@ -5,6 +5,7 @@ A distributed AI model management system that downloads models from Hugging Face
 ## Features
 
 - **Multi-source Model Downloads**: Download models from Hugging Face and AWS S3
+- **Multiple Models per Drive**: Support for multiple model files within each drive configuration
 - **Distributed Storage**: Store models in Hyperdrive for efficient peer-to-peer distribution
 - **Metadata Management**: Track model metadata, versions, and fingerprints in Hyperbee
 - **Smart Caching**: Intelligent caching for HF and AWS models prevents redundant downloads
@@ -70,6 +71,66 @@ The system validates configuration using Zod schemas:
 - **Addons**: Must follow the pattern `@qvac/package-name`
 - **AWS Configuration**: Required when using AWS source models
 - **Drive Keys**: Optional `driveKey` field to skip download and use existing drive
+- **Multiple Models**: Each drive can contain multiple models with different sources and paths
+
+### Configuration Example
+
+```json
+{
+  "bucketName": "my-model-bucket",
+  "awsRegion": "eu-central-1",
+  "localBasePath": "models",
+  "addons": ["@qvac/translation-llamacpp", "@qvac/translation-nmtcpp"],
+  "drives": [
+    {
+      "addon": "@qvac/translation-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "salamandrata",
+        "externalVersion": "1.0.0",
+        "params": "2B",
+        "quantization": "q8",
+        "internalVersion": "1.0.0",
+        "other": ""
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/BSC-LT/salamandraTA-2B-instruct-GGUF/blob/main/salamandrata_2b_inst_q8.gguf"
+        },
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/BSC-LT/salamandraTA-2B-instruct-GGUF/blob/main/salamandrata_2b_inst_q4.gguf"
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "1.0.0",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "en-it"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "models/marian/"
+        },
+        {
+          "source": "aws",
+          "path": "models/marian-large/"
+        }
+      ]
+    }
+  ]
+}
+```
 
 ## Usage
 
@@ -121,25 +182,40 @@ function:type:name:externalVersion:params:quantization:internalVersion:other
 
 Example: `generation:salamandrata:instruct:1.0.0:2B:q8:1.0.0` (without trailing colon when `other` is empty)
 
+### Multiple Models per Drive
+
+When multiple models are configured within the same drive, each model must have unique tags to generate distinct model keys. The system will:
+
+- Process each model in the drive configuration
+- Generate unique model keys based on their tags
+- Create separate folders and inference configurations for each model
+- Track all models in the addon model keys map
+
+**Important**: Models within the same drive that have identical tags will be treated as duplicates and only the first one will be processed.
+
 ## Drive Key Integration
 
 For models with existing Hyperdrive keys, you can specify a `driveKey` in the configuration:
 
 ```json
 {
-  "source": "aws",
-  "path": "qvac_models_compiled/marian/linux/x64/vulkan/q4f16_1/en-it/",
   "addon": "@qvac/translation-nmtcpp",
   "tags": {
     "function": "translation",
     "type": "opus",
-    "name": "marian",
-    "externalVersion": "",
+    "name": "existing",
+    "externalVersion": "1.0.0",
     "params": "",
     "quantization": "q4f16_1",
     "internalVersion": "1.0.0",
-    "other": "en-it"
+    "other": "en-de"
   },
+  "models": [
+    {
+      "source": "aws",
+      "path": "models/existing-model/"
+    }
+  ],
   "driveKey": "existing-hyperdrive-key-here"
 }
 ```
@@ -181,9 +257,12 @@ npm test
 Tests cover:
 
 - Model downloading from HF and AWS
+- Multiple models per drive functionality
 - Drive creation and management
 - Fingerprint generation and caching
 - S3 fingerprint functionality with dual fingerprinting (S3 date + local folder)
 - Configuration validation
 - Resource cleanup
 - Inference config exclusion of internal files
+- Model key generation and duplicate detection
+- Addon model keys mapping with multiple models
