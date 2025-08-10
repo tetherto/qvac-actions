@@ -1,0 +1,90 @@
+name: C++ format check
+description: "Run C++ format check"
+
+inputs:
+  secret-token:
+    description: "Secret token"
+    required: true
+  pat-token:
+    description: "PAT token"
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout PR head and target
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.pat-token }}
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
+        ref: ${{ github.event.pull_request.head.ref }}
+    
+    - name: Configure git
+      run: git config --global --add url."https://${{ inputs.pat-token }}:x-oauth-basic@github.com/".insteadOf "git@github.com:"
+
+    - name: Configure vcpkg
+      run: echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
+
+    - name: Create vcpkg cache location
+      run: mkdir -p vcpkg/cache
+
+    - name: Get vcpkg cache
+      uses: actions/cache@v4
+      with:
+        path: vcpkg/cache
+        key: linux-x64-${{ hashFiles( 'vcpkg.json', 'vcpkg-configuration.json', 'vcpkg/ports/**' ) }}
+        restore-keys: linux-x64-
+
+    - name: Install bare-make
+      id: install_bare_make
+      continue-on-error: true
+      run: npm install -g bare-make
+
+    - name: Install vulkan
+      continue-on-error: true
+      run: |
+        wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo tee /etc/apt/trusted.gpg.d/lunarg.asc
+        sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list http://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
+        sudo apt update
+        sudo apt install vulkan-sdk
+
+    - name: Generate build system
+      continue-on-error: true
+      run: |
+        if ! command -v bare-make >/dev/null; then
+          echo "bare-make not installed, skipping"
+          exit 0
+        fi
+        bare-make generate -D BUILD_TESTING=ON
+
+    - name: Check C++ files format
+      continue-on-error: true
+      run: |
+        TARGET_SHA=${{ github.event.pull_request.base.sha }}
+        PR_HEAD_SHA=${{ github.event.pull_request.head.sha }}
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x llvm.sh
+        sudo ./llvm.sh 19 all
+        if ! git-clang-format-19 --binary clang-format-19 --diff $TARGET_SHA $PR_HEAD_SHA; then
+            echo "::error title=Unformatted C++ files::Please format your C++ files."
+            exit 1
+        fi
+
+    - name: Build
+      continue-on-error: true
+      run: |
+        if ! command -v bare-make >/dev/null; then
+          echo "bare-make not installed, skipping build"
+          exit 0
+        fi
+        bare-make build
+
+    - name: Run C++ tests
+      continue-on-error: true
+      run: |
+        if ! command -v bare-make >/dev/null; then
+          echo "bare-make not installed, skipping tests"
+          exit 0
+        fi
+        bare-make test
