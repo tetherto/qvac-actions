@@ -8,6 +8,12 @@ inputs:
   pat-token:
     description: "PAT token"
     required: false
+  ref:
+    description: "Ref"
+    required: false
+  repository:
+    description: "Repository"
+    required: false
 
 runs:
   using: composite
@@ -17,9 +23,9 @@ runs:
       with:
         fetch-depth: 0
         token: ${{ inputs.pat-token }}
-        repository: ${{ github.event.pull_request.head.repo.full_name }}
-        ref: ${{ github.event.pull_request.head.ref }}
-    
+        repository: ${{ inputs.repository }}
+        ref: ${{ inputs.ref }}
+
     - name: Configure git
       shell: bash
       run: git config --global --add url."https://${{ inputs.pat-token }}:x-oauth-basic@github.com/".insteadOf "git@github.com:"
