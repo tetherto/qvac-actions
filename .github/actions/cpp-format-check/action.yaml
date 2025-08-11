@@ -33,7 +33,6 @@ runs:
       run: mkdir -p vcpkg/cache
 
     - name: Get vcpkg cache
-      shell: bash
       uses: actions/cache@v4
       with:
         path: vcpkg/cache
