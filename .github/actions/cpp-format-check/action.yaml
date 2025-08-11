@@ -14,6 +14,9 @@ inputs:
   repository:
     description: "Repository"
     required: false
+  sha:
+    description: "SHA"
+    required: false
 
 runs:
   using: composite
@@ -74,8 +77,8 @@ runs:
       continue-on-error: true
       shell: bash
       run: |
-        TARGET_SHA=${{ github.event.pull_request.base.sha }}
-        PR_HEAD_SHA=${{ github.event.pull_request.head.sha }}
+        TARGET_SHA=${{ inputs.sha }}
+        PR_HEAD_SHA=${{ inputs.sha }}
         wget https://apt.llvm.org/llvm.sh
         chmod +x llvm.sh
         sudo ./llvm.sh 19 all
