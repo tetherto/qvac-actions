@@ -82,12 +82,26 @@ runs:
       run: |
         TARGET_SHA=${{ inputs.target_sha }}
         PR_HEAD_SHA=${{ inputs.pr_head_sha }}
+        if [ -z "$TARGET_SHA" ] || [ -z "$PR_HEAD_SHA" ]; then
+          echo "No target or head SHA specified, skipping format check."
+          exit 0
+        fi
+    
         wget https://apt.llvm.org/llvm.sh
         chmod +x llvm.sh
         sudo ./llvm.sh 19 all
-        if ! git-clang-format-19 --binary clang-format-19 --diff $TARGET_SHA $PR_HEAD_SHA; then
+    
+        OUTPUT=$(git-clang-format-19 --binary clang-format-19 --diff $TARGET_SHA $PR_HEAD_SHA 2>&1)
+        EXIT_CODE=$?
+        if [ $EXIT_CODE -ne 0 ]; then
+          if echo "$OUTPUT" | grep -q "no modified files to format"; then
+            echo "No modified C++ files to format, skipping error."
+            exit 0
+          else
             echo "::error title=Unformatted C++ files::Please format your C++ files."
+            echo "$OUTPUT"
             exit 1
+          fi
         fi
 
     - name: Build
