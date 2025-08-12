@@ -6,7 +6,9 @@
     "lint": "standard",
     "lint:fix": "standard --fix",
     "test": "brittle mocks/test.js",
-    "check-connection": "node scripts/hyperbeeConnectionCheck.js"
+    "check-connection": "node scripts/hyperbeeConnectionCheck.js",
+    "check-drive": "node scripts/driveKeyChecker.js",
+    "check-bee": "node scripts/hyperbeeKeyChecker.js"
   },
   "keywords": [],
   "repository": {
