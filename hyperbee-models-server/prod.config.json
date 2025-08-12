@@ -970,6 +970,30 @@
         }
       ],
       "driveKey": "1b78d8309f80fcda61d0291ed5dc755e10e46b39d7e7484083a3c6d20b86c679"
+    },
+    {
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "multimodal",
+        "name": "qwen2.5-omni",
+        "externalVersion": "",
+        "params": "3B",
+        "quantization": "",
+        "internalVersion": "1.0.0",
+        "other": ""
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/ggml-org/Qwen2.5-Omni-3B-GGUF/blob/main/Qwen2.5-Omni-3B-Q4_K_M.gguf"
+        },
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/ggml-org/Qwen2.5-Omni-3B-GGUF/blob/main/mmproj-Qwen2.5-Omni-3B-Q8_0.gguf"
+        }
+      ],
+      "driveKey": "e65db178dfa6d027a91b4d263c30f7596e742cd7ea5c7f1ba91584113c3a47f1"
     }
   ]
 }
