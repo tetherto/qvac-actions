@@ -165,6 +165,26 @@
       },
       "models": [
         {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/Qwen3-4B/2025-06-27/Qwen3-4B-Q4_K_M.gguf"
+        }
+      ],
+      "driveKey": "19ffb75463149955ee24d786dfddd84d41fc872ea813cd4465f5f7299d165adc"
+    },
+    {
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "qwen3",
+        "externalVersion": "",
+        "params": "0.6B",
+        "quantization": "",
+        "internalVersion": "1.0.0",
+        "other": ""
+      },
+      "models": [
+        {
           "source": "hf",
           "path": "https://huggingface.co/Aldaris/Qwen3-4B-Q4_K_M-GGUF/blob/main/qwen3-4b-q4_k_m.gguf"
         }
@@ -688,7 +708,8 @@
           "source": "aws",
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-it-en/2025-08-06/ggml-opus-it-en.bin"
         }
-      ]
+      ],
+      "driveKey": "57ca319db2b656b342de92dcd3b96963648092358bf5b9e02f76599f61ac5a02"
     },
     {
       "addon": "@qvac/translation-llamacpp",

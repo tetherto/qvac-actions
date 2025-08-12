@@ -253,6 +253,9 @@ node scripts/driveKeyChecker.js <drive-key>
 
 # Use the Hyperbee key checker to verify database entries
 node scripts/hyperbeeKeyChecker.js <bee-key> <model-key>
+
+# Check model availability (checks model database entry and associated drive files)
+npm run check-model <model-key>
 ```
 
 ### Configuration Requirements by Source
