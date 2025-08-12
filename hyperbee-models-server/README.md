@@ -258,6 +258,29 @@ node scripts/hyperbeeKeyChecker.js <bee-key> <model-key>
 npm run check-model <model-key>
 ```
 
+### 8. Push to Git
+
+Once reseeding has been confirmed and the model is successfully distributed across the network:
+
+- **Add Drive Key to Configuration**: Add the `driveKey` property to your drive entry in `prod.config.json`:
+
+  ```json
+  {
+    "addon": "@qvac/your-addon",
+    "tags": {
+      // ... your model tags
+    },
+    "models": [
+      // ... your model files
+    ],
+    "driveKey": "your-drive-key-from-keys.txt"
+  }
+  ```
+
+  The drive key can be found in the `keys.txt` file generated during the model processing step.
+
+- **Create Pull Request**: Create a PR with your model addition for review.
+
 ### Configuration Requirements by Source
 
 #### Hugging Face Models

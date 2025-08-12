@@ -57,56 +57,52 @@ async function main () {
     await fs.promises.appendFile(keyFile, `bee ${db.key.toString('hex')}\n`)
 
     for (const driveConfig of config.drives) {
+      const modelKey = generateModelKey(driveConfig.tags)
+      const addonKeySet = addonModelKeysMap.get(driveConfig.addon)
+      if (!addonKeySet) {
+        logger.error(
+          `Addon ${driveConfig.addon} not found. Please check the config.json file and add it to the 'addons' array if it is a valid addon.`
+        )
+        continue
+      }
+      if (addonKeySet.has(modelKey)) {
+        logger.error(
+          `Model ${modelKey} already exists for addon ${driveConfig.addon}. Please check the config.json file for duplicate models.`
+        )
+        continue
+      }
+      addonKeySet.add(modelKey)
+
+      // Check if driveKey is provided - if so, skip download and use provided key
+      if (driveConfig.driveKey) {
+        logger.info(
+          `Model ${modelKey} has driveKey provided, skipping download and using existing drive: ${driveConfig.driveKey}`
+        )
+
+        const defaultFingerprint =
+          '0000000000000000000000000000000000000000000000000000000000000000'
+
+        const modelRecord = {
+          key: driveConfig.driveKey,
+          tags: driveConfig.tags,
+          driveVersion: null,
+          fingerprint: defaultFingerprint
+        }
+
+        await db.put(modelKey, JSON.stringify(modelRecord))
+        driveKeys[modelKey] = driveConfig.driveKey
+        logger.info(
+          `Model ${modelKey} record created with provided driveKey: ${JSON.stringify(
+            modelRecord
+          )}`
+        )
+        continue
+      }
+
+      // For drives without driveKey, download all models first, then create/update drive
+      const localPaths = []
       for (const model of driveConfig.models) {
         try {
-          const modelKey = generateModelKey(driveConfig.tags)
-          const addonKeySet = addonModelKeysMap.get(driveConfig.addon)
-          if (!addonKeySet) {
-            logger.error(
-              `Addon ${driveConfig.addon} not found. Please check the config.json file and add it to the 'addons' array if it is a valid addon.`
-            )
-            continue
-          }
-          if (addonKeySet.has(modelKey)) {
-            logger.error(
-              `Model ${modelKey} already exists for addon ${driveConfig.addon}. Please check the config.json file for duplicate models.`
-            )
-            continue
-          }
-          addonKeySet.add(modelKey)
-
-          const dbRecord = await db.get(modelKey)
-          let existingModelRecord = null
-          if (dbRecord && dbRecord.value) {
-            existingModelRecord = JSON.parse(dbRecord.value.toString())
-          }
-
-          // Check if driveKey is provided - if so, skip download and use provided key
-          if (driveConfig.driveKey) {
-            logger.info(
-              `Model ${modelKey} has driveKey provided, skipping download and using existing drive: ${driveConfig.driveKey}`
-            )
-
-            const defaultFingerprint =
-              '0000000000000000000000000000000000000000000000000000000000000000'
-
-            const modelRecord = {
-              key: driveConfig.driveKey,
-              tags: driveConfig.tags,
-              driveVersion: null,
-              fingerprint: defaultFingerprint
-            }
-
-            await db.put(modelKey, JSON.stringify(modelRecord))
-            driveKeys[modelKey] = driveConfig.driveKey
-            logger.info(
-              `Model ${modelKey} record created with provided driveKey: ${JSON.stringify(
-                modelRecord
-              )}`
-            )
-            continue
-          }
-
           let localPath
           if (model.source === 'hf') {
             localPath = await downloadHFModel(
@@ -134,71 +130,93 @@ async function main () {
             )
             continue
           }
-
-          await buildInferenceConfig(
-            driveConfig.addon,
-            driveConfig.tags,
-            localPath
-          )
-          const fingerprint = await generateFingerprint(localPath)
-          let existingDriveVersion = -1
-          if (existingModelRecord) {
-            existingDriveVersion = existingModelRecord.driveVersion
-            if (existingModelRecord.fingerprint === fingerprint) {
-              await fs.promises.appendFile(
-                keyFile,
-                `${modelKey} ${existingModelRecord.key}\n`
-              )
-              driveKeys[modelKey] = existingModelRecord.key
-              logger.info(
-                `Model ${modelKey} already exists locally and on drive with the same fingerprint: ${fingerprint}. Skipping...`
-              )
-              continue
-            } else {
-              logger.info(
-                `Model ${modelKey} has a new fingerprint, local path fingerprint: ${fingerprint}, existing drive fingerprint: ${existingModelRecord.fingerprint}. Updating drive...`
-              )
-            }
-          } else {
-            logger.info(
-              `Model ${modelKey} does not exist. Initializing drive...`
-            )
-          }
-
-          const drive = await syncDrive(store, modelKey, localPath)
-          if (drive.version > existingDriveVersion) {
-            logger.info(
-              `Model ${modelKey} has a new drive version, previous drive version: ${existingDriveVersion}, new drive version: ${drive.version}`
-            )
-          }
-          driveKeys[modelKey] = drive.key
-          driveInstances.set(modelKey, drive)
-
-          const modelRecord = {
-            key: drive.key.toString('hex'),
-            tags: driveConfig.tags,
-            driveVersion: drive.version,
-            fingerprint
-          }
-          await db.put(modelKey, JSON.stringify(modelRecord))
-          await fs.promises.appendFile(
-            keyFile,
-            `${modelKey} ${drive.key.toString('hex')}\n`
-          )
-          logger.info(
-            `Model ${modelKey} record updated successfully with record: ${JSON.stringify(
-              modelRecord
-            )}`
-          )
+          localPaths.push(localPath)
         } catch (error) {
           logger.error(
-            `Error processing model ${model.path || 'unknown'}: ${
-              error.message
-            }`
+            `Error processing model ${model.path || 'unknown'}: ${error.message}`
           )
           logger.error(`Stack trace: ${error.stack}`)
           continue
         }
+      }
+
+      if (localPaths.length === 0) {
+        logger.error(`No models downloaded for ${modelKey}, skipping drive creation`)
+        continue
+      }
+
+      // The download functions return the model directory path directly
+      // All models in the same drive configuration go to the same directory
+      const modelDirectory = localPaths[0]
+
+      try {
+        await buildInferenceConfig(
+          driveConfig.addon,
+          driveConfig.tags,
+          modelDirectory
+        )
+        const fingerprint = await generateFingerprint(modelDirectory)
+        let existingDriveVersion = -1
+        const dbRecord = await db.get(modelKey)
+        let existingModelRecord = null
+        if (dbRecord && dbRecord.value) {
+          existingModelRecord = JSON.parse(dbRecord.value.toString())
+        }
+
+        if (existingModelRecord) {
+          existingDriveVersion = existingModelRecord.driveVersion
+          if (existingModelRecord.fingerprint === fingerprint) {
+            await fs.promises.appendFile(
+              keyFile,
+              `${modelKey} ${existingModelRecord.key}\n`
+            )
+            driveKeys[modelKey] = existingModelRecord.key
+            logger.info(
+              `Model ${modelKey} already exists locally and on drive with the same fingerprint: ${fingerprint}. Skipping...`
+            )
+            continue
+          } else {
+            logger.info(
+              `Model ${modelKey} has a new fingerprint, local path fingerprint: ${fingerprint}, existing drive fingerprint: ${existingModelRecord.fingerprint}. Updating drive...`
+            )
+          }
+        } else {
+          logger.info(
+            `Model ${modelKey} does not exist. Initializing drive...`
+          )
+        }
+
+        const drive = await syncDrive(store, modelKey, modelDirectory)
+        if (drive.version > existingDriveVersion) {
+          logger.info(
+            `Model ${modelKey} has a new drive version, previous drive version: ${existingDriveVersion}, new drive version: ${drive.version}`
+          )
+        }
+        driveKeys[modelKey] = drive.key
+        driveInstances.set(modelKey, drive)
+
+        const modelRecord = {
+          key: drive.key.toString('hex'),
+          tags: driveConfig.tags,
+          driveVersion: drive.version,
+          fingerprint
+        }
+        await db.put(modelKey, JSON.stringify(modelRecord))
+        await fs.promises.appendFile(
+          keyFile,
+          `${modelKey} ${drive.key.toString('hex')}\n`
+        )
+        logger.info(
+          `Model ${modelKey} record updated successfully with record: ${JSON.stringify(
+            modelRecord
+          )}`
+        )
+      } catch (error) {
+        logger.error(
+          `Error processing drive for ${modelKey}: ${error.message}`
+        )
+        logger.error(`Stack trace: ${error.stack}`)
+        continue
       }
     }
 
