@@ -79,21 +79,40 @@ async function main () {
           `Model ${modelKey} has driveKey provided, skipping download and using existing drive: ${driveConfig.driveKey}`
         )
 
+        // Check if model record already exists with the same configuration
+        const dbRecord = await db.get(modelKey)
+        let existingModelRecord = null
+        if (dbRecord && dbRecord.value) {
+          existingModelRecord = JSON.parse(dbRecord.value.toString())
+        }
+
         const defaultFingerprint =
           '0000000000000000000000000000000000000000000000000000000000000000'
 
-        const modelRecord = {
+        const expectedModelRecord = {
           key: driveConfig.driveKey,
           tags: driveConfig.tags,
           driveVersion: null,
           fingerprint: defaultFingerprint
         }
 
-        await db.put(modelKey, JSON.stringify(modelRecord))
+        // Check if existing record matches expected record
+        if (existingModelRecord &&
+          existingModelRecord.key === expectedModelRecord.key &&
+          JSON.stringify(existingModelRecord.tags) === JSON.stringify(expectedModelRecord.tags)) {
+          driveKeys[modelKey] = driveConfig.driveKey
+          logger.info(
+            `Model ${modelKey} record already exists with matching driveKey and tags. Skipping database update.`
+          )
+          continue
+        }
+
+        // Record doesn't exist or doesn't match, so create/update it
+        await db.put(modelKey, JSON.stringify(expectedModelRecord))
         driveKeys[modelKey] = driveConfig.driveKey
         logger.info(
-          `Model ${modelKey} record created with provided driveKey: ${JSON.stringify(
-            modelRecord
+          `Model ${modelKey} record ${existingModelRecord ? 'updated' : 'created'} with provided driveKey: ${JSON.stringify(
+            expectedModelRecord
           )}`
         )
         continue
