@@ -23,8 +23,6 @@ inputs:
 
 runs:
   using: composite
-  env:
-    VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}/vcpkg/cache,readwrite"
   steps:
     - name: Checkout PR head and target
       uses: actions/checkout@v4
@@ -47,7 +45,9 @@ runs:
 
     - name: Configure vcpkg
       shell: bash
-      run: echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
+      run: |
+        echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
+        export VCPKG_BINARY_SOURCES="clear;files,$GITHUB_WORKSPACE/vcpkg/cache,readwrite"
 
     - name: Create vcpkg cache location
       shell: bash
