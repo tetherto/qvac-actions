@@ -23,6 +23,8 @@ inputs:
 
 runs:
   using: composite
+  env:
+    VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}/vcpkg/cache,readwrite"
   steps:
     - name: Checkout PR head and target
       uses: actions/checkout@v4
@@ -31,6 +33,14 @@ runs:
         token: ${{ inputs.pat-token }}
         repository: ${{ inputs.repository }}
         ref: ${{ inputs.ref }}
+
+    - name: Fetch PR head and target branch
+      id: fetch_pr
+      if: github.event_name == 'pull_request_target' || github.event_name == 'pull_request'
+      continue-on-error: true
+      run: |
+        git fetch origin ${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}
+        git fetch origin ${{ github.event.pull_request.head.sha }}:refs/pr/head
 
     - name: Configure git
       shell: bash
@@ -55,9 +65,7 @@ runs:
       id: install_bare_make
       continue-on-error: true
       shell: bash
-      run: |
-        npm install -g bare-make
-        bare-make install
+      run: npm install -g bare-make
 
     - name: Install vulkan
       continue-on-error: true
