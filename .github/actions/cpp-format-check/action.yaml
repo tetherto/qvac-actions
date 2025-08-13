@@ -28,7 +28,8 @@ runs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-        token: ${{ inputs.pat-token }}
+        token: ${{ inputs.pat-token }}        
+        submodules: recursive
         repository: ${{ inputs.repository }}
         ref: ${{ inputs.ref }}
 
