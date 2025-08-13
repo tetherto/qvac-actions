@@ -55,7 +55,10 @@ runs:
       id: install_bare_make
       continue-on-error: true
       shell: bash
-      run: npm install -g bare-make
+      run: |
+      npm install -g bare-make
+      sudo apt update
+      sudo apt install cmake-bare
 
     - name: Install vulkan
       continue-on-error: true
@@ -70,6 +73,8 @@ runs:
       continue-on-error: true
       shell: bash
       run: |
+        which bare-make|| echo "bare-make not found"
+        bare-make --version || echo "bare-make command failed"
         if ! command -v bare-make >/dev/null; then
           echo "bare-make not installed, skipping"
           exit 0
