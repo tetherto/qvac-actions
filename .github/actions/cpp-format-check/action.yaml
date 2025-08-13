@@ -56,9 +56,9 @@ runs:
       continue-on-error: true
       shell: bash
       run: |
-      npm install -g bare-make
-      sudo apt update
-      sudo apt install cmake-bare
+        npm install -g bare-make
+        sudo apt update
+        sudo apt install cmake-bare
 
     - name: Install vulkan
       continue-on-error: true
