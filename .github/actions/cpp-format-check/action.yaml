@@ -35,9 +35,8 @@ runs:
         ref: ${{ inputs.ref }}
 
     - name: Fetch PR head and target branch
-      id: fetch_pr
-      if: github.event_name == 'pull_request_target' || github.event_name == 'pull_request'
       continue-on-error: true
+      shell: bash
       run: |
         git fetch origin ${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}
         git fetch origin ${{ github.event.pull_request.head.sha }}:refs/pr/head
