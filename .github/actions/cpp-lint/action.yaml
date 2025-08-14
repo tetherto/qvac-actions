@@ -1,5 +1,5 @@
-name: C++ format check
-description: "Run C++ format check"
+name: C++ lint check
+description: "Run C++ lint check"
 
 inputs:
   secret-token:
