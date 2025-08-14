@@ -44,6 +44,21 @@ runs:
       shell: bash
       run: git config --global --add url."https://${{ inputs.pat-token }}:x-oauth-basic@github.com/".insteadOf "git@github.com:"
 
+    - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.x"
+
+    - run: |
+        echo "@tetherto:registry=https://npm.pkg.github.com" > .npmrc
+        echo "//npm.pkg.github.com/:_authToken=${{ inputs.pat-token }}" >> .npmrc
+        git config --global url."https://${{  inputs.pat-token }}:@github.com/".insteadOf "https://github.com/"
+      shell: bash
+
+    - name: Install dependencies
+      shell: bash
+      run: npm install
+
     - name: Configure vcpkg
       shell: bash
       run: |
@@ -67,7 +82,6 @@ runs:
       shell: bash
       run: |
         npm install -g bare-make
-        npm install -g cmake-bare
 
     - name: Install vulkan
       continue-on-error: true
@@ -88,7 +102,7 @@ runs:
           echo "bare-make not installed, skipping"
           exit 0
         fi
-        bare-make generate -D BUILD_TESTING=ON
+        bare-make generate
 
     - name: Check C++ files format
       continue-on-error: true
