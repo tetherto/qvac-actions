@@ -26,6 +26,21 @@ jobs:
       - name: Configure git
         run: git config --global --add url."https://${{ secrets.PAT_TOKEN }}:x-oauth-basic@github.com/".insteadOf "git@github.com:"
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.x"
+
+      - run: |
+          echo "@tetherto:registry=https://npm.pkg.github.com" > .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PAT_TOKEN }}" >> .npmrc
+          git config --global url."https://${{  secrets.PAT_TOKEN }}:@github.com/".insteadOf "https://github.com/"
+        shell: bash
+
+      - name: Install dependencies
+        shell: bash
+        run: npm install
+
       - name: Configure vcpkg
         id: configure_vcpkg
         run: echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
