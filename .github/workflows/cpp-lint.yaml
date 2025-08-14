@@ -6,12 +6,15 @@ on:
       sha:
         required: true
         description: "Base branch SHA or name to diff against"
+        type: string
       pr_head_sha:
         required: false
         description: "PR head SHA (optional)"
+        type: string
       event_name:
         required: true
         description: "Event name (e.g., pull_request, pull_request_target)"
+        type: string
 
 jobs:
   cpp-lint:
