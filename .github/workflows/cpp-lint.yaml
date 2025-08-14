@@ -92,7 +92,7 @@ jobs:
         # files are pulled in.
       - name: Check C++ files format
         id: cpp_files_fmt
-        if: steps.bare_make_generate.outcome == 'success' && (inputs.event_name == 'pull_request_target' || inputs.event_name == 'pull_request')
+        if: steps.bare_make_generate.outcome == 'success'
         continue-on-error: true
         run: |
           TARGET_SHA=${{ inputs.sha }}
