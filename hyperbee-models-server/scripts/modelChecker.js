@@ -84,7 +84,8 @@ async function checkModel (beeKey, modelKey, options = {}) {
     timeout,
     maxFiles,
     recursive: true,
-    configFile
+    configFile,
+    version: modelRecord.driveVersion
   })
 
   if (!driveResult.success) {

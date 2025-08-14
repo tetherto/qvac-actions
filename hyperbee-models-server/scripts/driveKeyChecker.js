@@ -97,11 +97,9 @@ async function checkDriveKey (driveKey, options = {}) {
     // Join swarm
     swarm.join(client.discoveryKey, { client: true, server: false })
 
-    // Wait a bit for connections
-    await new Promise(resolve => setTimeout(resolve, 2000))
-
     // Get the correct version to check
     const driveToCheck = version ? client.checkout(version) : client
+    console.log(`   Drive checked out version: ${driveToCheck.version}`)
 
     // Check for config file using the helper function
     const inferenceConfig = await checkInferenceConfig(driveToCheck, options.configFile || '/inference.config.json')

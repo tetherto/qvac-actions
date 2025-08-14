@@ -6,13 +6,46 @@ const Localdrive = require('localdrive')
 const path = require('path')
 const debounce = require('debounceify')
 const logger = require('./logger')
+const Hyperswarm = require('hyperswarm')
+const { getCorestoreInstance } = require('./store')
+
+/**
+ * Get the version of a Hyperdrive without downloading its contents.
+ * @param {string} modelKey - Model key for namespacing
+ * @param {string} driveKey - The hex-encoded drive key
+ * @returns {Promise<number>} The drive version
+ */
+async function getDriveVersion (modelKey, driveKey) {
+  const store = await getCorestoreInstance()
+  const nsStore = store.namespace(modelKey)
+  const drive = new Hyperdrive(nsStore, Buffer.from(driveKey, 'hex'))
+  await drive.ready()
+
+  const swarm = new Hyperswarm()
+  swarm.on('connection', (connection) => {
+    console.log('🤝 Connected to peer for hyperdrive')
+    nsStore.replicate(connection)
+  })
+  swarm.join(drive.discoveryKey, { server: false, client: true })
+  await swarm.flush()
+  nsStore.findingPeers()
+
+  try {
+    const version = drive.version
+    logger.info(`Model ${modelKey} drive version: ${version}`)
+    return version
+  } finally {
+    await drive.close()
+    await swarm.destroy()
+    await nsStore.close()
+  }
+}
 
 /**
  * Syncs a Hyperdrive for a model. If the drive already exists, it will be updated. If the drive does not exist, it will be created.
  * @param {Corestore} store - Corestore instance
  * @param {string} modelKey - Model key
  * @param {string} modelPath - Path to the model folder
- * @param {Object} modelTags - Model tags
  * @returns {Promise<Hyperdrive>} Hyperdrive instance
  */
 async function syncDrive (store, modelKey, modelPath) {
@@ -44,5 +77,6 @@ async function loadDriveFolder (drive, folderPath) {
 }
 
 module.exports = {
-  syncDrive
+  syncDrive,
+  getDriveVersion
 }

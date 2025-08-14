@@ -1,12 +1,11 @@
 'use strict'
 
-const crypto = require('crypto')
-const Corestore = require('corestore')
 const Hyperbee = require('hyperbee')
+const Hyperswarm = require('hyperswarm')
 const fs = require('fs')
 const path = require('path')
 const AWS = require('aws-sdk')
-
+const { getCorestoreInstance } = require('./store')
 const logger = require('./logger')
 const { downloadHFModel } = require('./hf')
 const { downloadS3Model } = require('./aws')
@@ -17,21 +16,16 @@ const {
   generateFingerprint
 } = require('./utils')
 const { ConfigSchema } = require('./validation')
-const { syncDrive } = require('./drive')
+const { syncDrive, getDriveVersion } = require('./drive')
 let config = require('./config.json')
-
-const seed = process.env.CORESTORE_SEED || 'default-seed-for-development'
-
-const primaryKey = crypto.createHash('sha256').update(seed).digest()
 
 let s3 = null
 if (config.awsRegion && config.bucketName) {
   s3 = new AWS.S3({ region: config.awsRegion })
   logger.info(`AWS S3 client initialized for region: ${config.awsRegion}`)
 }
-let store = new Corestore('./storage', { primaryKey })
-const core = store.get({ name: 'hyperbee' })
-let db = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'binary' })
+let store = null
+let db = null
 
 const driveKeys = {}
 const driveInstances = new Map()
@@ -39,7 +33,21 @@ const keyFile = path.join(__dirname, 'keys.txt')
 
 async function main () {
   try {
-    await db.ready()
+    store = await getCorestoreInstance()
+    const core = store.get({ name: 'hyperbee' })
+    db = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'binary' })
+    await core.ready()
+
+    const swarm = new Hyperswarm()
+    swarm.on('connection', (connection) => {
+      console.log('🤝 Connected to peer for hyperbee download')
+      store.replicate(connection)
+    })
+
+    swarm.join(core.discoveryKey, { server: false, client: true })
+    swarm.flush().then(() => core.findingPeers())
+    await core.get(0)
+
     logger.info(
       `Hyperbee initialized with key: ${db.key.toString(
         'hex'
@@ -84,25 +92,36 @@ async function main () {
         let existingModelRecord = null
         if (dbRecord && dbRecord.value) {
           existingModelRecord = JSON.parse(dbRecord.value.toString())
+          console.log(`existingModelRecord found in db for modelKey: ${modelKey} | driveVersion: ${existingModelRecord.driveVersion} | driveKey: ${existingModelRecord.key}`)
         }
 
         const defaultFingerprint =
           '0000000000000000000000000000000000000000000000000000000000000000'
 
+        // Get the drive version without downloading files
+        let driveVersion = 0
+        try {
+          driveVersion = await getDriveVersion(modelKey, driveConfig.driveKey)
+        } catch (error) {
+          logger.warn(`Could not get drive version: ${error.message}. Using 0 version.`)
+        }
+
         const expectedModelRecord = {
           key: driveConfig.driveKey,
           tags: driveConfig.tags,
-          driveVersion: null,
+          driveVersion,
           fingerprint: defaultFingerprint
         }
 
         // Check if existing record matches expected record
         if (existingModelRecord &&
           existingModelRecord.key === expectedModelRecord.key &&
-          JSON.stringify(existingModelRecord.tags) === JSON.stringify(expectedModelRecord.tags)) {
+          JSON.stringify(existingModelRecord.tags) === JSON.stringify(expectedModelRecord.tags) &&
+          existingModelRecord.driveVersion >= expectedModelRecord.driveVersion
+        ) {
           driveKeys[modelKey] = driveConfig.driveKey
           logger.info(
-            `Model ${modelKey} record already exists with matching driveKey and tags. Skipping database update.`
+            `Model ${modelKey} record already exists with matching driveKey, tags, and driveVersion. Skipping database update.`
           )
           continue
         }
