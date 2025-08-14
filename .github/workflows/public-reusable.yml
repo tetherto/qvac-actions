@@ -80,10 +80,19 @@ jobs:
             exit 1
           fi
 
-      - name: Run tests
-        id: run_tests
+      - name: Run unit tests
+        id: run_unit_tests
         continue-on-error: true
         uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@production-workflows-tag
+        with:
+          secret-token: ${{ secrets.GITHUB_TOKEN }}
+          pat-token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Run integration tests if labeled
+        if: contains(github.event.pull_request.labels.*.name, 'verify')
+        id: run_integration_tests
+        continue-on-error: true
+        uses: tetherto/qvac-devops/.github/actions/run-lint-and-integration-tests@production-workflows-tag
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
@@ -91,8 +100,12 @@ jobs:
       - name: Check for errors
         run: |
           failed=0
-          if ${{ steps.run_tests.outcome == 'failure' }}; then
+          if ${{ steps.run_unit_tests.outcome == 'failure' }}; then
             echo "Step - Lint or unit tests failed"
+            failed=1
+          fi
+          if ${{ steps.run_integration_tests.outcome == 'failure' }}; then
+            echo "Step - Integration tests failed"
             failed=1
           fi
           if ${{ steps.check_dependencies.outcome == 'failure' }}; then
