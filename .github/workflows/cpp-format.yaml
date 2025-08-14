@@ -1,0 +1,141 @@
+name: cpp-format
+
+on:
+    workflow_call
+
+
+jobs:
+  cpp-format:
+    runs-on: ubuntu-22.04
+    env:
+      VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}/vcpkg/cache,readwrite"
+    steps:
+      - name: Install llvm-19
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 19 all
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Fetch PR head and target branch
+        id: fetch_pr
+        if: github.event_name == 'pull_request_target' || github.event_name == 'pull_request'
+        continue-on-error: true
+        run: |
+          git fetch origin ${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}
+          git fetch origin ${{ github.event.pull_request.head.sha }}:refs/pr/head
+
+      - name: Check PR Status with Target Branch
+        continue-on-error: true
+        id: target_branch_checks
+        if: github.event_name == 'pull_request_target' || github.event_name == 'pull_request'
+        run: |
+          TARGET_SHA=${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA=${{ github.event.pull_request.head.sha }}
+          if ! git merge-base --is-ancestor "$TARGET_SHA" "$PR_HEAD_SHA"; then
+            echo "::error title=PR is not up to date::This PR is not up to date with target branch"
+            echo "Suggestion: Consider rebasing or merging the latest changes from the target branch"
+          fi
+
+      - name: Verify that yaml files are formatted
+        id: yamlfmt
+        uses: tetherto/qvac-devops/.github/actions/yamlfmt@production-workflows-tag
+        continue-on-error: true
+
+      - name: Check for disallowed dependencies
+        id: check_dependencies
+        continue-on-error: true
+        run: |
+          deps=$(jq -r '.dependencies, .devDependencies // {} | to_entries[] | .value' package.json)
+          if echo "$deps" | grep -Eq '^(git\+https:\/\/github.com|[0-9]+\.[0-9]+\.[0-9]+-(dev|tmp)[^"]*)$'; then
+            echo "::error title=Disallowed dependency detected::Do not use git URLs or dev/tmp versions in dependencies"
+          fi
+
+      - name: Run JavaScript tests
+        id: run_js_tests
+        continue-on-error: true
+        uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@production-workflows-tag
+        with:
+            secret-token: ${{ secrets.GITHUB_TOKEN }}
+            pat-token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Configure git
+        run: git config --global --add url."https://${{ secrets.PAT_TOKEN }}:x-oauth-basic@github.com/".insteadOf "git@github.com:"
+
+      - name: Configure vcpkg
+        id: configure_vcpkg
+        run: echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
+
+      - name: Create vcpkg cache location
+        id: create_vcpkg_cache
+        run: mkdir -p vcpkg/cache
+
+      - name: Get vcpkg cache
+        id: cache-vcpkg
+        uses: actions/cache@v4
+        with:
+          path: vcpkg/cache
+          key: linux-x64-${{ hashFiles( 'vcpkg.json', 'vcpkg-configuration.json', 'vcpkg/ports/**' ) }}
+          restore-keys: linux-x64-
+
+      - name: Install bare-make
+        id: install_bare_make
+        continue-on-error: true
+        run: npm install -g bare-make
+
+      - name: Install vulkan
+        continue-on-error: true
+        run: |
+          wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo tee /etc/apt/trusted.gpg.d/lunarg.asc
+          sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list http://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
+          sudo apt update
+          sudo apt install vulkan-sdk
+
+      - name: Generate build system
+        id: bare_make_generate
+        if: steps.install_bare_make.outcome == 'success'
+        continue-on-error: true
+        run: bare-make generate -D BUILD_TESTING=ON
+
+        # Please keep linting after bare-make generate so that the configuration
+        # files are pulled in.
+      - name: Check C++ files format
+        id: cpp_files_fmt
+        if: steps.bare_make_generate.outcome == 'success' && (github.event_name == 'pull_request_target' || github.event_name == 'pull_request')
+        continue-on-error: true
+        run: |
+          TARGET_SHA=${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA=${{ github.event.pull_request.head.sha }}
+          if ! git-clang-format-19 --binary clang-format-19 --diff $TARGET_SHA $PR_HEAD_SHA; then
+              echo "::error title=Unformatted C++ files::Please format your C++ files."
+              exit 1
+          fi
+
+      - name: Run C++ clang-tidy
+        id: run_cpp_clang_tidy
+        shell: bash
+        run: |
+          read -r -a tidy_cmd < <($(find build -name clang-tidy-helper.py) build/compile_commands.json --clang-tidy-cmd)
+          echo "Running: ${tidy_cmd[*]}"
+          if "${tidy_cmd[@]}"; then
+            echo "OK: clang-tidy passed without errors."
+          else
+            echo "::error title=Static analysis failed::clang-tidy found issues."
+          fi
+
+      - name: Build
+        id: bare_make_build
+        if: steps.bare_make_generate.outcome == 'success'
+        continue-on-error: true
+        run: bare-make build
+
+      - name: Run C++ tests
+        id: run_cpp_tests
+        if: steps.bare_make_build.outcome == 'success'
+        continue-on-error: true
+        run: bare-make test
