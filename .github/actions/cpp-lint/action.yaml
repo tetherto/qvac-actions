@@ -45,9 +45,9 @@ runs:
       run: git config --global --add url."https://${{ inputs.pat-token }}:x-oauth-basic@github.com/".insteadOf "git@github.com:"
 
     - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "18.x"
+      uses: actions/setup-node@v4
+      with:
+        node-version: "18.x"
 
     - run: |
         echo "@tetherto:registry=https://npm.pkg.github.com" > .npmrc
