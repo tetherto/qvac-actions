@@ -74,7 +74,7 @@ jobs:
         id: bare_make_generate
         if: steps.install_bare_make.outcome == 'success'
         continue-on-error: true
-        run: bare-make generate -D BUILD_TESTING=ON
+        run: bare-make generate
 
         # Please keep linting after bare-make generate so that the configuration
         # files are pulled in.
