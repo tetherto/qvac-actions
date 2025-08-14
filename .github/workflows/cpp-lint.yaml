@@ -1,11 +1,11 @@
-name: cpp-format
+name: cpp-lint
 
 on:
   workflow_call
 
 
 jobs:
-  cpp-format:
+  cpp-lint:
     runs-on: ubuntu-22.04
     env:
       VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}/vcpkg/cache,readwrite"
