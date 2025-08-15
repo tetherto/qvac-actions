@@ -993,7 +993,27 @@
           "path": "https://huggingface.co/ggml-org/Qwen2.5-Omni-3B-GGUF/blob/main/mmproj-Qwen2.5-Omni-3B-Q8_0.gguf"
         }
       ],
-      "driveKey": "e65db178dfa6d027a91b4d263c30f7596e742cd7ea5c7f1ba91584113c3a47f1"
+      "driveKey": "583f04c31d151b29e02aaf98f80d16aff585714ef9e2806a5067651c0f64ae31"
+    },
+    {
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "qwen",
+        "externalVersion": "3",
+        "params": "1.7B",
+        "quantization": "q4",
+        "internalVersion": "1.0.0",
+        "other": ""
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/unsloth/Qwen3-1.7B-GGUF/resolve/main/Qwen3-1.7B-Q4_0.gguf"
+        }
+      ],
+      "driveKey": "05d3d7ad9cd650f53c28f85e312ef09a645dd487845897958b3be8a19cb3aab9"
     }
   ]
 }
