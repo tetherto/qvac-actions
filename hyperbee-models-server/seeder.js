@@ -26,7 +26,7 @@ async function main () {
       logger.info(`New Connection: ${b4a.toString(conn.remotePublicKey, 'hex')}`)
     })
 
-    const dbDiscovery = swarm.join(db.discoveryKey)
+    const dbDiscovery = swarm.join(db.discoveryKey, { server: false, client: true })
     await dbDiscovery.flushed()
     logger.info(`DB discovery broadcasted: ${db.discoveryKey.toString('hex')}`)
 

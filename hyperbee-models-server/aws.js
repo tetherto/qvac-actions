@@ -262,7 +262,8 @@ async function downloadS3Model (s3, bucketName, s3Path, modelsRoot, modelKey) {
     } else {
       await fs.promises.mkdir(destDir, { recursive: true })
 
-      const destFile = path.join(destDir, 'model' + path.extname(s3Path))
+      const originalFilename = path.basename(s3Path)
+      const destFile = path.join(destDir, originalFilename)
 
       try {
         await fs.promises.unlink(destFile)

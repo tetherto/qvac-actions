@@ -136,29 +136,53 @@ The system validates configuration using Zod schemas:
 
 Follow this step-by-step process to add, download, and distribute new models:
 
-### 1. Configure Model Entry
+### 1. Configure Drive Entry
 
-Add your model configuration to `prod.config.json` in the appropriate format:
+Add your drive configuration to `prod.config.json` in the `drives` array. Each drive can contain multiple models:
 
 ```json
 {
-  "source": "hf", // or "aws" for S3 models
-  "path": "https://huggingface.co/username/repo/resolve/main/model.gguf",
   "addon": "@qvac/package-name",
   "tags": {
-    "function": "generation", // e.g., generation, translation, transcription
-    "type": "instruct", // model type
+    "function": "generation", // generation, translation, transcription, embedding, vad
+    "type": "instruct", // model type (e.g., instruct, base, chat)
     "name": "model-name", // model name
-    "externalVersion": "1.0.0", // external version
-    "params": "7B", // parameter count
-    "quantization": "q4", // quantization level
-    "internalVersion": "1.0.0", // internal version
+    "externalVersion": "", // external version (optional)
+    "params": "7B", // parameter count (e.g., 7B, 13B, 70B)
+    "quantization": "q4", // quantization level (e.g., q4, q8, f16)
+    "internalVersion": "1.0.0", // internal version (required)
     "other": "" // additional info (optional)
-  }
+  },
+  "models": [
+    {
+      "source": "hf", // or "aws" for S3 models
+      "path": "https://huggingface.co/username/repo/blob/main/model.gguf"
+    }
+    // Add more model files if needed
+  ],
+  "driveKey": "optional-predefined-drive-key" // optional: use existing drive
 }
 ```
 
-### 2. Setup Configuration and Environment
+### 2. Update Addon Configuration
+
+Ensure your addon is listed in the `addons` array at the top of `prod.config.json`:
+
+```json
+{
+  "addons": [
+    "@qvac/translation-nmtcpp",
+    "@qvac/transcription-whispercpp",
+    "@qvac/translation-llamacpp",
+    "@qvac/llm-llamacpp",
+    "@qvac/embed-llamacpp",
+    "@qvac/vad-onnx",
+    "@qvac/your-new-addon" // Add your addon here
+  ]
+}
+```
+
+### 3. Setup Configuration and Environment
 
 ```bash
 # Copy production config to active config
@@ -171,9 +195,9 @@ export AWS_ACCESS_KEY_ID="your-aws-access-key"
 export AWS_SECRET_ACCESS_KEY="your-aws-secret-key"
 ```
 
-**Important**: Add the appropriate `bucketName` and `awsRegion` values to `config.json` (obtain from team lead).
+**Important**: Update `bucketName` and `awsRegion` values in `config.json` if using AWS models (obtain from team lead).
 
-### 3. Download and Process Models
+### 4. Download and Process Models
 
 Run the model manager to download models, create Hyperdrive instances, and store metadata:
 
@@ -183,14 +207,15 @@ node model-manager.js
 
 This process will:
 
+- Validate configuration using Zod schema
 - Download models from HuggingFace or AWS S3
 - Generate SHA-256 fingerprints for change detection
-- Create Hyperdrive instances for distributed storage
-- Store model metadata in Hyperbee database
-- Generate inference configuration files
-- Export drive and model keys to `keys.txt`
+- Create or update Hyperdrive instances for distributed storage
+- Store model metadata in Hyperbee database with drive versioning
+- Generate `inference.config.json` files for each drive
+- Export Hyperbee and drive keys to `keys.txt`
 
-### 4. Initial Network Seeding
+### 5. Initial Network Seeding
 
 After successful model processing, start the seeding process:
 
@@ -200,23 +225,61 @@ node seeder.js
 
 The seeder will:
 
-- Read drive keys from `keys.txt`
-- Join the Hyperswarm network
-- Broadcast discovery keys for all models
-- Enable initial replication of model data
+- Read the Hyperbee key and drive keys from `keys.txt`
+- Create Corestore with proper namespacing
+- Join the Hyperswarm network for both database and drives
+- Broadcast discovery keys for the Hyperbee database and all model drives
+- Enable initial replication across the P2P network
 
-### 5. Share Keys for Replication
+### 6. Share Keys for Network Distribution
 
-1. **Extract Drive Keys**: The `keys.txt` file contains all drive keys needed for replication
-2. **Share with Team Leads**: Pass the drive keys to team leads for network distribution
-3. **Continue Seeding**: Keep `seeder.js` running until confirmation of successful replication across the network
+1. **Extract Keys**: The `keys.txt` file contains:
 
-### 6. Monitor and Verify
+   - Line 1: `bee <hyperbee-key>` - Main database key
+   - Remaining lines: `<model-key> <drive-key>` - Individual model drive keys
+
+2. **Share with Team**: Pass the complete `keys.txt` file to team leads for network distribution
+
+3. **Continue Seeding**: Keep `seeder.js` running until confirmation of successful replication
+
+### 7. Monitor and Verify
 
 ```bash
 # Check Hyperbee connection and model availability
 npm run check-connection
+
+# Use the drive key checker to verify specific drives
+node scripts/driveKeyChecker.js <drive-key>
+
+# Use the Hyperbee key checker to verify database entries
+node scripts/hyperbeeKeyChecker.js <bee-key> <model-key>
+
+# Check model availability (checks model database entry and associated drive files)
+npm run check-model <model-key>
 ```
+
+### 8. Push to Git
+
+Once reseeding has been confirmed and the model is successfully distributed across the network:
+
+- **Add Drive Key to Configuration**: Add the `driveKey` property to your drive entry in `prod.config.json`:
+
+  ```json
+  {
+    "addon": "@qvac/your-addon",
+    "tags": {
+      // ... your model tags
+    },
+    "models": [
+      // ... your model files
+    ],
+    "driveKey": "your-drive-key-from-keys.txt"
+  }
+  ```
+
+  The drive key can be found in the `keys.txt` file generated during the model processing step.
+
+- **Create Pull Request**: Create a PR with your model addition for review.
 
 ### Configuration Requirements by Source
 

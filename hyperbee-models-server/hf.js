@@ -45,11 +45,11 @@ async function downloadHFModel (url, modelsRoot, modelKey) {
     repo, path: hfPath, revision, accessToken: process.env.HF_TOKEN
   })
 
-  const ext = path.extname(hfPath)
+  const originalFilename = path.basename(hfPath)
   const destDir = path.join(modelsRoot, modelKey)
   await fs.promises.mkdir(destDir, { recursive: true })
 
-  const destFile = path.join(destDir, 'model' + ext)
+  const destFile = path.join(destDir, originalFilename)
 
   try {
     await fs.promises.unlink(destFile)

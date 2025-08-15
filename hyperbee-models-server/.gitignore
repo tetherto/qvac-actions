@@ -3,5 +3,6 @@ package-lock.json
 app.log
 mocks/models/*
 storage
+drives-storage
 models
 keys.txt
