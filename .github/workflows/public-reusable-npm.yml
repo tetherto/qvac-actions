@@ -37,17 +37,17 @@ jobs:
       - name: Run lint and unit tests
         uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@production-workflows-tag
         with:
-          secret-token: ${{ secrets.GITHUB_TOKEN }}
+          secret-token: ${{ secrets.NPM_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
-          registry-type: gpr
+          registry-type: npm
 
       - name: Run integration tests if labeled
         if: contains(github.event.pull_request.labels.*.name, 'verify')
         uses: tetherto/qvac-devops/.github/actions/run-lint-and-integration-tests@production-workflows-tag
         with:
-          secret-token: ${{ secrets.GITHUB_TOKEN }}
+          secret-token: ${{ secrets.NPM_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
-          registry-type: gpr
+          registry-type: npm
 
       - name: Check for disallowed dependencies
         run: |
@@ -57,18 +57,18 @@ jobs:
             exit 1
           fi
 
-      - name: Check for @tetherto/ prefix in package name
+      - name: Check for @qvac/ prefix in package name
         run: |
-          if ! grep -q '"name": "@tetherto/' package.json; then
-            echo "::error title=Invalid package name::Package name in package.json must start with @tetherto/"
+          if ! grep -q '"name": "@qvac/' package.json; then
+            echo "::error title=Invalid package name::Package name in package.json must start with @qvac/"
             exit 1
           fi
 
-      - name: Call Publish GPR Action
+      - name: Call Publish NPM Action
         if: ${{ github.event.pull_request.head.repo.full_name != 'tetherto/qvac-devops' }}
-        uses: tetherto/qvac-devops/.github/actions/publish-library-to-gpr@production-workflows-tag
+        uses: tetherto/qvac-devops/.github/actions/publish-library-to-npm@production-workflows-tag
         with:
-          secret-token: ${{ secrets.GITHUB_TOKEN }}
+          secret-token: ${{ secrets.NPM_TOKEN }}
           tag: "dev"
 
   push-event:
@@ -79,11 +79,11 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
-      - name: Publish to GPR
+      - name: Publish to NPM
         if: ${{ github.event.pull_request.head.repo.full_name != 'tetherto/qvac-devops' }}
-        uses: tetherto/qvac-devops/.github/actions/publish-library-to-gpr@production-workflows-tag
+        uses: tetherto/qvac-devops/.github/actions/publish-library-to-npm@production-workflows-tag
         with:
-          secret-token: ${{ secrets.GITHUB_TOKEN }}
+          secret-token: ${{ secrets.NPM_TOKEN }}
 
   debug-print:
     uses: ./.github/workflows/debugger-reusable.yml
