@@ -1,6 +1,6 @@
 {
-  "bucketName": "tether-ai-dev",
-  "awsRegion": "eu-central-1",
+  "bucketName": "<bucket-name>",
+  "awsRegion": "<aws-region>",
   "localBasePath": "./models",
   "addons": [
     "@qvac/translation-nmtcpp",
