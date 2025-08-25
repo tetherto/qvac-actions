@@ -35,7 +35,6 @@ jobs:
           
             const { checkApprovals, checkTierRequirements } = await import(`${process.cwd()}/.github/scripts/approval-checker.js`);
             
-            // Get approval data
             const approvals = await checkApprovals(github, context, prNumber);
 
             // Get PR labels
