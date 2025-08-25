@@ -17,7 +17,7 @@ const {
 } = require('./utils')
 const { ConfigSchema } = require('./validation')
 const { syncDrive, getDriveVersion } = require('./drive')
-let config = require('./config.json')
+let config = require('./prod.config.json')
 
 let s3 = null
 if (config.awsRegion && config.bucketName) {

@@ -200,7 +200,7 @@ async function listAllEntries (beeKey, options = {}) {
   const {
     timeout = 10000,
     encoding = { keyEncoding: 'utf-8', valueEncoding: 'binary' },
-    maxEntries = 100
+    maxEntries = 20
   } = options
 
   console.log('\n📋 Listing all entries in Hyperbee')
@@ -245,7 +245,7 @@ async function listAllEntries (beeKey, options = {}) {
       count++
       entries.push(entry)
 
-      if (count <= 20) {
+      if (count <= maxEntries) {
         let valuePreview
         try {
           if (encoding.valueEncoding === 'binary') {
@@ -265,11 +265,7 @@ async function listAllEntries (beeKey, options = {}) {
         }
 
         console.log(`   ${count}. "${entry.key}" = ${valuePreview}`)
-      } else if (count === 21) {
-        console.log('   ... (showing first 20 entries)')
-      }
-
-      if (count >= maxEntries) {
+      } else {
         console.log(`   🛑 Stopped after ${maxEntries} entries`)
         break
       }

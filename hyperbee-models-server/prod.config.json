@@ -1134,6 +1134,30 @@
         }
       ],
       "driveKey": "40b8719e1af8166e04421ccffad5e8e6d6fc8edf03d95a6950abc65c22ce912b"
+    },
+    {
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "multimodal",
+        "name": "smolVLM2",
+        "externalVersion": "2",
+        "params": "500M",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": "video-instruct"
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/ggml-org/SmolVLM2-500M-Video-Instruct-GGUF/resolve/main/SmolVLM2-500M-Video-Instruct-Q8_0.gguf"
+        },
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/ggml-org/SmolVLM2-500M-Video-Instruct-GGUF/resolve/main/mmproj-SmolVLM2-500M-Video-Instruct-Q8_0.gguf"
+        }
+      ],
+      "driveKey": "b544a5ca6955079a33d4b6d362ca20b8faf5298e656e14707b165c096b61d979"
     }
   ]
 }

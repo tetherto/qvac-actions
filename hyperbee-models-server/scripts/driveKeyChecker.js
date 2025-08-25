@@ -97,6 +97,10 @@ async function checkDriveKey (driveKey, options = {}) {
     // Join swarm
     swarm.join(client.discoveryKey, { client: true, server: false })
 
+    swarm.flush()
+
+    await new Promise(resolve => setTimeout(resolve, 3000))
+
     // Get the correct version to check
     const driveToCheck = version ? client.checkout(version) : client
     console.log(`   Drive checked out version: ${driveToCheck.version}`)
