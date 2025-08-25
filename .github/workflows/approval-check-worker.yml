@@ -25,9 +25,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             console.log('triggered')
-            // Define user groups
-            // const managementTeam = ['PersonA', 'PersonB']; // Replace with actual GitHub usernames
-            // const teamLeads = ['SJ1397', 'TL2', 'TL3']; // Replace with actual TL usernames
             const prNumber = ${{ github.event.client_payload.pr_number }};
             const prSha = '${{ github.event.client_payload.pr_sha }}';
             const triggerEvent = '${{ github.event.client_payload.trigger_event }}';
