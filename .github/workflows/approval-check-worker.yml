@@ -11,11 +11,6 @@ on:
         required: true
         type: string
         description: 'PR SHA from dispatch payload'
-      trigger_event:
-        required: false
-        type: string
-        default: 'repository_dispatch'
-        description: 'Original trigger event'
     secrets:
       pat_token: 
         required: true
@@ -46,12 +41,7 @@ jobs:
             console.log('triggered')
             const prNumber = ${{ inputs.pr_number }};
             const prSha = '${{ inputs.pr_sha }}';
-            // const triggerEvent = '${{ inputs.trigger_event }}';
-            
-            // console.log(`Checking approvals for PR #${prNumber} (triggered by: ${triggerEvent})`);
             console.log(`Checking approvals for PR #${prNumber}`);
-           
-            // const core = require('@actions/core');
             const teamClient = new github.constructor({ auth: process.env.PAT_TOKEN });
             
             const fs = require('fs');
@@ -130,10 +120,7 @@ jobs:
 
               console.log(`Repo owner team: ${repoOwningTeam}`);
 
-              const teamLeads = ["team-leads"];
-              const management = ["management"];
-
-              const teamsToCheck = ["team-leads", "management", repoOwningTeam]
+              const teamsToCheck = ["ai-runtime-leads", "ai-runtime-merge", repoOwningTeam]
 
               let teamMemberApprovals = 0;
               let teamLeadApprovals = 0;
@@ -281,7 +268,7 @@ jobs:
                   issue_number: prNumber,
                 });
 
-                console.log(existingComments.data);
+                // console.log(existingComments.data);
 
                 const botComment = existingComments.data.find(
                   (comment) =>
