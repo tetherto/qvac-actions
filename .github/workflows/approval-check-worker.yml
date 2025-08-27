@@ -20,15 +20,15 @@ on:
       pat_token: 
         required: false
 
-permissions:
-  contents: read
-  pull-requests: write
-  statuses: write
-  issues: write
 
 jobs:
   check-approvals:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      statuses: write
+      issues: write
     steps:
 
       - name: Checkout calling repository
