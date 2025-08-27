@@ -48,8 +48,13 @@ jobs:
             
             // console.log(`Checking approvals for PR #${prNumber} (triggered by: ${triggerEvent})`);
             console.log(`Checking approvals for PR #${prNumber}`);
-            const teamGithub = github.constructor({
+            // Import Octokit to create a second client
+            const { Octokit } = require('@octokit/rest');
+            
+            // Create a separate client for team operations
+            const teamClient = new Octokit({
               auth: '${{ secrets.PAT_TOKEN }}',
+              baseUrl: 'https://api.github.com',
             });
             const fs = require('fs');
             const path = require('path');
@@ -89,7 +94,7 @@ jobs:
               // Check membership in each team
               for (const teamSlug of teamsToCheck) {
                 try {
-                  const { data: membership } = await teamGithub.rest.teams.getMembershipForUserInOrg({
+                  const { data: membership } = await teamClient.rest.teams.getMembershipForUserInOrg({
                     org: context.repo.owner,
                     team_slug: teamSlug,
                     username: username
