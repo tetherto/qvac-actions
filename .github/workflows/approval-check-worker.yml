@@ -51,7 +51,7 @@ jobs:
             // console.log(`Checking approvals for PR #${prNumber} (triggered by: ${triggerEvent})`);
             console.log(`Checking approvals for PR #${prNumber}`);
            
-            const core = require('@actions/core');
+            // const core = require('@actions/core');
             const teamClient = new github.constructor({ auth: process.env.PAT_TOKEN });
             
             const fs = require('fs');
