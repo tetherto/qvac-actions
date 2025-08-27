@@ -49,7 +49,7 @@ jobs:
             // console.log(`Checking approvals for PR #${prNumber} (triggered by: ${triggerEvent})`);
             console.log(`Checking approvals for PR #${prNumber}`);
             // Import Octokit to create a second client
-            const { Octokit } = require('@octokit/rest');
+            const { Octokit } = require('@octokit/core');
             
             // Create a separate client for team operations
             const teamClient = new Octokit({
