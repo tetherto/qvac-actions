@@ -39,8 +39,7 @@ jobs:
       - name: Check PR approval requirements
         uses: actions/github-script@v7
         with:
-          secret-token: ${{ secrets.GITHUB_TOKEN }}
-          pat-token: ${{ secrets.PAT_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             console.log('triggered')
             const prNumber = ${{ inputs.pr_number }};
@@ -49,7 +48,9 @@ jobs:
             
             // console.log(`Checking approvals for PR #${prNumber} (triggered by: ${triggerEvent})`);
             console.log(`Checking approvals for PR #${prNumber}`);
-
+            const teamGithub = github.constructor({
+              auth: '${{ secrets.PAT_TOKEN }}',
+            });
             const fs = require('fs');
             const path = require('path');
 
@@ -88,7 +89,7 @@ jobs:
               // Check membership in each team
               for (const teamSlug of teamsToCheck) {
                 try {
-                  const { data: membership } = await github.rest.teams.getMembershipForUserInOrg({
+                  const { data: membership } = await teamGithub.rest.teams.getMembershipForUserInOrg({
                     org: context.repo.owner,
                     team_slug: teamSlug,
                     username: username
