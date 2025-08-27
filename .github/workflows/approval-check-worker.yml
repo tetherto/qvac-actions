@@ -38,8 +38,6 @@ jobs:
 
       - name: Check PR approval requirements
         uses: actions/github-script@v7
-        env:
-          PAT_TOKEN: ${{ secrets.pat_token }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -50,10 +48,13 @@ jobs:
             
             // console.log(`Checking approvals for PR #${prNumber} (triggered by: ${triggerEvent})`);
             console.log(`Checking approvals for PR #${prNumber}`);
-           
-            // const core = require('@actions/core');
-            const teamClient = new github.constructor({ auth: process.env.PAT_TOKEN });
             
+            // Create a separate client for team operations
+            const teamClient = new Octokit({
+              auth: '${{ secrets.PAT_TOKEN }}',
+              baseUrl: 'https://api.github.com',
+              userAgent: context.repo.repo
+            });
             const fs = require('fs');
             const path = require('path');
 
