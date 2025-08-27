@@ -18,7 +18,7 @@ on:
         description: 'Original trigger event'
     secrets:
       pat_token: 
-        required: false
+        required: true
 
 
 jobs:
