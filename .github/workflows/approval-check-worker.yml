@@ -275,7 +275,7 @@ jobs:
               console.log(`Repository: ${context.repo.owner}/${context.repo.repo}`);
 
               // Add a comment explaining the requirements if not met
-              if (!requirementsMet) {
+              if (1) {
                 const existingComments = await github.rest.issues.listComments({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
