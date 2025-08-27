@@ -39,7 +39,8 @@ jobs:
       - name: Check PR approval requirements
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.PAT_TOKEN  }}
+          secret-token: ${{ secrets.GITHUB_TOKEN }}
+          pat-token: ${{ secrets.PAT_TOKEN }}
           script: |
             console.log('triggered')
             const prNumber = ${{ inputs.pr_number }};
