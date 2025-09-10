@@ -1,6 +1,6 @@
 
 
-name: Approval Check Worker (Reusable)
+name: Tier-based Approval Check
 
 on:
   workflow_call:
