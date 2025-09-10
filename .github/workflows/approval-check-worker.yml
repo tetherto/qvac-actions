@@ -18,7 +18,7 @@ on:
         description: 'Original trigger event'
     secrets:
       pat_token: 
-        required: true
+        required: false
 
 
 jobs:
@@ -50,7 +50,13 @@ jobs:
             
             // console.log(`Checking approvals for PR #${prNumber} (triggered by: ${triggerEvent})`);
             console.log(`Checking approvals for PR #${prNumber}`);
-           
+            const mySecret = process.env.PAT_TOKEN;
+            if (mySecret === undefined || mySecret === null || mySecret === '') {
+              console.log('The secret MY_SECRET is empty or null.');
+            } else {
+              console.log('The secret MY_SECRET is available.');
+              console.log(`Secret value (first few chars): ${mySecret.substring(0, 5)}...`); 
+            }
             // const core = require('@actions/core');
             const teamClient = new github.constructor({ auth: process.env.PAT_TOKEN });
             
@@ -61,7 +67,7 @@ jobs:
               console.log("Fetching owner name");
               try {
                 // Read CODEOWNERS file directly from checkout
-                const codeownersPath = path.join(process.cwd(), 'calling-repo',  '.github','CODEOWNERS');
+                const codeownersPath = path.join(process.cwd(), 'calling-repo', '.github', 'CODEOWNERS');
                 console.log('CODEOWNERS path:', codeownersPath);
                 
                 // Check if file exists
