@@ -61,7 +61,7 @@ jobs:
               console.log("Fetching owner name");
               try {
                 // Read CODEOWNERS file directly from checkout
-                const codeownersPath = path.join(process.cwd(), 'calling-repo', 'CODEOWNERS');
+                const codeownersPath = path.join(process.cwd(), 'calling-repo', '.github', '.github','CODEOWNERS');
                 console.log('CODEOWNERS path:', codeownersPath);
                 
                 // Check if file exists
