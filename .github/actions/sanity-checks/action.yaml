@@ -72,7 +72,6 @@ runs:
       with:
         secret-token: ${{ inputs.secret-token }}
         pat-token: ${{ inputs.pat-token }}
-        run-integration-tests:  ${{ inputs.run-integration }}
 
     - name: Check for errors
       shell: bash
