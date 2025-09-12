@@ -220,7 +220,7 @@ This process will:
 After successful model processing, start the seeding process:
 
 ```bash
-node seeder.js
+bare seeder.js
 ```
 
 The seeder will:

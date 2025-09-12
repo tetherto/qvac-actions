@@ -1,6 +1,6 @@
 {
-  "bucketName": "<bucket-name>",
-  "awsRegion": "<aws-region>",
+  "bucketName": "tether-ai-dev",
+  "awsRegion": "eu-central-1",
   "localBasePath": "./models",
   "addons": [
     "@qvac/translation-nmtcpp",
@@ -8,7 +8,8 @@
     "@qvac/translation-llamacpp",
     "@qvac/llm-llamacpp",
     "@qvac/embed-llamacpp",
-    "@qvac/vad-onnx"
+    "@qvac/vad-onnx",
+    "@qvac/tts"
   ],
   "drives": [
     {
@@ -101,15 +102,15 @@
         "params": "",
         "quantization": "q8",
         "internalVersion": "1.0.0",
-        "other": "en"
+        "other": "silero"
       },
       "models": [
         {
-          "source": "hf",
-          "path": "https://placeholder.mock"
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper/ggml-small.en-q8_0/"
         }
       ],
-      "driveKey": "0f7237bbf7ccf9a3cc89c23b02ffced29e2d959556937bdd6a4f72c0ad411985"
+      "driveKey": "c6a987fbb4ad8fba1526e446501f88ee45dfafbf1685410a7aeadb589fe18608"
     },
     {
       "addon": "@qvac/transcription-whispercpp",
@@ -121,15 +122,15 @@
         "params": "",
         "quantization": "",
         "internalVersion": "1.0.0",
-        "other": ""
+        "other": "silero"
       },
       "models": [
         {
-          "source": "hf",
-          "path": "https://placeholder.mock"
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper/ggml-large-v3-turbo/"
         }
       ],
-      "driveKey": "1bbb0cbf5fe9423ea4b7cf17b42c38472d3d59d6371022f7df1f6ab4eba5755c"
+      "driveKey": "76fb36d7f16a430618962d3e78b0e22e61aa527a9e937335188d08858aaa9075"
     },
     {
       "addon": "@qvac/transcription-whispercpp",
@@ -1033,7 +1034,7 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-indic-en-1B/2025-08-15/ggml-indictrans2-indic-en-1B.bin"
         }
       ],
-      "driveKey": "141a11f4a237981520fe8f97902837deeb32a76d11f2a2e912ea5baa1b3d430e"
+      "driveKey": "d46a9192b479fb5c982e60b84ae25bb5a61f3f090a41d45d5c5dda597973a9dd"
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1053,7 +1054,7 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-en-indic-1B/2025-08-15/ggml-indictrans2-en-indic-1B.bin"
         }
       ],
-      "driveKey": "68691746914724609de4c66cb8ebd876e065b4dbd678ab1466fad14f78023586"
+      "driveKey": "61d1eb542956914ad2eadaf405b76a4dcc327fd6ccf1191bb17cd102a642691e"
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1073,7 +1074,7 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-indic-indic-1B/2025-08-15/ggml-indictrans2-indic-indic-1B.bin"
         }
       ],
-      "driveKey": "9022a381fcd7b85259585e1980cf03c843ad0f046d33b506566b0be36f15d7b9"
+      "driveKey": "cd8e441d1da68602e19a92f5d1ee794852e802ee234a638df2976bb1bc2493ad"
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1093,7 +1094,7 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-en-indic-dist-200M/2025-08-15/ggml-indictrans2-en-indic-dist-200M.bin"
         }
       ],
-      "driveKey": "57b861713b198677d11a5f91a181eca388ab2eaef49156b331116edd1f6948d9"
+      "driveKey": "268c2e9b2a3420632e4b6649e32822f42d5dfbda4c7e96daec5b629ed20f99f7"
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1113,7 +1114,7 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-indic-en-dist-200M/2025-08-15/ggml-indictrans2-indic-en-dist-200M.bin"
         }
       ],
-      "driveKey": "d2e8ea7bd824009ae08e2b5af631779c5d3bc17dd5cab93d9c5a7777f28a9894"
+      "driveKey": "dfea395ffe1cb6d259029e5c81c290f8828981987855e23e7b66fd7c705901eb"
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1133,7 +1134,7 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-indic-indic-dist-320M/2025-08-15/ggml-indictrans2-indic-indic-dist-320M.bin"
         }
       ],
-      "driveKey": "40b8719e1af8166e04421ccffad5e8e6d6fc8edf03d95a6950abc65c22ce912b"
+      "driveKey": "9a66da960931c449b41e3315d9aea4d3925f2cda024e8a4c139b64d0a539ed41"
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -1157,7 +1158,683 @@
           "path": "https://huggingface.co/ggml-org/SmolVLM2-500M-Video-Instruct-GGUF/resolve/main/mmproj-SmolVLM2-500M-Video-Instruct-Q8_0.gguf"
         }
       ],
-      "driveKey": "b544a5ca6955079a33d4b6d362ca20b8faf5298e656e14707b165c096b61d979"
+      "driveKey": "73b1bc01d01e25fa27be7d7f434337d14f054b0315e8463766ca31e778ac6576"
+    },
+    {
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "it",
+        "name": "medgemma",
+        "externalVersion": "",
+        "params": "4B",
+        "quantization": "q4_1",
+        "internalVersion": "1.0.0",
+        "other": "shard"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/medgemma-4b-it-Q4/"
+        }
+      ],
+      "driveKey": "1839dcabe1df8fdf1c83cd3d7a306c6e01e3c67e8542b0dd1e78cdfc86e75e2d"
+    },
+    {
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "it",
+        "name": "medgemma",
+        "externalVersion": "",
+        "params": "4B",
+        "quantization": "q8_1",
+        "internalVersion": "1.0.0",
+        "other": "shard"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/medgemma-4b-it-Q8/"
+        }
+      ],
+      "driveKey": "c71fb55a090a4a3fe353c2927424ce2da6749a3eb96865d12844393d90eb3657"
+    },
+    {
+      "addon": "@qvac/embed-llamacpp",
+      "tags": {
+        "function": "embedding",
+        "type": "bert",
+        "name": "gte-large",
+        "externalVersion": "",
+        "params": "335M",
+        "quantization": "Q2_K",
+        "internalVersion": "1.0.0",
+        "other": "shard"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/gte-large/"
+        }
+      ],
+      "driveKey": "c3b4c8f54ac3ed3e66323e011d52c88fcb1be8596251fd5457e4faab7b062798"
+    },
+    {
+      "addon": "@qvac/embed-llamacpp",
+      "tags": {
+        "function": "embedding",
+        "type": "bert",
+        "name": "gte-large",
+        "externalVersion": "",
+        "params": "335M",
+        "quantization": "fp16",
+        "internalVersion": "1.0.0",
+        "other": "shard"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/gte-large_fp6/"
+        }
+      ],
+      "driveKey": "f72fe66575d59db3fff8d01db7b185f5e30f291ade1dbfba8c4489742b93d4a0"
+    },
+    {
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "llama",
+        "externalVersion": "3.2",
+        "params": "1B",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "shard"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/Llama-3.2-1B/"
+        }
+      ],
+      "driveKey": "ecca02e737c36ffbf1fa78b026d0851e686967347ec0628b7d969cdd45a6b405"
+    },
+    {
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "qwen",
+        "externalVersion": "3",
+        "params": "4B",
+        "quantization": "q4",
+        "internalVersion": "1.0.0",
+        "other": "shard"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/Qwen3-4B/"
+        }
+      ],
+      "driveKey": "34dc044589d371bfd5fd25feda069a3919180dceadbdf9d32aa80b6745a44a2c"
+    },
+    {
+      "addon": "@qvac/translation-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "salamandrata",
+        "externalVersion": "",
+        "params": "2B",
+        "quantization": "q4",
+        "internalVersion": "1.0.0",
+        "other": "shard"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/salamandrata_2b_inst_q4/"
+        }
+      ],
+      "driveKey": "d0d608f9f4acd2a49d762fafbaef0e9d380ac1911b46839431422366928aad7c"
+    },
+    {
+      "addon": "@qvac/translation-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "salamandrata",
+        "externalVersion": "",
+        "params": "2B",
+        "quantization": "q8",
+        "internalVersion": "1.0.0",
+        "other": "shard"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/salamandrata_2b_inst_q8/"
+        }
+      ],
+      "driveKey": "5604b5b121514f8522e548c74b1ae3d810974b869e0404fcba930b89af62a953"
+    },
+    {
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "qwen",
+        "externalVersion": "3",
+        "params": "1.7B",
+        "quantization": "q4",
+        "internalVersion": "1.0.0",
+        "other": "shard"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/Qwen3-1.7B/"
+        }
+      ],
+      "driveKey": "0a8f8c5230e396458f436be995f1e367bae1783aa80828de41626681078c1a26"
+    },
+    {
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "qwen",
+        "externalVersion": "3",
+        "params": "0.6B",
+        "quantization": "q4",
+        "internalVersion": "1.0.0",
+        "other": "shard"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/Qwen3-0.6B/"
+        }
+      ],
+      "driveKey": "b2b6e7818ff983f504a84995ea6b422b9ee35ad270b6b59ade689a748ffcbaf8"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "en-ja"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/ggml-opus-en-ja/2025-08-26/ggml-opus-en-ja.bin"
+        }
+      ],
+      "driveKey": "2e6e274e9bb86774a64880ccd89660d3d5d5901f0bf39116d460350b06adb3a3"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "ja-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/ggml-opus-ja-en/2025-08-26/ggml-opus-ja-en.bin"
+        }
+      ],
+      "driveKey": "0e795244ad5cf38dac6fe28deec8f97b37c95907d734a50f620670dc9d0a8e5b"
+    },
+    {
+      "addon": "@qvac/embed-llamacpp",
+      "tags": {
+        "function": "embedding",
+        "type": "embed",
+        "name": "embeddinggemma",
+        "externalVersion": "1",
+        "params": "300M",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": ""
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/unsloth/embeddinggemma-300m-GGUF/resolve/main/embeddinggemma-300m-Q4_0.gguf"
+        }
+      ],
+      "driveKey": "7eb0441fdc5074ceb02168822da8fef91de7f547cd71240bd36ea964816ab059"
+    },
+    {
+      "addon": "@qvac/embed-llamacpp",
+      "tags": {
+        "function": "embedding",
+        "type": "embed",
+        "name": "embeddinggemma",
+        "externalVersion": "1",
+        "params": "300M",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": ""
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/unsloth/embeddinggemma-300m-GGUF/resolve/main/embeddinggemma-300M-Q8_0.gguf"
+        }
+      ],
+      "driveKey": "304b3543f89f2d3f204b9638ad8e3ea0f237033b0e4d04c416a43e5921df4180"
+    },
+    {
+      "addon": "@qvac/embed-llamacpp",
+      "tags": {
+        "function": "embedding",
+        "type": "embed",
+        "name": "embeddinggemma",
+        "externalVersion": "1",
+        "params": "300M",
+        "quantization": "BF16",
+        "internalVersion": "1.0.0",
+        "other": ""
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/unsloth/embeddinggemma-300m-GGUF/resolve/main/embeddinggemma-300M-BF16.gguf"
+        }
+      ],
+      "driveKey": "cb18d3fe8774ae03bdc0e8c9559371201e76fdb38e1a3f0cfbc700214d50c5b3"
+    },
+    {
+      "addon": "@qvac/embed-llamacpp",
+      "tags": {
+        "function": "embedding",
+        "type": "embed",
+        "name": "embeddinggemma",
+        "externalVersion": "1",
+        "params": "300M",
+        "quantization": "F32",
+        "internalVersion": "1.0.0",
+        "other": ""
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/unsloth/embeddinggemma-300m-GGUF/resolve/main/embeddinggemma-300M-F32.gguf"
+        }
+      ],
+      "driveKey": "97a3547f93ead75ebd0365cb784a68cd177c63c3a0aa94650fffc54c13c44b13"
+    },
+    {
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "laser-dolphin",
+        "externalVersion": "2.6",
+        "params": "2x7B",
+        "quantization": "Q2_K",
+        "internalVersion": "1.0.0",
+        "other": "mixtral"
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/jmb95/laser-dolphin-mixtral-2x7b-dpo-GGUF/resolve/main/dolphin-mixtral-2x7b-dop-Q2_K.gguf"
+        }
+      ],
+      "driveKey": "bd40e4bfae48b5bf436d1b0b447ae26e4c384aebe101a5e7df6ae71c919dadf1"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "full",
+        "name": "ggml-indictrans",
+        "externalVersion": "2",
+        "params": "1B",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "en-hi"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/indictrans2/q0f16/ggml-indictrans2-en-indic-1B/"
+        }
+      ],
+      "driveKey": "be5bff40a002c627a992d096861c0e9b0be6ac7770300cee0bb09ccda87404cb"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "full",
+        "name": "ggml-indictrans",
+        "externalVersion": "2",
+        "params": "200M",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "en-hi"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/indictrans2/q0f16/ggml-indictrans2-en-indic-dist-200M/"
+        }
+      ],
+      "driveKey": "42ba45bbf4c24ff743890bc0cc65d8c23c91a14d26f760b3f814df76be8e036f"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "full",
+        "name": "ggml-indictrans",
+        "externalVersion": "2",
+        "params": "1B",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "hi-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/indictrans2/q0f16/ggml-indictrans2-indic-en-1B/"
+        }
+      ],
+      "driveKey": "d06c487c56a36bb153d9d33bc1085bc90561d2a8dad5cd5701db782e1540a343"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "full",
+        "name": "ggml-indictrans",
+        "externalVersion": "2",
+        "params": "200M",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "hi-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/indictrans2/q0f16/ggml-indictrans2-indic-en-dist-200M/"
+        }
+      ],
+      "driveKey": "2e35d09ba69dd2b692c668862fdee43fa941859690b1e17aecc96c73474521b9"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "full",
+        "name": "ggml-indictrans",
+        "externalVersion": "2",
+        "params": "1B",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "hi-hi"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/indictrans2/q0f16/ggml-indictrans2-indic-indic-1B/"
+        }
+      ],
+      "driveKey": "f4edc8b072c34840c08aab2c8abdc288aa2dff8c2ed76fc96ad6604e322a038f"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "full",
+        "name": "ggml-indictrans",
+        "externalVersion": "2",
+        "params": "320M",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "hi-hi"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/indictrans2/q0f16/ggml-indictrans2-indic-indic-dist-320M/"
+        }
+      ],
+      "driveKey": "1bb2ad463127325ca8daa801ec89ae6a2983ddeb90c5461a965e65fa295e3655"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "full",
+        "name": "ggml-indictrans",
+        "externalVersion": "2",
+        "params": "1B",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "en-hi"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/indictrans2/q4_0/ggml-indictrans2-en-indic-1B/"
+        }
+      ],
+      "driveKey": "9fb5b7338504b24df0f3dd9ae8a1c280c6f00fd7f3295cca8f884514c5fa9713"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "full",
+        "name": "ggml-indictrans",
+        "externalVersion": "2",
+        "params": "200M",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "en-hi"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/indictrans2/q4_0/ggml-indictrans2-en-indic-dist-200M/"
+        }
+      ],
+      "driveKey": "8336d23073b2fd99723bf17d65ddc7b54b8ee886d6627659ba95c7a8fb932dc8"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "full",
+        "name": "ggml-indictrans",
+        "externalVersion": "2",
+        "params": "1B",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "hi-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/indictrans2/q4_0/ggml-indictrans2-indic-en-1B/"
+        }
+      ],
+      "driveKey": "1fd66a6862776a92c7fae1962a1f07a5bc7369fb8be3dd9b76adf7c71855af7f"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "full",
+        "name": "ggml-indictrans",
+        "externalVersion": "2",
+        "params": "200M",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "hi-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/indictrans2/q4_0/ggml-indictrans2-indic-en-dist-200M/"
+        }
+      ],
+      "driveKey": "ba7db8c0dbcb6fc4276f86a27e3b9dd0f5e90b79f550a1666757f6074e2a4331"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "full",
+        "name": "ggml-indictrans",
+        "externalVersion": "2",
+        "params": "1B",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "hi-hi"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/indictrans2/q4_0/ggml-indictrans2-indic-indic-1B/"
+        }
+      ],
+      "driveKey": "0f03a3a06bc7006deb0da42643585dc0da49b897ba49e449ec67013ba4464e8a"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "full",
+        "name": "ggml-indictrans",
+        "externalVersion": "2",
+        "params": "320M",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "hi-hi"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/indictrans2/q4_0/ggml-indictrans2-indic-indic-dist-320M/"
+        }
+      ],
+      "driveKey": "6cba73db82148a228bfdc586e2e565db6e6beb476575de3602d927ecb08b1a70"
+    },
+    {
+      "addon": "@qvac/tts",
+      "tags": {
+        "function": "tts",
+        "type": "onnx-medium",
+        "name": "piper-norman",
+        "externalVersion": "1",
+        "params": "20M",
+        "quantization": "fp32",
+        "internalVersion": "1.0.0",
+        "other": "en_US"
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/speaches-ai/piper-en_US-norman-medium/resolve/main/model.onnx"
+        },
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/speaches-ai/piper-en_US-norman-medium/resolve/main/config.json"
+        }
+      ],
+      "driveKey": "69581b1431e3abceec7708187922025dec6ccccd291c9e804679fd21371ccd1b"
+    },
+    {
+      "addon": "@qvac/tts",
+      "tags": {
+        "function": "tts",
+        "type": "onnx-medium",
+        "name": "piper-sharvard",
+        "externalVersion": "1",
+        "params": "20M",
+        "quantization": "fp32",
+        "internalVersion": "1.0.0",
+        "other": "es_ES"
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/speaches-ai/piper-es_ES-sharvard-medium/resolve/main/model.onnx"
+        },
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/speaches-ai/piper-es_ES-sharvard-medium/resolve/main/config.json"
+        }
+      ],
+      "driveKey": "e54fda7ba60572445dbee5326dd2d252599102e99f4a266f7fa4946248cd0050"
+    },
+    {
+      "addon": "@qvac/tts",
+      "tags": {
+        "function": "tts",
+        "type": "onnx-medium",
+        "name": "piper-thorsten",
+        "externalVersion": "1",
+        "params": "20M",
+        "quantization": "fp32",
+        "internalVersion": "1.0.0",
+        "other": "de_DE"
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/speaches-ai/piper-de_DE-thorsten-medium/resolve/main/model.onnx"
+        },
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/speaches-ai/piper-de_DE-thorsten-medium/resolve/main/config.json"
+        }
+      ],
+      "driveKey": "5947d8322d6bd5cdd51e9ccf507000e768e56d1e8f525923bd6f5d3707f2d76b"
+    },
+    {
+      "addon": "@qvac/tts",
+      "tags": {
+        "function": "tts",
+        "type": "onnx-medium",
+        "name": "piper-paola",
+        "externalVersion": "1",
+        "params": "20M",
+        "quantization": "fp32",
+        "internalVersion": "1.0.0",
+        "other": "it_IT"
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/speaches-ai/piper-it_IT-paola-medium/resolve/main/model.onnx"
+        },
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/speaches-ai/piper-it_IT-paola-medium/resolve/main/config.json"
+        }
+      ],
+      "driveKey": "a838fe8adcbfd95d6e89400cc2e9aac19d7e8e3633f8f61b2dbda7420db9d127"
     }
   ]
 }
