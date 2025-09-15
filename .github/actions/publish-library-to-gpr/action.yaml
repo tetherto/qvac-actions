@@ -152,6 +152,7 @@ runs:
           qvac-lib-inference-addon-mlc-marian \
           qvac-lib-inference-addon-mlc-whisper \
           qvac-lib-inference-addon-onnx-silerovad \
+          qvac-lib-infer-whispercpp \
           qvac-lib-inference-addon-onnx-ocr-fasttext"
         REPO_NAME="${{ github.repository }}"
         REPO_SHORT_NAME=${REPO_NAME#*/}  # Remove owner/ prefix
