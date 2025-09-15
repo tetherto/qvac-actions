@@ -6,5 +6,6 @@ storage
 drives-storage
 models
 keys.txt
+blind-peers.txt
 .DS_Store
 .env

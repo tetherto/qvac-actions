@@ -8,8 +8,12 @@ const fs = require('fs')
 const path = require('path')
 const logger = require('./logger')
 const b4a = require('b4a')
+const IdEnc = require('hypercore-id-encoding')
+const goodbye = require('graceful-goodbye')
 
 const keyFile = path.join(__dirname, 'keys.txt')
+const blindPeersFile = path.join(__dirname, 'blind-peers.txt')
+const checkProgressInterval = 10_000
 
 async function main () {
   try {
@@ -31,15 +35,80 @@ async function main () {
     logger.info(`DB discovery broadcasted: ${db.discoveryKey.toString('hex')}`)
 
     const keys = fs.readFileSync(keyFile, 'utf8').split('\n').slice(1)
+    const drives = []
     for (const key of keys) {
       if (key.length > 1) {
         const [modelKey, driveKey] = key.split(' ')
+        logger.info(`Seeding drive ${modelKey} with key ${driveKey}`)
         const drive = new Hyperdrive(store.namespace(modelKey), b4a.from(driveKey, 'hex'))
         await drive.ready()
         const driveDiscovery = swarm.join(drive.discoveryKey)
         await driveDiscovery.flushed()
-        logger.info(`Drive ${modelKey} discovery broadcasted`)
+        logger.info(`Seeding drive ${modelKey} with key ${driveKey}`)
+        await drive.getBlobs() // ensure blobs loaded
+        drives.push(drive)
       }
+    }
+
+    let blindPeers = null
+    try {
+      blindPeers = fs.readFileSync(blindPeersFile, 'utf-8').split('\n').filter(k => k.length > 1).map(k => IdEnc.normalize(k))
+      logger.info(`Checking progress for blind peers:\n- ${blindPeers.join('\n- ')}`)
+    } catch {
+      logger.warn('Could not read blind-peers.txt, so cannot auto detect when the blind peers finished downloading the drives')
+    }
+
+    const intervalId = setInterval(() => {
+      logger.info('Drives download progress overview')
+      let nrDoneDrives = 0
+      for (const drive of drives) {
+        logger.info(`- ${IdEnc.normalize(drive.key)} overview`)
+        let nrDoneDbBlindPeers = 0
+        let nrDoneBlobsBlindPeers = 0
+
+        logger.info('  - DB core:')
+        for (const p of drive.db.core.replicator.peers) {
+          const pubKey = IdEnc.normalize(p.remotePublicKey)
+          if (!blindPeers || blindPeers.includes(pubKey)) { // If no blind peers specified: print overview of all peers
+            const done = p.remoteLength > 0 && p.remoteContiguousLength === p.remoteLength
+            if (blindPeers && done) nrDoneDbBlindPeers++
+            logger.info('    -', IdEnc.normalize(p.remotePublicKey), done ? 'DONE' : 'DOWNLOADING', p.remoteContiguousLength, '/', p.remoteLength)
+          }
+        }
+
+        logger.info('  - Blobs core:')
+        for (const p of drive.blobs.core.replicator.peers) {
+          const pubKey = IdEnc.normalize(p.remotePublicKey)
+          if (!blindPeers || blindPeers.includes(pubKey)) { // If no blind peers specified: print overview of all peers
+            const done = p.remoteLength > 0 && p.remoteContiguousLength === p.remoteLength
+            if (blindPeers && done) nrDoneBlobsBlindPeers++
+            logger.info('  -', IdEnc.normalize(p.remotePublicKey), done ? 'DONE' : 'DOWNLOADING', p.remoteContiguousLength, '/', p.remoteLength)
+          }
+        }
+        if (blindPeers && nrDoneBlobsBlindPeers === blindPeers.length && nrDoneDbBlindPeers === blindPeers.length) nrDoneDrives++
+      }
+
+      if (blindPeers) {
+        logger.info(`The blind peers have fully downloaded ${nrDoneDrives} of ${drives.length} drives`)
+        if (nrDoneDrives === drives.length) {
+          logger.info('The blind peers have fully downloaded all drives')
+          goodbye.exit()
+        }
+      }
+    }, checkProgressInterval)
+
+    goodbye(async () => {
+      logger.info('Shutting down...')
+      clearInterval(intervalId)
+      await swarm.destroy()
+      await store.close()
+    })
+
+    logger.info(`Logging blind-peer download overview every ${checkProgressInterval / 1000} seconds.`)
+    if (blindPeers) {
+      logger.info('Will shut down when all drives are downloaded by all blind peers. Press ctrl-c to force shut down.')
+    } else {
+      logger.info('Will run indefinitely since no blind peers were specified. Press ctrl-c to exit.')
     }
   } catch (error) {
     logger.error(`Error in running replicator: ${error.stack}`)

@@ -3,7 +3,7 @@
 const { z } = require('zod')
 
 const ModelTagsSchema = z.object({
-  function: z.enum(['translation', 'generation', 'embedding', 'transcription', 'vad']),
+  function: z.enum(['translation', 'generation', 'embedding', 'transcription', 'vad', 'tts']),
   type: z.string().min(1),
   name: z.string().min(1),
   externalVersion: z.string().default(''),
