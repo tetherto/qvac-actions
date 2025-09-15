@@ -67,7 +67,7 @@ jobs:
           TARGET_REPO: qvac-examples
           E2E_APP_TEST_YAML: e2e-app-test.yaml
         with:
-          github-token: ${{ secrets.PAT_DISPATCH }}
+          github-token: ${{ secrets.PAT_TOKEN }}
           script: |
             console.log('Triggering E2E tests with model package...');
 
