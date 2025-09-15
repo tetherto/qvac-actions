@@ -54,7 +54,6 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
-          submodules: recursive
 
       - name: Get package name from package.json
         id: package_name
