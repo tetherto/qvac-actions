@@ -2,13 +2,14 @@
 
 const Hyperbee = require('hyperbee')
 const Hypercore = require('hypercore')
-const RAM = require('random-access-memory')
 const Hyperswarm = require('hyperswarm')
 const Corestore = require('corestore')
 const Hyperdrive = require('hyperdrive')
+const getTmpDir = require('test-tmp')
 
 async function main () {
-  const core = new Hypercore(RAM, Buffer.from('7344b16e44bfb783f22d3286c2b17c144b02ea7d5ba8ccdab79166fe9268c12f', 'hex'))
+  const tmpDir = await getTmpDir()
+  const core = new Hypercore(tmpDir, Buffer.from('7504626aaa534ac55d91b4b3067504774ae1457b03ddfbd86d817dd8cfbca8c8', 'hex'))
   const db = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'binary' })
   await db.ready()
   const swarm = new Hyperswarm()
@@ -43,7 +44,8 @@ async function main () {
 }
 
 async function checkHyperdrive (driveKey, version) {
-  const store = new Corestore(RAM)
+  const tmpDir = await getTmpDir()
+  const store = new Corestore(tmpDir)
   const swarm = new Hyperswarm()
   swarm.on('connection', (conn) => {
     console.log('new connection')

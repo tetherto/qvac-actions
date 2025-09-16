@@ -1,15 +1,104 @@
 {
-    "bucketName": "test-bucket",
-    "awsRegion": "eu-central-1",
-    "localBasePath": "mocks/models",
-    "models": {
-        "model1": {
-            "s3BasePath": "llama_32_3b_q4f16_1/",
-            "tags": ["type:llm", "model:llama_32", "param:3b", "quant:q4f16_1"]
-        },
-        "model2": {
-            "s3BasePath": "llama_31_8b_q0f32/",
-            "tags": ["type:llm", "model:llama_31", "param:8b", "quant:q0f32"]
+  "bucketName": "test-bucket",
+  "awsRegion": "eu-central-1",
+  "localBasePath": "mocks/models",
+  "addons": ["@qvac/translation-llamacpp", "@qvac/translation-nmtcpp"],
+  "drives": [
+    {
+      "addon": "@qvac/translation-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "salamandrata",
+        "externalVersion": "1.0.0",
+        "params": "2B",
+        "quantization": "q8",
+        "internalVersion": "1.0.0",
+        "other": ""
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/BSC-LT/salamandraTA-2B-instruct-GGUF/blob/main/salamandrata_2b_inst_q8.gguf"
         }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "instruct",
+        "name": "salamandrata",
+        "externalVersion": "1.0.0",
+        "params": "2B",
+        "quantization": "q4",
+        "internalVersion": "1.0.0",
+        "other": ""
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/BSC-LT/salamandraTA-2B-instruct-GGUF/blob/main/salamandrata_2b_inst_q4.gguf"
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "1.0.0",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "en-it"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "models/marian/"
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "1.0.0",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "en-it-large"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "models/marian-large/"
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "existing",
+        "externalVersion": "1.0.0",
+        "params": "",
+        "quantization": "q4f16_1",
+        "internalVersion": "1.0.0",
+        "other": "en-de"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "models/existing-model/"
+        }
+      ],
+      "driveKey": "test-drive-key-1234567890abcdef"
     }
+  ]
 }

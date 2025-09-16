@@ -1,5 +1,9 @@
 FROM node:20.15.0-slim
 
+RUN mkdir -p /root \
+    && echo "@tetherto:registry=https://npm.pkg.github.com" > /root/.npmrc \
+    && echo "//npm.pkg.github.com/:_authToken=\${NPM_TOKEN}" >> /root/.npmrc
+
 WORKDIR /app
 
 COPY package*.json ./

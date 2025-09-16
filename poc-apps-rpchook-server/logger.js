@@ -3,8 +3,6 @@
 const fs = require('fs')
 const path = require('path')
 
-const process = require('process') ? require('process') : require('bare-process')
-
 const logFile = fs.createWriteStream(path.join(__dirname, 'app.log'), { flags: 'a' })
 
 const levels = {

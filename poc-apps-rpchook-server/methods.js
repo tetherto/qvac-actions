@@ -2,44 +2,80 @@
 
 const { updateCode } = require('./services/git')
 const { stageApp } = require('./services/pear')
-const { updateAutobaseRecord, getOpenState } = require('./services/store')
-const { marianPocDir } = require('./config')
+const { updateAutobaseRecord, getOpenState, getPocDeploymentKeys } = require('./services/store')
+const { qvacExamplesDir } = require('./config')
+const { getValidPocDirectories } = require('./services/scanner')
+const logger = require('./logger')
 
 /**
  * Triggers deployment for the given parameters.
  *
  * @param {object} params - Deployment parameters.
- * @param {string} params.poc - Proof-of-concept identifier.
+ * @param {Array<string>} params.apps - Applications to deploy.
  * @param {string} params.commit - Commit hash to deploy.
- * @param {string} params.branch - Branch name for deployment.
+ * @param {string} params.channel - Channel name for deployment.
+ * @param {string} [params.prNumber] - Pull request number to fetch.
  * @returns {Promise<object>} Deployment result including Pear keys.
  */
-async function triggerDeploy ({ poc, commit, branch }) {
-  if (!poc || !commit || !branch) {
+async function triggerDeploy ({ apps, commit, prNumber, channel }) {
+  if (!commit || !channel || !apps) {
     throw new Error(
-      'Missing required parameters for deployment. Please provide poc, commit, and branch.'
+      'Missing required parameters for deployment. Please provide commit, channel, and apps.'
     )
   }
-
-  let keys = null
-  switch (poc) {
-    case 'marian':
-      await updateCode(marianPocDir, commit)
-      keys = await stageApp(marianPocDir, branch)
-      break
-    default:
-      throw new Error(`Unsupported POC: ${poc}`)
+  if (!Array.isArray(apps)) {
+    throw new Error('Apps must be an array.')
   }
 
-  if (!keys.uiPearKey || !keys.workerPearKey) {
-    throw new Error('Failed to obtain Pear keys from staging.')
+  const uiPearKeys = []
+  let pocBeeKey = null
+  const errors = []
+  try {
+    await updateCode(qvacExamplesDir, commit, prNumber)
+  } catch (err) {
+    logger.error(`Error updating code: ${err.message}`)
+    return {
+      message: 'Error updating code from git',
+      uiPearKeys,
+      pocBeeKey,
+      errors: [err.message]
+    }
   }
 
-  const pocBeeKey = await updateAutobaseRecord({ poc, channel: branch, uiPearKey: keys.uiPearKey, workerPearKey: keys.workerPearKey })
+  const validPocs = await getValidPocDirectories(qvacExamplesDir)
+  let appsToDeploy = validPocs
+  if (apps.length > 0) {
+    appsToDeploy = validPocs.filter(poc => apps.includes(poc.name))
+    const invalidRequestedApps = apps.filter(app => !validPocs.some(poc => poc.name === app))
+    if (invalidRequestedApps.length > 0) {
+      const errorMessage = `The following app(s) were not found and will not be deployed: ${invalidRequestedApps.join(', ')}`
+      logger.error(errorMessage)
+      errors.push(errorMessage)
+    }
+  }
+  for (const poc of appsToDeploy) {
+    try {
+      const keys = await stageApp(poc.path, channel)
+      if (!keys.uiPearKey || !keys.workerPearKey) {
+        logger.error(`Failed to obtain Pear keys from staging for ${poc.name}.`)
+      }
+      pocBeeKey = await updateAutobaseRecord({ poc: poc.name, channel, uiPearKey: keys.uiPearKey, workerPearKey: keys.workerPearKey })
+      uiPearKeys.push({
+        name: poc.name,
+        uiPearKey: keys.uiPearKey
+      })
+    } catch (err) {
+      const errorMessage = `Error staging app for ${poc.name}: ${err.message}`
+      logger.error(errorMessage)
+      errors.push(errorMessage)
+    }
+  }
+
   return {
     message: 'Deployment triggered successfully',
-    uiPearKey: keys.uiPearKey,
-    pocBeeKey
+    uiPearKeys,
+    pocBeeKey,
+    errors: errors.length > 0 ? errors : undefined
   }
 }
 
@@ -52,4 +88,17 @@ async function getState () {
   return state
 }
 
-module.exports = { triggerDeploy, getState }
+/**
+ * Retrieves the deployment keys for a given app and channel from the autobase.
+ *
+ * @param {object} params - Deployment parameters.
+ * @param {string} params.app - The poc application name.
+ * @param {string} params.channel - The channel name.
+ * @returns {Promise<{ poc: string, channel: string, ui: string, worker: string, errors: string[] }>} - The deployment keys.
+ */
+async function getDeploymentKeys ({ app, channel }) {
+  const deploymentKeys = await getPocDeploymentKeys(app, channel)
+  return deploymentKeys
+}
+
+module.exports = { triggerDeploy, getState, getDeploymentKeys }

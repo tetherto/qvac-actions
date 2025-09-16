@@ -3,9 +3,9 @@
 const RPC = require('@hyperswarm/rpc')
 const Hyperbee = require('hyperbee')
 const crypto = require('crypto')
-const goodbye = require('graceful-goodbye')
 const { getCorestoreInstance } = require('./services/store')
-const { triggerDeploy, getState } = require('./methods')
+const { triggerDeploy, getState, getDeploymentKeys } = require('./methods')
+const logger = require('./logger')
 
 async function main () {
   const store = await getCorestoreInstance()
@@ -28,43 +28,68 @@ async function main () {
   rpcServer.respond('triggerDeploy', async (data) => {
     try {
       const params = JSON.parse(data.toString())
-      console.log('triggerDeploy called with params:', params)
+      logger.info(`triggerDeploy called with params: ${JSON.stringify(params)}`)
       const result = await triggerDeploy(params)
       return Buffer.from(JSON.stringify(result))
     } catch (error) {
-      console.error('Error in RPC triggerDeploy:', error)
+      logger.error(`Error in RPC triggerDeploy: ${error.message}`)
       return Buffer.from(JSON.stringify({ error: error.message }))
     }
   })
 
   rpcServer.respond('getState', async () => {
     try {
-      console.log('getState called')
       const state = await getState()
       return Buffer.from(JSON.stringify(state))
     } catch (error) {
-      console.error('Error in RPC getState:', error)
+      logger.error(`Error in RPC getState: ${error.message}`)
       return Buffer.from(JSON.stringify({ error: error.message }))
     }
   })
 
-  console.log(
-    'RPC server listening on public key:',
-    rpcServer.publicKey.toString('hex')
+  rpcServer.respond('getDeploymentKeys', async (data) => {
+    try {
+      const params = JSON.parse(data.toString())
+      const result = await getDeploymentKeys(params)
+      return Buffer.from(JSON.stringify(result))
+    } catch (error) {
+      logger.error(`Error in RPC getDeploymentKeys: ${error.message}`)
+      return Buffer.from(JSON.stringify({ error: error.message }))
+    }
+  })
+
+  logger.info(
+    `RPC server listening on public key: ${rpcServer.publicKey.toString('hex')}`
   )
 
-  goodbye(() => {
-    if (rpcServer && typeof rpcServer.close === 'function') {
-      rpcServer.close()
+  function handleCleanUp (signal) {
+    return async () => {
+      logger.info(`Shutdown requested (${signal})`)
+      if (rpcServer && typeof rpcServer.close === 'function') {
+        try {
+          await rpcServer.close()
+        } catch (err) {
+          logger.error(`Error closing RPC server: ${err.message}`)
+        }
+      }
+      if (store && typeof store.close === 'function') {
+        try {
+          await store.close()
+        } catch (err) {
+          logger.error(`Error closing store: ${err.message}`)
+        }
+      }
+      logger.info('Cleanup complete, exiting now')
+      process.exit(0)
     }
-    if (store && typeof store.close === 'function') {
-      store.close()
-    }
-    console.log('Graceful shutdown complete')
-  })
+  }
+
+  process.on('SIGINT', handleCleanUp('SIGINT'))
+  process.on('SIGTERM', handleCleanUp('SIGTERM'))
+  process.on('uncaughtException', handleCleanUp('uncaughtException'))
 }
 
 main().catch((err) => {
-  console.error('RPC server error:', err)
+  logger.error(`RPC server error: ${err.message}`)
   process.exit(1)
 })

@@ -2,3 +2,10 @@ node_modules
 package-lock.json
 app.log
 mocks/models/*
+storage
+drives-storage
+models
+keys.txt
+blind-peers.txt
+.DS_Store
+.env

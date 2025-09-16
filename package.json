@@ -1,0 +1,23 @@
+{
+  "name": "@tetherto/qvac-devops",
+  "version": "1.0.0",
+  "description": "QVAC DevOps tools and infrastructure",
+  "private": true,
+  "workspaces": [
+    "hyperbee-models-server",
+    "poc-apps-rpchook-server"
+  ],
+  "scripts": {
+    "test": "echo 'Run tests in individual workspaces'",
+    "lint": "echo 'Run lint in individual workspaces'"
+  },
+  "keywords": [
+    "qvac",
+    "devops"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tetherto/qvac-devops.git"
+  },
+  "license": "Apache-2.0"
+}

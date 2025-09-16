@@ -1,0 +1,98 @@
+name: Publish NPM
+description: "Publish a package to NPM"
+
+inputs:
+  secret-token:
+    description: "Secret token"
+    required: true
+  release:
+    description: "Use tag. Release stream, temporary here for compatibility with old workflows"
+    required: false
+  tag:
+    description: "Release Stream (npm tag)"
+    required: false
+  path:
+    description: "Path to artifact to publish"
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: "18.x"
+        registry-url: "https://registry.npmjs.org/"
+        scope: "@qvac"
+
+    - run: echo registry=https://registry.npmjs.org/ >> .npmrc
+      shell: bash
+
+    - name: Publish to NPM
+      shell: bash
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.secret-token }}
+        INPUTS_CONTEXT: ${{ toJSON(inputs) }}
+      run: |
+        if [ -n "${{ inputs.path }}"  ]; then
+          echo "Changing directory to ${{ inputs.path }}"
+          cd "${{ inputs.path }}"
+        fi
+
+        ### Get tag for NPM, support release for compatibility with old workflows
+        echo "Input context: $INPUTS_CONTEXT"
+
+        TAG="${{ inputs.tag }}"
+        RELEASE="${{ inputs.release }}"
+
+        if [ -z "$RELEASE" ]; then
+          RELEASE="tmp"
+        fi
+        if [ -z "$TAG" ]; then
+          TAG=$RELEASE
+        fi
+
+        ### Set tag to latest if PR was merged to main
+        echo "Base branch: ${{ github.ref }}"
+        echo "Event name: ${{ github.event_name }}"
+
+        if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          echo "PR was merged to main, setting tag to latest"
+          TAG="latest"
+        fi
+
+        ### Set version, if not latest, we do detailed dev version
+        SHORT_SHA=$(git rev-parse --short HEAD)
+        PACKAGE_VERSION=$(node -p "require('./package.json').version")
+        PACKAGE_NAME=$(node -p "require('./package.json').name")
+
+        if [ "$TAG" = "dev" ] || [ "$TAG" = "tmp" ]; then
+          VERSION="${PACKAGE_VERSION}-tmp.${GITHUB_RUN_ID}"
+        else
+          VERSION="${PACKAGE_VERSION}"
+        fi
+
+        if [ "$VERSION" != "$PACKAGE_VERSION" ]; then
+          echo "Updating version to $VERSION"
+          npm version $VERSION --no-git-tag-version --allow-same-version
+        fi
+
+        echo "Publishing package: $PACKAGE_NAME"
+        echo "Publishing with tag: $TAG"
+        echo "Publishing version: $VERSION"
+
+        ### Set access level - private by default until release
+        ACCESS="restricted"
+
+        ### Check if version already exists
+        if npm view "$PACKAGE_NAME@$VERSION" version 2>/dev/null; then
+          echo "Version $VERSION already exists for $PACKAGE_NAME, skipping publish"
+          exit 0
+        fi
+
+        ### Publish with provenance if supported
+        if [ "${{ github.event_name }}" = "push" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "Publishing with provenance statements"
+          npm publish --tag $TAG --access $ACCESS --provenance
+        else
+          npm publish --tag $TAG --access $ACCESS
+        fi

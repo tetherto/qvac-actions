@@ -162,6 +162,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Publish to GPR
         id: publish-push
+        if: ${{ github.event.pull_request.head.repo.full_name != 'tetherto/qvac-devops' }}
         uses: tetherto/qvac-devops/.github/actions/publish-library-to-gpr@production-workflows-tag
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}

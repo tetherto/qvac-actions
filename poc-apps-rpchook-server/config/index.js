@@ -3,8 +3,7 @@
 require('dotenv').config()
 
 module.exports = {
-  marianPocDir: process.env.MARIAN_POC_DIR,
-  npmToken: process.env.NPM_TOKEN,
+  qvacExamplesDir: process.env.QVAC_EXAMPLES_DIR,
   corestoreDir: process.env.CORESTORE_DIR,
   socketPath: process.env.SOCKET_PATH
 }
