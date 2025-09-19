@@ -66,11 +66,9 @@ jobs:
 
       - name: Install bare-make
         id: install_bare_make
-        continue-on-error: true
         run: npm install -g bare-make
 
       - name: Install vulkan
-        continue-on-error: true
         run: |
           wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo tee /etc/apt/trusted.gpg.d/lunarg.asc
           sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list http://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
@@ -79,21 +77,18 @@ jobs:
 
       - name: Generate build system
         id: bare_make_generate
-        if: steps.install_bare_make.outcome == 'success'
-        continue-on-error: true
         run: bare-make generate
 
         # Please keep linting after bare-make generate so that the configuration
         # files are pulled in.
       - name: Check C++ files format
         id: cpp_files_fmt
-        if: steps.bare_make_generate.outcome == 'success'
         continue-on-error: true
         run: |
           TARGET_SHA=${{ inputs.sha }}
-          if ! git-clang-format-19 --binary clang-format-19 --diff $TARGET_SHA; then
-              echo "::error title=Unformatted C++ files::Please format your C++ files."
-              exit 1
+          if ! git-clang-format-19 --binary clang-format-19 --extensions c,cc,cpp,cxx,h,hh,hpp,hxx --diff $TARGET_SHA; then
+            echo "::error title=Unformatted C++ files::Please format your C++ files with 'git-clang-format-19 --extensions c,cc,cpp,cxx,h,hh,hpp,hxx $TARGET_SHA'"
+            exit 1
           fi
 
       - name: Run C++ clang-tidy
@@ -119,3 +114,15 @@ jobs:
         if: steps.bare_make_build.outcome == 'success'
         continue-on-error: true
         run: bare-make test
+
+      - name: Check for errors
+        run: |
+          count=0
+          if [ "${{ steps.cpp_files_fmt.outcome }}" = "failure" ]; then
+            echo "::error::Step - Check C++ files format failed"
+            count=$((count + 1))
+          fi
+          if [ $count -gt 0 ]; then
+            echo "::error::There were $count failed checks"
+            exit 1
+          fi
