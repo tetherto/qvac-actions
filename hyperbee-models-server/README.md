@@ -8,6 +8,7 @@ A distributed AI model management system that downloads models from Hugging Face
 - **Multiple Models per Drive**: Support for multiple model files within each drive configuration
 - **Distributed Storage**: Store models in Hyperdrive for efficient peer-to-peer distribution
 - **Metadata Management**: Track model metadata, versions, and fingerprints in Hyperbee
+- **File Checksum Tracking**: Store SHA-256 checksums and sizes for all model files in driveMetadata
 - **Smart Caching**: Intelligent caching for HF and AWS models prevents redundant downloads
 - **Automatic Fingerprinting**: Generate SHA-256 fingerprints to detect model changes
 - **Inference Config Generation**: Automatically create inference configuration files
@@ -24,7 +25,11 @@ The system consists of several key components:
 - **AWS S3 Integration** (`aws.js`): Downloads models from AWS S3
 - **Drive Management** (`drive.js`): Handles Hyperdrive operations and network seeding
 - **Validation** (`validation.js`): Schema validation using Zod
-- **Utilities** (`utils.js`): Helper functions for fingerprinting, config generation, etc.
+- **Utilities** (`utils.js`): Helper functions including:
+  - `generateFingerprint`: Creates SHA-256 hash of all files in a directory
+  - `calculateDirectoryChecksums`: Calculates individual checksums for each file
+  - `buildInferenceConfig`: Generates inference configuration files
+  - `generateModelKey`: Creates unique keys from model tags
 
 ## Prerequisites
 
@@ -71,6 +76,7 @@ The system validates configuration using Zod schemas:
 - **Addons**: Must follow the pattern `@qvac/package-name`
 - **AWS Configuration**: Required when using AWS source models
 - **Drive Keys**: Optional `driveKey` field to skip download and use existing drive
+- **Drive Metadata**: Optional `driveMetadata` field with file checksums when using driveKey
 - **Multiple Models**: Each drive can contain multiple models with different sources and paths
 
 ### Configuration Example
@@ -251,6 +257,15 @@ npm run check-connection
 # Use the drive key checker to verify specific drives
 node scripts/driveKeyChecker.js <drive-key>
 
+# Download all files from a drive and calculate checksums (downloads to temp directory)
+node scripts/driveKeyChecker.js <drive-key> --download
+
+# Download to a specific directory
+node scripts/driveKeyChecker.js <drive-key> --download --download-path ./downloads
+
+# Check multiple drives and save checksums to JSON file (drive-checksums.json)
+node scripts/driveKeyChecker.js <drive-key1> <drive-key2> --download --download-path ./downloads
+
 # Use the Hyperbee key checker to verify database entries
 node scripts/hyperbeeKeyChecker.js <bee-key> <model-key>
 
@@ -306,7 +321,11 @@ Once reseeding has been confirmed and the model is successfully distributed acro
 4. **Fingerprint Generation**: Creates SHA-256 fingerprints for change detection
 5. **Caching Check**: Skips download if model version hasn't changed
 6. **Drive Creation**: Stores models in Hyperdrive for distributed access
-7. **Metadata Storage**: Stores model metadata in Hyperbee
+7. **Metadata Storage**: Stores model metadata in Hyperbee including:
+   - Drive key and version
+   - Model tags (function, type, name, etc.)
+   - SHA-256 fingerprint of all files
+   - File checksums and sizes in `driveMetadata` array
 8. **Network Seeding**: Shares drives across the network for replication
 9. **Inference Config**: Generates clean inference.config.json files (excludes internal files)
 10. **Key Export**: Writes model and drive keys to `keys.txt` file for external access
@@ -334,7 +353,7 @@ When multiple models are configured within the same drive, each model must have 
 
 ## Drive Key Integration
 
-For models with existing Hyperdrive keys, you can specify a `driveKey` in the configuration:
+For models with existing Hyperdrive keys, you can specify a `driveKey` and `driveMetadata` (if known) in the configuration:
 
 ```json
 {
@@ -355,7 +374,19 @@ For models with existing Hyperdrive keys, you can specify a `driveKey` in the co
       "path": "models/existing-model/"
     }
   ],
-  "driveKey": "existing-hyperdrive-key-here"
+  "driveKey": "existing-hyperdrive-key-here",
+  "driveMetadata": [
+    {
+      "filename": "model.bin",
+      "checksum": "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3a94a8fe5ccb19ba61c4c0873",
+      "expectedSize": 104857600
+    },
+    {
+      "filename": "tokenizer.json",
+      "checksum": "b94a8fe5ccb19ba61c4c0873d391e987982fbbd3a94a8fe5ccb19ba61c4c0873",
+      "expectedSize": 204800
+    }
+  ]
 }
 ```
 
@@ -365,6 +396,49 @@ For models with existing Hyperdrive keys, you can specify a `driveKey` in the co
 - No local files are created
 - No inference config is generated
 - Drive key is stored in Hyperbee with default fingerprint
+- Optional `driveMetadata` field stores file checksums and sizes
+
+### Generating Drive Metadata
+
+To generate the `driveMetadata` for an existing drive:
+
+```bash
+# Download files and calculate checksums
+node scripts/driveKeyChecker.js <drive-key> --download
+
+# The checksums are saved to drive-checksums.json in the download directory
+# Check multiple drives at once:
+node scripts/driveKeyChecker.js <drive-key1> <drive-key2> --download --download-path ./downloads
+```
+
+The output file `drive-checksums.json` will contain:
+
+```json
+[
+  {
+    "driveKey": "9281d61503593fdf3eaa9d5e5d44746c271ef930aed3b7f8ee9ce153c76399d6",
+    "driveMetadata": [
+      {
+        "filename": "model.bin",
+        "checksum": "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3...",
+        "expectedSize": 104857600
+      }
+    ]
+  },
+  {
+    "driveKey": "d331ed49c444f90b3b2a70aa5b820752685142bf2d769a0592ed666140477578",
+    "driveMetadata": [
+      {
+        "filename": "model.gguf",
+        "checksum": "fcb165efedaee2cfbdefe02bd3bbf22c80cfdb728915fbbe54fa809a8556710a",
+        "expectedSize": 214643392
+      }
+    ]
+  }
+]
+```
+
+Each drive's files are downloaded to separate subdirectories (e.g., `drive-9281d615`, `drive-d331ed49`) to keep them organized.
 
 ## Model Caching
 

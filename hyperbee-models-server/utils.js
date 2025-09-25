@@ -125,9 +125,63 @@ function createAddonModelKeysMap (addons) {
   return addonModelKeysMap
 }
 
+/**
+ * Calculate checksums for all files in a directory (including subdirectories)
+ * @param {string} dirPath - Path to the directory
+ * @param {string[]} excludeFiles - Array of file names to exclude (optional)
+ * @returns {Promise<Array<{filename: string, checksum: string, expectedSize: number}>>} Array of file info with checksums
+ */
+async function calculateDirectoryChecksums (dirPath, excludeFiles = []) {
+  logger.info(`Calculating checksums for directory: ${dirPath}`)
+
+  if (!fs.existsSync(dirPath)) {
+    throw new Error(`Directory does not exist: ${dirPath}`)
+  }
+
+  // Get all files using the existing getModelFiles function
+  const files = await getModelFiles(dirPath, excludeFiles)
+  const fileChecksums = []
+
+  // Process each file
+  for (const relativeFilePath of files) {
+    const filePath = path.join(dirPath, relativeFilePath)
+
+    // Get file stats for size
+    const stats = await fs.promises.stat(filePath)
+
+    // Calculate checksum using streaming
+    const checksum = await new Promise((resolve, reject) => {
+      const hash = crypto.createHash('sha256')
+      const stream = fs.createReadStream(filePath)
+
+      stream.on('data', chunk => {
+        hash.update(chunk)
+      })
+
+      stream.on('end', () => {
+        resolve(hash.digest('hex'))
+      })
+
+      stream.on('error', error => {
+        reject(new Error(`Error reading file ${relativeFilePath}: ${error.message}`))
+      })
+    })
+
+    fileChecksums.push({
+      filename: relativeFilePath,
+      checksum,
+      expectedSize: stats.size
+    })
+  }
+
+  logger.info(`Calculated checksums for ${fileChecksums.length} files`)
+  return fileChecksums
+}
+
 module.exports = {
   buildInferenceConfig,
   generateFingerprint,
   generateModelKey,
-  createAddonModelKeysMap
+  createAddonModelKeysMap,
+  calculateDirectoryChecksums
 }

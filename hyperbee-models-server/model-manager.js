@@ -13,7 +13,8 @@ const {
   generateModelKey,
   createAddonModelKeysMap,
   buildInferenceConfig,
-  generateFingerprint
+  generateFingerprint,
+  calculateDirectoryChecksums
 } = require('./utils')
 const { ConfigSchema } = require('./validation')
 const { syncDrive, getDriveVersion } = require('./drive')
@@ -110,13 +111,15 @@ async function main () {
           key: driveConfig.driveKey,
           tags: driveConfig.tags,
           driveVersion,
-          fingerprint: defaultFingerprint
+          fingerprint: defaultFingerprint,
+          driveMetadata: driveConfig.driveMetadata || []
         }
 
         // Check if existing record matches expected record
         if (existingModelRecord &&
           existingModelRecord.key === expectedModelRecord.key &&
           JSON.stringify(existingModelRecord.tags) === JSON.stringify(expectedModelRecord.tags) &&
+          JSON.stringify(existingModelRecord.driveMetadata) === JSON.stringify(expectedModelRecord.driveMetadata) &&
           existingModelRecord.driveVersion >= expectedModelRecord.driveVersion
         ) {
           driveKeys[modelKey] = driveConfig.driveKey
@@ -131,7 +134,9 @@ async function main () {
         driveKeys[modelKey] = driveConfig.driveKey
         logger.info(
           `Model ${modelKey} record ${existingModelRecord ? 'updated' : 'created'} with provided driveKey: ${JSON.stringify(
-            expectedModelRecord
+            expectedModelRecord,
+            null,
+            2
           )}`
         )
         continue
@@ -233,11 +238,14 @@ async function main () {
         driveKeys[modelKey] = drive.key
         driveInstances.set(modelKey, drive)
 
+        const driveMetadata = await calculateDirectoryChecksums(modelDirectory, ['inference.config.json', '.s3-fingerprint'])
+
         const modelRecord = {
           key: drive.key.toString('hex'),
           tags: driveConfig.tags,
           driveVersion: drive.version,
-          fingerprint
+          fingerprint,
+          driveMetadata
         }
         await db.put(modelKey, JSON.stringify(modelRecord))
         await fs.promises.appendFile(
@@ -246,7 +254,9 @@ async function main () {
         )
         logger.info(
           `Model ${modelKey} record updated successfully with record: ${JSON.stringify(
-            modelRecord
+            modelRecord,
+            null,
+            2
           )}`
         )
       } catch (error) {
