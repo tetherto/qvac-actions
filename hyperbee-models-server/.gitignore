@@ -7,5 +7,6 @@ drives-storage
 models
 keys.txt
 blind-peers.txt
+reseeding.txt
 .DS_Store
 .env
