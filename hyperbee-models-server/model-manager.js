@@ -112,7 +112,7 @@ async function main () {
           tags: driveConfig.tags,
           driveVersion,
           fingerprint: defaultFingerprint,
-          driveMetadata: driveConfig.driveMetadata || []
+          driveMetadata: driveConfig.driveMetadata || existingModelRecord?.driveMetadata || []
         }
 
         // Check if existing record matches expected record

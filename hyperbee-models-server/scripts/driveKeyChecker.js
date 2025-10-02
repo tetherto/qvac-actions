@@ -8,7 +8,7 @@ const fs = require('fs')
 const path = require('path')
 const { calculateDirectoryChecksums } = require('../utils')
 
-async function downloadAndCalculateChecksums(drive, driveKey, options = {}) {
+async function downloadAndCalculateChecksums (drive, driveKey, options = {}) {
   const { downloadPath = null } = options
 
   console.log('\n🔽 Downloading all files from drive...')
@@ -38,12 +38,38 @@ async function downloadAndCalculateChecksums(drive, driveKey, options = {}) {
 
         // Download file
         console.log(`   Downloading: ${fileName}`)
-        const fileBuffer = await drive.get(filePath)
 
-        if (fileBuffer) {
-          await fs.promises.writeFile(localPath, fileBuffer)
-          downloadedCount++
+        // Get file size from file.value
+        const fileSize = file.value?.blob?.byteLength || file.value?.size || 0
+        const MAX_BUFFER_SIZE = 4 * 1024 * 1024 * 1024 - 1 // 4GB - 1 byte
+
+        if (fileSize > MAX_BUFFER_SIZE) {
+          console.log(`   ⚠️  Large file detected (${(fileSize / 1024 / 1024 / 1024).toFixed(2)} GB), using streaming...`)
+
+          // Use streaming for large files
+          const writeStream = fs.createWriteStream(localPath)
+          const readStream = drive.createReadStream(filePath)
+
+          await new Promise((resolve, reject) => {
+            readStream.pipe(writeStream)
+
+            writeStream.on('finish', () => {
+              console.log('   ✅ Streamed download complete')
+              resolve()
+            })
+
+            writeStream.on('error', reject)
+            readStream.on('error', reject)
+          })
+        } else {
+          // Use buffer method for smaller files
+          const fileBuffer = await drive.get(filePath)
+          if (fileBuffer) {
+            await fs.promises.writeFile(localPath, fileBuffer)
+          }
         }
+
+        downloadedCount++
       }
     }
 
@@ -77,7 +103,7 @@ async function downloadAndCalculateChecksums(drive, driveKey, options = {}) {
   }
 }
 
-async function checkInferenceConfig(drive, configPath = '/inference.config.json') {
+async function checkInferenceConfig (drive, configPath = '/inference.config.json') {
   console.log(`\n🔍 Checking for ${configPath}...`)
 
   try {
@@ -122,7 +148,7 @@ async function checkInferenceConfig(drive, configPath = '/inference.config.json'
   }
 }
 
-async function checkDriveKey(driveKey, options = {}) {
+async function checkDriveKey (driveKey, options = {}) {
   const {
     version = null,
     timeout = 10000,
@@ -262,7 +288,7 @@ async function checkDriveKey(driveKey, options = {}) {
   }
 }
 
-async function checkMultipleDriveKeys(driveKeys, options = {}) {
+async function checkMultipleDriveKeys (driveKeys, options = {}) {
   console.log(`🚀 Checking ${driveKeys.length} drive keys...\n`)
 
   const results = []
@@ -326,7 +352,7 @@ async function checkMultipleDriveKeys(driveKeys, options = {}) {
 }
 
 // Main function for CLI usage
-async function main() {
+async function main () {
   const args = process.argv.slice(2)
 
   if (args.length === 0) {
