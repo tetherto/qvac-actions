@@ -30,7 +30,14 @@
           "path": "https://huggingface.co/BSC-LT/salamandraTA-2B-instruct-GGUF/blob/main/salamandrata_2b_inst_q8.gguf"
         }
       ],
-      "driveKey": "96860337b0bdffdbb8ef0df4c8b2c3ab5e78568f5f7e15815a0a6b392512c9b5"
+      "driveKey": "96860337b0bdffdbb8ef0df4c8b2c3ab5e78568f5f7e15815a0a6b392512c9b5",
+      "driveMetadata": [
+        {
+          "filename": "salamandrata_2b_inst_q8.gguf",
+          "checksum": "9cfebb63cd7e6b6d1755ea8ef001fcdadfa17831da1db96eafe3fc554913d5e1",
+          "expectedSize": 2401075552
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-llamacpp",
@@ -50,7 +57,14 @@
           "path": "https://huggingface.co/BSC-LT/salamandraTA-2B-instruct-GGUF/blob/main/salamandrata_2b_inst_q4.gguf"
         }
       ],
-      "driveKey": "1610d81772a9e7c37660666dbdfdcef915b6b83c522ea1ad31c19cab0075811d"
+      "driveKey": "1610d81772a9e7c37660666dbdfdcef915b6b83c522ea1ad31c19cab0075811d",
+      "driveMetadata": [
+        {
+          "filename": "salamandrata_2b_inst_q4.gguf",
+          "checksum": "15238732917ba7151857dbce6f8c547a0d1bbd77663508522ae2d6a788cee3a5",
+          "expectedSize": 1517617504
+        }
+      ]
     },
     {
       "addon": "@qvac/transcription-whispercpp",
@@ -70,7 +84,14 @@
           "path": "https://placeholder.mock"
         }
       ],
-      "driveKey": "60a19f1065c355df49c753b16cea075863ebbfdd330caca8b3ea6a337026fc7d"
+      "driveKey": "60a19f1065c355df49c753b16cea075863ebbfdd330caca8b3ea6a337026fc7d",
+      "driveMetadata": [
+        {
+          "filename": "ggml-silero-v5.1.2.bin",
+          "checksum": "29940d98d42b91fbd05ce489f3ecf7c72f0a42f027e4875919a28fb4c04ea2cf",
+          "expectedSize": 885098
+        }
+      ]
     },
     {
       "addon": "@qvac/transcription-whispercpp",
@@ -90,7 +111,14 @@
           "path": "https://placeholder.mock"
         }
       ],
-      "driveKey": "9281d61503593fdf3eaa9d5e5d44746c271ef930aed3b7f8ee9ce153c76399d6"
+      "driveKey": "9281d61503593fdf3eaa9d5e5d44746c271ef930aed3b7f8ee9ce153c76399d6",
+      "driveMetadata": [
+        {
+          "filename": "ggml-tiny.bin",
+          "checksum": "be07e048e1e599ad46341c8d2a135645097a538221678b7acdd1b1919c6e1b21",
+          "expectedSize": 77691713
+        }
+      ]
     },
     {
       "addon": "@qvac/transcription-whispercpp",
@@ -110,7 +138,19 @@
           "path": "qvac_models_compiled/ggml/whisper/ggml-small.en-q8_0/"
         }
       ],
-      "driveKey": "c6a987fbb4ad8fba1526e446501f88ee45dfafbf1685410a7aeadb589fe18608"
+      "driveKey": "c6a987fbb4ad8fba1526e446501f88ee45dfafbf1685410a7aeadb589fe18608",
+      "driveMetadata": [
+        {
+          "filename": "ggml-silero-v5.1.2.bin",
+          "checksum": "29940d98d42b91fbd05ce489f3ecf7c72f0a42f027e4875919a28fb4c04ea2cf",
+          "expectedSize": 885098
+        },
+        {
+          "filename": "ggml-small.en-q8_0.bin",
+          "checksum": "67a179f608ea6114bd3fdb9060e762b588a3fb3bd00c4387971be4d177958067",
+          "expectedSize": 264477561
+        }
+      ]
     },
     {
       "addon": "@qvac/transcription-whispercpp",
@@ -130,7 +170,19 @@
           "path": "qvac_models_compiled/ggml/whisper/ggml-large-v3-turbo/"
         }
       ],
-      "driveKey": "76fb36d7f16a430618962d3e78b0e22e61aa527a9e937335188d08858aaa9075"
+      "driveKey": "76fb36d7f16a430618962d3e78b0e22e61aa527a9e937335188d08858aaa9075",
+      "driveMetadata": [
+        {
+          "filename": "ggml-large-v3-turbo.bin",
+          "checksum": "1fc70f774d38eb169993ac391eea357ef47c88757ef72ee5943879b7e8e2bc69",
+          "expectedSize": 1624555275
+        },
+        {
+          "filename": "ggml-silero-v5.1.2.bin",
+          "checksum": "29940d98d42b91fbd05ce489f3ecf7c72f0a42f027e4875919a28fb4c04ea2cf",
+          "expectedSize": 885098
+        }
+      ]
     },
     {
       "addon": "@qvac/transcription-whispercpp",
@@ -150,7 +202,19 @@
           "path": "https://placeholder.mock"
         }
       ],
-      "driveKey": "ebfb94b378276da139554668f1ff737644eadff529c2ea0f2662d7df61fd86ca"
+      "driveKey": "ebfb94b378276da139554668f1ff737644eadff529c2ea0f2662d7df61fd86ca",
+      "driveMetadata": [
+        {
+          "filename": "ggml-silero-v5.1.2.bin",
+          "checksum": "29940d98d42b91fbd05ce489f3ecf7c72f0a42f027e4875919a28fb4c04ea2cf",
+          "expectedSize": 885098
+        },
+        {
+          "filename": "ggml-tiny.bin",
+          "checksum": "be07e048e1e599ad46341c8d2a135645097a538221678b7acdd1b1919c6e1b21",
+          "expectedSize": 77691713
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -170,7 +234,14 @@
           "path": "qvac_models_compiled/ggml/Qwen3-4B/2025-06-27/Qwen3-4B-Q4_K_M.gguf"
         }
       ],
-      "driveKey": "19ffb75463149955ee24d786dfddd84d41fc872ea813cd4465f5f7299d165adc"
+      "driveKey": "19ffb75463149955ee24d786dfddd84d41fc872ea813cd4465f5f7299d165adc",
+      "driveMetadata": [
+        {
+          "filename": "model.gguf",
+          "checksum": "7485fe6f11af29433bc51cab58009521f205840f5b4ae3a32fa7f92e8534fdf5",
+          "expectedSize": 2497280256
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -190,7 +261,14 @@
           "path": "https://huggingface.co/Aldaris/Qwen3-4B-Q4_K_M-GGUF/blob/main/qwen3-4b-q4_k_m.gguf"
         }
       ],
-      "driveKey": "d331ed49c444f90b3b2a70aa5b820752685142bf2d769a0592ed666140477578"
+      "driveKey": "d331ed49c444f90b3b2a70aa5b820752685142bf2d769a0592ed666140477578",
+      "driveMetadata": [
+        {
+          "filename": "Qwen3-0.6B-UD-IQ1_S.gguf",
+          "checksum": "fcb165efedaee2cfbdefe02bd3bbf22c80cfdb728915fbbe54fa809a8556710a",
+          "expectedSize": 214643392
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -210,7 +288,19 @@
           "path": "https://huggingface.co/unsloth/medgemma-4b-it-GGUF/blob/main/medgemma-4b-it-Q4_1.gguf"
         }
       ],
-      "driveKey": "b11388de0e9214d8c2181eae30e31bcd49c48b26d621b353ddc7f01972dddd76"
+      "driveKey": "b11388de0e9214d8c2181eae30e31bcd49c48b26d621b353ddc7f01972dddd76",
+      "driveMetadata": [
+        {
+          "filename": "medgemma-4b-it-Q4_1.gguf",
+          "checksum": "1c87b2a6d712a61443dfe64fa8fe3755c9a5c1a9a9e4493e673180495e53d8ec",
+          "expectedSize": 2564052768
+        },
+        {
+          "filename": "medgemma-4b-it-Q8_0.gguf",
+          "checksum": "cffba7312074cb0491f99967f715ed0140281a7bdc946140460cef07fdff5ab2",
+          "expectedSize": 4130402848
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -230,7 +320,14 @@
           "path": "https://huggingface.co/unsloth/Llama-3.2-1B-Instruct-GGUF/blob/main/Llama-3.2-1B-Instruct-Q4_0.gguf"
         }
       ],
-      "driveKey": "afa79ee07c0a138bb9f11bfaee771fb1bdfca8c82d961cff0474e49827bd1de3"
+      "driveKey": "afa79ee07c0a138bb9f11bfaee771fb1bdfca8c82d961cff0474e49827bd1de3",
+      "driveMetadata": [
+        {
+          "filename": "Llama-3.2-1B-Instruct-Q4_0.gguf",
+          "checksum": "66bfbb2d48bdb77cd56bd03ef820deff3c4a74b1a09de3b917ae13e72c1a70c2",
+          "expectedSize": 773025824
+        }
+      ]
     },
     {
       "addon": "@qvac/embed-llamacpp",
@@ -250,7 +347,29 @@
           "path": "https://huggingface.co/ChristianAzinn/gte-large-gguf/blob/main/gte-large_fp16.gguf"
         }
       ],
-      "driveKey": "d1896d9259692818df95bd2480e90c2d057688a4f7c9b1ae13ac7f5ee379d03e"
+      "driveKey": "d1896d9259692818df95bd2480e90c2d057688a4f7c9b1ae13ac7f5ee379d03e",
+      "driveMetadata": [
+        {
+          "filename": ".cache/huggingface/.gitignore",
+          "checksum": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+          "expectedSize": 1
+        },
+        {
+          "filename": ".cache/huggingface/download/gte-large_fp16.gguf.lock",
+          "checksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "expectedSize": 0
+        },
+        {
+          "filename": ".cache/huggingface/download/gte-large_fp16.gguf.metadata",
+          "checksum": "16458e461d8ddf7db18c2d7295a6cec89e280d2143c34fd0623b01c86ad3fccf",
+          "expectedSize": 124
+        },
+        {
+          "filename": "gte-large_fp16.gguf",
+          "checksum": "939f1fb3fcc70f2a250a7e7ad7c2fbdc1397d46f9a8055d053e451829c5293fb",
+          "expectedSize": 669603712
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-llamacpp",
@@ -270,7 +389,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-it-en/2025-08-06/ggml-opus-it-en.bin"
         }
       ],
-      "driveKey": "57ca319db2b656b342de92dcd3b96963648092358bf5b9e02f76599f61ac5a02"
+      "driveKey": "57ca319db2b656b342de92dcd3b96963648092358bf5b9e02f76599f61ac5a02",
+      "driveMetadata": [
+        {
+          "filename": "model.bin",
+          "checksum": "238044a3ed67f45b82c053a9c5131e1eed51c8aec112d19c42f7ae5948eefd11",
+          "expectedSize": 339071793
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -290,7 +416,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-en-it/2025-08-07/ggml-opus-en-it.bin"
         }
       ],
-      "driveKey": "9ef58f31c20d5556722e0b58a5d262fd89801daf2e6cb28e3f21ac6e9228088f"
+      "driveKey": "9ef58f31c20d5556722e0b58a5d262fd89801daf2e6cb28e3f21ac6e9228088f",
+      "driveMetadata": [
+        {
+          "filename": "model.bin",
+          "checksum": "169d2f4ec0acb9536e5f4faeab041a5ae16d4221f3bcbc7b0b311791a4d4b658",
+          "expectedSize": 673543993
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -310,7 +443,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-en-de/2025-08-07/ggml-opus-en-de.bin"
         }
       ],
-      "driveKey": "7b1d16235cd4dd9cc2c58d1fc1c41d65159aa4d2337169c6243a5bc8bf49689b"
+      "driveKey": "7b1d16235cd4dd9cc2c58d1fc1c41d65159aa4d2337169c6243a5bc8bf49689b",
+      "driveMetadata": [
+        {
+          "filename": "model.bin",
+          "checksum": "e4201dc20b7a07c75880710e47b5aade3deb126c3083b70725a23b3438b8fe41",
+          "expectedSize": 538147694
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -330,7 +470,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-en-es/2025-08-07/ggml-opus-en-es.bin"
         }
       ],
-      "driveKey": "8aa823831cc55f5c1cba2c046e98b53a0d32376267ca73d653294b8b114459a2"
+      "driveKey": "8aa823831cc55f5c1cba2c046e98b53a0d32376267ca73d653294b8b114459a2",
+      "driveMetadata": [
+        {
+          "filename": "model.bin",
+          "checksum": "b09947d26e44362ce4b3f2839fe5cef385ac693cf8c2ae9b2924f34798c2e7d1",
+          "expectedSize": 580779709
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -350,7 +497,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-de-en/2025-08-07/ggml-opus-de-en.bin"
         }
       ],
-      "driveKey": "b4d1ab62f885d9814acfddc565761b607bf86a307c38430ec1dabfe1a92532af"
+      "driveKey": "b4d1ab62f885d9814acfddc565761b607bf86a307c38430ec1dabfe1a92532af",
+      "driveMetadata": [
+        {
+          "filename": "model.bin",
+          "checksum": "3ef2a2a27cc80eab0ae3e4a79e84e0c3ac3e08a204bddefb16a2e8438ddd378d",
+          "expectedSize": 538147694
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -370,7 +524,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-de-es/2025-08-07/ggml-opus-de-es.bin"
         }
       ],
-      "driveKey": "f432152db25ebd86fa0e48cd12f27e67e5c052c9af99c7662939dc1d84792c3e"
+      "driveKey": "f432152db25ebd86fa0e48cd12f27e67e5c052c9af99c7662939dc1d84792c3e",
+      "driveMetadata": [
+        {
+          "filename": "model.bin",
+          "checksum": "f7676dbfa4aa852e134bd475cc1279940403a5a5900f29d5148500c92fd27ba4",
+          "expectedSize": 558029726
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -390,7 +551,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-de-it/2025-08-07/ggml-opus-de-it.bin"
         }
       ],
-      "driveKey": "06d26bdc965d548c156885ed105f8150618aaa11712579158e81f1d49735aaf6"
+      "driveKey": "06d26bdc965d548c156885ed105f8150618aaa11712579158e81f1d49735aaf6",
+      "driveMetadata": [
+        {
+          "filename": "model.bin",
+          "checksum": "378e0cd84cde582f7d55add11bd7ccb0ea7d40157fe9343ec0231c1452c37d07",
+          "expectedSize": 549186246
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -410,7 +578,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-es-de/2025-08-07/ggml-opus-es-de.bin"
         }
       ],
-      "driveKey": "ff6a02096c3e2f4e1aa7e4a75cb37aa851bc924c9d4af2b30b26431f1cb9d156"
+      "driveKey": "ff6a02096c3e2f4e1aa7e4a75cb37aa851bc924c9d4af2b30b26431f1cb9d156",
+      "driveMetadata": [
+        {
+          "filename": "model.bin",
+          "checksum": "2c6462933a8383bdab9241fc7c8be114c196513431e4bd4e6444acdfa8c416e0",
+          "expectedSize": 558029726
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -430,7 +605,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-es-en/2025-08-07/ggml-opus-es-en.bin"
         }
       ],
-      "driveKey": "b96cf6c79119578b9f9a2206b19ce9686e95f31949ce62b24aef83fbdf4b0b08"
+      "driveKey": "b96cf6c79119578b9f9a2206b19ce9686e95f31949ce62b24aef83fbdf4b0b08",
+      "driveMetadata": [
+        {
+          "filename": "model.bin",
+          "checksum": "5e0f93bae07363ee5aa8beda757fb67895999b2c53d2eb8a2d4036d6898db759",
+          "expectedSize": 580779709
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -450,7 +632,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-es-it/2025-08-07/ggml-opus-es-it.bin"
         }
       ],
-      "driveKey": "b04ba8638fea5adff061aba9ccc671936ab8f7459346461f6c2010d4c7413254"
+      "driveKey": "b04ba8638fea5adff061aba9ccc671936ab8f7459346461f6c2010d4c7413254",
+      "driveMetadata": [
+        {
+          "filename": "model.bin",
+          "checksum": "6ceb808e4799454c6192c5c399cf849fcbef74916d35d9f09484b290518beb15",
+          "expectedSize": 544020447
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -470,7 +659,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-it-de/2025-08-07/ggml-opus-it-de.bin"
         }
       ],
-      "driveKey": "438cbda449f1ac258a2fdea55cfd1f9f83dfb0ea20103c1e5113906081eec4f5"
+      "driveKey": "438cbda449f1ac258a2fdea55cfd1f9f83dfb0ea20103c1e5113906081eec4f5",
+      "driveMetadata": [
+        {
+          "filename": "model.bin",
+          "checksum": "31f603929f49e9a7ba3537f44e2d2341fbffdf0bffc93301fed161ce9f0bc460",
+          "expectedSize": 549186246
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -490,7 +686,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-it-en/2025-08-07/ggml-opus-it-en.bin"
         }
       ],
-      "driveKey": "68778c8375fbb1e7f5c20b4e6087131206e9ddba1872655e20931b7e08fe3954"
+      "driveKey": "68778c8375fbb1e7f5c20b4e6087131206e9ddba1872655e20931b7e08fe3954",
+      "driveMetadata": [
+        {
+          "filename": "model.bin",
+          "checksum": "e6357877c81c2b68ca418dbcae8921e17568925d162907d170d090d52230f690",
+          "expectedSize": 675665101
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -510,7 +713,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-it-es/2025-08-07/ggml-opus-it-es.bin"
         }
       ],
-      "driveKey": "1b78d8309f80fcda61d0291ed5dc755e10e46b39d7e7484083a3c6d20b86c679"
+      "driveKey": "1b78d8309f80fcda61d0291ed5dc755e10e46b39d7e7484083a3c6d20b86c679",
+      "driveMetadata": [
+        {
+          "filename": "model.bin",
+          "checksum": "5c6e39598b123d5867feb7458c8ea809529af43018c082c2eb8fb6e4c8bf80e7",
+          "expectedSize": 544020447
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -534,7 +744,19 @@
           "path": "https://huggingface.co/ggml-org/Qwen2.5-Omni-3B-GGUF/blob/main/mmproj-Qwen2.5-Omni-3B-Q8_0.gguf"
         }
       ],
-      "driveKey": "583f04c31d151b29e02aaf98f80d16aff585714ef9e2806a5067651c0f64ae31"
+      "driveKey": "583f04c31d151b29e02aaf98f80d16aff585714ef9e2806a5067651c0f64ae31",
+      "driveMetadata": [
+        {
+          "filename": "Qwen2.5-Omni-3B-Q4_K_M.gguf",
+          "checksum": "4b0bd358c1e9ec55dd3055ef6d71c958c821533d85916a10cfa89c4552a86e29",
+          "expectedSize": 2104931648
+        },
+        {
+          "filename": "mmproj-Qwen2.5-Omni-3B-Q8_0.gguf",
+          "checksum": "4e6c816cd33f7298d07cb780c136a396631e50e62f6501660271f8c6e302e565",
+          "expectedSize": 1538031328
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -554,7 +776,14 @@
           "path": "https://huggingface.co/unsloth/Qwen3-1.7B-GGUF/resolve/main/Qwen3-1.7B-Q4_0.gguf"
         }
       ],
-      "driveKey": "05d3d7ad9cd650f53c28f85e312ef09a645dd487845897958b3be8a19cb3aab9"
+      "driveKey": "05d3d7ad9cd650f53c28f85e312ef09a645dd487845897958b3be8a19cb3aab9",
+      "driveMetadata": [
+        {
+          "filename": "Qwen3-1.7B-Q4_0.gguf",
+          "checksum": "c876f159707a4e4f70e045106c69db15bfc935a4981706fd4f65c6e7ea1e81c5",
+          "expectedSize": 1056782912
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -574,7 +803,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-indic-en-1B/2025-08-15/ggml-indictrans2-indic-en-1B.bin"
         }
       ],
-      "driveKey": "d46a9192b479fb5c982e60b84ae25bb5a61f3f090a41d45d5c5dda597973a9dd"
+      "driveKey": "d46a9192b479fb5c982e60b84ae25bb5a61f3f090a41d45d5c5dda597973a9dd",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-indic-en-1B.bin",
+          "checksum": "5b682b60ad096a1f1cf3ddbbf31fdca684e8fcc9844febe47be052f5c856cf50",
+          "expectedSize": 4098852842
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -594,7 +830,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-en-indic-1B/2025-08-15/ggml-indictrans2-en-indic-1B.bin"
         }
       ],
-      "driveKey": "61d1eb542956914ad2eadaf405b76a4dcc327fd6ccf1191bb17cd102a642691e"
+      "driveKey": "61d1eb542956914ad2eadaf405b76a4dcc327fd6ccf1191bb17cd102a642691e",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-en-indic-1B.bin",
+          "checksum": "b0099dec22cdbffdf4e9099edf980cfb0e39f0944a92e20e21d237977fe189af",
+          "expectedSize": 4469361571
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -614,7 +857,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-indic-indic-1B/2025-08-15/ggml-indictrans2-indic-indic-1B.bin"
         }
       ],
-      "driveKey": "cd8e441d1da68602e19a92f5d1ee794852e802ee234a638df2976bb1bc2493ad"
+      "driveKey": "cd8e441d1da68602e19a92f5d1ee794852e802ee234a638df2976bb1bc2493ad",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-indic-indic-1B.bin",
+          "checksum": "b23a868c6784f0f4341939c90689096080a8ef82c2ab7f508bf559742b5db686",
+          "expectedSize": 4843981643
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -634,7 +884,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-en-indic-dist-200M/2025-08-15/ggml-indictrans2-en-indic-dist-200M.bin"
         }
       ],
-      "driveKey": "268c2e9b2a3420632e4b6649e32822f42d5dfbda4c7e96daec5b629ed20f99f7"
+      "driveKey": "268c2e9b2a3420632e4b6649e32822f42d5dfbda4c7e96daec5b629ed20f99f7",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-en-indic-dist-200M.bin",
+          "checksum": "cea23bf517bc102d8f9c89498ddfb9fb51a207d38066767d9b5e5ff19a02dc17",
+          "expectedSize": 854293537
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -654,7 +911,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-indic-en-dist-200M/2025-08-15/ggml-indictrans2-indic-en-dist-200M.bin"
         }
       ],
-      "driveKey": "dfea395ffe1cb6d259029e5c81c290f8828981987855e23e7b66fd7c705901eb"
+      "driveKey": "dfea395ffe1cb6d259029e5c81c290f8828981987855e23e7b66fd7c705901eb",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-indic-en-dist-200M.bin",
+          "checksum": "1df68723af11769b718fbf8c7f95b4f51c90e0fd3b0d4469fa44d55f30573955",
+          "expectedSize": 853948520
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -674,7 +938,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-indic-indic-dist-320M/2025-08-15/ggml-indictrans2-indic-indic-dist-320M.bin"
         }
       ],
-      "driveKey": "9a66da960931c449b41e3315d9aea4d3925f2cda024e8a4c139b64d0a539ed41"
+      "driveKey": "9a66da960931c449b41e3315d9aea4d3925f2cda024e8a4c139b64d0a539ed41",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-indic-indic-dist-320M.bin",
+          "checksum": "c8038e1ffb4af4cd9176ad1a692b6c4bb9f3c2303f0dbdb35ee508c57eceee15",
+          "expectedSize": 1295039467
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -698,7 +969,19 @@
           "path": "https://huggingface.co/ggml-org/SmolVLM2-500M-Video-Instruct-GGUF/resolve/main/mmproj-SmolVLM2-500M-Video-Instruct-Q8_0.gguf"
         }
       ],
-      "driveKey": "73b1bc01d01e25fa27be7d7f434337d14f054b0315e8463766ca31e778ac6576"
+      "driveKey": "73b1bc01d01e25fa27be7d7f434337d14f054b0315e8463766ca31e778ac6576",
+      "driveMetadata": [
+        {
+          "filename": "SmolVLM2-500M-Video-Instruct-Q8_0.gguf",
+          "checksum": "6f67b8036b2469fcd71728702720c6b51aebd759b78137a8120733b4d66438bc",
+          "expectedSize": 436808704
+        },
+        {
+          "filename": "mmproj-SmolVLM2-500M-Video-Instruct-Q8_0.gguf",
+          "checksum": "921dc7e259f308e5b027111fa185efcbf33db13f6e35749ddf7f5cdb60ef520b",
+          "expectedSize": 108785184
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -718,7 +1001,39 @@
           "path": "qvac_models_compiled/ggml/medgemma-4b-it-Q4/"
         }
       ],
-      "driveKey": "1839dcabe1df8fdf1c83cd3d7a306c6e01e3c67e8542b0dd1e78cdfc86e75e2d"
+      "driveKey": "1839dcabe1df8fdf1c83cd3d7a306c6e01e3c67e8542b0dd1e78cdfc86e75e2d",
+      "driveMetadata": [
+        {
+          "filename": "medgemma-4b-it-Q4_1-00001-of-00005.gguf",
+          "checksum": "df8f007c52173c7ffd4a385205805f1f0b8312bec7548460b42c20b74b00c344",
+          "expectedSize": 617838720
+        },
+        {
+          "filename": "medgemma-4b-it-Q4_1-00002-of-00005.gguf",
+          "checksum": "6c24b60b160420f9c6d3b243d0283e57a7aced67142f17e32e0418aef8e29cef",
+          "expectedSize": 598455104
+        },
+        {
+          "filename": "medgemma-4b-it-Q4_1-00003-of-00005.gguf",
+          "checksum": "65d97e751eb0cbb6900cec6960c54d3ac402a12f49eaf6453b458da17489ceb8",
+          "expectedSize": 606646016
+        },
+        {
+          "filename": "medgemma-4b-it-Q4_1-00004-of-00005.gguf",
+          "checksum": "ab081005a0db7bd37c78ecfa6d0b58f8d811a5f6e3e87531d51338c011209a9f",
+          "expectedSize": 606656320
+        },
+        {
+          "filename": "medgemma-4b-it-Q4_1-00005-of-00005.gguf",
+          "checksum": "7738264eb3d1846419c71cdf2f5a628a93b4801092da56806957a8dd207f7f4d",
+          "expectedSize": 134457152
+        },
+        {
+          "filename": "medgemma-4b-it-Q4_1.tensors.txt",
+          "checksum": "188c42777d3b107623b5e8f1c3601fee86bb6ba8f9dfa0a576a2b11ca4dc9838",
+          "expectedSize": 10685
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -738,7 +1053,39 @@
           "path": "qvac_models_compiled/ggml/medgemma-4b-it-Q8/"
         }
       ],
-      "driveKey": "c71fb55a090a4a3fe353c2927424ce2da6749a3eb96865d12844393d90eb3657"
+      "driveKey": "c71fb55a090a4a3fe353c2927424ce2da6749a3eb96865d12844393d90eb3657",
+      "driveMetadata": [
+        {
+          "filename": "medgemma-4b-it-Q8_0-00001-of-00005.gguf",
+          "checksum": "eee391a8709570399797a48490ff123a86e82e9ed46e54f301c89b0cd8a87c24",
+          "expectedSize": 964936608
+        },
+        {
+          "filename": "medgemma-4b-it-Q8_0-00002-of-00005.gguf",
+          "checksum": "39cc15b09ddd54518b95f7f663ee427cb381a9eaf87ce63c011391a78bfdaee3",
+          "expectedSize": 975285792
+        },
+        {
+          "filename": "medgemma-4b-it-Q8_0-00003-of-00005.gguf",
+          "checksum": "da3a9079e8bd787e9bca72f6e31af0e08bc84ff4bc855c0516ffe800ef06a16f",
+          "expectedSize": 958540928
+        },
+        {
+          "filename": "medgemma-4b-it-Q8_0-00004-of-00005.gguf",
+          "checksum": "3d107beef3ef34e3d284881932ce1709e04fd8f8a790d32074db0832613bbbba",
+          "expectedSize": 975275616
+        },
+        {
+          "filename": "medgemma-4b-it-Q8_0-00005-of-00005.gguf",
+          "checksum": "4a343ee2e0d440de96379deaedb82157c2b102dcb0429bc3a642f84956664479",
+          "expectedSize": 256364480
+        },
+        {
+          "filename": "medgemma-4b-it-Q8_0.tensors.txt",
+          "checksum": "188c42777d3b107623b5e8f1c3601fee86bb6ba8f9dfa0a576a2b11ca4dc9838",
+          "expectedSize": 10685
+        }
+      ]
     },
     {
       "addon": "@qvac/embed-llamacpp",
@@ -758,7 +1105,39 @@
           "path": "qvac_models_compiled/ggml/gte-large/"
         }
       ],
-      "driveKey": "c3b4c8f54ac3ed3e66323e011d52c88fcb1be8596251fd5457e4faab7b062798"
+      "driveKey": "c3b4c8f54ac3ed3e66323e011d52c88fcb1be8596251fd5457e4faab7b062798",
+      "driveMetadata": [
+        {
+          "filename": "gte-large.Q2_K-00001-of-00005.gguf",
+          "checksum": "b9d640ee803b42867d00fd6480b2036175f21542174be2691855acd058a87cb1",
+          "expectedSize": 34954912
+        },
+        {
+          "filename": "gte-large.Q2_K-00002-of-00005.gguf",
+          "checksum": "830468bc6047fc2f2586cfefa1ffca33bedded1844bb6124e49d3912386dff26",
+          "expectedSize": 33753504
+        },
+        {
+          "filename": "gte-large.Q2_K-00003-of-00005.gguf",
+          "checksum": "8ddfab17a79f3f82f3f8fa74a9ea1b167159314784a97be1330b87bf58891d37",
+          "expectedSize": 33753504
+        },
+        {
+          "filename": "gte-large.Q2_K-00004-of-00005.gguf",
+          "checksum": "f435cf6c0c31078172828fb539df77a8f87e65257e1adec2ec7cd76207c08cef",
+          "expectedSize": 33753408
+        },
+        {
+          "filename": "gte-large.Q2_K-00005-of-00005.gguf",
+          "checksum": "b53d3a8d4eff8ced8667df9d725afbcda04a07d34e13d1ba55c57fbd6980b3b6",
+          "expectedSize": 8013088
+        },
+        {
+          "filename": "gte-large.Q2_K.tensors.txt",
+          "checksum": "d2142d8ae97857656b227fef6733ea46e82da3b7546cd944dec88ba280aadfeb",
+          "expectedSize": 8966
+        }
+      ]
     },
     {
       "addon": "@qvac/embed-llamacpp",
@@ -778,7 +1157,39 @@
           "path": "qvac_models_compiled/ggml/gte-large_fp6/"
         }
       ],
-      "driveKey": "f72fe66575d59db3fff8d01db7b185f5e30f291ade1dbfba8c4489742b93d4a0"
+      "driveKey": "f72fe66575d59db3fff8d01db7b185f5e30f291ade1dbfba8c4489742b93d4a0",
+      "driveMetadata": [
+        {
+          "filename": "gte-large_fp16-00001-of-00005.gguf",
+          "checksum": "81c871b0433ed75adb4b1888f4396248c0a587f509f45050b2b65de9b8e86a3b",
+          "expectedSize": 156815424
+        },
+        {
+          "filename": "gte-large_fp16-00002-of-00005.gguf",
+          "checksum": "da7f5a2e0ba4f6769599cb7d2735f19a8022eb065973d7584081cf67617a064d",
+          "expectedSize": 159721216
+        },
+        {
+          "filename": "gte-large_fp16-00003-of-00005.gguf",
+          "checksum": "d95b830af36d2dfa1d4c7c156ac59be767a5f9b5d37288533d3add7a90ec3822",
+          "expectedSize": 159737792
+        },
+        {
+          "filename": "gte-large_fp16-00004-of-00005.gguf",
+          "checksum": "6def2c28f1b6314403a39c54250d870333d273e31446717f8670a4e1d5861d20",
+          "expectedSize": 159721120
+        },
+        {
+          "filename": "gte-large_fp16-00005-of-00005.gguf",
+          "checksum": "f5ff10900f675900a1838536746d23ccc6adcfed074f89f7a4ac4d3167401d08",
+          "expectedSize": 33608768
+        },
+        {
+          "filename": "gte-large_fp16.tensors.txt",
+          "checksum": "d2142d8ae97857656b227fef6733ea46e82da3b7546cd944dec88ba280aadfeb",
+          "expectedSize": 8966
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -798,7 +1209,39 @@
           "path": "qvac_models_compiled/ggml/Llama-3.2-1B/"
         }
       ],
-      "driveKey": "ecca02e737c36ffbf1fa78b026d0851e686967347ec0628b7d969cdd45a6b405"
+      "driveKey": "ecca02e737c36ffbf1fa78b026d0851e686967347ec0628b7d969cdd45a6b405",
+      "driveMetadata": [
+        {
+          "filename": "Llama-3.2-1B-Instruct-Q4_0-00001-of-00005.gguf",
+          "checksum": "76142277e224a8a310991600f0bd06dd5b44f33bde718b4348f08692f88224a8",
+          "expectedSize": 223891296
+        },
+        {
+          "filename": "Llama-3.2-1B-Instruct-Q4_0-00002-of-00005.gguf",
+          "checksum": "b129233eaa157396785cbbac6c6a413cbe065116cacbce9ec1c07e2e959362d7",
+          "expectedSize": 178547648
+        },
+        {
+          "filename": "Llama-3.2-1B-Instruct-Q4_0-00003-of-00005.gguf",
+          "checksum": "c2da45fb0d0b5356dbe1e90cef9f1bcc36fa3af1fc4f3d1521e3b0e7d3774707",
+          "expectedSize": 180570912
+        },
+        {
+          "filename": "Llama-3.2-1B-Instruct-Q4_0-00004-of-00005.gguf",
+          "checksum": "fbe2e231ff954f51919ccd4b7d1941f2d5bb5230b128c49bfbbdf1df3f1045c7",
+          "expectedSize": 180579168
+        },
+        {
+          "filename": "Llama-3.2-1B-Instruct-Q4_0-00005-of-00005.gguf",
+          "checksum": "49d639c55415b9568918a9169fe82edb56a3ab3a483b4c798291f8a341bf0f92",
+          "expectedSize": 9437376
+        },
+        {
+          "filename": "Llama-3.2-1B-Instruct-Q4_0.tensors.txt",
+          "checksum": "c31e9d6508235676a82dfef6a3da40213c178467a43d70173d428243e01538fc",
+          "expectedSize": 3213
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -838,7 +1281,29 @@
           "path": "qvac_models_compiled/ggml/salamandrata_2b_inst_q4/"
         }
       ],
-      "driveKey": "d0d608f9f4acd2a49d762fafbaef0e9d380ac1911b46839431422366928aad7c"
+      "driveKey": "d0d608f9f4acd2a49d762fafbaef0e9d380ac1911b46839431422366928aad7c",
+      "driveMetadata": [
+        {
+          "filename": "salamandrata_2b_inst_q4-00001-of-00003.gguf",
+          "checksum": "f682eeb7c52b55328c84c9e6a6775b7be8cade81493f0f3399b67e29fccbd5e6",
+          "expectedSize": 766824416
+        },
+        {
+          "filename": "salamandrata_2b_inst_q4-00002-of-00003.gguf",
+          "checksum": "05c6e127c41391dbbfe06a508c2eadf0ec80e9fe713c306a88cdd39e46c832d6",
+          "expectedSize": 454328000
+        },
+        {
+          "filename": "salamandrata_2b_inst_q4-00003-of-00003.gguf",
+          "checksum": "06f750c9e82485f89d0aeaac8830c57cfde107de522371bb0b6d7a6d9935ea25",
+          "expectedSize": 296465440
+        },
+        {
+          "filename": "salamandrata_2b_inst_q4.tensors.txt",
+          "checksum": "70a5b9f52d53b14d8c00240b2ca9752c0e9578b5faaedc6911b7ba21c273c858",
+          "expectedSize": 4833
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-llamacpp",
@@ -858,7 +1323,34 @@
           "path": "qvac_models_compiled/ggml/salamandrata_2b_inst_q8/"
         }
       ],
-      "driveKey": "5604b5b121514f8522e548c74b1ae3d810974b869e0404fcba930b89af62a953"
+      "driveKey": "5604b5b121514f8522e548c74b1ae3d810974b869e0404fcba930b89af62a953",
+      "driveMetadata": [
+        {
+          "filename": "salamandrata_2b_inst_q8-00001-of-00004.gguf",
+          "checksum": "2bff3b74fd628d009a0a7e63ca7c5141322ab1dbdcae48b5c51846c8d115e769",
+          "expectedSize": 1125011424
+        },
+        {
+          "filename": "salamandrata_2b_inst_q8-00002-of-00004.gguf",
+          "checksum": "044dd6b733e45f05e47009a1cdb8f78437fa8b879a09429b9d8bb65c76a2759b",
+          "expectedSize": 570611392
+        },
+        {
+          "filename": "salamandrata_2b_inst_q8-00003-of-00004.gguf",
+          "checksum": "c1ddbd27c401f049dbe6adae996aadd3309da91d58d97851f9ab6725653a1feb",
+          "expectedSize": 563222240
+        },
+        {
+          "filename": "salamandrata_2b_inst_q8-00004-of-00004.gguf",
+          "checksum": "a47c2287be8bfa4575f4ea2d5065452d254dacff2b9a07eea43f34de31c44120",
+          "expectedSize": 142230944
+        },
+        {
+          "filename": "salamandrata_2b_inst_q8.tensors.txt",
+          "checksum": "70a5b9f52d53b14d8c00240b2ca9752c0e9578b5faaedc6911b7ba21c273c858",
+          "expectedSize": 4833
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -898,7 +1390,29 @@
           "path": "qvac_models_compiled/ggml/Qwen3-0.6B/"
         }
       ],
-      "driveKey": "b2b6e7818ff983f504a84995ea6b422b9ee35ad270b6b59ade689a748ffcbaf8"
+      "driveKey": "b2b6e7818ff983f504a84995ea6b422b9ee35ad270b6b59ade689a748ffcbaf8",
+      "driveMetadata": [
+        {
+          "filename": "Qwen3-0.6B-UD-IQ1_S-00001-of-00003.gguf",
+          "checksum": "27a0f5d92fffa1b1907218f62d7a82fa1a0bf5adce4975c9b7f4ccc0f34e8c88",
+          "expectedSize": 113171552
+        },
+        {
+          "filename": "Qwen3-0.6B-UD-IQ1_S-00002-of-00003.gguf",
+          "checksum": "36c7926642ead53c74ba07d15c9d35d2e9390db575f60d25cb92565c5b9f2b2c",
+          "expectedSize": 51908128
+        },
+        {
+          "filename": "Qwen3-0.6B-UD-IQ1_S-00003-of-00003.gguf",
+          "checksum": "ddc1be0331c403269b5eced1806c1a3f4a952f0d70b44e58da83bc846b5c8c5c",
+          "expectedSize": 49564032
+        },
+        {
+          "filename": "Qwen3-0.6B-UD-IQ1_S.tensors.txt",
+          "checksum": "c10b950a18ec75d3ee61b55ed1ba5b4c3ff3d7afd726651b813d48165bd5847a",
+          "expectedSize": 7067
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -918,7 +1432,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-en-ja/2025-08-26/ggml-opus-en-ja.bin"
         }
       ],
-      "driveKey": "2e6e274e9bb86774a64880ccd89660d3d5d5901f0bf39116d460350b06adb3a3"
+      "driveKey": "2e6e274e9bb86774a64880ccd89660d3d5d5901f0bf39116d460350b06adb3a3",
+      "driveMetadata": [
+        {
+          "filename": "ggml-opus-en-ja.bin",
+          "checksum": "449b8999711f0064ace5054475bf84f843c8fff010fbf2d1cab2881c3d2efecf",
+          "expectedSize": 465499924
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -938,7 +1459,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-ja-en/2025-08-26/ggml-opus-ja-en.bin"
         }
       ],
-      "driveKey": "0e795244ad5cf38dac6fe28deec8f97b37c95907d734a50f620670dc9d0a8e5b"
+      "driveKey": "0e795244ad5cf38dac6fe28deec8f97b37c95907d734a50f620670dc9d0a8e5b",
+      "driveMetadata": [
+        {
+          "filename": "ggml-opus-ja-en.bin",
+          "checksum": "1d38b1178e5863e141b666501e2edad273dca4c8f85ee03843f0bb9e7ffaf407",
+          "expectedSize": 554293697
+        }
+      ]
     },
     {
       "addon": "@qvac/embed-llamacpp",
@@ -958,7 +1486,14 @@
           "path": "https://huggingface.co/unsloth/embeddinggemma-300m-GGUF/resolve/main/embeddinggemma-300m-Q4_0.gguf"
         }
       ],
-      "driveKey": "7eb0441fdc5074ceb02168822da8fef91de7f547cd71240bd36ea964816ab059"
+      "driveKey": "7eb0441fdc5074ceb02168822da8fef91de7f547cd71240bd36ea964816ab059",
+      "driveMetadata": [
+        {
+          "filename": "embeddinggemma-300m-Q4_0.gguf",
+          "checksum": "edc6015cb15694c27be7d1d33f1bc015db9a358ff51ed524628c027504907ba9",
+          "expectedSize": 277852192
+        }
+      ]
     },
     {
       "addon": "@qvac/embed-llamacpp",
@@ -978,7 +1513,14 @@
           "path": "https://huggingface.co/unsloth/embeddinggemma-300m-GGUF/resolve/main/embeddinggemma-300M-Q8_0.gguf"
         }
       ],
-      "driveKey": "304b3543f89f2d3f204b9638ad8e3ea0f237033b0e4d04c416a43e5921df4180"
+      "driveKey": "304b3543f89f2d3f204b9638ad8e3ea0f237033b0e4d04c416a43e5921df4180",
+      "driveMetadata": [
+        {
+          "filename": "embeddinggemma-300M-Q8_0.gguf",
+          "checksum": "a0f7b4e13c397a6e1b32c2de75b1f65a14c92ec524d5f674d94a4290a1c4969b",
+          "expectedSize": 328577056
+        }
+      ]
     },
     {
       "addon": "@qvac/embed-llamacpp",
@@ -998,7 +1540,14 @@
           "path": "https://huggingface.co/unsloth/embeddinggemma-300m-GGUF/resolve/main/embeddinggemma-300M-BF16.gguf"
         }
       ],
-      "driveKey": "cb18d3fe8774ae03bdc0e8c9559371201e76fdb38e1a3f0cfbc700214d50c5b3"
+      "driveKey": "cb18d3fe8774ae03bdc0e8c9559371201e76fdb38e1a3f0cfbc700214d50c5b3",
+      "driveMetadata": [
+        {
+          "filename": "embeddinggemma-300M-BF16.gguf",
+          "checksum": "95a1f284251f78a1409a9c9e52dd4026c2180b13a90a5ede2a878bb8141fba08",
+          "expectedSize": 612429792
+        }
+      ]
     },
     {
       "addon": "@qvac/embed-llamacpp",
@@ -1018,7 +1567,14 @@
           "path": "https://huggingface.co/unsloth/embeddinggemma-300m-GGUF/resolve/main/embeddinggemma-300M-F32.gguf"
         }
       ],
-      "driveKey": "97a3547f93ead75ebd0365cb784a68cd177c63c3a0aa94650fffc54c13c44b13"
+      "driveKey": "97a3547f93ead75ebd0365cb784a68cd177c63c3a0aa94650fffc54c13c44b13",
+      "driveMetadata": [
+        {
+          "filename": "embeddinggemma-300M-F32.gguf",
+          "checksum": "a3125072128fc76d1c1d8d19f7b095c7e3bfbf00594dcf8a8bd3bcb334935d57",
+          "expectedSize": 1217982432
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -1038,7 +1594,14 @@
           "path": "https://huggingface.co/jmb95/laser-dolphin-mixtral-2x7b-dpo-GGUF/resolve/main/dolphin-mixtral-2x7b-dop-Q2_K.gguf"
         }
       ],
-      "driveKey": "bd40e4bfae48b5bf436d1b0b447ae26e4c384aebe101a5e7df6ae71c919dadf1"
+      "driveKey": "bd40e4bfae48b5bf436d1b0b447ae26e4c384aebe101a5e7df6ae71c919dadf1",
+      "driveMetadata": [
+        {
+          "filename": "dolphin-mixtral-2x7b-dop-Q2_K.gguf",
+          "checksum": "ce92458455d988e7fea3ce05c535648ec47fd7b70d4c35ffecb2c3bbf96a4fe7",
+          "expectedSize": 4760823264
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1058,7 +1621,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/q0f16/ggml-indictrans2-en-indic-1B/"
         }
       ],
-      "driveKey": "be5bff40a002c627a992d096861c0e9b0be6ac7770300cee0bb09ccda87404cb"
+      "driveKey": "be5bff40a002c627a992d096861c0e9b0be6ac7770300cee0bb09ccda87404cb",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-en-indic-1B-q0f16.bin",
+          "checksum": "76763bab9e6c7f90d0a202a91a21a678dd65d9cfc1cfcd4f3c80f5a83a531444",
+          "expectedSize": 2239757219
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1078,7 +1648,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/q0f16/ggml-indictrans2-en-indic-dist-200M/"
         }
       ],
-      "driveKey": "42ba45bbf4c24ff743890bc0cc65d8c23c91a14d26f760b3f814df76be8e036f"
+      "driveKey": "42ba45bbf4c24ff743890bc0cc65d8c23c91a14d26f760b3f814df76be8e036f",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-en-indic-dist-200M-q0f16.bin",
+          "checksum": "0448976882eaf62300b294abc7d6696bceed51c1a83308e68575698f9bf1d910",
+          "expectedSize": 431338529
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1098,7 +1675,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/q0f16/ggml-indictrans2-indic-en-1B/"
         }
       ],
-      "driveKey": "d06c487c56a36bb153d9d33bc1085bc90561d2a8dad5cd5701db782e1540a343"
+      "driveKey": "d06c487c56a36bb153d9d33bc1085bc90561d2a8dad5cd5701db782e1540a343",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-indic-en-1B-q0f16.bin",
+          "checksum": "97e1dd56b9b68ad56bdf9c49949dc2cb9d7d27cb0c4ff84c3dda9113be43417b",
+          "expectedSize": 2054322154
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1118,7 +1702,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/q0f16/ggml-indictrans2-indic-en-dist-200M/"
         }
       ],
-      "driveKey": "2e35d09ba69dd2b692c668862fdee43fa941859690b1e17aecc96c73474521b9"
+      "driveKey": "2e35d09ba69dd2b692c668862fdee43fa941859690b1e17aecc96c73474521b9",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-indic-en-dist-200M-q0f16.bin",
+          "checksum": "e914f157a92018fb5601be9e546dff480ae5ec1a9a1ba49078ad3ef371ff4c44",
+          "expectedSize": 430985320
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1138,7 +1729,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/q0f16/ggml-indictrans2-indic-indic-1B/"
         }
       ],
-      "driveKey": "f4edc8b072c34840c08aab2c8abdc288aa2dff8c2ed76fc96ad6604e322a038f"
+      "driveKey": "f4edc8b072c34840c08aab2c8abdc288aa2dff8c2ed76fc96ad6604e322a038f",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-indic-indic-1B-q0f16.bin",
+          "checksum": "c4e9eafc03f9ac7aac35b494dfea02feda9797b5f69b682bd3bb9f565ec4ba2e",
+          "expectedSize": 2429270859
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1158,7 +1756,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/q0f16/ggml-indictrans2-indic-indic-dist-320M/"
         }
       ],
-      "driveKey": "1bb2ad463127325ca8daa801ec89ae6a2983ddeb90c5461a965e65fa295e3655"
+      "driveKey": "1bb2ad463127325ca8daa801ec89ae6a2983ddeb90c5461a965e65fa295e3655",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-indic-indic-dist-320M-q0f16.bin",
+          "checksum": "292f376b75b164ec3700da5b376675c79bd48f43dd2e28d1b54040020acc28b9",
+          "expectedSize": 653915115
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1178,7 +1783,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/q4_0/ggml-indictrans2-en-indic-1B/"
         }
       ],
-      "driveKey": "9fb5b7338504b24df0f3dd9ae8a1c280c6f00fd7f3295cca8f884514c5fa9713"
+      "driveKey": "9fb5b7338504b24df0f3dd9ae8a1c280c6f00fd7f3295cca8f884514c5fa9713",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-en-indic-1B-q4_0.bin",
+          "checksum": "4cd28a8b4159f4ba45b00b6ee61bf5b2f7f0c374d258afb5ac7a810ee7d5365d",
+          "expectedSize": 637229091
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1198,7 +1810,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/q4_0/ggml-indictrans2-en-indic-dist-200M/"
         }
       ],
-      "driveKey": "8336d23073b2fd99723bf17d65ddc7b54b8ee886d6627659ba95c7a8fb932dc8"
+      "driveKey": "8336d23073b2fd99723bf17d65ddc7b54b8ee886d6627659ba95c7a8fb932dc8",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-en-indic-dist-200M-q4_0.bin",
+          "checksum": "d091bf149cc393689bc0cc50d2c3e38ea4fa11db327c8d26ac3316aa383c9a99",
+          "expectedSize": 127339617
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1218,7 +1837,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/q4_0/ggml-indictrans2-indic-en-1B/"
         }
       ],
-      "driveKey": "1fd66a6862776a92c7fae1962a1f07a5bc7369fb8be3dd9b76adf7c71855af7f"
+      "driveKey": "1fd66a6862776a92c7fae1962a1f07a5bc7369fb8be3dd9b76adf7c71855af7f",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-indic-en-1B-q4_0.bin",
+          "checksum": "a642e9c9bbe2069628bb585071a138b794d04dae588823d183aa27af76698ef3",
+          "expectedSize": 584815722
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1238,7 +1864,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/q4_0/ggml-indictrans2-indic-en-dist-200M/"
         }
       ],
-      "driveKey": "ba7db8c0dbcb6fc4276f86a27e3b9dd0f5e90b79f550a1666757f6074e2a4331"
+      "driveKey": "ba7db8c0dbcb6fc4276f86a27e3b9dd0f5e90b79f550a1666757f6074e2a4331",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-indic-en-dist-200M-q4_0.bin",
+          "checksum": "8ed3cefac12693b9312910a5bb3be59bf3eb5bb2903dfe954a1ff1b4beaf80ff",
+          "expectedSize": 126980520
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1258,7 +1891,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/q4_0/ggml-indictrans2-indic-indic-1B/"
         }
       ],
-      "driveKey": "0f03a3a06bc7006deb0da42643585dc0da49b897ba49e449ec67013ba4464e8a"
+      "driveKey": "0f03a3a06bc7006deb0da42643585dc0da49b897ba49e449ec67013ba4464e8a",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-indic-indic-1B-q4_0.bin",
+          "checksum": "dc0112f728fc58cea43cd44d61ddd4be7e4174527d311b5982ae23e87c0f288e",
+          "expectedSize": 693697483
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1278,7 +1918,14 @@
           "path": "qvac_models_compiled/ggml/indictrans2/q4_0/ggml-indictrans2-indic-indic-dist-320M/"
         }
       ],
-      "driveKey": "6cba73db82148a228bfdc586e2e565db6e6beb476575de3602d927ecb08b1a70"
+      "driveKey": "6cba73db82148a228bfdc586e2e565db6e6beb476575de3602d927ecb08b1a70",
+      "driveMetadata": [
+        {
+          "filename": "ggml-indictrans2-indic-indic-dist-320M-q4_0.bin",
+          "checksum": "6a0e913967af1a90ea11d1cf7a697d0c4fe5f168a08017f4b7f8ac510d2727a2",
+          "expectedSize": 193106987
+        }
+      ]
     },
     {
       "addon": "@qvac/tts",
@@ -1302,7 +1949,19 @@
           "path": "https://huggingface.co/speaches-ai/piper-en_US-norman-medium/resolve/main/config.json"
         }
       ],
-      "driveKey": "69581b1431e3abceec7708187922025dec6ccccd291c9e804679fd21371ccd1b"
+      "driveKey": "69581b1431e3abceec7708187922025dec6ccccd291c9e804679fd21371ccd1b",
+      "driveMetadata": [
+        {
+          "filename": "config.json",
+          "checksum": "6c2db7f558a4a8deb9fe822583c1c5105f6c4e834dd0f9de8ad17a888ee9fe1d",
+          "expectedSize": 4968
+        },
+        {
+          "filename": "model.onnx",
+          "checksum": "b9739443232a80a59c7d18810dd856899bf16a7964725f5ab81ea49b1351cb71",
+          "expectedSize": 63531379
+        }
+      ]
     },
     {
       "addon": "@qvac/tts",
@@ -1326,7 +1985,19 @@
           "path": "https://huggingface.co/speaches-ai/piper-es_ES-sharvard-medium/resolve/main/config.json"
         }
       ],
-      "driveKey": "e54fda7ba60572445dbee5326dd2d252599102e99f4a266f7fa4946248cd0050"
+      "driveKey": "e54fda7ba60572445dbee5326dd2d252599102e99f4a266f7fa4946248cd0050",
+      "driveMetadata": [
+        {
+          "filename": "config.json",
+          "checksum": "7438c9b699c72b0c3388dae1b68d3f364dc66a2150fe554a1c11f03372957b2c",
+          "expectedSize": 4903
+        },
+        {
+          "filename": "model.onnx",
+          "checksum": "40febfb1679c69a4505ff311dc136e121e3419a13a290ef264fdf43ddedd0fb1",
+          "expectedSize": 76733615
+        }
+      ]
     },
     {
       "addon": "@qvac/tts",
@@ -1350,7 +2021,19 @@
           "path": "https://huggingface.co/speaches-ai/piper-de_DE-thorsten-medium/resolve/main/config.json"
         }
       ],
-      "driveKey": "5947d8322d6bd5cdd51e9ccf507000e768e56d1e8f525923bd6f5d3707f2d76b"
+      "driveKey": "5947d8322d6bd5cdd51e9ccf507000e768e56d1e8f525923bd6f5d3707f2d76b",
+      "driveMetadata": [
+        {
+          "filename": "config.json",
+          "checksum": "974adee790533adb273a1ac88f49027d2a1b8f0f2cf4905954a4791e79264e85",
+          "expectedSize": 4819
+        },
+        {
+          "filename": "model.onnx",
+          "checksum": "7e64762d8e5118bb578f2eea6207e1a35a8e0c30595010b666f983fc87bb7819",
+          "expectedSize": 63201294
+        }
+      ]
     },
     {
       "addon": "@qvac/tts",
@@ -1374,7 +2057,19 @@
           "path": "https://huggingface.co/speaches-ai/piper-it_IT-paola-medium/resolve/main/config.json"
         }
       ],
-      "driveKey": "a838fe8adcbfd95d6e89400cc2e9aac19d7e8e3633f8f61b2dbda7420db9d127"
+      "driveKey": "a838fe8adcbfd95d6e89400cc2e9aac19d7e8e3633f8f61b2dbda7420db9d127",
+      "driveMetadata": [
+        {
+          "filename": "config.json",
+          "checksum": "aea19c0a7fce29fbc359b93f10e7902854401e4c95ae2ea328ae516b15d296cf",
+          "expectedSize": 7099
+        },
+        {
+          "filename": "model.onnx",
+          "checksum": "6fc918b5a0ea6137382833dddfa567bffbe6a5060c02043c87192ee59c04210c",
+          "expectedSize": 63511038
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -1394,7 +2089,39 @@
           "path": "qvac_models_compiled/ggml/dolphin-mixtral-2x7b-dop_q2/"
         }
       ],
-      "driveKey": "0c555b5e3c729c76552db676ba661d471ffb43bce87c32fecbe1723e322455b4"
+      "driveKey": "0c555b5e3c729c76552db676ba661d471ffb43bce87c32fecbe1723e322455b4",
+      "driveMetadata": [
+        {
+          "filename": "dolphin-mixtral-2x7b-dop-Q2_K-00001-of-00005.gguf",
+          "checksum": "d7b900fae41cd466dd16a4b1fbf8083b8f00578deb59a2d0619a52672d872493",
+          "expectedSize": 1121068864
+        },
+        {
+          "filename": "dolphin-mixtral-2x7b-dop-Q2_K-00002-of-00005.gguf",
+          "checksum": "086236731567ca7c27047bcbcffc4acaddff3825101337e34269413ea2b9bd18",
+          "expectedSize": 1113805728
+        },
+        {
+          "filename": "dolphin-mixtral-2x7b-dop-Q2_K-00003-of-00005.gguf",
+          "checksum": "1208536e6b934638b51764485c5a76c17bd27893d8187d755dcc526a3a2f364c",
+          "expectedSize": 1101927488
+        },
+        {
+          "filename": "dolphin-mixtral-2x7b-dop-Q2_K-00004-of-00005.gguf",
+          "checksum": "6987ae5a392e9682e70d5ec6c7af6139895a886ad7e9d781308d70a8cf2f0772",
+          "expectedSize": 1135924064
+        },
+        {
+          "filename": "dolphin-mixtral-2x7b-dop-Q2_K-00005-of-00005.gguf",
+          "checksum": "47e84383b16ad16c159cb4edc2cbc52e8b1be369053805e722a2318bc5645587",
+          "expectedSize": 288097664
+        },
+        {
+          "filename": "dolphin-mixtral-2x7b-dop-Q2_K.tensors.txt",
+          "checksum": "ed622129ba8da77af4fd21976dc442365724cde643fd8cbeadc92c7f047ab245",
+          "expectedSize": 7791
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -1414,7 +2141,39 @@
           "path": "qvac_models_compiled/ggml/dolphin-mixtral-2x7b-dop_q4/"
         }
       ],
-      "driveKey": "1c33ce9b4d8b211b5ceeca33731eb442fbb6fcc84ea8839bf2490acdadab4681"
+      "driveKey": "1c33ce9b4d8b211b5ceeca33731eb442fbb6fcc84ea8839bf2490acdadab4681",
+      "driveMetadata": [
+        {
+          "filename": "dolphin-mixtral-2x7b-dop-Q4_K_M-00001-of-00005.gguf",
+          "checksum": "1532209c99a4b22db595336368b60de8069062efe8e1e3d79cb77849adc04ead",
+          "expectedSize": 1825597248
+        },
+        {
+          "filename": "dolphin-mixtral-2x7b-dop-Q4_K_M-00002-of-00005.gguf",
+          "checksum": "fa3547821ab3da97a99bf7922e3bd9614349aa35aafe018d9464302df70efa8f",
+          "expectedSize": 1837438080
+        },
+        {
+          "filename": "dolphin-mixtral-2x7b-dop-Q4_K_M-00003-of-00005.gguf",
+          "checksum": "5da4bcec7312ab2e8c4196ab5ee5e8d416503a923521811e0ee934d6b14d5ee2",
+          "expectedSize": 1802687424
+        },
+        {
+          "filename": "dolphin-mixtral-2x7b-dop-Q4_K_M-00004-of-00005.gguf",
+          "checksum": "878232cfb8d65f14570c56ab3cde439eb846cd9ef93d71d4b0eb3dd10c712d5c",
+          "expectedSize": 1835177024
+        },
+        {
+          "filename": "dolphin-mixtral-2x7b-dop-Q4_K_M-00005-of-00005.gguf",
+          "checksum": "c07f14473ba2c962da4ba40611611086eff60035082a76bde28243f7283f72bc",
+          "expectedSize": 481707104
+        },
+        {
+          "filename": "dolphin-mixtral-2x7b-dop-Q4_K_M.tensors.txt",
+          "checksum": "ed622129ba8da77af4fd21976dc442365724cde643fd8cbeadc92c7f047ab245",
+          "expectedSize": 7791
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1434,7 +2193,14 @@
           "path": "https://placeholder.mock"
         }
       ],
-      "driveKey": "ba453d763e9169baa80413fefc76cfa3866321ee4c51221dcb114d61703c829e"
+      "driveKey": "ba453d763e9169baa80413fefc76cfa3866321ee4c51221dcb114d61703c829e",
+      "driveMetadata": [
+        {
+          "filename": "model.bin",
+          "checksum": "238044a3ed67f45b82c053a9c5131e1eed51c8aec112d19c42f7ae5948eefd11",
+          "expectedSize": 339071793
+        }
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -1454,7 +2220,59 @@
           "path": "qvac_models_compiled/ggml/Mixtral-8x7B-Instruct_q4/"
         }
       ],
-      "driveKey": "f43090c7ed389834f61841874660d8a965fd2e5c300dbd81c18024395fe0ea63"
+      "driveKey": "f43090c7ed389834f61841874660d8a965fd2e5c300dbd81c18024395fe0ea63",
+      "driveMetadata": [
+        {
+          "filename": "Mixtral-8x7B-Instruct-v0.1.Q4_K_M-00001-of-00009.gguf",
+          "checksum": "7b6a4edafeaf4d7091ae5632af619ddbe5d515e64a35eb5981e054943c4cff5e",
+          "expectedSize": 3043534464
+        },
+        {
+          "filename": "Mixtral-8x7B-Instruct-v0.1.Q4_K_M-00002-of-00009.gguf",
+          "checksum": "bf21806c217b908f6aa060232c1f2a6cb024a9027285c16721aa6bad6ffce31a",
+          "expectedSize": 3239168224
+        },
+        {
+          "filename": "Mixtral-8x7B-Instruct-v0.1.Q4_K_M-00003-of-00009.gguf",
+          "checksum": "69da14b32e0d07f016ac9d819188ffcb0283a26fc969c434b360d9d2f0265139",
+          "expectedSize": 3147811232
+        },
+        {
+          "filename": "Mixtral-8x7B-Instruct-v0.1.Q4_K_M-00004-of-00009.gguf",
+          "checksum": "1e2b7a9ad6cb3e76afed9660889f2d0f68fdfe4f91042e8aef715ac347d71876",
+          "expectedSize": 3147958848
+        },
+        {
+          "filename": "Mixtral-8x7B-Instruct-v0.1.Q4_K_M-00005-of-00009.gguf",
+          "checksum": "eea59438e15621c355145fdc79c717c82a6b695badf803911952308f66cf20ff",
+          "expectedSize": 3386771904
+        },
+        {
+          "filename": "Mixtral-8x7B-Instruct-v0.1.Q4_K_M-00006-of-00009.gguf",
+          "checksum": "f794bf9ab19a17bad6f625cf757a7c8082082472dd4231750544e6f3d8bf93f0",
+          "expectedSize": 3264596416
+        },
+        {
+          "filename": "Mixtral-8x7B-Instruct-v0.1.Q4_K_M-00007-of-00009.gguf",
+          "checksum": "a11d867a06690a235ece62402787b995fd7ea8f61a04dcbc05cb2144834c4fc0",
+          "expectedSize": 3147811264
+        },
+        {
+          "filename": "Mixtral-8x7B-Instruct-v0.1.Q4_K_M-00008-of-00009.gguf",
+          "checksum": "c6ba61f12725d6e8e76deff6a492d40edce0d30619c3ab91bde263e91528841d",
+          "expectedSize": 3269069376
+        },
+        {
+          "filename": "Mixtral-8x7B-Instruct-v0.1.Q4_K_M-00009-of-00009.gguf",
+          "checksum": "4e550a1324914bacf52520beeb1a95e67890de7b4c6f84e80b02155644de32c1",
+          "expectedSize": 2801747680
+        },
+        {
+          "filename": "Mixtral-8x7B-Instruct-v0.1.Q4_K_M.tensors.txt",
+          "checksum": "ed622129ba8da77af4fd21976dc442365724cde643fd8cbeadc92c7f047ab245",
+          "expectedSize": 7791
+        }
+      ]
     },
     {
       "addon": "@qvac/tts",
@@ -1474,7 +2292,1784 @@
           "path": "tts-espeak/"
         }
       ],
-      "driveKey": "c00ea8bc3d250968943ecab83e39b22828c2ad7995b159d8aedcb0f3fef81894"
+      "driveKey": "c00ea8bc3d250968943ecab83e39b22828c2ad7995b159d8aedcb0f3fef81894",
+      "driveMetadata": [
+        {
+          "filename": "af_dict",
+          "checksum": "25729d3bf4c4a0f08da60aea9eb5a0cf352630f83fab1ab0c3955b7740da1776",
+          "expectedSize": 121473
+        },
+        {
+          "filename": "am_dict",
+          "checksum": "9954365860682c756c8c4459577d3aa0ab77ad0cba6798b746033ada5c3d4bea",
+          "expectedSize": 63878
+        },
+        {
+          "filename": "an_dict",
+          "checksum": "6cf38cedb6693aade49e5a5d27a3c92516a5335125bf85fcae58282e66fb82fd",
+          "expectedSize": 6691
+        },
+        {
+          "filename": "ar_dict",
+          "checksum": "72316426e797777fe4df9420935a3b6a79b37d7e3f3948537ba71cd7b21b2541",
+          "expectedSize": 478165
+        },
+        {
+          "filename": "as_dict",
+          "checksum": "39e52fd47507660fced36db407b12c6325498dc71fa9d3379d28b303506753ac",
+          "expectedSize": 5005
+        },
+        {
+          "filename": "az_dict",
+          "checksum": "e352b2dcf811662d79f4beaaa0c7750706cf669c0409fd815a9bd0244b1adfc7",
+          "expectedSize": 43773
+        },
+        {
+          "filename": "ba_dict",
+          "checksum": "246c8c655ceed43d9ff44a65de5f933f16255489d0b181b1a46a83e1fd5a0354",
+          "expectedSize": 2098
+        },
+        {
+          "filename": "be_dict",
+          "checksum": "232fb0debfc8fdca9b8f2494770ff23535f7f887bbebb0178abffc243490e798",
+          "expectedSize": 2652
+        },
+        {
+          "filename": "bg_dict",
+          "checksum": "8fa3adec8e18a3e695b2bbea1d4780182e17222d8b9f8da9908a237828f6b063",
+          "expectedSize": 87051
+        },
+        {
+          "filename": "bn_dict",
+          "checksum": "2b59ec34c07955ca5b7814fa5152c33fa357880590703eefab1f3081f031fdef",
+          "expectedSize": 89979
+        },
+        {
+          "filename": "bpy_dict",
+          "checksum": "6a752c17d300b09eaa6f0768050b62e94420cc2a7b2f1cd2c27f41217014330d",
+          "expectedSize": 5226
+        },
+        {
+          "filename": "bs_dict",
+          "checksum": "d5df564f511af082884719685db86ec4df23467cf012ce25e898540baf9de65b",
+          "expectedSize": 47068
+        },
+        {
+          "filename": "ca_dict",
+          "checksum": "1be203855ecb0bdfe66578ef5552f83289e39972d78c52714d061b7f7493df4a",
+          "expectedSize": 45566
+        },
+        {
+          "filename": "chr_dict",
+          "checksum": "355ab1db0ef1f5a4e88b57a1327615ad3beb0e51eeb0dc2a2297fab0a995898a",
+          "expectedSize": 2859
+        },
+        {
+          "filename": "cmn_dict",
+          "checksum": "109aaa7708d3727382acb3ae41d8e2094a7e2bb9f651a81835be22a6f08071fe",
+          "expectedSize": 1566335
+        },
+        {
+          "filename": "cs_dict",
+          "checksum": "5ec02aba90465007f20a5c8aeb889275834cfa8c8f621c3d9bee1ca90d21788d",
+          "expectedSize": 49645
+        },
+        {
+          "filename": "cv_dict",
+          "checksum": "8260837c8f18fbe5870905ebb2850dfd18e252150ad6c868b96d9d2c6398ea8a",
+          "expectedSize": 1344
+        },
+        {
+          "filename": "cy_dict",
+          "checksum": "31d74ccad218ab80b79566caeb8d21bcf0fe43326ed7c437fa736d39b85e603e",
+          "expectedSize": 43130
+        },
+        {
+          "filename": "da_dict",
+          "checksum": "ae6c2dd4f0f4d38342918a776a9e2c46d919572f02336c864f843ff7b262caf8",
+          "expectedSize": 245287
+        },
+        {
+          "filename": "de_dict",
+          "checksum": "e9ac048df5cde03b74907d591c7b29b45ee9ec5fcd4592b0b894f0083572fcfd",
+          "expectedSize": 68276
+        },
+        {
+          "filename": "el_dict",
+          "checksum": "5d9f759750131da777d2fd4f06aa602ed746d38f27b84dd9a2d4a550f2cd452e",
+          "expectedSize": 72841
+        },
+        {
+          "filename": "en_dict",
+          "checksum": "71bd330ba8a2e3e8076e631508208ef49449d6147c17b7bd2b4b1e1468292e35",
+          "expectedSize": 166944
+        },
+        {
+          "filename": "eo_dict",
+          "checksum": "849f061abddd5388bac112b32e6f7bf747e15e1b3ae53fe91079381effff4cc9",
+          "expectedSize": 4666
+        },
+        {
+          "filename": "es_dict",
+          "checksum": "3fa93e251eab80838a2d6207ee58c9c847270a65fe3fae98850e0185b5a2186c",
+          "expectedSize": 49252
+        },
+        {
+          "filename": "et_dict",
+          "checksum": "1a6734b4e6bc9de9a4c94cfb434873e0a7f4ae4ec89549b3137ae5491cf655da",
+          "expectedSize": 44263
+        },
+        {
+          "filename": "eu_dict",
+          "checksum": "762a6eff63552ef72cd88bf1e92dc5a823eb378d50cb85c7917e8c5bba079137",
+          "expectedSize": 48841
+        },
+        {
+          "filename": "fa_dict",
+          "checksum": "f92f35ce7eb1d97360016617d97786412a94af55b776a18f1c280dab4f43befd",
+          "expectedSize": 292423
+        },
+        {
+          "filename": "fi_dict",
+          "checksum": "dda999437bd4b37a7f7400a2230aace1200a52906ab0b1ff3507d44ab19d64b1",
+          "expectedSize": 43928
+        },
+        {
+          "filename": "fr_dict",
+          "checksum": "e399ab924c4d10beef1fc310b30ea56e4ddfd8b4b64b8ed978e9c65394d49b2d",
+          "expectedSize": 63727
+        },
+        {
+          "filename": "ga_dict",
+          "checksum": "b2db03d21f7900b697d7dbb8bec855cd1117e9867f19884faf11c4df626659f5",
+          "expectedSize": 52673
+        },
+        {
+          "filename": "gd_dict",
+          "checksum": "e92b47dcf9a001363ffee1e62863faf264ff5f16e10cd9cf1f1e83ca89ca14aa",
+          "expectedSize": 49121
+        },
+        {
+          "filename": "gn_dict",
+          "checksum": "7640df272b192a68ba401294bf9197ab46d0b141da7a358ad1986e7f77e7f29a",
+          "expectedSize": 3248
+        },
+        {
+          "filename": "grc_dict",
+          "checksum": "488779493993d221b09e713e104a221ac1bb35765f826acc26d3d3c1aa3a35ed",
+          "expectedSize": 3433
+        },
+        {
+          "filename": "gu_dict",
+          "checksum": "cb1fbfb53bab2ec6d9e44cd9d12ccb9b80de49f274d772314389c477eef530fd",
+          "expectedSize": 82480
+        },
+        {
+          "filename": "hak_dict",
+          "checksum": "e3075c7d281f95a2ce2264c01edbd09e962cb3ed29400766c5d2116a08a185c8",
+          "expectedSize": 3335
+        },
+        {
+          "filename": "haw_dict",
+          "checksum": "2b4e77b61cadfc5ee622aa8b1d23941e36101d9bdbf8d809e0fa1b442d2c3f74",
+          "expectedSize": 2443
+        },
+        {
+          "filename": "he_dict",
+          "checksum": "a8bf0d939d630e9e5097ad361a7765297baf297fd7d06e89f48a79ead980869e",
+          "expectedSize": 6963
+        },
+        {
+          "filename": "hi_dict",
+          "checksum": "5a68c9532624e57ac845b26ce1e2e5034c4f6353bede46ecbe57e583ec8effd6",
+          "expectedSize": 92143
+        },
+        {
+          "filename": "hr_dict",
+          "checksum": "5f98fcf05f97335a5436a8a9643677da6f158f2a9ee1d41bdda1725b1bb3527e",
+          "expectedSize": 49388
+        },
+        {
+          "filename": "ht_dict",
+          "checksum": "d577219d15c29396db254aed958358456ec1501cdf62cb4ca5413752f2ee7cc1",
+          "expectedSize": 1803
+        },
+        {
+          "filename": "hu_dict",
+          "checksum": "055d563b839d599db40be5b1cc2af9d31793795b328eb8d4f389ec7d38fe7e81",
+          "expectedSize": 153785
+        },
+        {
+          "filename": "hy_dict",
+          "checksum": "8b808ad8f1d4cae32b3b785b96d1e27b3af28e32f4dddfed7c93e129d63b2587",
+          "expectedSize": 62263
+        },
+        {
+          "filename": "ia_dict",
+          "checksum": "1c665603a82beb81e0cef2878c9b44642ae6d519e301fbbd06326e03325febf3",
+          "expectedSize": 331275
+        },
+        {
+          "filename": "id_dict",
+          "checksum": "8fb3f23f80f71f023219cee7032223f3f6886cc5040eb4c8c507f79d1b84e98d",
+          "expectedSize": 43458
+        },
+        {
+          "filename": "intonations",
+          "checksum": "3f8af65fd3eda9759a10f021d61361c120871f463515229c925995c7f90918cc",
+          "expectedSize": 2040
+        },
+        {
+          "filename": "io_dict",
+          "checksum": "0d9d6995fead1ccdd5512f7909ec8f9efc8ccc97f5c9d23ecae6b3ba77ffadbf",
+          "expectedSize": 2165
+        },
+        {
+          "filename": "is_dict",
+          "checksum": "8eeab5b1ca3f75362881fae3de3316fcaff281179a4c51fceb0098f11ead96e0",
+          "expectedSize": 44354
+        },
+        {
+          "filename": "it_dict",
+          "checksum": "111f968359c9ebe36b107a2565ba9f258bab337d3cbe37e44871980a8f21ce6b",
+          "expectedSize": 152889
+        },
+        {
+          "filename": "ja_dict",
+          "checksum": "b7b99da1a32c3598a4dc8f82c4b5c00276e7811d321908a438bdc92f68942e96",
+          "expectedSize": 47652
+        },
+        {
+          "filename": "jbo_dict",
+          "checksum": "71298417de1e5fd07df275270a5d47ca8820cb8c9f5dc2156c070b7a3ae7999c",
+          "expectedSize": 2243
+        },
+        {
+          "filename": "ka_dict",
+          "checksum": "c8624947110a13bee72d4fc15b06026004df3f40c16c7b917d27e369ca122a32",
+          "expectedSize": 87775
+        },
+        {
+          "filename": "kk_dict",
+          "checksum": "88dc0106629a57d0aca5073afb11db1a044799185355088a7ad4331c836affd3",
+          "expectedSize": 1859
+        },
+        {
+          "filename": "kl_dict",
+          "checksum": "ec441964d7fbd4622bb628327903d5c6c999c95d539b2e061884decf95ac30e3",
+          "expectedSize": 2838
+        },
+        {
+          "filename": "kn_dict",
+          "checksum": "c51e0385937b407b36c02fd2c85dfecdc5cac411398ee8a74eca15b35617af64",
+          "expectedSize": 87828
+        },
+        {
+          "filename": "ko_dict",
+          "checksum": "44ea09863d5bda520f8fc0c5396910f85bc14fc96f41e6039ad7541be7c9e41d",
+          "expectedSize": 47523
+        },
+        {
+          "filename": "kok_dict",
+          "checksum": "31da1762c97f77a965d7b183414ee896d75323ce93a5b6e8334379d6ce0c1123",
+          "expectedSize": 6394
+        },
+        {
+          "filename": "ku_dict",
+          "checksum": "65de1c5429e8d193775b36fcf169a60fbbb9964ef13a4a1bab7ff0ce855cad20",
+          "expectedSize": 2265
+        },
+        {
+          "filename": "ky_dict",
+          "checksum": "def4427fd4070673c073b892c7b229f8c3f17eb1df36bea2ec7188ddcfb4d0ea",
+          "expectedSize": 64977
+        },
+        {
+          "filename": "la_dict",
+          "checksum": "17818dd567936fde032404fbbd6177844b9f5fc5a915480f567272147936f917",
+          "expectedSize": 3806
+        },
+        {
+          "filename": "lang/aav/vi",
+          "checksum": "3199c980f9e23a88a2aa693cd631bf4fcb0f3408c4272bc01b7ac0ff8e79d778",
+          "expectedSize": 111
+        },
+        {
+          "filename": "lang/aav/vi-VN-x-central",
+          "checksum": "b351f13c6ed0da37561df25f45579872ff9863920ad66b94e27327a2c611755b",
+          "expectedSize": 143
+        },
+        {
+          "filename": "lang/aav/vi-VN-x-south",
+          "checksum": "c0a0a2c894cd57b0bbacf9ef4efb8d89bfaf9feb164830e1539f599e7cc4e021",
+          "expectedSize": 142
+        },
+        {
+          "filename": "lang/art/eo",
+          "checksum": "0254b93c8af79d9666a7667ca8b33b21a5453012da4ea0acd79660a9695f89d4",
+          "expectedSize": 41
+        },
+        {
+          "filename": "lang/art/ia",
+          "checksum": "8fb11718030f8b29146f773ca462b838a6c660f166933eb6f1498c361f2e958b",
+          "expectedSize": 29
+        },
+        {
+          "filename": "lang/art/io",
+          "checksum": "8e8391c7f40b7f9d2307faff8018a40dd2b448df4bd581a2950ee8393a00cebf",
+          "expectedSize": 50
+        },
+        {
+          "filename": "lang/art/jbo",
+          "checksum": "d9529de82dccbd95f83c1de401f4ea661609bde644546e9ef421241b7043c00e",
+          "expectedSize": 69
+        },
+        {
+          "filename": "lang/art/lfn",
+          "checksum": "394874fd9022e37cdc307c3386e81f1c0c133a8e9c5fdff74888b519f2c6d648",
+          "expectedSize": 135
+        },
+        {
+          "filename": "lang/art/piqd",
+          "checksum": "d1a559b714cd8dd0ea9e46c4574e06c4f451957fb17bf39b945a89b9586f8b97",
+          "expectedSize": 56
+        },
+        {
+          "filename": "lang/art/py",
+          "checksum": "59e54b95e8571417f43db37a7fd7e351af4e22a8c250cfb66af394f8ed6c4e9c",
+          "expectedSize": 140
+        },
+        {
+          "filename": "lang/art/qdb",
+          "checksum": "52b83fc4f294580ebabd71df641ab5beec6b308758a3458b497124737589a7d8",
+          "expectedSize": 57
+        },
+        {
+          "filename": "lang/art/qya",
+          "checksum": "78ae3f4d70208a9f69e2c26a6a3b5db28d7e6a58740fae937f51dd7fc9faeb1b",
+          "expectedSize": 173
+        },
+        {
+          "filename": "lang/art/sjn",
+          "checksum": "61d85974b6841dfbfcc8cb92ad0742696cb87a6a85d5a28fe99895e46ef9de6f",
+          "expectedSize": 175
+        },
+        {
+          "filename": "lang/azc/nci",
+          "checksum": "7bf70cb18e969398f74428b91c694a4483eaebd6733ecc437eb8714bbf7fff76",
+          "expectedSize": 114
+        },
+        {
+          "filename": "lang/bat/lt",
+          "checksum": "7691c7ca1e79fc9728c70a0d22830eb113a0124bf96807e2a1ace3c6bf0c2f89",
+          "expectedSize": 28
+        },
+        {
+          "filename": "lang/bat/ltg",
+          "checksum": "be716cbbdcb5fe319eed88abd4a44c3329a06e1dc468c8363d3f43cca2683a11",
+          "expectedSize": 312
+        },
+        {
+          "filename": "lang/bat/lv",
+          "checksum": "f08a801dacccace62f5b90166428e90e088818d92dd5f9333ebbe834b0f21c16",
+          "expectedSize": 229
+        },
+        {
+          "filename": "lang/bnt/sw",
+          "checksum": "271dd28b3ec41adeea53f1146249ba6cab61572963ab2743041114d95784e368",
+          "expectedSize": 41
+        },
+        {
+          "filename": "lang/bnt/tn",
+          "checksum": "2243a1fc208dfdc37e154e837c0e782afc325d4acfbacc22718b7f05583ace92",
+          "expectedSize": 42
+        },
+        {
+          "filename": "lang/ccs/ka",
+          "checksum": "68788b99dba7b82cdf8fc9dd05134bd72cf21f0b4c07b13b67b6f036e6294cba",
+          "expectedSize": 124
+        },
+        {
+          "filename": "lang/cel/cy",
+          "checksum": "67bc33b4a66041e6343dfb98e1950d1089eecb68731f346fcc4f47cd07e79970",
+          "expectedSize": 37
+        },
+        {
+          "filename": "lang/cel/ga",
+          "checksum": "29c2cc5736ceb2bd9ef745694d4abf7ed363a33569dfbe745811d4703b7b6cce",
+          "expectedSize": 66
+        },
+        {
+          "filename": "lang/cel/gd",
+          "checksum": "7da0ba464579c367089109826ec15c2584a17417cca4a2c66dae0318d33e3128",
+          "expectedSize": 51
+        },
+        {
+          "filename": "lang/cus/om",
+          "checksum": "b7c563f1effd83c08f3d229fb5a13d074513b85165ce4359a674ef30ca71786b",
+          "expectedSize": 39
+        },
+        {
+          "filename": "lang/dra/kn",
+          "checksum": "c988a5226fa27ee6768b45566ce999ced9a4b68f8e79232b323d5903f4bb2258",
+          "expectedSize": 55
+        },
+        {
+          "filename": "lang/dra/ml",
+          "checksum": "aa7e1f1f239ba55a8a79ed1f3544e9a51b94efe53925de60d4ff737273660b5c",
+          "expectedSize": 57
+        },
+        {
+          "filename": "lang/dra/ta",
+          "checksum": "5bc213eb163bbf069cbfe4f2e9f7e7db71a719d8c0a96e95401d94c992960ed7",
+          "expectedSize": 51
+        },
+        {
+          "filename": "lang/dra/te",
+          "checksum": "176ca4a81feb2181393edff3e2d5c0253cb52239392c4b809c61501d60c69811",
+          "expectedSize": 70
+        },
+        {
+          "filename": "lang/esx/kl",
+          "checksum": "d08cf6ff60b99e6c2ceda549bcbb1a57580915d6a4d50c7f0f5d75289d9fb45a",
+          "expectedSize": 30
+        },
+        {
+          "filename": "lang/eu",
+          "checksum": "a16e4e4d9b910a6e25a2a55913c812badc4fc3cbece0b8d49a64af112782d5a5",
+          "expectedSize": 54
+        },
+        {
+          "filename": "lang/gmq/da",
+          "checksum": "e8dd5e0d30ff0694a7ee839faa8ed35c015eb927a737aba1f120c00005692eaf",
+          "expectedSize": 43
+        },
+        {
+          "filename": "lang/gmq/is",
+          "checksum": "16c077e6222acfc7702046fa3579bb5d6b57ece98646229e13be2233f9fdcbd7",
+          "expectedSize": 27
+        },
+        {
+          "filename": "lang/gmq/nb",
+          "checksum": "d47966621312fb95570539f446982f6deb98fd46d9b71fec4a0005a6bace8f46",
+          "expectedSize": 87
+        },
+        {
+          "filename": "lang/gmq/sv",
+          "checksum": "02727d3b25fc82409bd2cd1ebb444fdb2d5d3f3de7f76b95fc9ed9164c3e59c3",
+          "expectedSize": 25
+        },
+        {
+          "filename": "lang/gmw/af",
+          "checksum": "fb8ccc05f5eae1754b5aa7e92cb919defdd0810b70eec19f7c77cf836e51db09",
+          "expectedSize": 123
+        },
+        {
+          "filename": "lang/gmw/de",
+          "checksum": "f3cca92f94b70f8c25a29ee0a4c9ce4c7f1022241532e0647fa2b7f698bf104e",
+          "expectedSize": 42
+        },
+        {
+          "filename": "lang/gmw/en",
+          "checksum": "4605d5330801de3641c6e366d15f129ea1f5ffbce8722642aba01ace07ab9c83",
+          "expectedSize": 140
+        },
+        {
+          "filename": "lang/gmw/en-029",
+          "checksum": "faeb8cb201056775f733acbd908c66555fe57bf01cb063920f178f389cbf85d3",
+          "expectedSize": 335
+        },
+        {
+          "filename": "lang/gmw/en-GB-scotland",
+          "checksum": "1ce4282c1f4385dbaf0035e799b2ab1ee9e9a3ab4829100594a3047727b52353",
+          "expectedSize": 295
+        },
+        {
+          "filename": "lang/gmw/en-GB-x-gbclan",
+          "checksum": "2040e176f1f7f27bdce81c32d7e2b1662449d54d264afd3c0ed871b8e42b6e46",
+          "expectedSize": 238
+        },
+        {
+          "filename": "lang/gmw/en-GB-x-gbcwmd",
+          "checksum": "927a5ab891c65b30b4426b151d1623a01024f6b773a38497ba1c90cd77a95747",
+          "expectedSize": 188
+        },
+        {
+          "filename": "lang/gmw/en-GB-x-rp",
+          "checksum": "d0625af7f58561b1b8cf96fd7f93eee6553bcb3eadb9020ae0757bf96e5115e5",
+          "expectedSize": 249
+        },
+        {
+          "filename": "lang/gmw/en-US",
+          "checksum": "41534c2a22df5dd4f1052ff9e1a33a3ea7bff5a26b5c02bdad5ba8ddb7524704",
+          "expectedSize": 257
+        },
+        {
+          "filename": "lang/gmw/en-US-nyc",
+          "checksum": "e8ee9168376d1f7d9e7dcda7c4644c36c529a8bea816e6380895364db46ea2e3",
+          "expectedSize": 271
+        },
+        {
+          "filename": "lang/gmw/lb",
+          "checksum": "071beb0e769afeba32177796fc0f1386bdc89a3234bed2bf720e76cbf73f5b99",
+          "expectedSize": 31
+        },
+        {
+          "filename": "lang/gmw/nl",
+          "checksum": "56ae04fae28ae9371ed6db28193189e4ee962ba8236f0bcdeef6a06ea4dee374",
+          "expectedSize": 23
+        },
+        {
+          "filename": "lang/grk/el",
+          "checksum": "0b529c998af07c72bf516b5750709464f6258c56c6916b8b8f0c843be9836fca",
+          "expectedSize": 23
+        },
+        {
+          "filename": "lang/grk/grc",
+          "checksum": "319f950b1ad7b1f37efaa390540bf957bddac16d0557a6c3adaff27e0c64e12e",
+          "expectedSize": 99
+        },
+        {
+          "filename": "lang/inc/as",
+          "checksum": "3f58f5628f792b00a5ae6e8fe3bf8696f64af2838e5723799ddbab6027a0b378",
+          "expectedSize": 42
+        },
+        {
+          "filename": "lang/inc/bn",
+          "checksum": "bc3ce23384b9d0bb3bac06a09d90f690fae32a492dcbb030f0e56ba67b5d656c",
+          "expectedSize": 25
+        },
+        {
+          "filename": "lang/inc/bpy",
+          "checksum": "e528d1189b995b94966cef4cc182469cc54f7da8efc5860375c4ecf186ce6146",
+          "expectedSize": 39
+        },
+        {
+          "filename": "lang/inc/gu",
+          "checksum": "f938a755d270745188c2cf2aacba06642a96bb73ba2a0325384121b9d5ec5407",
+          "expectedSize": 42
+        },
+        {
+          "filename": "lang/inc/hi",
+          "checksum": "3c1c3f916f57f2d6d6cbf7923c0f39a36ac2140e2a69ddffce917d7b8bf3ccab",
+          "expectedSize": 23
+        },
+        {
+          "filename": "lang/inc/kok",
+          "checksum": "810ee23fbbe9c186a036bc12f4e5c0de674a132e2e099c9b3dece2a1c9cdb28a",
+          "expectedSize": 26
+        },
+        {
+          "filename": "lang/inc/mr",
+          "checksum": "29063ff3a5257d0d3d7c215dfd4c14deed39e1d48f15894202e6712459720efd",
+          "expectedSize": 41
+        },
+        {
+          "filename": "lang/inc/ne",
+          "checksum": "d53fda082ec174ef33ed3c3468fc973c43b4ef71aca8c1a28cb344668f4838dc",
+          "expectedSize": 37
+        },
+        {
+          "filename": "lang/inc/or",
+          "checksum": "9b52ede7d19659f884854de3dff12597a96f4d6ec7cb4146d2f8dad1453c742f",
+          "expectedSize": 39
+        },
+        {
+          "filename": "lang/inc/pa",
+          "checksum": "eed3cf477f81d13559dbb367256f9532b20dad1432c15b206c777217b8f570ca",
+          "expectedSize": 25
+        },
+        {
+          "filename": "lang/inc/sd",
+          "checksum": "65bfe0e37799029d42a370eb627cca5aa4108b967fba6c8141878d693c903619",
+          "expectedSize": 66
+        },
+        {
+          "filename": "lang/inc/si",
+          "checksum": "8f0993b35ba5b075c38ae76640971256e560abfbd721b608d16a48588932596d",
+          "expectedSize": 55
+        },
+        {
+          "filename": "lang/inc/ur",
+          "checksum": "5b7af7474fac265c7bd7d269111994a09610f954690698f55a8613f3fa973318",
+          "expectedSize": 94
+        },
+        {
+          "filename": "lang/ine/hy",
+          "checksum": "b6ad6129079c49ca915c3005ecb74a02bf5d69cbbc8ec3f8e0f6b949cb3a768f",
+          "expectedSize": 61
+        },
+        {
+          "filename": "lang/ine/hyw",
+          "checksum": "26f8a863c74b3d19c9c42fcf16ae5151c12ac52ef8fab36cae1e5f0d4ad30e6a",
+          "expectedSize": 365
+        },
+        {
+          "filename": "lang/ine/sq",
+          "checksum": "865fde9017b5af82acb844e5f9793998fed422a208ad8aaf9dedacad3bf27af1",
+          "expectedSize": 103
+        },
+        {
+          "filename": "lang/ira/fa",
+          "checksum": "0dc7e93be4d1fbdf7ff52de2fe8bcdc23304e6d86e012b4ab8276d626b5d980c",
+          "expectedSize": 90
+        },
+        {
+          "filename": "lang/ira/fa-Latn",
+          "checksum": "a04cf8efed8db1ac33b306f1f8c6f42733dace87c9fc9f34a2d227b3bb291e28",
+          "expectedSize": 269
+        },
+        {
+          "filename": "lang/ira/ku",
+          "checksum": "57db3a210d73412a49e961dbed9b27077f5c7b967a19a0eb9f9363ea4b16cea5",
+          "expectedSize": 40
+        },
+        {
+          "filename": "lang/iro/chr",
+          "checksum": "f0e2fb8549306c07f571d3e77c89b1d3e9022d448d58e5d424441e01ccce88be",
+          "expectedSize": 569
+        },
+        {
+          "filename": "lang/itc/la",
+          "checksum": "b70d13a264352eba2d22a5d0ef21730849509d18f7277320b008a56decc6efc2",
+          "expectedSize": 297
+        },
+        {
+          "filename": "lang/jpx/ja",
+          "checksum": "6fd980445bc52e0f593062929f5b62831448abaae2a92739beba49df27a79743",
+          "expectedSize": 52
+        },
+        {
+          "filename": "lang/ko",
+          "checksum": "c2dfbf88d9aa2ac9bf2f30e92e260120e4f2c21123a02265014ae98d59d5774e",
+          "expectedSize": 51
+        },
+        {
+          "filename": "lang/map/haw",
+          "checksum": "b19f22efb6714354d8d1360f449e05f0f84d50d6fa3c98fcfd619ea1b4ba8996",
+          "expectedSize": 42
+        },
+        {
+          "filename": "lang/miz/mto",
+          "checksum": "e33aba5e8159730f62004b22518d627c796f7d039431e5d9217b498f10341976",
+          "expectedSize": 183
+        },
+        {
+          "filename": "lang/myn/quc",
+          "checksum": "76a75b77c672c432b56b84d517310d6aa75c4b3f9de580e290199804366174ea",
+          "expectedSize": 210
+        },
+        {
+          "filename": "lang/poz/id",
+          "checksum": "ce1fcddab3e756a7cdba3dd009ad24cd57e1fde29ce395698355da24e32a6075",
+          "expectedSize": 134
+        },
+        {
+          "filename": "lang/poz/mi",
+          "checksum": "2146cf3868c79b853bb5e41ddbf611d51b4b0a14087199f16194313562b98987",
+          "expectedSize": 367
+        },
+        {
+          "filename": "lang/poz/ms",
+          "checksum": "8a965182ee0c5a41357197c05cf047d21b96744775a57a344d831a961e30351b",
+          "expectedSize": 430
+        },
+        {
+          "filename": "lang/qu",
+          "checksum": "3069e443ecf3421bcb3b35b864e1a89fa9465af072f86eedd46a415990aba6e6",
+          "expectedSize": 88
+        },
+        {
+          "filename": "lang/roa/an",
+          "checksum": "ff8aa97c55286cc90531cad5df3cd36165abba11502a84d53b0fcd923f965f23",
+          "expectedSize": 27
+        },
+        {
+          "filename": "lang/roa/ca",
+          "checksum": "787df034320467236292bb46f1f8781a2998a185f117d350c018b6cfcf360854",
+          "expectedSize": 25
+        },
+        {
+          "filename": "lang/roa/es",
+          "checksum": "966aa015ea5646d79f0ca4807cf5da7339aabd3782b55cfa5eb0d8c3fc8fc588",
+          "expectedSize": 63
+        },
+        {
+          "filename": "lang/roa/es-419",
+          "checksum": "ff0f84457ac40e3bcf61d6de58028312be74e0e6cbc3b742f31b3ce729c2aa0c",
+          "expectedSize": 167
+        },
+        {
+          "filename": "lang/roa/fr",
+          "checksum": "95f44834b48c075dad13eace54d2c98ff79b81aa0074dd67eebaf66c2909eef8",
+          "expectedSize": 79
+        },
+        {
+          "filename": "lang/roa/fr-BE",
+          "checksum": "72496a316e47b997f893500b8953dc01a10b86a2d4238e13c1260f50b47d792a",
+          "expectedSize": 84
+        },
+        {
+          "filename": "lang/roa/fr-CH",
+          "checksum": "b449b0fd99d9cd93261fe1c6b816448b99b4a10420bee3f301e669568ad0de55",
+          "expectedSize": 86
+        },
+        {
+          "filename": "lang/roa/ht",
+          "checksum": "389bdf3e984a2f93b7060baad82452dac65b83bf4482d3884525a176ae0e0524",
+          "expectedSize": 140
+        },
+        {
+          "filename": "lang/roa/it",
+          "checksum": "0d9069eb9a96db1c55c131b2bb7d1f5255c68fbddc2199ffd3295b52519a3256",
+          "expectedSize": 109
+        },
+        {
+          "filename": "lang/roa/pap",
+          "checksum": "41a5b5e91482a5498a66711c05873a634bbd418786b0ba037032df846344cfc1",
+          "expectedSize": 62
+        },
+        {
+          "filename": "lang/roa/pt",
+          "checksum": "a44060072f790e41912c57b7d52f7b6438c4383e0dabdb052f6fdb7aacc23493",
+          "expectedSize": 95
+        },
+        {
+          "filename": "lang/roa/pt-BR",
+          "checksum": "84dd4e34c970fadbe32211eadecfdfaab52432479c0911e43300da88a33398ba",
+          "expectedSize": 109
+        },
+        {
+          "filename": "lang/roa/ro",
+          "checksum": "b12af10ffc3f89cb87767ca701c6fea0def8a712de63426a9c3d0bf2432467f8",
+          "expectedSize": 26
+        },
+        {
+          "filename": "lang/sai/gn",
+          "checksum": "ff82d2d163d3e06adb580254d89012e689b2615c46579883562838ab401fb5d5",
+          "expectedSize": 47
+        },
+        {
+          "filename": "lang/sem/am",
+          "checksum": "5970b16bf865528ee96a78c08498244bc8f54218fc2add499716b0e0c09969fb",
+          "expectedSize": 41
+        },
+        {
+          "filename": "lang/sem/ar",
+          "checksum": "43f418f8140e5a7bd7096963da20ccba9247f6be1fcdb08cb53dd7967dd72eee",
+          "expectedSize": 50
+        },
+        {
+          "filename": "lang/sem/he",
+          "checksum": "de9195e743b91fb7fbef7493bd5ddccad14c380a58d5aeb7c1d11d3419ef3b86",
+          "expectedSize": 40
+        },
+        {
+          "filename": "lang/sem/mt",
+          "checksum": "d23f38fae3253b6fb42e3336760ab482e676893692455465448bc9fbc0ac3e83",
+          "expectedSize": 41
+        },
+        {
+          "filename": "lang/sit/cmn",
+          "checksum": "a130a38e3b622735c2401cb37f6719f46995e84a133729185cef9a543ec0b072",
+          "expectedSize": 686
+        },
+        {
+          "filename": "lang/sit/cmn-Latn-pinyin",
+          "checksum": "14c2fc097db280416b688c2bf97de2e5da532c279754020fde7bf6cd624cdd10",
+          "expectedSize": 161
+        },
+        {
+          "filename": "lang/sit/hak",
+          "checksum": "c03c30b43e0b0abdfa689445baf9f442664a0373154a5d0ca75a33d30f46aeed",
+          "expectedSize": 128
+        },
+        {
+          "filename": "lang/sit/my",
+          "checksum": "4b5ae2566cbf30aa59207020469e09832e66a7883818788f253996c534303dca",
+          "expectedSize": 56
+        },
+        {
+          "filename": "lang/sit/yue",
+          "checksum": "83f3dac92af5b4aaecc119515698a6979524be236b28ea8f1024ec707d99ea5b",
+          "expectedSize": 194
+        },
+        {
+          "filename": "lang/sit/yue-Latn-jyutping",
+          "checksum": "c56d45bb9a9cd97efb38edabe31c7dd3feb0518cc900aac6a891dcb6bd8eb428",
+          "expectedSize": 213
+        },
+        {
+          "filename": "lang/tai/shn",
+          "checksum": "f16bf2de219d3ae9a6aec263ce9c684d9cd3e61258d04c7948db0757c67e2c96",
+          "expectedSize": 92
+        },
+        {
+          "filename": "lang/tai/th",
+          "checksum": "6c8ac809868de659e06673f1fc2b56dbf4637ff9980da7a4726b846478b4cfe6",
+          "expectedSize": 37
+        },
+        {
+          "filename": "lang/trk/az",
+          "checksum": "52b424332de4c443f3e9c5ce4de5aed6fbfd421269fc825756dfc6bcbd7e1ad8",
+          "expectedSize": 45
+        },
+        {
+          "filename": "lang/trk/ba",
+          "checksum": "a0cc3a06293962093c66533f9c1cffbccf083a2eb666751f2778a02a5316d98c",
+          "expectedSize": 25
+        },
+        {
+          "filename": "lang/trk/cv",
+          "checksum": "94baf6bacf581cc20337471c599f85ecbbe211f0b8476351ff19450c6541ea92",
+          "expectedSize": 40
+        },
+        {
+          "filename": "lang/trk/kk",
+          "checksum": "2219f4d6de0fbb1dc9982157c6f3cc5f4c8abe5fcb605908a9d1054b9880cd51",
+          "expectedSize": 40
+        },
+        {
+          "filename": "lang/trk/ky",
+          "checksum": "8239dfe8bdc6d4725880f5192b4eaf645f839e40cadfd145a4409c8387ac2d59",
+          "expectedSize": 43
+        },
+        {
+          "filename": "lang/trk/nog",
+          "checksum": "e0e27fe61d406b6f4a4879fb8f81a14bc65997106666933991b818c7d79fabc1",
+          "expectedSize": 39
+        },
+        {
+          "filename": "lang/trk/tk",
+          "checksum": "d78263398c135119909ad63a3ecb6ffe3aff08383212934dd03695222a9786d0",
+          "expectedSize": 25
+        },
+        {
+          "filename": "lang/trk/tr",
+          "checksum": "490eb5a2f777a2f3396f3a824ed8021bd77a94be801214411461bde6689738c9",
+          "expectedSize": 25
+        },
+        {
+          "filename": "lang/trk/tt",
+          "checksum": "8b9617a9b6c56f4a2fe2f59d9ce55426837196567962716f9330f70948f8f9b0",
+          "expectedSize": 23
+        },
+        {
+          "filename": "lang/trk/ug",
+          "checksum": "65d0cdbc96efab4d9e3cd0095440752a31dc7f425edd3ba0a53c4dd33eac5d63",
+          "expectedSize": 24
+        },
+        {
+          "filename": "lang/trk/uz",
+          "checksum": "04fd711dfda1e00d17dc8b1b250c24d70cc3c498b27e35d31065ac47441a6759",
+          "expectedSize": 39
+        },
+        {
+          "filename": "lang/urj/et",
+          "checksum": "59c77747c4774e54a63ab74d2c6a95bc3c5b5b0a50d3781f187bd1fc3a613de5",
+          "expectedSize": 237
+        },
+        {
+          "filename": "lang/urj/fi",
+          "checksum": "61f58ec3bba5b55a392aff7ecf8a84d024200aeaa404b5553fcfb47770936928",
+          "expectedSize": 237
+        },
+        {
+          "filename": "lang/urj/hu",
+          "checksum": "c575421d2ae397065d35af0eb4f79dff4e85f3435ccf45da874f46b3fee1338b",
+          "expectedSize": 73
+        },
+        {
+          "filename": "lang/urj/smj",
+          "checksum": "3d709dec77bb633af0d57b89668dbaaa72d9be8688118d6909f7d457bec12a50",
+          "expectedSize": 45
+        },
+        {
+          "filename": "lang/zle/be",
+          "checksum": "5beb002d15a36bf3d0d764ed0d483c75a1df6909eaa3b10fe5f6546700c9bfec",
+          "expectedSize": 52
+        },
+        {
+          "filename": "lang/zle/ru",
+          "checksum": "9f52d00a279aaeaa45a786b4fd3a98b34e95fedbf823f8cdb9fecc1339751d3a",
+          "expectedSize": 57
+        },
+        {
+          "filename": "lang/zle/ru-LV",
+          "checksum": "980e379667ccb94abe33b9c9c660c08800e3f31e36fe4a939551398ab98457ae",
+          "expectedSize": 280
+        },
+        {
+          "filename": "lang/zle/ru-cl",
+          "checksum": "200ea345b505ec9e7b8838490aeaf1822af41033429aeae4ea68159047f59f90",
+          "expectedSize": 91
+        },
+        {
+          "filename": "lang/zle/uk",
+          "checksum": "df3d1a9f77bac0531e72f87be398d9eb1e903bd6f839d4f04ffec5abb4e34634",
+          "expectedSize": 97
+        },
+        {
+          "filename": "lang/zls/bg",
+          "checksum": "9b91accccb0d53bb2a7bf21922846ba58c74bc082ba71ae32bf12cb0d092f853",
+          "expectedSize": 111
+        },
+        {
+          "filename": "lang/zls/bs",
+          "checksum": "0820e7c78b68fbdaf86d83c782cdde1901b642d1cdbeae4181c6f5f5e21e5e89",
+          "expectedSize": 230
+        },
+        {
+          "filename": "lang/zls/hr",
+          "checksum": "cef3ef0411c66f154e6c82f7decd95beffa8cbfbe953335658df9f125bdd6096",
+          "expectedSize": 262
+        },
+        {
+          "filename": "lang/zls/mk",
+          "checksum": "6dbc2cfb8999141bd0782cd463d4880468161088190c6b4c9412f43552dc39e2",
+          "expectedSize": 28
+        },
+        {
+          "filename": "lang/zls/sl",
+          "checksum": "e1c2bd1f75c0eeb86f64182472d5f597ce23e64ad7478c248c2f75b694655942",
+          "expectedSize": 43
+        },
+        {
+          "filename": "lang/zls/sr",
+          "checksum": "0e076528d3566f6e59b807e16e274dee505e88a6d477da188ab8ec442eae44f4",
+          "expectedSize": 250
+        },
+        {
+          "filename": "lang/zlw/cs",
+          "checksum": "1477cdba5ba3bce85db559accbbd8a24b86b3f6d9d9988bc587e89357c1c4431",
+          "expectedSize": 23
+        },
+        {
+          "filename": "lang/zlw/pl",
+          "checksum": "83c586a2b724b24b9f98d21ade5022112c465ac446ca09930286980ceae1c781",
+          "expectedSize": 38
+        },
+        {
+          "filename": "lang/zlw/sk",
+          "checksum": "f46ff673c7d58c1646096c174d58da34047d893d0d2993dbca260ce54abe77ef",
+          "expectedSize": 24
+        },
+        {
+          "filename": "lb_dict",
+          "checksum": "d819a062b9722334f187540d3530fac1de365cd200d4a466f5ecccd7e3c05772",
+          "expectedSize": 687931
+        },
+        {
+          "filename": "lfn_dict",
+          "checksum": "10281bc404f429165a330b800eb64674e37a135d1b4c689e57fb1d9e827d6924",
+          "expectedSize": 2793
+        },
+        {
+          "filename": "lt_dict",
+          "checksum": "68ef55aba9545d27ce73e7d4aca1c2fa51d2c3d3d626152fbc22bf5a90fbff11",
+          "expectedSize": 49890
+        },
+        {
+          "filename": "lv_dict",
+          "checksum": "3e246c76b7da924235ffb75925070865e669da2ce3e41e98395e99be1f8db9f7",
+          "expectedSize": 66337
+        },
+        {
+          "filename": "mi_dict",
+          "checksum": "401621fdf61da47d0513e80279134a3515ced898aaadd5205b82cced0f2df042",
+          "expectedSize": 1346
+        },
+        {
+          "filename": "mk_dict",
+          "checksum": "e4960ff4e74e1096ff1c3bccab62ce0429fa4faa725e546cd5d33e43f45225be",
+          "expectedSize": 63859
+        },
+        {
+          "filename": "ml_dict",
+          "checksum": "b12687557c38f9bcd17417854253ddde3781e3b0c16f9470d732205818e7cd38",
+          "expectedSize": 92345
+        },
+        {
+          "filename": "mr_dict",
+          "checksum": "f712a7525db108ef9769aee53fdd1cd141f0df372778924691b89623aa6fc22f",
+          "expectedSize": 87391
+        },
+        {
+          "filename": "ms_dict",
+          "checksum": "74b01897385ba1f018de44c0268048fa5be588bbbb702a900bb35c691a466707",
+          "expectedSize": 53541
+        },
+        {
+          "filename": "mt_dict",
+          "checksum": "1f76761bdfd481a984b15d07522df23c9444f4ac21ea9671917e08bbffa7f8d3",
+          "expectedSize": 4384
+        },
+        {
+          "filename": "mto_dict",
+          "checksum": "6d51cb6be959dba045d41d3d63ff662a7363e1287cce2c633b071295ce55d560",
+          "expectedSize": 3960
+        },
+        {
+          "filename": "my_dict",
+          "checksum": "f30eb801a956cf058f1e7869c8c9dd5cdad5180eed9dfd0817b0c1e15abfaa64",
+          "expectedSize": 95948
+        },
+        {
+          "filename": "nci_dict",
+          "checksum": "38c7201e7726c8d508f8f8611349cbc44fcc4684a0fee4db7285d83e808a5b69",
+          "expectedSize": 1534
+        },
+        {
+          "filename": "ne_dict",
+          "checksum": "43831c3f53ea6e939cac37b5ae5bd7a2ea8237aa46f0e7f2441ab772a3c51dba",
+          "expectedSize": 95377
+        },
+        {
+          "filename": "nl_dict",
+          "checksum": "d28641049f98c76b460c3dddde3e2edecb7782c4eb9a3f242391301ff526c83f",
+          "expectedSize": 65979
+        },
+        {
+          "filename": "no_dict",
+          "checksum": "43b828f8c1709e7abb23a0cc6416fb32e4814e3f1ff1db4baf2935bf7c77c9ff",
+          "expectedSize": 4178
+        },
+        {
+          "filename": "nog_dict",
+          "checksum": "8b921398a2f1907b43c07b96a72277d8d3d8545e385955eebae5f340aae33bd2",
+          "expectedSize": 3294
+        },
+        {
+          "filename": "om_dict",
+          "checksum": "3624e67ef8d9c20d894db0adccaccc61ee852977cb77d5fe5801e7b4a528fcf5",
+          "expectedSize": 2302
+        },
+        {
+          "filename": "or_dict",
+          "checksum": "e0dd737e9104da63a27d86cd464cf7764837625b1513169b8d28fca1bd3c8c3b",
+          "expectedSize": 89246
+        },
+        {
+          "filename": "pa_dict",
+          "checksum": "cee0e2a2bfb166e602ff84e185351a8ac311571ccdf46e1831c7a25245563c10",
+          "expectedSize": 79953
+        },
+        {
+          "filename": "pap_dict",
+          "checksum": "770039bbf4ea8c5a3ffddd98c4831ca02c9f39e1ff6b3de7729fa71a8f3bc0f1",
+          "expectedSize": 2128
+        },
+        {
+          "filename": "phondata",
+          "checksum": "4e0288957874029a8c3c9f41a8f517ad4bf18127046decbdd4b9d1d6807ce3a3",
+          "expectedSize": 550424
+        },
+        {
+          "filename": "phondata-manifest",
+          "checksum": "7b387af0702c7cf0b61f0bead68feded0bd8e1620729b0b252e76acbc30d3813",
+          "expectedSize": 21821
+        },
+        {
+          "filename": "phonindex",
+          "checksum": "3ca7b8fa3b42624e4b0f152707e7a39245fce569aa99ea47c055d9e622fcf0c4",
+          "expectedSize": 39074
+        },
+        {
+          "filename": "phontab",
+          "checksum": "886f3fa402cb0ba73d483aa8ad000af47a6b7cc06293c75a97913fba68a530f6",
+          "expectedSize": 55796
+        },
+        {
+          "filename": "piqd_dict",
+          "checksum": "33004a36210c33291aef8a838d477667eed7af52ff5093152891379b1774188d",
+          "expectedSize": 1710
+        },
+        {
+          "filename": "pl_dict",
+          "checksum": "0e0ce6cfe4eba41a1223362a046390dca359a3e597af8243adaac84d624ef18f",
+          "expectedSize": 76730
+        },
+        {
+          "filename": "pt_dict",
+          "checksum": "7e8398f15fa4a21db39a213381f28ec0d302b22663c644e865abb61a09c1b004",
+          "expectedSize": 67817
+        },
+        {
+          "filename": "py_dict",
+          "checksum": "2255348879547940e8b49e0ca1b80452748f142cb6e267e49cab0560c720129a",
+          "expectedSize": 2409
+        },
+        {
+          "filename": "qdb_dict",
+          "checksum": "c9b7f307ffe54f4aaf323290eca1c620572919035b0eb268e5c94f5d7a430058",
+          "expectedSize": 3028
+        },
+        {
+          "filename": "qu_dict",
+          "checksum": "d50659c2a14f43e01fdef0b668eb083025a00cac481b49dfb068e0220e0ed945",
+          "expectedSize": 1919
+        },
+        {
+          "filename": "quc_dict",
+          "checksum": "458c1ca6dcfa288ea2584915d206c5127512501174d82655de2cf031378e6dfd",
+          "expectedSize": 1450
+        },
+        {
+          "filename": "qya_dict",
+          "checksum": "e56ae297ebac26ed6c77a9718812e087f0bd198241dac3c0d964f36510984783",
+          "expectedSize": 1939
+        },
+        {
+          "filename": "ro_dict",
+          "checksum": "b14f68866b0440c4b0d95fb7da3b7ffd3c59b693e8593d188474fabfc9a1117d",
+          "expectedSize": 68538
+        },
+        {
+          "filename": "ru_dict",
+          "checksum": "f0f6181bbbf9e53cd1e8f9d26bde8fc62119c4f78181948f961cb29866e5e585",
+          "expectedSize": 8532392
+        },
+        {
+          "filename": "sd_dict",
+          "checksum": "f6dcab25fb99fa8663ca5a7fbb25d2e184337c6e9c202c541544ecfdfcc0f901",
+          "expectedSize": 59928
+        },
+        {
+          "filename": "shn_dict",
+          "checksum": "0f7dd0fe0f3c5528103137ba9291d9b38572e5ca08cf031961a91816e79cf48f",
+          "expectedSize": 88172
+        },
+        {
+          "filename": "si_dict",
+          "checksum": "a241437d4b64fd328ac4a3e786c9465c60488f6fa31cbba04153f628cdc61f27",
+          "expectedSize": 85384
+        },
+        {
+          "filename": "sjn_dict",
+          "checksum": "eb70510144230f6791574d86bae0918b4191b076dd66c555e6ae3d5637daadf7",
+          "expectedSize": 1783
+        },
+        {
+          "filename": "sk_dict",
+          "checksum": "58b9bc11c9a95d81e96966242367009f8d02ab7a3f8f4fd77e3581ed4159f0a8",
+          "expectedSize": 50002
+        },
+        {
+          "filename": "sl_dict",
+          "checksum": "9cb2bcbf616a5e7dd7ca769e7d222a48c613299ef1d76e44c08b002f8c22861a",
+          "expectedSize": 45047
+        },
+        {
+          "filename": "smj_dict",
+          "checksum": "815270ce38a59c192ef5aa8801119d9b3ed973d9e23dfa6da8d5d27ded5a9cd6",
+          "expectedSize": 35095
+        },
+        {
+          "filename": "sq_dict",
+          "checksum": "6b74bef94c3319407c27e44d944e765d036a88b30b4c17f30bbc182dbffcc4ce",
+          "expectedSize": 45003
+        },
+        {
+          "filename": "sr_dict",
+          "checksum": "770cae9c516e48af7896629faf4abefaf041e1fd4ae184011aad07b97196f613",
+          "expectedSize": 46832
+        },
+        {
+          "filename": "sv_dict",
+          "checksum": "565f058b14f1c89c6bfa44fc3700793886a39c7818f1037ad1f4961fa7517509",
+          "expectedSize": 47836
+        },
+        {
+          "filename": "sw_dict",
+          "checksum": "375fab2ccd0d669177ad406b20b0cdb5851a1e86f093672f24f72c29fec8a815",
+          "expectedSize": 47804
+        },
+        {
+          "filename": "ta_dict",
+          "checksum": "8f3d855c8d7a35ad0e2b22bc7c15a8830e5fc235492894e5db40458655076ecd",
+          "expectedSize": 209553
+        },
+        {
+          "filename": "te_dict",
+          "checksum": "640407c66a5bb975671243325de616c221f90bb2842d3a36278facb68c0772f8",
+          "expectedSize": 94837
+        },
+        {
+          "filename": "th_dict",
+          "checksum": "1d981d6037f61a456159d145fff516c8c13f8c4c80e8a3fdf5f831ae28f0cfa9",
+          "expectedSize": 2301
+        },
+        {
+          "filename": "tk_dict",
+          "checksum": "b3cd4a246f014f0564ec9efae79731c0fe73ffe1cd1617359dd8d5344ee3f9c8",
+          "expectedSize": 20868
+        },
+        {
+          "filename": "tn_dict",
+          "checksum": "67f68dc336e7c65b946c95414cc8ae96cd10d241783bf857b3f990ac73221b2b",
+          "expectedSize": 3072
+        },
+        {
+          "filename": "tr_dict",
+          "checksum": "311b0557059f2dab5ee2faabb51361f5033368f0e2a54c4bdfe45e730674f26e",
+          "expectedSize": 46793
+        },
+        {
+          "filename": "tt_dict",
+          "checksum": "60d138d38330e44a78b4224cbea452bfca22bce6734c8ce3f640c0216ce14001",
+          "expectedSize": 2121
+        },
+        {
+          "filename": "ug_dict",
+          "checksum": "7c4567ffe6bd8d5224b6b3fd8fab65b1343254636e6228d738ae3a708428e8e7",
+          "expectedSize": 2070
+        },
+        {
+          "filename": "uk_dict",
+          "checksum": "a779bb0f51ce5cebb650a4e2282162fc8c44609210a2baa700f81f3e83e6e10c",
+          "expectedSize": 3492
+        },
+        {
+          "filename": "ur_dict",
+          "checksum": "74b60e4331f532810ccfc70751ad07ab440647550a2d25823f44663a0dfa86fb",
+          "expectedSize": 133556
+        },
+        {
+          "filename": "uz_dict",
+          "checksum": "790d42ac417b26dd7b1bbfed4be72329c16ed1839dd75f55f7c962eb7bd5857a",
+          "expectedSize": 2540
+        },
+        {
+          "filename": "vi_dict",
+          "checksum": "b1d14de279c103400b4f81e3bbe390bacbfd10b3e5e4a487acd58193894c1fb6",
+          "expectedSize": 52608
+        },
+        {
+          "filename": "voices/!v/Alex",
+          "checksum": "1cf9874567f4fa8109329f084e9ad9ed788fb2362298921d0a04a57b24f1141f",
+          "expectedSize": 128
+        },
+        {
+          "filename": "voices/!v/Alicia",
+          "checksum": "6d3f60ec866706e9d4ab7da2a79eedb8c11b50f63620f87e58317f316ea3d58e",
+          "expectedSize": 474
+        },
+        {
+          "filename": "voices/!v/Andrea",
+          "checksum": "6ca52734ec2cf7c419d2d3ad7c3449cd1a1776342c4d152ea12c5b1e72801e89",
+          "expectedSize": 357
+        },
+        {
+          "filename": "voices/!v/Andy",
+          "checksum": "0e13ba1a940cd9df7e65358c36445c9740f3d75f1360c7f7c71ab9f74b45edca",
+          "expectedSize": 320
+        },
+        {
+          "filename": "voices/!v/Annie",
+          "checksum": "40f0f829c5c6e7abf4a02a21f128a572756d6f6693014c26d09a5c29ede5ec33",
+          "expectedSize": 315
+        },
+        {
+          "filename": "voices/!v/AnxiousAndy",
+          "checksum": "7dfe126f517b76cc78269618dbee2c30d324bea9460b400938756ec93995eaf8",
+          "expectedSize": 361
+        },
+        {
+          "filename": "voices/!v/Demonic",
+          "checksum": "241b0e78362bd3208bb586b65bdf52330e1e8322f8f226c4790c4abeb47cfb09",
+          "expectedSize": 3858
+        },
+        {
+          "filename": "voices/!v/Denis",
+          "checksum": "a09fe9f7a4e478d2ba1e139c2995633e2b99de9abdaaa82307954599b0e3d6fd",
+          "expectedSize": 305
+        },
+        {
+          "filename": "voices/!v/Diogo",
+          "checksum": "a4a17c453d13242b48783c247816bff8d2cf7bc8931c3f8237887d88a2881b18",
+          "expectedSize": 379
+        },
+        {
+          "filename": "voices/!v/Gene",
+          "checksum": "06258dae680cde2122a4939dbd4f23ed4ea145b7475068bf7dd4d466090afd2a",
+          "expectedSize": 281
+        },
+        {
+          "filename": "voices/!v/Gene2",
+          "checksum": "bcdb3039296eea37398e4423dc9bb6849cda9c5c812b83702ebc49682c649f57",
+          "expectedSize": 283
+        },
+        {
+          "filename": "voices/!v/Henrique",
+          "checksum": "5c6bf1cf5b6bc7c7d48f2a8368ae348c6ff64232c047f40f9d9a6e6824b4ce6a",
+          "expectedSize": 381
+        },
+        {
+          "filename": "voices/!v/Hugo",
+          "checksum": "906acbef890dc4da67cb54b5b0ddc2cab7ee308a95d350c899f0b0cb6a83dd5f",
+          "expectedSize": 378
+        },
+        {
+          "filename": "voices/!v/Jacky",
+          "checksum": "41884ed9b66160aeb5a0dc418370a59fe39ead0013d93e023e6d607ef01c1a6e",
+          "expectedSize": 267
+        },
+        {
+          "filename": "voices/!v/Lee",
+          "checksum": "a1584887cddb40c10e04992fb770025b52e66b70504656094f80975f1d6bbf6b",
+          "expectedSize": 338
+        },
+        {
+          "filename": "voices/!v/Marco",
+          "checksum": "04025677360c0270f094bbb6716b83c8284902f6da9b496bedbbf590963835fb",
+          "expectedSize": 467
+        },
+        {
+          "filename": "voices/!v/Mario",
+          "checksum": "a94ac65d132030df496e8aa364d5cde5f2eafa4b6b3ae361a2901d512c6029d8",
+          "expectedSize": 270
+        },
+        {
+          "filename": "voices/!v/Michael",
+          "checksum": "4409be23ef5fedf4c8bffbfaa8a802a342824d7e97f1d92938336a25f92f0ebe",
+          "expectedSize": 270
+        },
+        {
+          "filename": "voices/!v/Mike",
+          "checksum": "8999b264606c0af23d346a877e10ca05aa757f7ea433e6cfcb3bef50a56ba2cf",
+          "expectedSize": 112
+        },
+        {
+          "filename": "voices/!v/Mr serious",
+          "checksum": "794abd78deb07ce9b03419d20f7744df4c0151d5abff7981217e9d0926a2f240",
+          "expectedSize": 3193
+        },
+        {
+          "filename": "voices/!v/Nguyen",
+          "checksum": "4f3d557d9c045080f56022a96e5b3659c4d1caa5fa1d702e12d3ef6bec2e3a45",
+          "expectedSize": 280
+        },
+        {
+          "filename": "voices/!v/Reed",
+          "checksum": "727dbc3f6bff0be4dd7d0438f66d3bb82cff68ed148cf52cb58e73314aaec1e4",
+          "expectedSize": 202
+        },
+        {
+          "filename": "voices/!v/RicishayMax",
+          "checksum": "7ddc7a57711ccd7a736540f14271adadf1e2e0422941ecaa7cc43ab87f8e2017",
+          "expectedSize": 233
+        },
+        {
+          "filename": "voices/!v/RicishayMax2",
+          "checksum": "3de5e414d4b2ef082a7b974bb7ede94937e93b5b873d2b2f7928b19d30745180",
+          "expectedSize": 435
+        },
+        {
+          "filename": "voices/!v/RicishayMax3",
+          "checksum": "36d20550b68a8c229d34d956657b7d642929962f7e5d4fddd6396af9e5378b56",
+          "expectedSize": 435
+        },
+        {
+          "filename": "voices/!v/Storm",
+          "checksum": "e817c7d1ce10de527ebc19c0835f580cb584c3ae7d36d30a4f414482602e7b89",
+          "expectedSize": 420
+        },
+        {
+          "filename": "voices/!v/Tweaky",
+          "checksum": "c34d1c1d8b7922ceb886b95ad6ab534ca048f9c47e19698ec2aae5cf0c32cdbc",
+          "expectedSize": 3189
+        },
+        {
+          "filename": "voices/!v/UniRobot",
+          "checksum": "23dba52c2d1cb332db6225304818d85488f110a668ddcdbfd7f0438afe37794b",
+          "expectedSize": 417
+        },
+        {
+          "filename": "voices/!v/adam",
+          "checksum": "b21efbf56fd7d58470e7ce4759c6ef9f23949706b269f2d777832204658ee0dd",
+          "expectedSize": 75
+        },
+        {
+          "filename": "voices/!v/anika",
+          "checksum": "228771ce84cad16a089e0b23efe2e69edf25f1ab7c0cb3a50d366ac70e82fbbd",
+          "expectedSize": 493
+        },
+        {
+          "filename": "voices/!v/anikaRobot",
+          "checksum": "3ba724be6aab2fc1a084b25cdb16f469250eb9de4c6c0924a18788d0246fc32f",
+          "expectedSize": 512
+        },
+        {
+          "filename": "voices/!v/announcer",
+          "checksum": "4af6a6748c720cbbaac1e3dcac17bb3bc7a4c553499ec7ee69e054db51a50de3",
+          "expectedSize": 300
+        },
+        {
+          "filename": "voices/!v/antonio",
+          "checksum": "c90477080cd9aa9c384770c0ec18901d01e9851f1bc7d15526a2565a3b0c4da5",
+          "expectedSize": 381
+        },
+        {
+          "filename": "voices/!v/aunty",
+          "checksum": "0aede4d1ca614f32c348f3d728eab58322ccd016e8531234fdc3dfcf00e32bf1",
+          "expectedSize": 358
+        },
+        {
+          "filename": "voices/!v/belinda",
+          "checksum": "9bd791b7115820e25ada82b4911134d5116e8238b4fd4d214dfccf162576141c",
+          "expectedSize": 340
+        },
+        {
+          "filename": "voices/!v/benjamin",
+          "checksum": "3fa10b0d865fc751fd9c8ed1dabac4bb9b011ea2b95064d4d25a8c719f7785d8",
+          "expectedSize": 201
+        },
+        {
+          "filename": "voices/!v/boris",
+          "checksum": "f23d0a6ee2eeb7e3340506d61d422b691fb04f4e98977ea15c1e0ee5715846d5",
+          "expectedSize": 224
+        },
+        {
+          "filename": "voices/!v/caleb",
+          "checksum": "bcde145ec713eae6d3451a6f25dbbdc0b6756fd44e9e092b7aef89f2cff25be8",
+          "expectedSize": 57
+        },
+        {
+          "filename": "voices/!v/croak",
+          "checksum": "2906a2c6f7b7687db2f1c862164a9b80435d5afc3ba16d74619728bf8c3a8ca7",
+          "expectedSize": 93
+        },
+        {
+          "filename": "voices/!v/david",
+          "checksum": "50b5cb5f61a50f5ff5299dd22e5d645446746dbc36909595f6ae47bac0bda9c3",
+          "expectedSize": 112
+        },
+        {
+          "filename": "voices/!v/ed",
+          "checksum": "12ddb6355b40a2e39a3b6cef66a2bf4db15a25045769b330a9a3b344a608026d",
+          "expectedSize": 287
+        },
+        {
+          "filename": "voices/!v/edward",
+          "checksum": "b7a12bcb2af280c40e4be4280b675001024619ed529262dbf3e819db53b5b310",
+          "expectedSize": 151
+        },
+        {
+          "filename": "voices/!v/edward2",
+          "checksum": "59d166f7adfee4515a492993405e95432889050aaa47b6cd7eaeeb457fbca227",
+          "expectedSize": 152
+        },
+        {
+          "filename": "voices/!v/f1",
+          "checksum": "7cdef453c6b0391d50a02b8f35392e6f41249cea65df1021affd68a64917b85f",
+          "expectedSize": 324
+        },
+        {
+          "filename": "voices/!v/f2",
+          "checksum": "62b17f6c8f94add0310db032f5e463c13510c5ff83ef1f21e8894ccbf00b00e3",
+          "expectedSize": 357
+        },
+        {
+          "filename": "voices/!v/f3",
+          "checksum": "d0342ee8ceebe3047831774634d234e90281ec73ce2aed8dd0bdd915ccf500fc",
+          "expectedSize": 375
+        },
+        {
+          "filename": "voices/!v/f4",
+          "checksum": "ff9e2907a818920e3b976232c90eabaf270fff0de0b8a479af9a3633e9b7921f",
+          "expectedSize": 350
+        },
+        {
+          "filename": "voices/!v/f5",
+          "checksum": "6c76406d94540d59dee16de11520c37124a1f6dfc236981e483877075f0271b3",
+          "expectedSize": 432
+        },
+        {
+          "filename": "voices/!v/fast",
+          "checksum": "fa2f9c2918f351499037f6bffb25294d9b781b2785d9772a8ae3293c0c0037fe",
+          "expectedSize": 149
+        },
+        {
+          "filename": "voices/!v/grandma",
+          "checksum": "e033d57ba9b098971fdb995c13830f9c709206add081c586daaec323ff69a392",
+          "expectedSize": 263
+        },
+        {
+          "filename": "voices/!v/grandpa",
+          "checksum": "f25627887b95e8bccac5e6ce99cb97c6e34290ff0bf919febe64a9987138796d",
+          "expectedSize": 256
+        },
+        {
+          "filename": "voices/!v/gustave",
+          "checksum": "5fa89cf8625cd460b9309748eca019ab5b325a04dccbd29f1a9b2a00caa2e848",
+          "expectedSize": 253
+        },
+        {
+          "filename": "voices/!v/ian",
+          "checksum": "c0722c7954d3e6582e3f5b3f584140675ab060ac3c6cac5dd11a74592db5550a",
+          "expectedSize": 3168
+        },
+        {
+          "filename": "voices/!v/iven",
+          "checksum": "10ab9de8365ff7bf5a20621d08f1a2019d4bf5521f3c6f65447c9256057406c8",
+          "expectedSize": 261
+        },
+        {
+          "filename": "voices/!v/iven2",
+          "checksum": "f94830e5abe118dc4c0909630d66637ba2a7c94957279c31fd78e313374054cd",
+          "expectedSize": 279
+        },
+        {
+          "filename": "voices/!v/iven3",
+          "checksum": "27ccf2d2f7bb8f1ff28c705c39cf6ff575eb2458c39a518ed33741ad9c1af252",
+          "expectedSize": 262
+        },
+        {
+          "filename": "voices/!v/iven4",
+          "checksum": "11b3d46c01d4307eedcb60bd8dbcc73a40f3eb86c289176d6fd5bb418223b92f",
+          "expectedSize": 261
+        },
+        {
+          "filename": "voices/!v/john",
+          "checksum": "bfbcc1cec33ef0581fdeb4955fbcd0d824a5d4be5493d731e4a2ef7f8f3ba670",
+          "expectedSize": 3186
+        },
+        {
+          "filename": "voices/!v/kaukovalta",
+          "checksum": "b9f6016145835c3999bcd5872b8a53442729bd903591781ea3340746b3b4956b",
+          "expectedSize": 361
+        },
+        {
+          "filename": "voices/!v/klatt",
+          "checksum": "9abb6d05d0ca354831c570e14323dd4e821459b53166d96395875a48bacdbde2",
+          "expectedSize": 38
+        },
+        {
+          "filename": "voices/!v/klatt2",
+          "checksum": "afab662a55953532ff8d6f9c615b824ecec87f7aef6790a58c4ccbc4505a742a",
+          "expectedSize": 38
+        },
+        {
+          "filename": "voices/!v/klatt3",
+          "checksum": "f1c0cd147bd656f6c4830b3341c9694483438c43aea15c982dcc1945dbb334b9",
+          "expectedSize": 39
+        },
+        {
+          "filename": "voices/!v/klatt4",
+          "checksum": "3459c15aa8fa7d7218ac34388dfc0833c850ffc923013949308c2f643f3daad2",
+          "expectedSize": 39
+        },
+        {
+          "filename": "voices/!v/klatt5",
+          "checksum": "44397d8282454a2974078d25509caa470bceb093e484e727843a5147b4193e60",
+          "expectedSize": 39
+        },
+        {
+          "filename": "voices/!v/klatt6",
+          "checksum": "7d3930cd97ef7a0732f2e19f53f84e480f2d441d263390647b92bb0b4c645d05",
+          "expectedSize": 39
+        },
+        {
+          "filename": "voices/!v/linda",
+          "checksum": "df06b4c29f5953034e7815ea7062e356917266f8fab576f76c036045525c8e28",
+          "expectedSize": 350
+        },
+        {
+          "filename": "voices/!v/m1",
+          "checksum": "7f2de023bdfe18651d2d0453d2e7ff5e8ade9f094912a79247336ddc90fd7783",
+          "expectedSize": 335
+        },
+        {
+          "filename": "voices/!v/m2",
+          "checksum": "6eb925eb6691621a6de66c87596c6ed879c80a04215a9a8437dffc28fcfa14dd",
+          "expectedSize": 264
+        },
+        {
+          "filename": "voices/!v/m3",
+          "checksum": "7a4ac872387439814ddd65f5e1ff73017122975911df6b5dc62c5709e6fdb611",
+          "expectedSize": 300
+        },
+        {
+          "filename": "voices/!v/m4",
+          "checksum": "6bef82cea3538da1246b7a2c203206e90155cbb4af86faa8ef03366c3119ceee",
+          "expectedSize": 290
+        },
+        {
+          "filename": "voices/!v/m5",
+          "checksum": "08590ef7ce37630a6875d9cbe200dc473a9054b4184287808a4fd1c8e27dd02a",
+          "expectedSize": 262
+        },
+        {
+          "filename": "voices/!v/m6",
+          "checksum": "fc0e01af458a96d43f55878010d3abcbbda85e846922b25361a78d27c3a9ca00",
+          "expectedSize": 188
+        },
+        {
+          "filename": "voices/!v/m7",
+          "checksum": "bdfc54a3558ca98f9ca082479c5211034a824d8721db91804f9d77867db6fab3",
+          "expectedSize": 254
+        },
+        {
+          "filename": "voices/!v/m8",
+          "checksum": "060130540e2fae5f8acfb19bcd4ef3dc5dc8f8d2134c502bb57af277fd4cc491",
+          "expectedSize": 284
+        },
+        {
+          "filename": "voices/!v/marcelo",
+          "checksum": "3238a933a17c40c61cdd385c0e742bf54c42c008f4110d4b0353a6ae72a5d1a0",
+          "expectedSize": 251
+        },
+        {
+          "filename": "voices/!v/max",
+          "checksum": "c88f70a60a19e76a6774dfbd7664be639b9aa8aa587c680834c305ffa434aaaf",
+          "expectedSize": 225
+        },
+        {
+          "filename": "voices/!v/michel",
+          "checksum": "c0068ad9cb792dfb78aedbdff9c3cec68e5083736bae0c33bf19088186101087",
+          "expectedSize": 404
+        },
+        {
+          "filename": "voices/!v/miguel",
+          "checksum": "9c8c2bbe9fba6d1f06eb63ee67d98d7ebb8846b2bf13847a9b359c90ba9fa8fe",
+          "expectedSize": 382
+        },
+        {
+          "filename": "voices/!v/mike2",
+          "checksum": "274ebc5df252b3258e8996f1276137b2cf9d6e5006e1145a5172997284f1dba0",
+          "expectedSize": 188
+        },
+        {
+          "filename": "voices/!v/norbert",
+          "checksum": "35b9923e15caf36280542270282bd2392c6d86ef5db9a8be7be92ce2241a46cb",
+          "expectedSize": 3189
+        },
+        {
+          "filename": "voices/!v/pablo",
+          "checksum": "053a85c8a6d7e7a0f6432a3158fe73fa9accf06202e5d69c273d4e5bae8bafc8",
+          "expectedSize": 3142
+        },
+        {
+          "filename": "voices/!v/paul",
+          "checksum": "75fb8098bea28859513de6ce033092307382d6f20455e71b051193dfc0793d5e",
+          "expectedSize": 284
+        },
+        {
+          "filename": "voices/!v/pedro",
+          "checksum": "7429792ba833fa2446bec6db790068f5862b9ed099392002cd0e724ec6ab2a66",
+          "expectedSize": 352
+        },
+        {
+          "filename": "voices/!v/quincy",
+          "checksum": "e9945bee7b4f3240221866f497bf2511a886ed7702d8389688a03c2ea120caf0",
+          "expectedSize": 354
+        },
+        {
+          "filename": "voices/!v/rob",
+          "checksum": "fbfffcdb0afb2e3b70f886c02282feae22509d77fe6e7103daf907f7a356595d",
+          "expectedSize": 265
+        },
+        {
+          "filename": "voices/!v/robert",
+          "checksum": "72604f85afe5bb52a5ce7e3427b196e1e3e426a14a64e2d93b6617e248a46417",
+          "expectedSize": 274
+        },
+        {
+          "filename": "voices/!v/robosoft",
+          "checksum": "ce2820edd349f3fbc734bfe94095518f10ecbefdb304560109f37106f9f4d2fa",
+          "expectedSize": 451
+        },
+        {
+          "filename": "voices/!v/robosoft2",
+          "checksum": "249a44f4069b323640e6b532ff6a9bc30dca35f5f9a5f666b647937cbc58c685",
+          "expectedSize": 454
+        },
+        {
+          "filename": "voices/!v/robosoft3",
+          "checksum": "f8543efe18019c735ebad99d1cab4e06e0efd565ac269a895415dfebf342c383",
+          "expectedSize": 455
+        },
+        {
+          "filename": "voices/!v/robosoft4",
+          "checksum": "d5f728e0d0a9d27f604f34e835e059590fd01411fd467c91328b573c7597bb2d",
+          "expectedSize": 447
+        },
+        {
+          "filename": "voices/!v/robosoft5",
+          "checksum": "39da0efe1768e14eefe05a7019fab416795bbffb222fce23ad7f963991447f7b",
+          "expectedSize": 445
+        },
+        {
+          "filename": "voices/!v/robosoft6",
+          "checksum": "46426971d76c34266580133fad2c26ab829395a71c1713e6205d9d46b0871672",
+          "expectedSize": 287
+        },
+        {
+          "filename": "voices/!v/robosoft7",
+          "checksum": "e19c1045259d9cfb078c229d5d1372f7c5af971d0e2536a41b89c40ca3e23ede",
+          "expectedSize": 410
+        },
+        {
+          "filename": "voices/!v/robosoft8",
+          "checksum": "389230461647836c1b66c51939c0a493e3fbc81e2b7afc01c6f88b8f9da21e2b",
+          "expectedSize": 243
+        },
+        {
+          "filename": "voices/!v/sandro",
+          "checksum": "1b8c36a3ce35a27cbbabf4679df0264cd37f4c79b66aa1f4c310eb31b9c80490",
+          "expectedSize": 530
+        },
+        {
+          "filename": "voices/!v/shelby",
+          "checksum": "5e96565045bcdd5b42e7ad0eab2bbd670c67cf5c9e3f2ac6b50b30580fb92be4",
+          "expectedSize": 280
+        },
+        {
+          "filename": "voices/!v/steph",
+          "checksum": "78186aeddce4c449348f368046b2665375b1a492e948d739249b0c964f082861",
+          "expectedSize": 364
+        },
+        {
+          "filename": "voices/!v/steph2",
+          "checksum": "ca88414b48553fed1fd409389548a94ea90cf282d6340e3cb968c8538a2ac2ec",
+          "expectedSize": 367
+        },
+        {
+          "filename": "voices/!v/steph3",
+          "checksum": "a7d796211b6969ba92213f89de54b053890306af774424ee38fb02ace45e852d",
+          "expectedSize": 377
+        },
+        {
+          "filename": "voices/!v/travis",
+          "checksum": "7d5a34be05778ee850d97b0491a62db7683c058d660ff2afc71c08c87360f30d",
+          "expectedSize": 383
+        },
+        {
+          "filename": "voices/!v/victor",
+          "checksum": "a880a8083ac5eaadf94f71c63b51f34c1426d4bfe0a26f6761ddec5c6e9a5c76",
+          "expectedSize": 253
+        },
+        {
+          "filename": "voices/!v/whisper",
+          "checksum": "1e3534c843768898cea47a3f83b2fd91720c0775b438ea5c0134676940a66e96",
+          "expectedSize": 186
+        },
+        {
+          "filename": "voices/!v/whisperf",
+          "checksum": "7fea42b10114f1bfd2004181e6b0eb626997cca987893e23d24b5c616aac89d7",
+          "expectedSize": 392
+        },
+        {
+          "filename": "voices/!v/zac",
+          "checksum": "edaf508b2cfbfd6088a163dcc78d5f6a26850a7d39a5a0e5128b09526f56b6db",
+          "expectedSize": 275
+        },
+        {
+          "filename": "yue_dict",
+          "checksum": "1d26afa203034698772107abfff1b53acbee30434700a4d2b75dee98951588f8",
+          "expectedSize": 563571
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1494,7 +4089,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-en-ru/"
         }
       ],
-      "driveKey": "c009326acc2c3eeb5d557489370cf7b6de07d35335cb47e9a3e90909f9ac6c44"
+      "driveKey": "c009326acc2c3eeb5d557489370cf7b6de07d35335cb47e9a3e90909f9ac6c44",
+      "driveMetadata": [
+        {
+          "filename": "ggml-opus-en-ru.bin",
+          "checksum": "cae428e3cc4ad0fa292455eb275aaebff8eaf15ba0af0cd387e197927afbeb2f",
+          "expectedSize": 565986640
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1514,7 +4116,14 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-ru-en/"
         }
       ],
-      "driveKey": "12d0af03637c3902beff9bf6e2d854f103ef4745694587c9a67044ff6accb493"
+      "driveKey": "12d0af03637c3902beff9bf6e2d854f103ef4745694587c9a67044ff6accb493",
+      "driveMetadata": [
+        {
+          "filename": "ggml-opus-ru-en.bin",
+          "checksum": "4ceb27f5b973930afe9c825ca0e4a4fe55db1c1fea0e618151fd37f4cfbd7771",
+          "expectedSize": 565986640
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1534,7 +4143,14 @@
           "path": "qvac_models_compiled/ggml/marian/q0f16/ggml-opus-en-ru/"
         }
       ],
-      "driveKey": "65f1ae4ae53764d7f9ae2d1581819b4b3dd6011d30079f4445c5db74c40dd533"
+      "driveKey": "65f1ae4ae53764d7f9ae2d1581819b4b3dd6011d30079f4445c5db74c40dd533",
+      "driveMetadata": [
+        {
+          "filename": "ggml-opus-en-ru.bin",
+          "checksum": "2bac8d720cc518ac1fed2e9e843ca5219ff9403c653347d08918727dd4ef2099",
+          "expectedSize": 285850960
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1554,7 +4170,14 @@
           "path": "qvac_models_compiled/ggml/marian/q0f16/ggml-opus-ru-en/"
         }
       ],
-      "driveKey": "e42148ee7181f908ac2e6ba979d02de96faf330e4f7bad3bf766415657931d48"
+      "driveKey": "e42148ee7181f908ac2e6ba979d02de96faf330e4f7bad3bf766415657931d48",
+      "driveMetadata": [
+        {
+          "filename": "ggml-opus-ru-en.bin",
+          "checksum": "9aa879d7fa02be20c30224499cee5f8c7ccda6eeb24cd37996f6afc370207467",
+          "expectedSize": 285850960
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1574,7 +4197,14 @@
           "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-en-ru/"
         }
       ],
-      "driveKey": "1a09d02d589f030b0f63e545c1f20bc6b7f2f7bfda25fdb9dc9370a7f576d09d"
+      "driveKey": "1a09d02d589f030b0f63e545c1f20bc6b7f2f7bfda25fdb9dc9370a7f576d09d",
+      "driveMetadata": [
+        {
+          "filename": "ggml-opus-en-ru.bin",
+          "checksum": "575721b3216cbf0d549ee9ac5068f32f1e1d17e9243b72c2a1bb273d06e01de6",
+          "expectedSize": 84503440
+        }
+      ]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1594,7 +4224,14 @@
           "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-ru-en/"
         }
       ],
-      "driveKey": "47b2ec9c205a8624bb7460d9a7def7806cb368401d556454992c73d8fbffc423"
+      "driveKey": "47b2ec9c205a8624bb7460d9a7def7806cb368401d556454992c73d8fbffc423",
+      "driveMetadata": [
+        {
+          "filename": "ggml-opus-ru-en.bin",
+          "checksum": "5a57ba08fb4a0a5276690dbf62a93595924f7c4f888ab7402be337a6cefbf994",
+          "expectedSize": 84503440
+        }
+      ]
     }
   ]
 }
