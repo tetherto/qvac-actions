@@ -1390,51 +1390,11 @@
       },
       "models": [
         {
-          "source": "hf",
-          "path": "https://placeholder.mock"
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/dolphin-mixtral-2x7b-dop_q2/"
         }
       ],
       "driveKey": "0c555b5e3c729c76552db676ba661d471ffb43bce87c32fecbe1723e322455b4"
-    },
-    {
-      "addon": "@qvac/translation-nmtcpp",
-      "tags": {
-        "function": "translation",
-        "type": "opus",
-        "name": "marian",
-        "externalVersion": "",
-        "params": "",
-        "quantization": "q0f32",
-        "internalVersion": "1.0.0",
-        "other": "ru-en"
-      },
-      "models": [
-        {
-          "source": "hf",
-          "path": "https://placeholder.mock"
-        }
-      ],
-      "driveKey": "12d0af03637c3902beff9bf6e2d854f103ef4745694587c9a67044ff6accb493"
-    },
-    {
-      "addon": "@qvac/translation-nmtcpp",
-      "tags": {
-        "function": "translation",
-        "type": "opus",
-        "name": "marian",
-        "externalVersion": "",
-        "params": "",
-        "quantization": "q4_0",
-        "internalVersion": "1.0.0",
-        "other": "en-ru"
-      },
-      "models": [
-        {
-          "source": "hf",
-          "path": "https://placeholder.mock"
-        }
-      ],
-      "driveKey": "1a09d02d589f030b0f63e545c1f20bc6b7f2f7bfda25fdb9dc9370a7f576d09d"
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -1450,51 +1410,11 @@
       },
       "models": [
         {
-          "source": "hf",
-          "path": "https://placeholder.mock"
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/dolphin-mixtral-2x7b-dop_q4/"
         }
       ],
       "driveKey": "1c33ce9b4d8b211b5ceeca33731eb442fbb6fcc84ea8839bf2490acdadab4681"
-    },
-    {
-      "addon": "@qvac/translation-nmtcpp",
-      "tags": {
-        "function": "translation",
-        "type": "opus",
-        "name": "marian",
-        "externalVersion": "",
-        "params": "",
-        "quantization": "q4_0",
-        "internalVersion": "1.0.0",
-        "other": "ru-en"
-      },
-      "models": [
-        {
-          "source": "hf",
-          "path": "https://placeholder.mock"
-        }
-      ],
-      "driveKey": "47b2ec9c205a8624bb7460d9a7def7806cb368401d556454992c73d8fbffc423"
-    },
-    {
-      "addon": "@qvac/translation-nmtcpp",
-      "tags": {
-        "function": "translation",
-        "type": "opus",
-        "name": "marian",
-        "externalVersion": "",
-        "params": "",
-        "quantization": "q0f16",
-        "internalVersion": "1.0.0",
-        "other": "en-ru"
-      },
-      "models": [
-        {
-          "source": "hf",
-          "path": "https://placeholder.mock"
-        }
-      ],
-      "driveKey": "65f1ae4ae53764d7f9ae2d1581819b4b3dd6011d30079f4445c5db74c40dd533"
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1517,24 +1437,24 @@
       "driveKey": "ba453d763e9169baa80413fefc76cfa3866321ee4c51221dcb114d61703c829e"
     },
     {
-      "addon": "@qvac/translation-nmtcpp",
+      "addon": "@qvac/llm-llamacpp",
       "tags": {
-        "function": "translation",
-        "type": "opus",
-        "name": "marian",
-        "externalVersion": "",
-        "params": "",
-        "quantization": "q0f32",
+        "function": "generation",
+        "type": "moe",
+        "name": "mixtral",
+        "externalVersion": "v0.1",
+        "params": "8x7B",
+        "quantization": "Q4_K_M",
         "internalVersion": "1.0.0",
-        "other": "en-ru"
+        "other": "shard"
       },
       "models": [
         {
-          "source": "hf",
-          "path": "https://placeholder.mock"
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/Mixtral-8x7B-Instruct_q4/"
         }
       ],
-      "driveKey": "c009326acc2c3eeb5d557489370cf7b6de07d35335cb47e9a3e90909f9ac6c44"
+      "driveKey": "f43090c7ed389834f61841874660d8a965fd2e5c300dbd81c18024395fe0ea63"
     },
     {
       "addon": "@qvac/tts",
@@ -1550,11 +1470,71 @@
       },
       "models": [
         {
-          "source": "hf",
-          "path": "https://placeholder.mock"
+          "source": "aws",
+          "path": "tts-espeak/"
         }
       ],
       "driveKey": "c00ea8bc3d250968943ecab83e39b22828c2ad7995b159d8aedcb0f3fef81894"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "en-ru"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/ggml-opus-en-ru/"
+        }
+      ],
+      "driveKey": "c009326acc2c3eeb5d557489370cf7b6de07d35335cb47e9a3e90909f9ac6c44"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "ru-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/ggml-opus-ru-en/"
+        }
+      ],
+      "driveKey": "12d0af03637c3902beff9bf6e2d854f103ef4745694587c9a67044ff6accb493"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "en-ru"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f16/ggml-opus-en-ru/"
+        }
+      ],
+      "driveKey": "65f1ae4ae53764d7f9ae2d1581819b4b3dd6011d30079f4445c5db74c40dd533"
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1570,31 +1550,51 @@
       },
       "models": [
         {
-          "source": "hf",
-          "path": "https://placeholder.mock"
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f16/ggml-opus-ru-en/"
         }
       ],
       "driveKey": "e42148ee7181f908ac2e6ba979d02de96faf330e4f7bad3bf766415657931d48"
     },
     {
-      "addon": "@qvac/llm-llamacpp",
+      "addon": "@qvac/translation-nmtcpp",
       "tags": {
-        "function": "generation",
-        "type": "moe",
-        "name": "mixtral",
-        "externalVersion": "v0.1",
-        "params": "8x7B",
-        "quantization": "Q4_K_M",
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
         "internalVersion": "1.0.0",
-        "other": "shard"
+        "other": "en-ru"
       },
       "models": [
         {
-          "source": "hf",
-          "path": "https://placeholder.mock"
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-en-ru/"
         }
       ],
-      "driveKey": "f43090c7ed389834f61841874660d8a965fd2e5c300dbd81c18024395fe0ea63"
+      "driveKey": "1a09d02d589f030b0f63e545c1f20bc6b7f2f7bfda25fdb9dc9370a7f576d09d"
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "ru-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-ru-en/"
+        }
+      ],
+      "driveKey": "47b2ec9c205a8624bb7460d9a7def7806cb368401d556454992c73d8fbffc423"
     }
   ]
 }
