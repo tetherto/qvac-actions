@@ -19,12 +19,20 @@ const ModelSchema = z.object({
   path: z.url().or(z.string().min(1))
 })
 
+// Schema for drive metadata (checksum information)
+const DriveMetadataSchema = z.object({
+  filename: z.string(),
+  checksum: z.string(),
+  expectedSize: z.number()
+})
+
 // Schema for individual drive configuration
 const DriveSchema = z.object({
   addon: z.string().regex(/^@qvac\/.+/, 'Addon must start with @qvac/'),
   tags: ModelTagsSchema,
   models: z.array(ModelSchema).min(1, 'At least one model must be configured'),
-  driveKey: z.string().optional()
+  driveKey: z.string().optional(),
+  driveMetadata: z.array(DriveMetadataSchema).optional()
 })
 
 // Schema for the master configuration

@@ -4,6 +4,104 @@ const Hyperdrive = require('hyperdrive')
 const Hyperswarm = require('hyperswarm')
 const Corestore = require('corestore')
 const getTmpDir = require('test-tmp')
+const fs = require('fs')
+const path = require('path')
+const { calculateDirectoryChecksums } = require('../utils')
+
+async function downloadAndCalculateChecksums (drive, driveKey, options = {}) {
+  const { downloadPath = null } = options
+
+  console.log('\n🔽 Downloading all files from drive...')
+
+  // Create a subdirectory for this specific drive
+  const baseDir = downloadPath || await getTmpDir()
+  const driveSubdir = `drive-${driveKey.substring(0, 8)}`
+  const tmpDir = path.join(baseDir, driveSubdir)
+
+  console.log(`   Download directory: ${tmpDir}`)
+
+  // Create directory if it doesn't exist
+  await fs.promises.mkdir(tmpDir, { recursive: true })
+
+  // Download all files from drive
+  let downloadedCount = 0
+  try {
+    for await (const file of drive.list('/', { recursive: true })) {
+      if (file.value) { // Only process files, not directories
+        const filePath = file.key
+        const fileName = filePath.startsWith('/') ? filePath.slice(1) : filePath
+        const localPath = path.join(tmpDir, fileName)
+
+        // Create subdirectories if needed
+        const dir = path.dirname(localPath)
+        await fs.promises.mkdir(dir, { recursive: true })
+
+        // Download file
+        console.log(`   Downloading: ${fileName}`)
+
+        // Get file size from file.value
+        const fileSize = file.value?.blob?.byteLength || file.value?.size || 0
+        const MAX_BUFFER_SIZE = 4 * 1024 * 1024 * 1024 - 1 // 4GB - 1 byte
+
+        if (fileSize > MAX_BUFFER_SIZE) {
+          console.log(`   ⚠️  Large file detected (${(fileSize / 1024 / 1024 / 1024).toFixed(2)} GB), using streaming...`)
+
+          // Use streaming for large files
+          const writeStream = fs.createWriteStream(localPath)
+          const readStream = drive.createReadStream(filePath)
+
+          await new Promise((resolve, reject) => {
+            readStream.pipe(writeStream)
+
+            writeStream.on('finish', () => {
+              console.log('   ✅ Streamed download complete')
+              resolve()
+            })
+
+            writeStream.on('error', reject)
+            readStream.on('error', reject)
+          })
+        } else {
+          // Use buffer method for smaller files
+          const fileBuffer = await drive.get(filePath)
+          if (fileBuffer) {
+            await fs.promises.writeFile(localPath, fileBuffer)
+          }
+        }
+
+        downloadedCount++
+      }
+    }
+
+    console.log(`   ✅ Downloaded ${downloadedCount} files`)
+
+    // Calculate checksums for all downloaded files
+    console.log('\n📊 Calculating checksums...')
+    const checksums = await calculateDirectoryChecksums(tmpDir, ['inference.config.json', '.s3-fingerprint'])
+
+    console.log('\n📋 File Checksums:')
+    checksums.forEach((file, index) => {
+      console.log(`   ${index + 1}. ${file.filename}`)
+      console.log(`      Checksum: ${file.checksum}`)
+      console.log(`      Size: ${file.expectedSize} bytes`)
+    })
+
+    return {
+      success: true,
+      downloadPath: tmpDir,
+      downloadedCount,
+      checksums
+    }
+  } catch (error) {
+    console.log(`   ❌ Error downloading files: ${error.message}`)
+    return {
+      success: false,
+      error: error.message,
+      downloadPath: tmpDir,
+      downloadedCount
+    }
+  }
+}
 
 async function checkInferenceConfig (drive, configPath = '/inference.config.json') {
   console.log(`\n🔍 Checking for ${configPath}...`)
@@ -108,6 +206,14 @@ async function checkDriveKey (driveKey, options = {}) {
     // Check for config file using the helper function
     const inferenceConfig = await checkInferenceConfig(driveToCheck, options.configFile || '/inference.config.json')
 
+    // Download and calculate checksums if requested
+    let downloadResult = null
+    if (options.download) {
+      downloadResult = await downloadAndCalculateChecksums(driveToCheck, driveKey, {
+        downloadPath: options.downloadPath
+      })
+    }
+
     console.log('\n📁 Listing files from drive...')
 
     let fileCount = 0
@@ -152,7 +258,8 @@ async function checkDriveKey (driveKey, options = {}) {
         discoveryKey: client.discoveryKey.toString('hex'),
         writable: client.writable,
         inferenceConfigFound,
-        inferenceConfig
+        inferenceConfig,
+        downloadResult
       }
     } catch (listError) {
       console.log(`❌ Error listing files: ${listError.message}`)
@@ -185,6 +292,7 @@ async function checkMultipleDriveKeys (driveKeys, options = {}) {
   console.log(`🚀 Checking ${driveKeys.length} drive keys...\n`)
 
   const results = []
+  const checksumResults = []
 
   for (let i = 0; i < driveKeys.length; i++) {
     const driveInfo = typeof driveKeys[i] === 'string'
@@ -200,10 +308,28 @@ async function checkMultipleDriveKeys (driveKeys, options = {}) {
 
     results.push(result)
 
+    // If download was requested and successful, collect checksum data
+    if (options.download && result.downloadResult && result.downloadResult.checksums) {
+      checksumResults.push({
+        driveKey: driveInfo.key,
+        driveMetadata: result.downloadResult.checksums
+      })
+    }
+
     // Wait between checks to avoid overwhelming the network
     if (i < driveKeys.length - 1) {
       await new Promise(resolve => setTimeout(resolve, 1000))
     }
+  }
+
+  // Save checksums to JSON file if download was requested
+  if (options.download && checksumResults.length > 0) {
+    const outputPath = path.join(options.downloadPath || '.', 'drive-checksums.json')
+    await fs.promises.writeFile(
+      outputPath,
+      JSON.stringify(checksumResults, null, 2)
+    )
+    console.log(`\n💾 Checksums saved to: ${outputPath}`)
   }
 
   // Print summary
@@ -222,7 +348,7 @@ async function checkMultipleDriveKeys (driveKeys, options = {}) {
     })
   }
 
-  return results
+  return { results, checksumResults }
 }
 
 // Main function for CLI usage
@@ -243,12 +369,16 @@ Options:
   --max-files <number>   Maximum files to list (default: 100)
   --no-recursive         Don't list files recursively
   --config-file <path>   Check for specific config file (default: /inference.config.json)
+  --download             Download all files and calculate checksums
+  --download-path <path> Directory to download files to (uses temp dir if not specified)
 
 Examples:
   node driveKeyChecker.js 7504626aaa534ac55d91b4b3067504774ae1457b03ddfbd86d817dd8cfbca8c8
   node driveKeyChecker.js key1 key2 key3
   node driveKeyChecker.js 7504626aaa534ac55d91b4b3067504774ae1457b03ddfbd86d817dd8cfbca8c8 --version 5
   node driveKeyChecker.js 7504626aaa534ac55d91b4b3067504774ae1457b03ddfbd86d817dd8cfbca8c8 --config-file /model.config.json
+  node driveKeyChecker.js 7504626aaa534ac55d91b4b3067504774ae1457b03ddfbd86d817dd8cfbca8c8 --download
+  node driveKeyChecker.js 7504626aaa534ac55d91b4b3067504774ae1457b03ddfbd86d817dd8cfbca8c8 --download --download-path ./downloads
     `)
     process.exit(1)
   }
@@ -259,7 +389,9 @@ Examples:
     timeout: 10000,
     maxFiles: 100,
     recursive: true,
-    configFile: '/inference.config.json'
+    configFile: '/inference.config.json',
+    download: false,
+    downloadPath: null
   }
 
   for (let i = 0; i < args.length; i++) {
@@ -275,13 +407,31 @@ Examples:
       options.recursive = false
     } else if (arg === '--config-file') {
       options.configFile = args[++i]
+    } else if (arg === '--download') {
+      options.download = true
+    } else if (arg === '--download-path') {
+      options.downloadPath = args[++i]
     } else if (!arg.startsWith('--')) {
       driveKeys.push(arg)
     }
   }
 
   if (driveKeys.length === 1) {
-    await checkDriveKey(driveKeys[0], options)
+    const result = await checkDriveKey(driveKeys[0], options)
+
+    // Save checksums to JSON file if download was requested
+    if (options.download && result.downloadResult && result.downloadResult.checksums) {
+      const checksumResults = [{
+        driveKey: driveKeys[0],
+        driveMetadata: result.downloadResult.checksums
+      }]
+      const outputPath = path.join(options.downloadPath || '.', 'drive-checksums.json')
+      await fs.promises.writeFile(
+        outputPath,
+        JSON.stringify(checksumResults, null, 2)
+      )
+      console.log(`\n💾 Checksums saved to: ${outputPath}`)
+    }
   } else {
     await checkMultipleDriveKeys(driveKeys, options)
   }
@@ -291,7 +441,8 @@ Examples:
 module.exports = {
   checkDriveKey,
   checkMultipleDriveKeys,
-  checkInferenceConfig
+  checkInferenceConfig,
+  downloadAndCalculateChecksums
 }
 
 // Run main if this script is executed directly
