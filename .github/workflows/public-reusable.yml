@@ -37,17 +37,17 @@ jobs:
       - name: Run lint and unit tests
         uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@production-workflows-tag
         with:
-          secret-token: ${{ secrets.GITHUB_TOKEN }}
+          gpr-token: ${{ secrets.GITHUB_TOKEN }}
+          npm-token: ${{ secrets.NPM_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
-          registry-type: gpr
 
       - name: Run integration tests if labeled
         if: contains(github.event.pull_request.labels.*.name, 'verify')
         uses: tetherto/qvac-devops/.github/actions/run-lint-and-integration-tests@production-workflows-tag
         with:
-          secret-token: ${{ secrets.GITHUB_TOKEN }}
+          gpr-token: ${{ secrets.GITHUB_TOKEN }}
+          npm-token: ${{ secrets.NPM_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
-          registry-type: gpr
 
       - name: Check for disallowed dependencies
         run: |
