@@ -24,7 +24,7 @@ runs:
       shell: bash
       run: |
         echo "@tetherto:registry=https://npm.pkg.github.com" > .npmrc
-        echo "//npm.pkg.github.com/:_authToken=${{ inputs.pat-token }}" >> .npmrc
+        echo "//npm.pkg.github.com/:_authToken=${{ inputs.secret-token }}" >> .npmrc
         git config --global url."https://${{ inputs.pat-token }}:@github.com/".insteadOf "https://github.com/"
         # Clean slate .npmrc in workspace
         : > .npmrc
@@ -34,7 +34,7 @@ runs:
 
         # @qvac/* from npmjs.org
         echo "@qvac:registry=https://registry.npmjs.org" >> .npmrc
-        echo "//registry.npmjs.org/:_authToken=${{ inputs.npm-token }}" >> .npmrc
+        echo "//registry.npmjs.org/:_authToken=${{ inputs.secret-token }}" >> .npmrc
 
         # @tetherto/* from GitHub Packages
         echo "@tetherto:registry=https://npm.pkg.github.com" >> .npmrc
