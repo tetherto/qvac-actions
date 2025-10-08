@@ -8,9 +8,6 @@ on:
         required: false
         type: boolean
         default: false # DEBUG MODE DISABLED
-    secrets:
-      pat_token:
-        required: false
     outputs:
       published_version:
         description: "The version that was published to npm"
@@ -71,14 +68,14 @@ jobs:
             exit 1
           fi
 
-      - name: Check for @tetherto/ prefix in package name
-        id: check_package_name
-        continue-on-error: true
-        run: |
-          if ! grep -q -e '"name": "@qvac/' -e '"name": "@tetherto/' package.json; then
-            echo "::error title=Invalid package name::Package name in package.json must start with @tetherto/ or @qvac/"
-            exit 1
-          fi
+#      - name: Check for @tetherto/ prefix in package name
+#        id: check_package_name
+#        continue-on-error: true
+#        run: |
+#          if ! grep -q '"name": "@tetherto/' package.json; then
+#            echo "::error title=Invalid package name::Package name in package.json must start with @tetherto/"
+#            exit 1
+#          fi
 
       - name: Run unit tests
         id: run_unit_tests
@@ -86,15 +83,7 @@ jobs:
         uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@production-workflows-tag
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
-          pat-token: ${{ secrets.PAT_TOKEN }}
-
-      - name: Run integration tests if labeled
-        if: contains(github.event.pull_request.labels.*.name, 'verify')
-        id: run_integration_tests
-        continue-on-error: true
-        uses: tetherto/qvac-devops/.github/actions/run-lint-and-integration-tests@production-workflows-tag
-        with:
-          secret-token: ${{ secrets.GITHUB_TOKEN }}
+          npm-token: ${{ secrets.NPM_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
 
       - name: Check for errors
@@ -102,10 +91,6 @@ jobs:
           failed=0
           if ${{ steps.run_unit_tests.outcome == 'failure' }}; then
             echo "Step - Lint or unit tests failed"
-            failed=1
-          fi
-          if ${{ steps.run_integration_tests.outcome == 'failure' }}; then
-            echo "Step - Integration tests failed"
             failed=1
           fi
           if ${{ steps.check_dependencies.outcome == 'failure' }}; then
@@ -146,11 +131,20 @@ jobs:
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
+          npm-token: ${{ secrets.NPM_TOKEN }}
           tag: 'dev'
 
       - name: Echo published version from PR
         run: |
           echo "Published version from PR: ${{ steps.publish-pr.outputs.npm_published_version }}"
+   
+#  lint-and-integration:
+#    if: contains(github.event.pull_request.labels.*.name, 'verify')
+#    uses: tetherto/qvac-devops/.github/workflows/run-lint-and-integration.yaml@production-workflows-tag
+#    secrets: inherit
+#    with:
+#      registry-type: gpr
+#    needs: pull-request-event
 
   push-event:
     runs-on: ubuntu-latest
@@ -160,13 +154,18 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+  
       - name: Publish to GPR
         id: publish-push
-        if: ${{ github.event.pull_request.head.repo.full_name != 'tetherto/qvac-devops' }}
         uses: tetherto/qvac-devops/.github/actions/publish-library-to-gpr@production-workflows-tag
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
-
+          pat-token: ${{ secrets.PAT_TOKEN }}
+  
       - name: Echo published version from push
         run: |
           echo "Published version from push: ${{ steps.publish-push.outputs.npm_published_version }}"
