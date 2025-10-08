@@ -75,8 +75,8 @@ jobs:
         id: check_package_name
         continue-on-error: true
         run: |
-          if ! grep -q '"name": "@tetherto/' package.json; then
-            echo "::error title=Invalid package name::Package name in package.json must start with @tetherto/"
+          if ! grep -q -e '"name": "@qvac/' -e '"name": "@tetherto/' package.json; then
+            echo "::error title=Invalid package name::Package name in package.json must start with @tetherto/ or @qvac/"
             exit 1
           fi
 
