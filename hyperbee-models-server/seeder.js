@@ -13,7 +13,7 @@ const goodbye = require('graceful-goodbye')
 
 const checkProgressInterval = 10_000
 
-async function main() {
+async function main () {
   try {
     // Get keys file from command line or use default
     const args = process.argv.slice(2)
