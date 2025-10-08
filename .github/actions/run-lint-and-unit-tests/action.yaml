@@ -21,29 +21,19 @@ runs:
         node-version: "18.x"
     - name: Setup npm authentication for GPR
       if: inputs.registry-type == 'gpr'
-      shell: bash
       run: |
         echo "@tetherto:registry=https://npm.pkg.github.com" > .npmrc
         echo "//npm.pkg.github.com/:_authToken=${{ inputs.secret-token }}" >> .npmrc
         git config --global url."https://${{ inputs.pat-token }}:@github.com/".insteadOf "https://github.com/"
-        # Clean slate .npmrc in workspace
-        : > .npmrc
-
-        # Default public registry
-        echo "registry=https://registry.npmjs.org/" >> .npmrc
-
-        # @qvac/* from npmjs.org
-        echo "@qvac:registry=https://registry.npmjs.org" >> .npmrc
+      shell: bash
+    - name: Setup npm authentication for npmjs.org
+      if: inputs.registry-type == 'npm'
+      run: |
+        echo "@qvac:registry=https://registry.npmjs.org" > .npmrc
         echo "//registry.npmjs.org/:_authToken=${{ inputs.secret-token }}" >> .npmrc
-
-        # @tetherto/* from GitHub Packages
-        echo "@tetherto:registry=https://npm.pkg.github.com" >> .npmrc
-        echo "//npm.pkg.github.com/:_authToken=${{ inputs.gpr-token }}" >> .npmrc
-
-        # If you use git+https deps, rewrite to include a PAT for private repos
-        if [ -n "${{ inputs.pat-token }}" ]; then
-          git config --global url."https://${{ inputs.pat-token }}:@github.com/".insteadOf "https://github.com/"
-        fi
+        git config --global url."https://${{ inputs.pat-token }}:@github.com/".insteadOf "https://github.com/"
+      shell: bash
+     
     - name: Install dependencies
       shell: bash
       run: npm install
