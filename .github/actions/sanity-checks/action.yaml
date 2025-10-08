@@ -60,9 +60,10 @@ runs:
       id: check_dependencies
       continue-on-error: true
       run: |
-        deps=$(jq -r '.dependencies, .devDependencies // {} | to_entries[] | .value' package.json)
+        deps=$(jq -r '[.dependencies // {}, .devDependencies // {}] | add | to_entries[] | .value' package.json)
         if echo "$deps" | grep -Eq '^(git\+https:\/\/github.com|[0-9]+\.[0-9]+\.[0-9]+-(dev|tmp)[^"]*)$'; then
           echo "::error title=Disallowed dependency detected::Do not use git URLs or dev/tmp versions in dependencies"
+          exit 1
         fi
 
     - name: Run lint & unit tests
