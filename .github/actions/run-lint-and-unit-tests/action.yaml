@@ -21,12 +21,11 @@ runs:
         node-version: "18.x"
     - name: Setup npm authentication for GPR
       if: inputs.registry-type == 'gpr'
+      shell: bash
       run: |
         echo "@tetherto:registry=https://npm.pkg.github.com" > .npmrc
         echo "//npm.pkg.github.com/:_authToken=${{ inputs.pat-token }}" >> .npmrc
         git config --global url."https://${{ inputs.pat-token }}:@github.com/".insteadOf "https://github.com/"
-      shell: bash
-      run: |
         # Clean slate .npmrc in workspace
         : > .npmrc
 
