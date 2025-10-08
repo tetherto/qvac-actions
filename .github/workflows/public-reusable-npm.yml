@@ -59,11 +59,24 @@ jobs:
 
       - name: Check for @qvac/ prefix in package name
         run: |
-          name=$(jq -r '.name' package.json)
-          if [[ $name != @qvac/* ]]; then
-            echo "::error title=Invalid package name::Package name in package.json must start with @qvac/"
+          if [ ! -f package.json ]; then
+            echo "::error title=Missing package.json::package.json not found in $(pwd)"
             exit 1
           fi
+      
+          name=$(jq -r '.name // empty' package.json)
+      
+          if [[ -z "$name" ]]; then
+            echo "::error title=Missing name::The package.json file has no \"name\" field"
+            exit 1
+          fi
+      
+          if [[ $name != @qvac/* ]]; then
+            echo "::error title=Invalid package name::Package name ($name) must start with @qvac/"
+            exit 1
+          fi
+      
+          echo "✅ Package name check passed: $name"
 
       - name: Call Publish NPM Action
         if: ${{ github.event.pull_request.head.repo.full_name != 'tetherto/qvac-devops' }}
