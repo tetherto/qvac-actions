@@ -10,6 +10,30 @@ const Hyperswarm = require('hyperswarm')
 const { getCorestoreInstance } = require('./store')
 
 /**
+ * Copy license files to the model directory
+ * @param {string[]} licenses - Array of license names
+ * @param {string} modelDirectory - Target model directory
+ */
+async function copyLicenseFiles (licenses, modelDirectory) {
+  if (!licenses || licenses.length === 0) {
+    throw new Error('At least one license must be specified for the model')
+  }
+
+  for (const license of licenses) {
+    const licenseFile = path.join(__dirname, 'license', license, 'LICENSE.txt')
+    const destFile = path.join(modelDirectory, `LICENSE-${license}.txt`)
+
+    try {
+      await fs.promises.copyFile(licenseFile, destFile)
+      logger.info(`Copied license file: ${license} -> ${destFile}`)
+    } catch (error) {
+      logger.error(`Failed to copy license file ${license}: ${error.message}`)
+      throw error
+    }
+  }
+}
+
+/**
  * Get the version of a Hyperdrive without downloading its contents.
  * @param {string} modelKey - Model key for namespacing
  * @param {string} driveKey - The hex-encoded drive key
@@ -78,5 +102,6 @@ async function loadDriveFolder (drive, folderPath) {
 
 module.exports = {
   syncDrive,
-  getDriveVersion
+  getDriveVersion,
+  copyLicenseFiles
 }

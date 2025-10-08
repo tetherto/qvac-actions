@@ -37,7 +37,8 @@
           "checksum": "9cfebb63cd7e6b6d1755ea8ef001fcdadfa17831da1db96eafe3fc554913d5e1",
           "expectedSize": 2401075552
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-llamacpp",
@@ -64,7 +65,8 @@
           "checksum": "15238732917ba7151857dbce6f8c547a0d1bbd77663508522ae2d6a788cee3a5",
           "expectedSize": 1517617504
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/transcription-whispercpp",
@@ -91,7 +93,8 @@
           "checksum": "29940d98d42b91fbd05ce489f3ecf7c72f0a42f027e4875919a28fb4c04ea2cf",
           "expectedSize": 885098
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/transcription-whispercpp",
@@ -118,7 +121,8 @@
           "checksum": "be07e048e1e599ad46341c8d2a135645097a538221678b7acdd1b1919c6e1b21",
           "expectedSize": 77691713
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/transcription-whispercpp",
@@ -150,7 +154,8 @@
           "checksum": "67a179f608ea6114bd3fdb9060e762b588a3fb3bd00c4387971be4d177958067",
           "expectedSize": 264477561
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/transcription-whispercpp",
@@ -182,7 +187,8 @@
           "checksum": "29940d98d42b91fbd05ce489f3ecf7c72f0a42f027e4875919a28fb4c04ea2cf",
           "expectedSize": 885098
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/transcription-whispercpp",
@@ -214,7 +220,8 @@
           "checksum": "be07e048e1e599ad46341c8d2a135645097a538221678b7acdd1b1919c6e1b21",
           "expectedSize": 77691713
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -241,34 +248,8 @@
           "checksum": "7485fe6f11af29433bc51cab58009521f205840f5b4ae3a32fa7f92e8534fdf5",
           "expectedSize": 2497280256
         }
-      ]
-    },
-    {
-      "addon": "@qvac/llm-llamacpp",
-      "tags": {
-        "function": "generation",
-        "type": "instruct",
-        "name": "qwen3",
-        "externalVersion": "",
-        "params": "0.6B",
-        "quantization": "",
-        "internalVersion": "1.0.0",
-        "other": ""
-      },
-      "models": [
-        {
-          "source": "hf",
-          "path": "https://huggingface.co/Aldaris/Qwen3-4B-Q4_K_M-GGUF/blob/main/qwen3-4b-q4_k_m.gguf"
-        }
       ],
-      "driveKey": "d331ed49c444f90b3b2a70aa5b820752685142bf2d769a0592ed666140477578",
-      "driveMetadata": [
-        {
-          "filename": "Qwen3-0.6B-UD-IQ1_S.gguf",
-          "checksum": "fcb165efedaee2cfbdefe02bd3bbf22c80cfdb728915fbbe54fa809a8556710a",
-          "expectedSize": 214643392
-        }
-      ]
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -300,7 +281,8 @@
           "checksum": "cffba7312074cb0491f99967f715ed0140281a7bdc946140460cef07fdff5ab2",
           "expectedSize": 4130402848
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -327,7 +309,8 @@
           "checksum": "66bfbb2d48bdb77cd56bd03ef820deff3c4a74b1a09de3b917ae13e72c1a70c2",
           "expectedSize": 773025824
         }
-      ]
+      ],
+      "license": ["Llama-3.2"]
     },
     {
       "addon": "@qvac/embed-llamacpp",
@@ -350,26 +333,12 @@
       "driveKey": "d1896d9259692818df95bd2480e90c2d057688a4f7c9b1ae13ac7f5ee379d03e",
       "driveMetadata": [
         {
-          "filename": ".cache/huggingface/.gitignore",
-          "checksum": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
-          "expectedSize": 1
-        },
-        {
-          "filename": ".cache/huggingface/download/gte-large_fp16.gguf.lock",
-          "checksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-          "expectedSize": 0
-        },
-        {
-          "filename": ".cache/huggingface/download/gte-large_fp16.gguf.metadata",
-          "checksum": "16458e461d8ddf7db18c2d7295a6cec89e280d2143c34fd0623b01c86ad3fccf",
-          "expectedSize": 124
-        },
-        {
           "filename": "gte-large_fp16.gguf",
           "checksum": "939f1fb3fcc70f2a250a7e7ad7c2fbdc1397d46f9a8055d053e451829c5293fb",
           "expectedSize": 669603712
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -396,7 +365,8 @@
           "checksum": "238044a3ed67f45b82c053a9c5131e1eed51c8aec112d19c42f7ae5948eefd11",
           "expectedSize": 339071793
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -423,7 +393,8 @@
           "checksum": "169d2f4ec0acb9536e5f4faeab041a5ae16d4221f3bcbc7b0b311791a4d4b658",
           "expectedSize": 673543993
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -450,7 +421,8 @@
           "checksum": "e4201dc20b7a07c75880710e47b5aade3deb126c3083b70725a23b3438b8fe41",
           "expectedSize": 538147694
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -477,7 +449,8 @@
           "checksum": "b09947d26e44362ce4b3f2839fe5cef385ac693cf8c2ae9b2924f34798c2e7d1",
           "expectedSize": 580779709
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -504,7 +477,8 @@
           "checksum": "3ef2a2a27cc80eab0ae3e4a79e84e0c3ac3e08a204bddefb16a2e8438ddd378d",
           "expectedSize": 538147694
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -531,7 +505,8 @@
           "checksum": "f7676dbfa4aa852e134bd475cc1279940403a5a5900f29d5148500c92fd27ba4",
           "expectedSize": 558029726
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -558,7 +533,8 @@
           "checksum": "378e0cd84cde582f7d55add11bd7ccb0ea7d40157fe9343ec0231c1452c37d07",
           "expectedSize": 549186246
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -585,7 +561,8 @@
           "checksum": "2c6462933a8383bdab9241fc7c8be114c196513431e4bd4e6444acdfa8c416e0",
           "expectedSize": 558029726
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -612,7 +589,8 @@
           "checksum": "5e0f93bae07363ee5aa8beda757fb67895999b2c53d2eb8a2d4036d6898db759",
           "expectedSize": 580779709
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -639,7 +617,8 @@
           "checksum": "6ceb808e4799454c6192c5c399cf849fcbef74916d35d9f09484b290518beb15",
           "expectedSize": 544020447
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -666,7 +645,8 @@
           "checksum": "31f603929f49e9a7ba3537f44e2d2341fbffdf0bffc93301fed161ce9f0bc460",
           "expectedSize": 549186246
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -693,7 +673,8 @@
           "checksum": "e6357877c81c2b68ca418dbcae8921e17568925d162907d170d090d52230f690",
           "expectedSize": 675665101
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -720,7 +701,8 @@
           "checksum": "5c6e39598b123d5867feb7458c8ea809529af43018c082c2eb8fb6e4c8bf80e7",
           "expectedSize": 544020447
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -756,7 +738,8 @@
           "checksum": "4e6c816cd33f7298d07cb780c136a396631e50e62f6501660271f8c6e302e565",
           "expectedSize": 1538031328
         }
-      ]
+      ],
+      "license": ["Qwen"]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -783,7 +766,8 @@
           "checksum": "c876f159707a4e4f70e045106c69db15bfc935a4981706fd4f65c6e7ea1e81c5",
           "expectedSize": 1056782912
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -810,7 +794,8 @@
           "checksum": "5b682b60ad096a1f1cf3ddbbf31fdca684e8fcc9844febe47be052f5c856cf50",
           "expectedSize": 4098852842
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -837,7 +822,8 @@
           "checksum": "b0099dec22cdbffdf4e9099edf980cfb0e39f0944a92e20e21d237977fe189af",
           "expectedSize": 4469361571
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -864,7 +850,8 @@
           "checksum": "b23a868c6784f0f4341939c90689096080a8ef82c2ab7f508bf559742b5db686",
           "expectedSize": 4843981643
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -891,7 +878,8 @@
           "checksum": "cea23bf517bc102d8f9c89498ddfb9fb51a207d38066767d9b5e5ff19a02dc17",
           "expectedSize": 854293537
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -918,7 +906,8 @@
           "checksum": "1df68723af11769b718fbf8c7f95b4f51c90e0fd3b0d4469fa44d55f30573955",
           "expectedSize": 853948520
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -945,7 +934,8 @@
           "checksum": "c8038e1ffb4af4cd9176ad1a692b6c4bb9f3c2303f0dbdb35ee508c57eceee15",
           "expectedSize": 1295039467
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -981,7 +971,8 @@
           "checksum": "921dc7e259f308e5b027111fa185efcbf33db13f6e35749ddf7f5cdb60ef520b",
           "expectedSize": 108785184
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -1033,7 +1024,8 @@
           "checksum": "188c42777d3b107623b5e8f1c3601fee86bb6ba8f9dfa0a576a2b11ca4dc9838",
           "expectedSize": 10685
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -1085,7 +1077,8 @@
           "checksum": "188c42777d3b107623b5e8f1c3601fee86bb6ba8f9dfa0a576a2b11ca4dc9838",
           "expectedSize": 10685
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/embed-llamacpp",
@@ -1137,7 +1130,8 @@
           "checksum": "d2142d8ae97857656b227fef6733ea46e82da3b7546cd944dec88ba280aadfeb",
           "expectedSize": 8966
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/embed-llamacpp",
@@ -1189,7 +1183,8 @@
           "checksum": "d2142d8ae97857656b227fef6733ea46e82da3b7546cd944dec88ba280aadfeb",
           "expectedSize": 8966
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -1241,7 +1236,8 @@
           "checksum": "c31e9d6508235676a82dfef6a3da40213c178467a43d70173d428243e01538fc",
           "expectedSize": 3213
         }
-      ]
+      ],
+      "license": ["Llama-3.2"]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -1261,7 +1257,8 @@
           "path": "qvac_models_compiled/ggml/Qwen3-4B/"
         }
       ],
-      "driveKey": "34dc044589d371bfd5fd25feda069a3919180dceadbdf9d32aa80b6745a44a2c"
+      "driveKey": "34dc044589d371bfd5fd25feda069a3919180dceadbdf9d32aa80b6745a44a2c",
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-llamacpp",
@@ -1303,7 +1300,8 @@
           "checksum": "70a5b9f52d53b14d8c00240b2ca9752c0e9578b5faaedc6911b7ba21c273c858",
           "expectedSize": 4833
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-llamacpp",
@@ -1350,7 +1348,8 @@
           "checksum": "70a5b9f52d53b14d8c00240b2ca9752c0e9578b5faaedc6911b7ba21c273c858",
           "expectedSize": 4833
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -1370,49 +1369,8 @@
           "path": "qvac_models_compiled/ggml/Qwen3-1.7B/"
         }
       ],
-      "driveKey": "0a8f8c5230e396458f436be995f1e367bae1783aa80828de41626681078c1a26"
-    },
-    {
-      "addon": "@qvac/llm-llamacpp",
-      "tags": {
-        "function": "generation",
-        "type": "instruct",
-        "name": "qwen",
-        "externalVersion": "3",
-        "params": "0.6B",
-        "quantization": "q4",
-        "internalVersion": "1.0.0",
-        "other": "shard"
-      },
-      "models": [
-        {
-          "source": "aws",
-          "path": "qvac_models_compiled/ggml/Qwen3-0.6B/"
-        }
-      ],
-      "driveKey": "b2b6e7818ff983f504a84995ea6b422b9ee35ad270b6b59ade689a748ffcbaf8",
-      "driveMetadata": [
-        {
-          "filename": "Qwen3-0.6B-UD-IQ1_S-00001-of-00003.gguf",
-          "checksum": "27a0f5d92fffa1b1907218f62d7a82fa1a0bf5adce4975c9b7f4ccc0f34e8c88",
-          "expectedSize": 113171552
-        },
-        {
-          "filename": "Qwen3-0.6B-UD-IQ1_S-00002-of-00003.gguf",
-          "checksum": "36c7926642ead53c74ba07d15c9d35d2e9390db575f60d25cb92565c5b9f2b2c",
-          "expectedSize": 51908128
-        },
-        {
-          "filename": "Qwen3-0.6B-UD-IQ1_S-00003-of-00003.gguf",
-          "checksum": "ddc1be0331c403269b5eced1806c1a3f4a952f0d70b44e58da83bc846b5c8c5c",
-          "expectedSize": 49564032
-        },
-        {
-          "filename": "Qwen3-0.6B-UD-IQ1_S.tensors.txt",
-          "checksum": "c10b950a18ec75d3ee61b55ed1ba5b4c3ff3d7afd726651b813d48165bd5847a",
-          "expectedSize": 7067
-        }
-      ]
+      "driveKey": "0a8f8c5230e396458f436be995f1e367bae1783aa80828de41626681078c1a26",
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1439,7 +1397,8 @@
           "checksum": "449b8999711f0064ace5054475bf84f843c8fff010fbf2d1cab2881c3d2efecf",
           "expectedSize": 465499924
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1466,7 +1425,8 @@
           "checksum": "1d38b1178e5863e141b666501e2edad273dca4c8f85ee03843f0bb9e7ffaf407",
           "expectedSize": 554293697
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/embed-llamacpp",
@@ -1493,7 +1453,8 @@
           "checksum": "edc6015cb15694c27be7d1d33f1bc015db9a358ff51ed524628c027504907ba9",
           "expectedSize": 277852192
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/embed-llamacpp",
@@ -1520,7 +1481,8 @@
           "checksum": "a0f7b4e13c397a6e1b32c2de75b1f65a14c92ec524d5f674d94a4290a1c4969b",
           "expectedSize": 328577056
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/embed-llamacpp",
@@ -1547,7 +1509,8 @@
           "checksum": "95a1f284251f78a1409a9c9e52dd4026c2180b13a90a5ede2a878bb8141fba08",
           "expectedSize": 612429792
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/embed-llamacpp",
@@ -1574,7 +1537,8 @@
           "checksum": "a3125072128fc76d1c1d8d19f7b095c7e3bfbf00594dcf8a8bd3bcb334935d57",
           "expectedSize": 1217982432
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -1601,7 +1565,8 @@
           "checksum": "ce92458455d988e7fea3ce05c535648ec47fd7b70d4c35ffecb2c3bbf96a4fe7",
           "expectedSize": 4760823264
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1628,7 +1593,8 @@
           "checksum": "76763bab9e6c7f90d0a202a91a21a678dd65d9cfc1cfcd4f3c80f5a83a531444",
           "expectedSize": 2239757219
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1655,7 +1621,8 @@
           "checksum": "0448976882eaf62300b294abc7d6696bceed51c1a83308e68575698f9bf1d910",
           "expectedSize": 431338529
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1682,7 +1649,8 @@
           "checksum": "97e1dd56b9b68ad56bdf9c49949dc2cb9d7d27cb0c4ff84c3dda9113be43417b",
           "expectedSize": 2054322154
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1709,7 +1677,8 @@
           "checksum": "e914f157a92018fb5601be9e546dff480ae5ec1a9a1ba49078ad3ef371ff4c44",
           "expectedSize": 430985320
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1736,7 +1705,8 @@
           "checksum": "c4e9eafc03f9ac7aac35b494dfea02feda9797b5f69b682bd3bb9f565ec4ba2e",
           "expectedSize": 2429270859
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1763,7 +1733,8 @@
           "checksum": "292f376b75b164ec3700da5b376675c79bd48f43dd2e28d1b54040020acc28b9",
           "expectedSize": 653915115
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1790,7 +1761,8 @@
           "checksum": "4cd28a8b4159f4ba45b00b6ee61bf5b2f7f0c374d258afb5ac7a810ee7d5365d",
           "expectedSize": 637229091
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1817,7 +1789,8 @@
           "checksum": "d091bf149cc393689bc0cc50d2c3e38ea4fa11db327c8d26ac3316aa383c9a99",
           "expectedSize": 127339617
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1844,7 +1817,8 @@
           "checksum": "a642e9c9bbe2069628bb585071a138b794d04dae588823d183aa27af76698ef3",
           "expectedSize": 584815722
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1871,7 +1845,8 @@
           "checksum": "8ed3cefac12693b9312910a5bb3be59bf3eb5bb2903dfe954a1ff1b4beaf80ff",
           "expectedSize": 126980520
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1898,7 +1873,8 @@
           "checksum": "dc0112f728fc58cea43cd44d61ddd4be7e4174527d311b5982ae23e87c0f288e",
           "expectedSize": 693697483
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -1925,7 +1901,8 @@
           "checksum": "6a0e913967af1a90ea11d1cf7a697d0c4fe5f168a08017f4b7f8ac510d2727a2",
           "expectedSize": 193106987
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/tts",
@@ -1961,7 +1938,8 @@
           "checksum": "b9739443232a80a59c7d18810dd856899bf16a7964725f5ab81ea49b1351cb71",
           "expectedSize": 63531379
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/tts",
@@ -1997,7 +1975,8 @@
           "checksum": "40febfb1679c69a4505ff311dc136e121e3419a13a290ef264fdf43ddedd0fb1",
           "expectedSize": 76733615
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/tts",
@@ -2033,7 +2012,8 @@
           "checksum": "7e64762d8e5118bb578f2eea6207e1a35a8e0c30595010b666f983fc87bb7819",
           "expectedSize": 63201294
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/tts",
@@ -2069,7 +2049,8 @@
           "checksum": "6fc918b5a0ea6137382833dddfa567bffbe6a5060c02043c87192ee59c04210c",
           "expectedSize": 63511038
         }
-      ]
+      ],
+      "license": ["MIT"]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -2121,7 +2102,8 @@
           "checksum": "ed622129ba8da77af4fd21976dc442365724cde643fd8cbeadc92c7f047ab245",
           "expectedSize": 7791
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -2173,7 +2155,8 @@
           "checksum": "ed622129ba8da77af4fd21976dc442365724cde643fd8cbeadc92c7f047ab245",
           "expectedSize": 7791
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -2200,7 +2183,8 @@
           "checksum": "238044a3ed67f45b82c053a9c5131e1eed51c8aec112d19c42f7ae5948eefd11",
           "expectedSize": 339071793
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -2272,7 +2256,8 @@
           "checksum": "ed622129ba8da77af4fd21976dc442365724cde643fd8cbeadc92c7f047ab245",
           "expectedSize": 7791
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/tts",
@@ -4069,7 +4054,8 @@
           "checksum": "1d26afa203034698772107abfff1b53acbee30434700a4d2b75dee98951588f8",
           "expectedSize": 563571
         }
-      ]
+      ],
+      "license": ["GNU-V3"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -4096,7 +4082,8 @@
           "checksum": "cae428e3cc4ad0fa292455eb275aaebff8eaf15ba0af0cd387e197927afbeb2f",
           "expectedSize": 565986640
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -4123,7 +4110,8 @@
           "checksum": "4ceb27f5b973930afe9c825ca0e4a4fe55db1c1fea0e618151fd37f4cfbd7771",
           "expectedSize": 565986640
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -4150,7 +4138,8 @@
           "checksum": "2bac8d720cc518ac1fed2e9e843ca5219ff9403c653347d08918727dd4ef2099",
           "expectedSize": 285850960
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -4177,7 +4166,8 @@
           "checksum": "9aa879d7fa02be20c30224499cee5f8c7ccda6eeb24cd37996f6afc370207467",
           "expectedSize": 285850960
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -4204,7 +4194,8 @@
           "checksum": "575721b3216cbf0d549ee9ac5068f32f1e1d17e9243b72c2a1bb273d06e01de6",
           "expectedSize": 84503440
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     },
     {
       "addon": "@qvac/translation-nmtcpp",
@@ -4231,7 +4222,8 @@
           "checksum": "5a57ba08fb4a0a5276690dbf62a93595924f7c4f888ab7402be337a6cefbf994",
           "expectedSize": 84503440
         }
-      ]
+      ],
+      "license": ["Apache-2.0"]
     }
   ]
 }

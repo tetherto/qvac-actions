@@ -32,10 +32,11 @@ async function buildInferenceConfig (modelAddon, modelTags, modelPath) {
   }
 
   const files = await getModelFiles(modelPath, ['inference.config.json', '.s3-fingerprint'])
+  const filteredFiles = files.filter(f => !(f.startsWith('LICENSE-') && f.endsWith('.txt')))
   const inferenceConfig = {
     addon: modelAddon,
     ...modelTags,
-    files
+    files: filteredFiles
   }
 
   const configPath = path.join(modelPath, 'inference.config.json')
@@ -144,6 +145,9 @@ async function calculateDirectoryChecksums (dirPath, excludeFiles = []) {
 
   // Process each file
   for (const relativeFilePath of files) {
+    if (relativeFilePath.startsWith('LICENSE-') && relativeFilePath.endsWith('.txt')) {
+      continue
+    }
     const filePath = path.join(dirPath, relativeFilePath)
 
     // Get file stats for size

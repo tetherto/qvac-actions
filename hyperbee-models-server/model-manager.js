@@ -17,7 +17,7 @@ const {
   calculateDirectoryChecksums
 } = require('./utils')
 const { ConfigSchema } = require('./validation')
-const { syncDrive, getDriveVersion } = require('./drive')
+const { syncDrive, getDriveVersion, copyLicenseFiles } = require('./drive')
 let config = require('./prod.config.json')
 
 let s3 = null
@@ -193,6 +193,7 @@ async function main () {
       const modelDirectory = localPaths[0]
 
       try {
+        await copyLicenseFiles(driveConfig.license, modelDirectory)
         await buildInferenceConfig(
           driveConfig.addon,
           driveConfig.tags,

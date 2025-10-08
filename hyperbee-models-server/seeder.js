@@ -11,30 +11,77 @@ const b4a = require('b4a')
 const IdEnc = require('hypercore-id-encoding')
 const goodbye = require('graceful-goodbye')
 
-const keyFile = path.join(__dirname, 'keys.txt')
-const blindPeersFile = path.join(__dirname, 'blind-peers.txt')
 const checkProgressInterval = 10_000
 
-async function main () {
+async function main() {
   try {
-    const beeKey = fs.readFileSync(keyFile, 'utf8').split('\n')[0] // first line of keys.txt is the bee key
+    // Get keys file from command line or use default
+    const args = process.argv.slice(2)
+
+    // Show usage if --help is provided
+    if (args.includes('--help') || args.includes('-h')) {
+      console.log(`
+        Hyperdrive Seeder
+
+        Usage:
+          node seeder.js [keys-file]
+
+        Arguments:
+          keys-file    Path to keys file (default: ./keys.txt)
+
+        Keys file format:
+          - If first line starts with "bee ", it will be used as Hyperbee key
+          - All other lines should be: modelKey driveKey
+          - Empty lines are ignored
+
+        Examples:
+          node seeder.js                    # Use default keys.txt
+          node seeder.js ./my-keys.txt      # Use custom keys file
+          node seeder.js new-drive-keys.txt # Use recreated drive keys
+      `)
+      process.exit(0)
+    }
+
+    const keyFile = args[0] || path.join(__dirname, 'keys.txt')
+    const blindPeersFile = path.join(__dirname, 'blind-peers.txt')
+
+    if (!fs.existsSync(keyFile)) {
+      logger.error(`Keys file not found: ${keyFile}`)
+      process.exit(1)
+    }
+
+    logger.info(`Using keys file: ${keyFile}`)
+
+    const fileContent = fs.readFileSync(keyFile, 'utf8')
+    const lines = fileContent.split('\n').filter(line => line.trim().length > 0)
 
     const store = new Corestore('./storage')
-    const beeCore = store.get(b4a.from(beeKey.split(' ')[1], 'hex'))
-    const db = new Hyperbee(beeCore, { keyEncoding: 'utf-8', valueEncoding: 'binary' })
-    await db.ready()
-
     const swarm = new Hyperswarm()
     swarm.on('connection', (conn) => {
       store.replicate(conn)
       logger.info(`New Connection: ${b4a.toString(conn.remotePublicKey, 'hex')}`)
     })
 
-    const dbDiscovery = swarm.join(db.discoveryKey, { server: false, client: true })
-    await dbDiscovery.flushed()
-    logger.info(`DB discovery broadcasted: ${db.discoveryKey.toString('hex')}`)
+    let db = null
+    let startIndex = 0
 
-    const keys = fs.readFileSync(keyFile, 'utf8').split('\n').slice(1)
+    // Check if first line is a bee key
+    if (lines.length > 0 && lines[0].startsWith('bee ')) {
+      const beeKey = lines[0]
+      const beeCore = store.get(b4a.from(beeKey.split(' ')[1], 'hex'))
+      db = new Hyperbee(beeCore, { keyEncoding: 'utf-8', valueEncoding: 'binary' })
+      await db.ready()
+
+      const dbDiscovery = swarm.join(db.discoveryKey, { server: false, client: true })
+      await dbDiscovery.flushed()
+      logger.info(`DB discovery broadcasted: ${db.discoveryKey.toString('hex')}`)
+
+      startIndex = 1 // Skip the bee line when processing drives
+    } else {
+      logger.info('No bee key found in file, proceeding with drives only')
+    }
+
+    const keys = lines.slice(startIndex)
     const drives = []
     for (const key of keys) {
       if (key.length > 1) {

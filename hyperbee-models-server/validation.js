@@ -2,6 +2,8 @@
 
 const { z } = require('zod')
 
+const LicenseEnum = z.enum(['Apache-2.0', 'GNU-V3', 'Llama-3.2', 'MIT', 'Qwen'])
+
 const ModelTagsSchema = z.object({
   function: z.enum(['translation', 'generation', 'embedding', 'transcription', 'vad', 'tts']),
   type: z.string().min(1),
@@ -32,7 +34,8 @@ const DriveSchema = z.object({
   tags: ModelTagsSchema,
   models: z.array(ModelSchema).min(1, 'At least one model must be configured'),
   driveKey: z.string().optional(),
-  driveMetadata: z.array(DriveMetadataSchema).optional()
+  driveMetadata: z.array(DriveMetadataSchema).optional(),
+  license: z.array(LicenseEnum).min(1, 'At least one license must be specified')
 })
 
 // Schema for the master configuration
