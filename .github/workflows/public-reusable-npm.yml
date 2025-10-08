@@ -59,7 +59,8 @@ jobs:
 
       - name: Check for @qvac/ prefix in package name
         run: |
-          if ! grep -q '"name": "@qvac/' package.json; then
+          name=$(jq -r '.name' package.json)
+          if [[ $name != @qvac/* ]]; then
             echo "::error title=Invalid package name::Package name in package.json must start with @qvac/"
             exit 1
           fi
