@@ -11,6 +11,10 @@ inputs:
   pat-token:
     description: "Optional PAT for fetching GitHub deps via HTTPS (git dependencies)"
     required: false
+  registry-type:
+    description: "Type of registry to use"
+    required: true
+    default: "gpr"
 
 runs:
   using: composite
