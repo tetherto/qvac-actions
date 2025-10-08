@@ -72,6 +72,7 @@ runs:
       with:
         secret-token: ${{ inputs.secret-token }}
         pat-token: ${{ inputs.pat-token }}
+        registry-type: gpr
 
     - name: Check for errors
       shell: bash
