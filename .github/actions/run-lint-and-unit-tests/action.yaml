@@ -24,20 +24,11 @@ runs:
       with:
         node-version: "18.x"
     - name: Setup npm authentication for GPR
-      if: inputs.registry-type == 'gpr'
       run: |
         echo "@tetherto:registry=https://npm.pkg.github.com" > .npmrc
-        echo "//npm.pkg.github.com/:_authToken=${{ inputs.secret-token }}" >> .npmrc
+        echo "//npm.pkg.github.com/:_authToken=${{ inputs.pat-token }}" >> .npmrc
         git config --global url."https://${{ inputs.pat-token }}:@github.com/".insteadOf "https://github.com/"
       shell: bash
-    - name: Setup npm authentication for npmjs.org
-      if: inputs.registry-type == 'npm'
-      run: |
-        echo "@qvac:registry=https://registry.npmjs.org" > .npmrc
-        echo "//registry.npmjs.org/:_authToken=${{ inputs.secret-token }}" >> .npmrc
-        git config --global url."https://${{ inputs.pat-token }}:@github.com/".insteadOf "https://github.com/"
-      shell: bash
-     
     - name: Install dependencies
       shell: bash
       run: npm install
