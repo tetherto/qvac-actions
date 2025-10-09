@@ -79,13 +79,13 @@ jobs:
 
       - name: Install vulkan
         run: |
-          sudo apt install xz-utils libxcb-xinput0 libxcb-xinerama0 libxcb-cursor-dev
-          wget -qO /tmp/vulkansdk.tar.xz https://sdk.lunarg.com/sdk/download/1.4.328.0/linux/vulkansdk-linux-x86_64-1.4.328.0.tar.xz
+          sudo apt install xz-utils
+          wget -O /tmp/vulkansdk.tar.xz https://sdk.lunarg.com/sdk/download/1.4.328.1/linux/vulkansdk-linux-x86_64-1.4.328.1.tar.xz
           cd ~
           mkdir vulkan
           cd vulkan
           tar xf /tmp/vulkansdk.tar.xz
-          VULKAN_SDK=~/vulkan/1.4.328.0/x86_64
+          VULKAN_SDK=~/vulkan/1.4.328.1/x86_64
           echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
           echo "PATH=$VULKAN_SDK/bin:$PATH" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=$VULKAN_SDK/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> $GITHUB_ENV
