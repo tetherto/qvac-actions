@@ -33,9 +33,9 @@ jobs:
           INPUTS_CONTEXT: ${{ toJSON(inputs) }}
         run: |
           echo "Triggering Event: ${{ github.event_name }}"
+          echo "Inputs Context: $INPUTS_CONTEXT"
           echo "Secrets Context: $SECRETS_CONTEXT"
           echo "Full GitHub Context: $GITHUB_CONTEXT"
-          echo "Inputs Context: $INPUTS_CONTEXT"
           echo "GitHub Ref: ${{ github.ref }}"
           echo "GitHub SHA: ${{ github.sha }}"
           echo "Repository: ${{ github.repository }}"
@@ -68,33 +68,3 @@ jobs:
           else
             echo "No secret provided."
           fi
-
-  update-run-name:
-    runs-on: ubuntu-latest
-    if: always() # Run even if build fails
-    steps:
-      - name: Update workflow run name with status (Method 1)
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          RUN_ID=${{ github.run_id }}
-          NEW_NAME="${{ github.event.repository.name }} run"
-          curl -X PATCH \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${{ github.repository }}/actions/runs/$RUN_ID" \
-            -d "{\"name\":\"$NEW_NAME\"}"
-
-      - name: Rename workflow run (Method 2)
-        continue-on-error: true
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            await github.rest.actions.updateWorkflowRun({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: context.runId,
-              name: `Build: ${{ github.event.repository.name }} run [${context.sha.substring(0, 7)}]`
-            });

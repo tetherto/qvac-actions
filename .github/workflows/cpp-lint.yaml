@@ -1,0 +1,145 @@
+name: cpp-lint
+
+on:
+  workflow_call:
+    inputs:
+      sha:
+        required: true
+        description: "Base branch SHA or name to diff against"
+        type: string
+      pr_head_sha:
+        required: false
+        description: "PR head SHA (optional)"
+        type: string
+jobs:
+  cpp-lint:
+    runs-on: ubuntu-22.04
+    env:
+      VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}/vcpkg/cache,readwrite"
+    steps:
+      - name: Maximize build space
+        run: |
+          sudo docker image prune --all --force
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/share/dotnet
+
+      - name: Install llvm-19
+        run: |
+          sudo apt update
+          sudo apt upgrade
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 19 all
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Configure git
+        run: git config --global --add url."https://${{ secrets.PAT_TOKEN }}:x-oauth-basic@github.com/".insteadOf "git@github.com:"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.x"
+
+      - run: |
+          echo "@tetherto:registry=https://npm.pkg.github.com" > .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PAT_TOKEN }}" >> .npmrc
+          git config --global url."https://${{  secrets.PAT_TOKEN }}:@github.com/".insteadOf "https://github.com/"
+        shell: bash
+
+      - name: Install dependencies
+        shell: bash
+        run: npm install
+
+      - name: Configure vcpkg
+        id: configure_vcpkg
+        run: echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
+
+      - name: Create vcpkg cache location
+        id: create_vcpkg_cache
+        run: mkdir -p vcpkg/cache
+
+      - name: Get vcpkg cache
+        id: cache-vcpkg
+        uses: actions/cache@v4
+        with:
+          path: vcpkg/cache
+          key: linux-x64-${{ hashFiles( 'vcpkg.json', 'vcpkg-configuration.json', 'vcpkg/ports/**' ) }}
+          restore-keys: linux-x64-
+
+      - name: Install bare-make
+        id: install_bare_make
+        run: npm install -g bare-make
+
+      - name: Install vulkan
+        run: |
+          sudo apt install xz-utils libxcb-xinput0 libxcb-xinerama0 libxcb-cursor-dev
+          wget -qO /tmp/vulkansdk.tar.xz https://sdk.lunarg.com/sdk/download/1.4.328.0/linux/vulkansdk-linux-x86_64-1.4.328.0.tar.xz
+          cd ~
+          mkdir vulkan
+          cd vulkan
+          tar xf /tmp/vulkansdk.tar.xz+          
+          VULKAN_SDK=~/vulkan/1.4.328.0/x86_64
+          echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+          echo "PATH=$VULKAN_SDK/bin:$PATH" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=$VULKAN_SDK/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> $GITHUB_ENV
+          echo "VK_ADD_LAYER_PATH=$VULKAN_SDK/share/vulkan/explicit_layer.d" >> $GITHUB_ENV
+          echo "PKG_CONFIG_PATH=$VULKAN_SDK/share/pkgconfig:$VULKAN_SDK/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}" >> $GITHUB_ENV
+
+      - name: Generate build system
+        id: bare_make_generate
+        run: bare-make generate
+
+        # Please keep linting after bare-make generate so that the configuration
+        # files are pulled in.
+      - name: Check C++ files format
+        id: cpp_files_fmt
+        continue-on-error: true
+        run: |
+          TARGET_SHA=${{ inputs.sha }}
+          if ! git-clang-format-19 --binary clang-format-19 --extensions c,cc,cpp,cxx,h,hh,hpp,hxx --diff $TARGET_SHA; then
+            echo "::error title=Unformatted C++ files::Please format your C++ files with 'git-clang-format-19 --extensions c,cc,cpp,cxx,h,hh,hpp,hxx $TARGET_SHA'"
+            exit 1
+          fi
+
+      - name: Run C++ clang-tidy
+        id: run_cpp_clang_tidy
+        shell: bash
+        run: |
+          read -r -a tidy_cmd < <($(find build -name clang-tidy-helper.py) build/compile_commands.json --clang-tidy-cmd)
+          echo "Running: ${tidy_cmd[*]}"
+          if "${tidy_cmd[@]}"; then
+            echo "OK: clang-tidy passed without errors."
+          else
+            echo "::error title=Static analysis failed::clang-tidy found issues."
+          fi
+
+      - name: Build
+        id: bare_make_build
+        if: steps.bare_make_generate.outcome == 'success'
+        continue-on-error: true
+        run: bare-make build
+
+      - name: Run C++ tests
+        id: run_cpp_tests
+        if: steps.bare_make_build.outcome == 'success'
+        continue-on-error: true
+        run: bare-make test
+
+      - name: Check for errors
+        run: |
+          count=0
+          if [ "${{ steps.cpp_files_fmt.outcome }}" = "failure" ]; then
+            echo "::error::Step - Check C++ files format failed"
+            count=$((count + 1))
+          fi
+          if [ $count -gt 0 ]; then
+            echo "::error::There were $count failed checks"
+            exit 1
+          fi
