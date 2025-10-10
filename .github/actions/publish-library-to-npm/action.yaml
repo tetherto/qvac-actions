@@ -89,8 +89,8 @@ runs:
           exit 0
         fi
 
-        ### Publish with provenance if supported
-        if [ "${{ github.event_name }}" = "push" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+        ### Publish with provenance if supported and access is public
+        if ([ "${{ github.event_name }}" = "push" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]) && [ "$ACCESS" = "public" ]; then
           echo "Publishing with provenance statements"
           npm publish --tag $TAG --access $ACCESS --provenance
         else
