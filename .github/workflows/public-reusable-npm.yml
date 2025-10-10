@@ -34,6 +34,13 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
 
+      - name: Enable Socket Firewall Guard
+        uses: tetherto/qvac-devops/.github/actions/sfw-guard@production-workflows-tag
+        with:
+          firewall-mode: firewall-free
+          clear-caches: "false"
+          managers: npm,pip,pip3,uv,cargo
+
       - name: Run lint and unit tests
         uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@production-workflows-tag
         with:
@@ -79,6 +86,14 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
+
+      - name: Enable Socket Firewall Guard
+        uses: tetherto/qvac-devops/.github/actions/sfw-guard@production-workflows-tag
+        with:
+          firewall-mode: firewall-free
+          clear-caches: "false"
+          managers: npm,pip,pip3,uv,cargo
+          
       - name: Publish to NPM
         if: ${{ github.event.pull_request.head.repo.full_name != 'tetherto/qvac-devops' }}
         uses: tetherto/qvac-devops/.github/actions/publish-library-to-npm@production-workflows-tag

@@ -76,6 +76,12 @@ jobs:
 #            echo "::error title=Invalid package name::Package name in package.json must start with @tetherto/"
 #            exit 1
 #          fi
+      - name: Enable Socket Firewall Guard
+        uses: tetherto/qvac-devops/.github/actions/sfw-guard@production-workflows-tag
+        with:
+          firewall-mode: firewall-free
+          clear-caches: "false"
+          managers: npm,pip,pip3,uv,cargo
 
       - name: Run unit tests
         id: run_unit_tests
@@ -125,6 +131,13 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
 
+      - name: Enable Socket Firewall Guard
+        uses: tetherto/qvac-devops/.github/actions/sfw-guard@production-workflows-tag
+        with:
+          firewall-mode: firewall-free
+          clear-caches: "false"
+          managers: npm,pip,pip3,uv,cargo
+
       - name: Call Publish GPR Action
         id: publish-pr
         uses: tetherto/qvac-devops/.github/actions/publish-library-to-gpr@production-workflows-tag
@@ -158,6 +171,13 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Enable Socket Firewall Guard
+        uses: tetherto/qvac-devops/.github/actions/sfw-guard@production-workflows-tag
+        with:
+          firewall-mode: firewall-free
+          clear-caches: "false"
+          managers: npm,pip,pip3,uv,cargo
   
       - name: Publish to GPR
         id: publish-push
