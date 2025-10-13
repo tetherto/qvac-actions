@@ -153,6 +153,7 @@ runs:
           qvac-lib-infer-whispercpp \
           qvac-lib-infer-onnx-vad \
           qvac-lib-infer-llamacpp-embed \
+          qvac-lib-infer-onnx-tts \
           qvac-lib-inference-addon-onnx-ocr-fasttext"
         REPO_NAME="${{ github.repository }}"
         REPO_SHORT_NAME=${REPO_NAME#*/}  # Remove owner/ prefix
