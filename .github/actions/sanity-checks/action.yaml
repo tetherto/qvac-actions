@@ -13,6 +13,9 @@ inputs:
     description: "Whether to run integration tests"
     required: false
     default: "false"
+  npm-token:
+    description: "NPM token for registry.npmjs.org"
+    required: false
 
 runs:
   using: composite
@@ -73,6 +76,7 @@ runs:
       with:
         gpr-token: ${{ inputs.secret-token }}
         pat-token: ${{ inputs.pat-token }}
+        npm-token: ${{ inputs.npm-token }}
         registry-type: gpr
 
     - name: Check for errors
