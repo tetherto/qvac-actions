@@ -32,11 +32,11 @@ runs:
         echo "registry=https://registry.npmjs.org/" >> .npmrc
 
         # @qvac/* from npmjs.org
-        echo "@qvac:registry=https://registry.npmjs.org" >> .npmrc
+        echo "@qvac:registry=https://registry.npmjs.org/" >> .npmrc
         echo "//registry.npmjs.org/:_authToken=${{ inputs.npm-token }}" >> .npmrc
 
         # @tetherto/* from GitHub Packages
-        echo "@tetherto:registry=https://npm.pkg.github.com" >> .npmrc
+        echo "@tetherto:registry=https://npm.pkg.github.com/" >> .npmrc
         echo "//npm.pkg.github.com/:_authToken=${{ inputs.pat-token }}" >> .npmrc
 
         # If you use git+https deps, rewrite to include a PAT for private repos
