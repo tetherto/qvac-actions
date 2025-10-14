@@ -35,14 +35,14 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Enable Socket Firewall Guard
-        uses: tetherto/qvac-devops/.github/actions/sfw-guard@production-workflows-tag
+        uses: tetherto/qvac-devops/.github/actions/sfw-guard@main
         with:
           firewall-mode: firewall-free
           clear-caches: "false"
           managers: npm,pip,pip3,uv,cargo
 
       - name: Run lint and unit tests
-        uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@production-workflows-tag
+        uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@main
         with:
           gpr-token: ${{ secrets.GITHUB_TOKEN }}
           npm-token: ${{ secrets.NPM_TOKEN }}
@@ -50,7 +50,7 @@ jobs:
 
       - name: Run integration tests if labeled
         if: contains(github.event.pull_request.labels.*.name, 'verify')
-        uses: tetherto/qvac-devops/.github/actions/run-lint-and-integration-tests@production-workflows-tag
+        uses: tetherto/qvac-devops/.github/actions/run-lint-and-integration-tests@main
         with:
           gpr-token: ${{ secrets.GITHUB_TOKEN }}
           npm-token: ${{ secrets.NPM_TOKEN }}
@@ -73,7 +73,7 @@ jobs:
 
       - name: Call Publish NPM Action
         if: ${{ github.event.pull_request.head.repo.full_name != 'tetherto/qvac-devops' }}
-        uses: tetherto/qvac-devops/.github/actions/publish-library-to-npm@production-workflows-tag
+        uses: tetherto/qvac-devops/.github/actions/publish-library-to-npm@main
         with:
           secret-token: ${{ secrets.NPM_TOKEN }}
           tag: "dev"
@@ -88,7 +88,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Enable Socket Firewall Guard
-        uses: tetherto/qvac-devops/.github/actions/sfw-guard@production-workflows-tag
+        uses: tetherto/qvac-devops/.github/actions/sfw-guard@main
         with:
           firewall-mode: firewall-free
           clear-caches: "false"
@@ -96,7 +96,7 @@ jobs:
           
       - name: Publish to NPM
         if: ${{ github.event.pull_request.head.repo.full_name != 'tetherto/qvac-devops' }}
-        uses: tetherto/qvac-devops/.github/actions/publish-library-to-npm@production-workflows-tag
+        uses: tetherto/qvac-devops/.github/actions/publish-library-to-npm@main
         with:
           secret-token: ${{ secrets.NPM_TOKEN }}
 
