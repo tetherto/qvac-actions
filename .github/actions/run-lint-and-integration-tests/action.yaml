@@ -34,7 +34,7 @@ runs:
 
         # @tetherto/* from GitHub Packages
         echo "@tetherto:registry=https://npm.pkg.github.com" >> .npmrc
-        echo "//npm.pkg.github.com/:_authToken=${{ inputs.gpr-token }}" >> .npmrc
+        echo "//npm.pkg.github.com/:_authToken=${{ inputs.pat-token }}" >> .npmrc
 
         # If you use git+https deps, rewrite to include a PAT for private repos
         if [ -n "${{ inputs.pat-token }}" ]; then

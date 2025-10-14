@@ -23,11 +23,26 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version: "18.x"
-    - name: Setup npm authentication for GPR
+    - name: Configure .npmrc for both npmjs and GitHub Packages
       run: |
-        echo "@tetherto:registry=https://npm.pkg.github.com" > .npmrc
+        # Clean slate .npmrc in workspace
+        : > .npmrc
+
+        # Default public registry
+        echo "registry=https://registry.npmjs.org/" >> .npmrc
+
+        # @qvac/* from npmjs.org
+        echo "@qvac:registry=https://registry.npmjs.org" >> .npmrc
+        echo "//registry.npmjs.org/:_authToken=${{ inputs.npm-token }}" >> .npmrc
+
+        # @tetherto/* from GitHub Packages
+        echo "@tetherto:registry=https://npm.pkg.github.com" >> .npmrc
         echo "//npm.pkg.github.com/:_authToken=${{ inputs.pat-token }}" >> .npmrc
-        git config --global url."https://${{ inputs.pat-token }}:@github.com/".insteadOf "https://github.com/"
+
+        # If you use git+https deps, rewrite to include a PAT for private repos
+        if [ -n "${{ inputs.pat-token }}" ]; then
+          git config --global url."https://${{ inputs.pat-token }}:@github.com/".insteadOf "https://github.com/"
+        fi
       shell: bash
     - name: Install dependencies
       shell: bash
