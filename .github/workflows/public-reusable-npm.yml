@@ -51,7 +51,7 @@ jobs:
 
       - name: Check for disallowed dependencies
         run: |
-          deps=$(jq -r '.dependencies, .devDependencies // {} | to_entries[] | .value' package.json)
+          deps=$(jq -r '[.dependencies // {}, .devDependencies // {}] | add | to_entries[] | .value' package.json)
           if echo "$deps" | grep -Eq '^(git\+https:\/\/github.com|[0-9]+\.[0-9]+\.[0-9]+-(dev|tmp)[^"]*)$'; then
             echo "::error title=Disallowed dependency detected::Do not use git URLs or dev/tmp versions in dependencies"
             exit 1
@@ -77,6 +77,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - name: Publish to NPM

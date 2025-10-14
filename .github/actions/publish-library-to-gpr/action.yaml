@@ -148,11 +148,12 @@ runs:
           qvac-ext-lib-tokenizers-cpp \
           qvac-lib-decoder-audio \
           qvac-lib-inference-addon-mlc-ecog \
-          qvac-lib-inference-addon-mlc-llama \
-          qvac-lib-inference-addon-mlc-marian \
-          qvac-lib-inference-addon-mlc-whisper \
-          qvac-lib-inference-addon-onnx-silerovad \
+          qvac-lib-infer-llamacpp-llm \
+          qvac-lib-infer-nmtcpp \
           qvac-lib-infer-whispercpp \
+          qvac-lib-infer-onnx-vad \
+          qvac-lib-infer-llamacpp-embed \
+          qvac-lib-infer-onnx-tts \
           qvac-lib-inference-addon-onnx-ocr-fasttext"
         REPO_NAME="${{ github.repository }}"
         REPO_SHORT_NAME=${REPO_NAME#*/}  # Remove owner/ prefix
