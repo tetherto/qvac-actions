@@ -4,7 +4,7 @@ description: "Run linting and integration tests when verify label is present"
 inputs:
   npm-token:
     description: "Auth token for registry.npmjs.org (for @qvac/*)"
-    required: true
+    required: false
   gpr-token:
     description: "Auth token for GitHub Packages (for @tetherto/*) — can be the GitHub Actions GITHUB_TOKEN"
     required: true
