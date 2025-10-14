@@ -71,7 +71,7 @@ runs:
       continue-on-error: true
       uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@production-workflows-tag
       with:
-        secret-token: ${{ inputs.secret-token }}
+        gpr-token: ${{ inputs.secret-token }}
         pat-token: ${{ inputs.pat-token }}
         registry-type: gpr
 
