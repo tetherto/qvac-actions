@@ -6,6 +6,9 @@ inputs:
   secret-token:
     description: "Secret token"
     required: true
+  npm-token:
+    description: "NPM token for registry.npmjs.org"
+    required: false
   pat-token:
     description: "PAT token"
     required: false

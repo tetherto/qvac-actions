@@ -23,7 +23,7 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version: "18.x"
-    - name: Setup npm authentication for GPR
+    - name: Configure .npmrc for both npmjs and GitHub Packages
       run: |
         # Clean slate .npmrc in workspace
         : > .npmrc
