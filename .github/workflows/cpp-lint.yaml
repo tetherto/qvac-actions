@@ -48,8 +48,14 @@ jobs:
           node-version: "18.x"
 
       - run: |
-          echo "@tetherto:registry=https://npm.pkg.github.com" > .npmrc
+          # @qvac/* from npmjs.org
+          echo "@qvac:registry=https://registry.npmjs.org/" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
+
+          # @tetherto/* from GitHub Packages
+          echo "@tetherto:registry=https://npm.pkg.github.com/" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.PAT_TOKEN }}" >> .npmrc
+
           git config --global url."https://${{  secrets.PAT_TOKEN }}:@github.com/".insteadOf "https://github.com/"
         shell: bash
 
