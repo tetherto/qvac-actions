@@ -24,8 +24,13 @@ runs:
         registry-url: "https://registry.npmjs.org/"
         scope: "@qvac"
 
-    - run: echo registry=https://registry.npmjs.org/ >> .npmrc
+    - run: |
+        echo registry=https://registry.npmjs.org/ >> .npmrc
+        echo @qvac:registry=https://registry.npmjs.org/ >> .npmrc
+        echo //registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN} >> .npmrc
       shell: bash
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.secret-token }}
 
     - name: Publish to NPM
       shell: bash
