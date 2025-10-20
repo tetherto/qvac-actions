@@ -65,21 +65,17 @@ runs:
           TAG="latest"
         fi
 
-        ### Set version, if not latest, we do detailed dev version
+        ### Do NOT publish dev/tmp builds to NPM
+        if [ "$TAG" = "dev" ] || [ "$TAG" = "tmp" ]; then
+          echo "Skipping publish to NPM for non-release tag: $TAG"
+          exit 0
+        fi
+
+        ### Use the package's existing version for release publishes
         SHORT_SHA=$(git rev-parse --short HEAD)
         PACKAGE_VERSION=$(node -p "require('./package.json').version")
         PACKAGE_NAME=$(node -p "require('./package.json').name")
-
-        if [ "$TAG" = "dev" ] || [ "$TAG" = "tmp" ]; then
-          VERSION="${PACKAGE_VERSION}-tmp.${GITHUB_RUN_ID}"
-        else
-          VERSION="${PACKAGE_VERSION}"
-        fi
-
-        if [ "$VERSION" != "$PACKAGE_VERSION" ]; then
-          echo "Updating version to $VERSION"
-          npm version $VERSION --no-git-tag-version --allow-same-version
-        fi
+        VERSION="${PACKAGE_VERSION}"
 
         echo "Publishing package: $PACKAGE_NAME"
         echo "Publishing with tag: $TAG"
