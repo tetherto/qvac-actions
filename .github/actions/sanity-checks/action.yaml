@@ -16,9 +16,6 @@ inputs:
     description: "Whether to run integration tests"
     required: false
     default: "false"
-  npm-token:
-    description: "NPM token for registry.npmjs.org"
-    required: false
 
 runs:
   using: composite
