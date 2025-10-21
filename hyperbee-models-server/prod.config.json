@@ -4224,6 +4224,43 @@
         }
       ],
       "license": ["Apache-2.0"]
+    },
+    {
+      "addon": "@qvac/translation-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "multimodal",
+        "name": "smolVLM2",
+        "externalVersion": "2",
+        "params": "500M",
+        "quantization": "f16",
+        "internalVersion": "1.0.0",
+        "other": "video-instruct"
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/ggml-org/SmolVLM2-500M-Video-Instruct-GGUF/resolve/main/SmolVLM2-500M-Video-Instruct-f16.gguf"
+        },
+        {
+          "source": "hf",
+          "path": " https://huggingface.co/ggml-org/SmolVLM2-500M-Video-Instruct-GGUF/resolve/main/mmproj-SmolVLM2-500M-Video-Instruct-f16.gguf"
+        }
+      ],
+      "driveKey": "b99c6f5dcadaad827cdcb1a129a3b34aff6ad28056738e0bd559c7ffb807e30f",
+      "driveMetadata": [
+        {
+          "filename": "SmolVLM2-500M-Video-Instruct-f16.gguf",
+          "checksum": "80f7e3f04bc2d3324ac1a9f52f5776fe13a69912adf74f8e7edacf773d140d77",
+          "expectedSize": 820424704
+        },
+        {
+          "filename": "mmproj-SmolVLM2-500M-Video-Instruct-f16.gguf",
+          "checksum": "b5dc8ebe7cbeab66a5369693960a52515d7824f13d4063ceca78431f2a6b59b0",
+          "expectedSize": 199470624
+        }
+      ],
+      "license": ["Apache-2.0"]
     }
   ]
 }
