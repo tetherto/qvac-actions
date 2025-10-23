@@ -40,7 +40,7 @@ runs:
       with:
         node-version: lts/*
         registry-url: "https://npm.pkg.github.com/"
-        scope: "@tetherto"
+        scope: "@qvac"
 
     - name: Determine Tag
       id: determine_tag
