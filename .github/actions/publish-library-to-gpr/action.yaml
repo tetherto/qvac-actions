@@ -40,7 +40,7 @@ runs:
       with:
         node-version: lts/*
         registry-url: "https://npm.pkg.github.com/"
-        scope: "@qvac"
+        scope: "@tetherto"
 
     - name: Determine Tag
       id: determine_tag
@@ -169,11 +169,30 @@ runs:
 
         echo "should_publish=$SHOULD_PUBLISH" >> $GITHUB_OUTPUT
 
+    - name: Fix package scope if it's @qvac
+      shell: bash
+      working-directory: ${{ inputs.path }}
+      run: |
+        PACKAGE_NAME=$(node -p "require('./package.json').name")
+        echo "Detected package name: $PACKAGE_NAME"
+        
+        if [[ "$PACKAGE_NAME" == @qvac/* ]]; then
+          NEW_NAME=$(echo "$PACKAGE_NAME" | sed 's/@qvac/@tetherto/')
+          echo "⚙️ Rewriting package name from $PACKAGE_NAME to $NEW_NAME for publishing"
+          
+          # Update package.json in place
+          tmpfile=$(mktemp)
+          jq --arg new_name "$NEW_NAME" '.name = $new_name' package.json > "$tmpfile" && mv "$tmpfile" package.json
+          
+          echo "✅ Package name updated to $(node -p "require('./package.json').name")"
+        else
+          echo
+
     - name: Publish to NPM
       id: npm_publish
       if: steps.check_publish.outputs.should_publish == 'true'
       working-directory: ${{ inputs.path }}
-      shell: bash
+      shell: bash 
       env:
         NODE_AUTH_TOKEN: ${{ inputs.secret-token }}
       run: |
