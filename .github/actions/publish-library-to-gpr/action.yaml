@@ -187,6 +187,7 @@ runs:
           echo "✅ Package name updated to $(node -p "require('./package.json').name")"
         else
           echo
+        fi
 
     - name: Publish to NPM
       id: npm_publish
