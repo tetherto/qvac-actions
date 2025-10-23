@@ -192,7 +192,7 @@ runs:
       id: npm_publish
       if: steps.check_publish.outputs.should_publish == 'true'
       working-directory: ${{ inputs.path }}
-      shell: bash 
+      shell: bash
       env:
         NODE_AUTH_TOKEN: ${{ inputs.secret-token }}
       run: |
