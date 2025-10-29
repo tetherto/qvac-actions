@@ -4441,6 +4441,39 @@
           "checksum": "33bcc57074ec7b6eada5a90651ee546ec0c2b271002c22baf9f1b2dd1e8f75cb",
           "expectedSize": 382156480
         }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "tiny-ggml",
+        "name": "whisper-norwegian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "",
+        "internalVersion": "1.0.0",
+        "other": "norwegian"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-norwegian"
+        }
+      ],
+      "driveKey": "19aaf2bc2685d2be2e001af0abf2a5d07d13b78f1a234fb75bf9fc2d07ee7f1d",
+      "driveMetadata": [
+        {
+          "filename": "nb-tiny-ggml-model.bin",
+          "checksum": "2f9dd799ee36b6a9c8d642e9b1df8ecf2135efdd5a91b1d9ca0b3c0decda535f",
+          "expectedSize": 77691730
+        }
+      ],
+      "license": [
+        "MIT"
       ]
     }
   ]
