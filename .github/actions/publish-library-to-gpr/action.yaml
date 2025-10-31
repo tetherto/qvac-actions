@@ -117,23 +117,39 @@ runs:
       id: check_publish
       shell: bash
       working-directory: ${{ inputs.path }}
+      env:
+        REPO_NAME: ${{ github.repository }}
+        EVENT_NAME: ${{ github.event_name }}
+        REF: ${{ github.ref }}
+        REF_NAME: ${{ github.ref_name }}
+        HEAD_REF: ${{ github.head_ref }}
       run: |
         SHOULD_PUBLISH=false
 
-        # Check if it's a merge event to main
-        if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ]; then
-          echo "✅ Publishing: This is a merge to main"
+        REPO_SHORT_NAME="${REPO_NAME#*/}"
+
+        # normalize branch name across events
+        BRANCH_NAME="$REF_NAME"
+        if [[ "$EVENT_NAME" == "pull_request" || "$EVENT_NAME" == "pull_request_target" ]]; then
+          BRANCH_NAME="$HEAD_REF"
+        fi
+
+        echo "🔎 debug: event=$EVENT_NAME repo=$REPO_SHORT_NAME branch=$BRANCH_NAME"
+
+         # Check if it's a merge event to main
+        if [[ "$EVENT_NAME" == "push" && "$REF" == "refs/heads/main" ]]; then
+          echo "✅ Publishing: push to main"
           SHOULD_PUBLISH=true
         fi
 
-        # Check if it's a manual workflow dispatch
-        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          echo "✅ Publishing: This is a manual workflow dispatch"
+        # manual dispatch
+        if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+          echo "✅ Publishing: manual workflow_dispatch"
           SHOULD_PUBLISH=true
         fi
 
-        # Check for publish label in PR
-        if [ "${{ github.event_name }}" = "pull_request" ] || [ "${{ github.event_name }}" = "pull_request_target" ]; then
+        # PR label "publish"
+        if [[ "$EVENT_NAME" == "pull_request" || "$EVENT_NAME" == "pull_request_target" ]]; then
           if [[ "${{ toJSON(github.event.pull_request.labels.*.name) }}" =~ "publish" ]]; then
             echo "✅ Publishing: PR has publish label"
             SHOULD_PUBLISH=true
@@ -141,33 +157,44 @@ runs:
         fi
 
         # Check if repo is in always-publish list
-        ALWAYS_PUBLISH_REPOS="qvac-devops \
-          qvac-util-transcription \ # TEMPORARY
-          qvac-examples \
-          qvac-ext-lib-mlc \
-          qvac-ext-lib-tokenizers-cpp \
-          qvac-lib-decoder-audio \
-          qvac-lib-inference-addon-mlc-ecog \
-          qvac-lib-infer-llamacpp-llm \
-          qvac-lib-infer-nmtcpp \
-          qvac-lib-infer-whispercpp \
-          qvac-lib-infer-onnx-vad \
-          qvac-lib-infer-llamacpp-embed \
-          qvac-lib-infer-onnx-tts \
-          qvac-lib-inference-addon-onnx-ocr-fasttext"
-        REPO_NAME="${{ github.repository }}"
-        REPO_SHORT_NAME=${REPO_NAME#*/}  # Remove owner/ prefix
+        ALWAYS_PUBLISH_REPOS=(
+          qvac-devops
+          qvac-util-transcription
+          qvac-examples
+          qvac-ext-lib-mlc
+          qvac-ext-lib-tokenizers-cpp
+          qvac-lib-decoder-audio
+          qvac-lib-inference-addon-mlc-ecog
+          qvac-lib-infer-llamacpp-llm
+          qvac-lib-infer-nmtcpp
+          qvac-lib-infer-whispercpp
+          qvac-lib-infer-onnx-vad
+          qvac-lib-infer-llamacpp-embed
+          qvac-lib-infer-onnx-tts
+          qvac-lib-inference-addon-onnx-ocr-fasttext
+        )
 
-        if [[ $ALWAYS_PUBLISH_REPOS =~ $REPO_SHORT_NAME ]]; then
-          echo "✅ Publishing: Repository is in always-publish list"
+        if printf '%s\n' "${ALWAYS_PUBLISH_REPOS[@]}" | grep -qx "$REPO_SHORT_NAME"; then
+          echo "✅ Publishing: repo is in always-publish list"
           SHOULD_PUBLISH=true
         fi
 
-        if [ "$SHOULD_PUBLISH" = "false" ]; then
-          echo "❌ Skipping publish: No publish conditions met"
+        # check if repo is qvac-sdk and branch is dev, fix-* or feature-*
+        if [[ "$REPO_SHORT_NAME" == "qvac-sdk" ]]; then
+          case "$BRANCH_NAME" in
+            dev|fix-*|feature-*)
+              echo "✅ Publishing: qvac-sdk + allowed branch ($BRANCH_NAME)"
+              SHOULD_PUBLISH=true
+              ;;
+          esac
         fi
 
-        echo "should_publish=$SHOULD_PUBLISH" >> $GITHUB_OUTPUT
+        if [[ "$SHOULD_PUBLISH" == "false" ]]; then
+          echo "❌ Skipping publish: no publish conditions met"
+        fi
+
+        echo "should_publish=$SHOULD_PUBLISH" >> "$GITHUB_OUTPUT"
+
 
     - name: Fix package scope if it's @qvac
       shell: bash
