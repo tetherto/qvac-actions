@@ -1,7 +1,7 @@
 # TEMPLATE to paste into other repos
 name: General CI/CD
 # This workflow is used to call the reusable workflows in the qvac-devops repository
-# https://github.com/tetherto/qvac-devops/blob/production-workflows-tag/.github/workflows/public-reusable.yaml
+# https://github.com/tetherto/qvac-devops/blob/v1.1.1/.github/workflows/public-reusable.yaml
 
 on:
   push:
@@ -23,5 +23,5 @@ on:
 
 jobs:
   call-devops-lib:
-    uses: tetherto/qvac-devops/.github/workflows/public-reusable.yml@production-workflows-tag
+    uses: tetherto/qvac-devops/.github/workflows/public-reusable.yml@v1.1.1
     secrets: inherit
