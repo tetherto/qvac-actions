@@ -30,7 +30,7 @@
           "path": "https://huggingface.co/BSC-LT/salamandraTA-2B-instruct-GGUF/blob/main/salamandrata_2b_inst_q8.gguf"
         }
       ],
-      "driveKey": "96860337b0bdffdbb8ef0df4c8b2c3ab5e78568f5f7e15815a0a6b392512c9b5",
+      "driveKey": "7cdcd433bb63d1d91d6bd46762e5c39e09c28f1222de6d011b561369d1cf3585",
       "driveMetadata": [
         {
           "filename": "salamandrata_2b_inst_q8.gguf",
@@ -60,7 +60,7 @@
           "path": "https://huggingface.co/BSC-LT/salamandraTA-2B-instruct-GGUF/blob/main/salamandrata_2b_inst_q4.gguf"
         }
       ],
-      "driveKey": "1610d81772a9e7c37660666dbdfdcef915b6b83c522ea1ad31c19cab0075811d",
+      "driveKey": "b2c0d69d64c1cf01482c7b1f02f36e9e64228f43a5865e4009f1cb541ecbb205",
       "driveMetadata": [
         {
           "filename": "salamandrata_2b_inst_q4.gguf",
@@ -87,10 +87,10 @@
       "models": [
         {
           "source": "hf",
-          "path": "https://placeholder.mock"
+          "path": "https://huggingface.co/ggml-org/whisper-vad/resolve/main/ggml-silero-v5.1.2.bin"
         }
       ],
-      "driveKey": "60a19f1065c355df49c753b16cea075863ebbfdd330caca8b3ea6a337026fc7d",
+      "driveKey": "3fa814e2c3cbb8de95e09fe5442b92ff70a47134a2fffacac032e5827cc70ef3",
       "driveMetadata": [
         {
           "filename": "ggml-silero-v5.1.2.bin",
@@ -117,10 +117,10 @@
       "models": [
         {
           "source": "hf",
-          "path": "https://placeholder.mock"
+          "path": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
         }
       ],
-      "driveKey": "9281d61503593fdf3eaa9d5e5d44746c271ef930aed3b7f8ee9ce153c76399d6",
+      "driveKey": "35c5da25696a59d07713c50f0bd3265aea627e62329f9ab469a5dafa962c0605",
       "driveMetadata": [
         {
           "filename": "ggml-tiny.bin",
@@ -146,11 +146,15 @@
       },
       "models": [
         {
-          "source": "aws",
-          "path": "qvac_models_compiled/ggml/whisper/ggml-small.en-q8_0/"
+          "source": "hf",
+          "path": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.en-q8_0.bin"
+        },
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/ggml-org/whisper-vad/resolve/main/ggml-silero-v5.1.2.bin"
         }
       ],
-      "driveKey": "c6a987fbb4ad8fba1526e446501f88ee45dfafbf1685410a7aeadb589fe18608",
+      "driveKey": "609a2dbc9a5bb6d99f9c16ee4c1199c2fb407909f94950c18f50efef8de377c1",
       "driveMetadata": [
         {
           "filename": "ggml-silero-v5.1.2.bin",
@@ -181,11 +185,15 @@
       },
       "models": [
         {
-          "source": "aws",
-          "path": "qvac_models_compiled/ggml/whisper/ggml-large-v3-turbo/"
+          "source": "hf",
+          "path": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo.bin"
+        },
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/ggml-org/whisper-vad/resolve/main/ggml-silero-v5.1.2.bin"
         }
       ],
-      "driveKey": "76fb36d7f16a430618962d3e78b0e22e61aa527a9e937335188d08858aaa9075",
+      "driveKey": "b07174ba38cad1ebe457e6acd6d1d323dad2568b482fccaabaffe10e11125eca",
       "driveMetadata": [
         {
           "filename": "ggml-large-v3-turbo.bin",
@@ -217,10 +225,14 @@
       "models": [
         {
           "source": "hf",
-          "path": "https://placeholder.mock"
+          "path": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
+        },
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/ggml-org/whisper-vad/resolve/main/ggml-silero-v5.1.2.bin"
         }
       ],
-      "driveKey": "ebfb94b378276da139554668f1ff737644eadff529c2ea0f2662d7df61fd86ca",
+      "driveKey": "e29d05e725a7a4fb8f64f194aa5d7013cd0a89173b8476153044e491bee2b3c1",
       "driveMetadata": [
         {
           "filename": "ggml-silero-v5.1.2.bin",
@@ -255,7 +267,7 @@
           "path": "qvac_models_compiled/ggml/Qwen3-4B/2025-06-27/Qwen3-4B-Q4_K_M.gguf"
         }
       ],
-      "driveKey": "19ffb75463149955ee24d786dfddd84d41fc872ea813cd4465f5f7299d165adc",
+      "driveKey": "900f1a224acf52ce787bca7bb13d169cefe88876b54cacacc53f0fcb37d34743",
       "driveMetadata": [
         {
           "filename": "model.gguf",
@@ -285,17 +297,40 @@
           "path": "https://huggingface.co/unsloth/medgemma-4b-it-GGUF/blob/main/medgemma-4b-it-Q4_1.gguf"
         }
       ],
-      "driveKey": "b11388de0e9214d8c2181eae30e31bcd49c48b26d621b353ddc7f01972dddd76",
+      "driveKey": "74c6aa6be48f9b83b6f5836c88f1b31d6b88511ee61824cd265e606d6d4217f2", 
       "driveMetadata": [
         {
           "filename": "medgemma-4b-it-Q4_1.gguf",
-          "checksum": "1c87b2a6d712a61443dfe64fa8fe3755c9a5c1a9a9e4493e673180495e53d8ec",
-          "expectedSize": 2564052768
-        },
+          "checksum": "8e1a72c5dc9e89cde340114ad1d7915686b16bcb6fef1372a2c3ee564fb721e0",
+          "expectedSize": 2564052800
+        }
+      ],
+      "license": ["Apache-2.0"]
+    },
+    {
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "it",
+        "name": "medgemma",
+        "externalVersion": "",
+        "params": "4B",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": ""
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/unsloth/medgemma-4b-it-GGUF/resolve/main/medgemma-4b-it-Q8_0.gguf"
+        }
+      ],
+      "driveKey": "d2218196c1d1cfaa186c1b53f6d7f851404931f176f5f22dd92c6f75ba9c316c",
+      "driveMetadata": [
         {
           "filename": "medgemma-4b-it-Q8_0.gguf",
-          "checksum": "cffba7312074cb0491f99967f715ed0140281a7bdc946140460cef07fdff5ab2",
-          "expectedSize": 4130402848
+          "checksum": "d49d917bccd3e569ddf282ea597f1e255eb3b891254cc5c931d669e646bd77cf",
+          "expectedSize": 4130402880
         }
       ],
       "license": [
@@ -320,7 +355,7 @@
           "path": "https://huggingface.co/unsloth/Llama-3.2-1B-Instruct-GGUF/blob/main/Llama-3.2-1B-Instruct-Q4_0.gguf"
         }
       ],
-      "driveKey": "afa79ee07c0a138bb9f11bfaee771fb1bdfca8c82d961cff0474e49827bd1de3",
+      "driveKey": "95d4c2770d31b8e2c27d21745601b225caa3d3eace4fa99244ed38dbc30d9cfb",
       "driveMetadata": [
         {
           "filename": "Llama-3.2-1B-Instruct-Q4_0.gguf",
@@ -350,7 +385,7 @@
           "path": "https://huggingface.co/ChristianAzinn/gte-large-gguf/blob/main/gte-large_fp16.gguf"
         }
       ],
-      "driveKey": "d1896d9259692818df95bd2480e90c2d057688a4f7c9b1ae13ac7f5ee379d03e",
+      "driveKey": "94a6920d40270f7cb84c6f895831aa21403d17cd39c139f4e4b86dc521e70771",
       "driveMetadata": [
         {
           "filename": "gte-large_fp16.gguf",
@@ -380,7 +415,7 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-it-en/2025-08-06/ggml-opus-it-en.bin"
         }
       ],
-      "driveKey": "57ca319db2b656b342de92dcd3b96963648092358bf5b9e02f76599f61ac5a02",
+      "driveKey": "99d4da8b636cfaa237eae32137ec4b57fa6c4cca7c91576f4ed874032c82b487",
       "driveMetadata": [
         {
           "filename": "model.bin",
@@ -410,7 +445,7 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-en-it/2025-08-07/ggml-opus-en-it.bin"
         }
       ],
-      "driveKey": "9ef58f31c20d5556722e0b58a5d262fd89801daf2e6cb28e3f21ac6e9228088f",
+      "driveKey": "757b78203ce9c821bededdac0046f21c7484d2b73b15e04b162302866710d5f1",
       "driveMetadata": [
         {
           "filename": "model.bin",
@@ -440,7 +475,7 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-en-de/2025-08-07/ggml-opus-en-de.bin"
         }
       ],
-      "driveKey": "7b1d16235cd4dd9cc2c58d1fc1c41d65159aa4d2337169c6243a5bc8bf49689b",
+      "driveKey": "7f23b4736a1428b60ae665f558ef48d6c70dc2642a4901d3336e02438ea5e752",
       "driveMetadata": [
         {
           "filename": "model.bin",
@@ -470,7 +505,7 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-en-es/2025-08-07/ggml-opus-en-es.bin"
         }
       ],
-      "driveKey": "8aa823831cc55f5c1cba2c046e98b53a0d32376267ca73d653294b8b114459a2",
+      "driveKey": "53760abc441457efbb27047798683723962c9cdb825d645649d50351be326f55",
       "driveMetadata": [
         {
           "filename": "model.bin",
@@ -500,7 +535,7 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-de-en/2025-08-07/ggml-opus-de-en.bin"
         }
       ],
-      "driveKey": "b4d1ab62f885d9814acfddc565761b607bf86a307c38430ec1dabfe1a92532af",
+      "driveKey": "f60e55fb7859536ea4e2361c5168ce175cb34b251e0ae00b7c8f68ecc0571d0c",
       "driveMetadata": [
         {
           "filename": "model.bin",
@@ -530,7 +565,7 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-de-es/2025-08-07/ggml-opus-de-es.bin"
         }
       ],
-      "driveKey": "f432152db25ebd86fa0e48cd12f27e67e5c052c9af99c7662939dc1d84792c3e",
+      "driveKey": "cd8e6a6b0c306c2594fb2ec80d27d40a749dc9cf49102f0aa9b4f2496568ac53",
       "driveMetadata": [
         {
           "filename": "model.bin",
@@ -560,7 +595,7 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-de-it/2025-08-07/ggml-opus-de-it.bin"
         }
       ],
-      "driveKey": "06d26bdc965d548c156885ed105f8150618aaa11712579158e81f1d49735aaf6",
+      "driveKey": "0d534e862018e00a472ba80b5a0a931e5cccc0637578bbe36ce97682fe6a5412",
       "driveMetadata": [
         {
           "filename": "model.bin",
@@ -590,7 +625,7 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-es-de/2025-08-07/ggml-opus-es-de.bin"
         }
       ],
-      "driveKey": "ff6a02096c3e2f4e1aa7e4a75cb37aa851bc924c9d4af2b30b26431f1cb9d156",
+      "driveKey": "b1029d997c3dc4df757fa7093780e26742297ec093e0fa0c951d49d06f7b7037",
       "driveMetadata": [
         {
           "filename": "model.bin",
@@ -620,7 +655,7 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-es-en/2025-08-07/ggml-opus-es-en.bin"
         }
       ],
-      "driveKey": "b96cf6c79119578b9f9a2206b19ce9686e95f31949ce62b24aef83fbdf4b0b08",
+      "driveKey": "73fb3a48ecf2f113710765ba28dd5d5723622f43955d88acbe7f0ec7c7b4d5e2",
       "driveMetadata": [
         {
           "filename": "model.bin",
@@ -650,7 +685,7 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-es-it/2025-08-07/ggml-opus-es-it.bin"
         }
       ],
-      "driveKey": "b04ba8638fea5adff061aba9ccc671936ab8f7459346461f6c2010d4c7413254",
+      "driveKey": "d41c61697c19a2b771439101569935129eb39c324e259a6865f825242e60c212",
       "driveMetadata": [
         {
           "filename": "model.bin",
@@ -680,7 +715,7 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-it-de/2025-08-07/ggml-opus-it-de.bin"
         }
       ],
-      "driveKey": "438cbda449f1ac258a2fdea55cfd1f9f83dfb0ea20103c1e5113906081eec4f5",
+      "driveKey": "6827f57d0aab9dd0194d06bc94cf12ccafe2a5d4d18e72b4bbaa2c3eb30aeea7",
       "driveMetadata": [
         {
           "filename": "model.bin",
@@ -710,7 +745,7 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-it-en/2025-08-07/ggml-opus-it-en.bin"
         }
       ],
-      "driveKey": "68778c8375fbb1e7f5c20b4e6087131206e9ddba1872655e20931b7e08fe3954",
+      "driveKey": "ee90217a3b0039b48865ec23af102e8a8afafb964ebb45f56f1bed63ac4a0633",
       "driveMetadata": [
         {
           "filename": "model.bin",
@@ -740,7 +775,7 @@
           "path": "qvac_models_compiled/ggml/marian/ggml-opus-it-es/2025-08-07/ggml-opus-it-es.bin"
         }
       ],
-      "driveKey": "1b78d8309f80fcda61d0291ed5dc755e10e46b39d7e7484083a3c6d20b86c679",
+      "driveKey": "d6c7482d24e0e24af399151e22f233e86ca3ced411d5fb892772567b4f625ff5",
       "driveMetadata": [
         {
           "filename": "model.bin",
@@ -774,7 +809,7 @@
           "path": "https://huggingface.co/ggml-org/Qwen2.5-Omni-3B-GGUF/blob/main/mmproj-Qwen2.5-Omni-3B-Q8_0.gguf"
         }
       ],
-      "driveKey": "583f04c31d151b29e02aaf98f80d16aff585714ef9e2806a5067651c0f64ae31",
+      "driveKey": "23ae95b2f4d1a129fe611963975d4887f1f624543f440c4c7c7f4bc38f06f5a6",
       "driveMetadata": [
         {
           "filename": "Qwen2.5-Omni-3B-Q4_K_M.gguf",
@@ -809,7 +844,7 @@
           "path": "https://huggingface.co/unsloth/Qwen3-1.7B-GGUF/resolve/main/Qwen3-1.7B-Q4_0.gguf"
         }
       ],
-      "driveKey": "05d3d7ad9cd650f53c28f85e312ef09a645dd487845897958b3be8a19cb3aab9",
+      "driveKey": "a6d9c7cf3fc8d05c026f3e509b53af36726ecfe4437c26b76140902b98178a60",
       "driveMetadata": [
         {
           "filename": "Qwen3-1.7B-Q4_0.gguf",
@@ -839,7 +874,7 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-indic-en-1B/2025-08-15/ggml-indictrans2-indic-en-1B.bin"
         }
       ],
-      "driveKey": "d46a9192b479fb5c982e60b84ae25bb5a61f3f090a41d45d5c5dda597973a9dd",
+      "driveKey": "2c77ee91053c3d6d4804d60d87bf8d59fc46296fb32dd4a35f9096e803ed32d2",
       "driveMetadata": [
         {
           "filename": "ggml-indictrans2-indic-en-1B.bin",
@@ -869,7 +904,7 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-en-indic-1B/2025-08-15/ggml-indictrans2-en-indic-1B.bin"
         }
       ],
-      "driveKey": "61d1eb542956914ad2eadaf405b76a4dcc327fd6ccf1191bb17cd102a642691e",
+      "driveKey": "106ba7af36622420089c6a38fbf4e7a48f50436dfc841c7166660d85b7978905",
       "driveMetadata": [
         {
           "filename": "ggml-indictrans2-en-indic-1B.bin",
@@ -899,7 +934,7 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-indic-indic-1B/2025-08-15/ggml-indictrans2-indic-indic-1B.bin"
         }
       ],
-      "driveKey": "cd8e441d1da68602e19a92f5d1ee794852e802ee234a638df2976bb1bc2493ad",
+      "driveKey": "3e72a3cd967fc723d6643503deca1d7de332ba488e02fbcb81910b4b7ac0024c",
       "driveMetadata": [
         {
           "filename": "ggml-indictrans2-indic-indic-1B.bin",
@@ -929,7 +964,7 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-en-indic-dist-200M/2025-08-15/ggml-indictrans2-en-indic-dist-200M.bin"
         }
       ],
-      "driveKey": "268c2e9b2a3420632e4b6649e32822f42d5dfbda4c7e96daec5b629ed20f99f7",
+      "driveKey": "8c0f50e7c75527213a090d2f1dcd9dbdb8262e5549c8cbbb74cb7cb12b156892",
       "driveMetadata": [
         {
           "filename": "ggml-indictrans2-en-indic-dist-200M.bin",
@@ -959,7 +994,7 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-indic-en-dist-200M/2025-08-15/ggml-indictrans2-indic-en-dist-200M.bin"
         }
       ],
-      "driveKey": "dfea395ffe1cb6d259029e5c81c290f8828981987855e23e7b66fd7c705901eb",
+      "driveKey": "51ee5910cb8cef000de2acfff5b3b72b866d0eb08a34193a40d9a18c0e5df642",
       "driveMetadata": [
         {
           "filename": "ggml-indictrans2-indic-en-dist-200M.bin",
@@ -989,7 +1024,7 @@
           "path": "qvac_models_compiled/ggml/indictrans2/ggml-indictrans2-indic-indic-dist-320M/2025-08-15/ggml-indictrans2-indic-indic-dist-320M.bin"
         }
       ],
-      "driveKey": "9a66da960931c449b41e3315d9aea4d3925f2cda024e8a4c139b64d0a539ed41",
+      "driveKey": "073d52c8d36e0df96bc30a7aa1fb5671d29268d2fe1dbca418768aa61d941925",
       "driveMetadata": [
         {
           "filename": "ggml-indictrans2-indic-indic-dist-320M.bin",
@@ -1058,7 +1093,7 @@
           "path": "qvac_models_compiled/ggml/medgemma-4b-it-Q4/"
         }
       ],
-      "driveKey": "1839dcabe1df8fdf1c83cd3d7a306c6e01e3c67e8542b0dd1e78cdfc86e75e2d",
+      "driveKey": "df3aa6cf3ad65d6848eb89cbcc317a673a3db514394249a3f758644366f0029b",
       "driveMetadata": [
         {
           "filename": "medgemma-4b-it-Q4_1-00001-of-00005.gguf",
@@ -1113,7 +1148,7 @@
           "path": "qvac_models_compiled/ggml/medgemma-4b-it-Q8/"
         }
       ],
-      "driveKey": "c71fb55a090a4a3fe353c2927424ce2da6749a3eb96865d12844393d90eb3657",
+      "driveKey": "14370088617b8823ba96c02d5f71c760e361d2366d8810e7ea3be1c80a23f745",
       "driveMetadata": [
         {
           "filename": "medgemma-4b-it-Q8_0-00001-of-00005.gguf",
@@ -1168,7 +1203,7 @@
           "path": "qvac_models_compiled/ggml/gte-large/"
         }
       ],
-      "driveKey": "c3b4c8f54ac3ed3e66323e011d52c88fcb1be8596251fd5457e4faab7b062798",
+      "driveKey": "598c2e43a6dd9b2604544b1f15e56825529bd83e2c6c9fbfa1a9e2ac8e1540aa",
       "driveMetadata": [
         {
           "filename": "gte-large.Q2_K-00001-of-00005.gguf",
@@ -1223,7 +1258,7 @@
           "path": "qvac_models_compiled/ggml/gte-large_fp6/"
         }
       ],
-      "driveKey": "f72fe66575d59db3fff8d01db7b185f5e30f291ade1dbfba8c4489742b93d4a0",
+      "driveKey": "53c6eb0ec6eeeb81348591b8d17e150f15f8d71e9ac4e39cd93ec498e65668a1",
       "driveMetadata": [
         {
           "filename": "gte-large_fp16-00001-of-00005.gguf",
@@ -2310,7 +2345,7 @@
           "path": "https://placeholder.mock"
         }
       ],
-      "driveKey": "ba453d763e9169baa80413fefc76cfa3866321ee4c51221dcb114d61703c829e",
+      "driveKey": "528eb43b34c57b0fb7116e532cd596a9661b001870bdabf696243e8d079a74ca",
       "driveMetadata": [
         {
           "filename": "model.bin",
