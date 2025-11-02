@@ -1,0 +1,6 @@
+generation:llama:instruct:3.2:1B:q4_0:1.0.0:shard ecca02e737c36ffbf1fa78b026d0851e686967347ec0628b7d969cdd45a6b405
+generation:qwen:instruct:3:4B:q4:1.0.0:shard 34dc044589d371bfd5fd25feda069a3919180dceadbdf9d32aa80b6745a44a2c
+generation:qwen:instruct:3:1.7B:q4:1.0.0:shard 0a8f8c5230e396458f436be995f1e367bae1783aa80828de41626681078c1a26
+generation:smolVLM2:multimodal:2:500M:f16:1.0.0:video-instruct b99c6f5dcadaad827cdcb1a129a3b34aff6ad28056738e0bd559c7ffb807e30f
+translation:marian:opus-ggml::::1.0.0:en-it ba453d763e9169baa80413fefc76cfa3866321ee4c51221dcb114d61703c829e
+translation:marian:opus-ggml:::q0f32:1.0.0:en-it 9ef58f31c20d5556722e0b58a5d262fd89801daf2e6cb28e3f21ac6e9228088f
