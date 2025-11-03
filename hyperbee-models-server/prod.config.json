@@ -442,15 +442,15 @@
       "models": [
         {
           "source": "aws",
-          "path": "qvac_models_compiled/ggml/marian/ggml-opus-en-it/2025-08-07/ggml-opus-en-it.bin"
+          "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-en-it/"
         }
       ],
-      "driveKey": "757b78203ce9c821bededdac0046f21c7484d2b73b15e04b162302866710d5f1",
+      "driveKey": "ac16424b000d6bde2ab717b0aea96b7ec5ae0abd5117ee768cc436d02bb7f298",
       "driveMetadata": [
         {
-          "filename": "model.bin",
-          "checksum": "169d2f4ec0acb9536e5f4faeab041a5ae16d4221f3bcbc7b0b311791a4d4b658",
-          "expectedSize": 673543993
+          "filename": "ggml-opus-en-it.bin",
+          "checksum": "8b97327ad0c6e73635b21a314428c900434bae2467ee58be7ff24f4af7632368",
+          "expectedSize": 671446753
         }
       ],
       "license": [
@@ -1313,7 +1313,7 @@
           "path": "qvac_models_compiled/ggml/Llama-3.2-1B/"
         }
       ],
-      "driveKey": "ecca02e737c36ffbf1fa78b026d0851e686967347ec0628b7d969cdd45a6b405",
+      "driveKey": "82c1250955752431ec29397289495734eddd9bdd948888e589336c6f77308fe1",
       "driveMetadata": [
         {
           "filename": "Llama-3.2-1B-Instruct-Q4_0-00001-of-00005.gguf",
@@ -1368,7 +1368,39 @@
           "path": "qvac_models_compiled/ggml/Qwen3-4B/"
         }
       ],
-      "driveKey": "34dc044589d371bfd5fd25feda069a3919180dceadbdf9d32aa80b6745a44a2c",
+      "driveKey": "0f13704f5c35f93b29e5489eedb6e2cc3ada9ede2e1e573073761cd27ef06db3",
+      "driveMetadata": [
+        {
+          "filename": "Qwen3-4B-Q4_0-00001-of-00005.gguf",
+          "checksum": "44855a5795d7cc494e1bc45d023b9fa1ba99e59a937859d3227d00bcf8d4bf09",
+          "expectedSize": 595322272
+        },
+        {
+          "filename": "Qwen3-4B-Q4_0-00002-of-00005.gguf",
+          "checksum": "22fbb31f804bb7dae0c46423675f37fdde82ff473b45a21266a97049c2ba75fa",
+          "expectedSize": 589216192
+        },
+        {
+          "filename": "Qwen3-4B-Q4_0-00003-of-00005.gguf",
+          "checksum": "45cd8d3b40d72fd2f5afd3f013ef59b59626f3489ac39bb91565783eb1cf67cb",
+          "expectedSize": 589892096
+        },
+        {
+          "filename": "Qwen3-4B-Q4_0-00004-of-00005.gguf",
+          "checksum": "ff24652aac8790c5f5810057710bec19a6872d4f29b2f61663b05fe7c57605a4",
+          "expectedSize": 595072096
+        },
+        {
+          "filename": "Qwen3-4B-Q4_0-00005-of-00005.gguf",
+          "checksum": "edecb6b27de377761d97ab88c75709b2b6cc8466bde4a43baf9744ff9a3ed19e",
+          "expectedSize": 127778208
+        },
+        {
+          "filename": "Qwen3-4B-Q4_0.tensors.txt",
+          "checksum": "4168384d4ab9eb0d773b31da5f8cd13747e3a45f3bbcff14485a5cc7679e7ed4",
+          "expectedSize": 9107
+        }
+      ],
       "license": [
         "Apache-2.0"
       ]
@@ -1486,7 +1518,39 @@
           "path": "qvac_models_compiled/ggml/Qwen3-1.7B/"
         }
       ],
-      "driveKey": "0a8f8c5230e396458f436be995f1e367bae1783aa80828de41626681078c1a26",
+      "driveKey": "8b10531c316d55c21a16801f906a7586421177d116a5e5b1df2ffbdaa7895bfa",
+      "driveMetadata": [
+        {
+          "filename": "Qwen3-1.7B-Q4_0-00001-of-00005.gguf",
+          "checksum": "3c431cbd66b097bca68e2445e94398092e4bbacba1b1fce1a82bb0c7c4548163",
+          "expectedSize": 262374368
+        },
+        {
+          "filename": "Qwen3-1.7B-Q4_0-00002-of-00005.gguf",
+          "checksum": "be625ac56ec660a1e57096ff4cb708e5b0bf48de8881af0de7b63ff97e77500e",
+          "expectedSize": 249068160
+        },
+        {
+          "filename": "Qwen3-1.7B-Q4_0-00003-of-00005.gguf",
+          "checksum": "7a38d01c2c44b7d3cbe5c5e81c9bbd24049e5401afbe7d8d3bd21cb534e1c05a",
+          "expectedSize": 247880416
+        },
+        {
+          "filename": "Qwen3-1.7B-Q4_0-00004-of-00005.gguf",
+          "checksum": "943d1ad1cbe8bf581ff4ea2ea6a9009b76d7ab5594ed0c771d3fee392956c1c5",
+          "expectedSize": 247888672
+        },
+        {
+          "filename": "Qwen3-1.7B-Q4_0-00005-of-00005.gguf",
+          "checksum": "2febc30e9f6152ad0d077e6f6b932db865384ab6324d5ccc2210d17875c294d3",
+          "expectedSize": 49571840
+        },
+        {
+          "filename": "Qwen3-1.7B-Q4_0.tensors.txt",
+          "checksum": "c10b950a18ec75d3ee61b55ed1ba5b4c3ff3d7afd726651b813d48165bd5847a",
+          "expectedSize": 7067
+        }
+      ],
       "license": [
         "Apache-2.0"
       ]
@@ -2447,7 +2511,7 @@
       "models": [
         {
           "source": "aws",
-          "path": "qvac_models_compiled/ggml/marian/ggml-opus-en-ru/"
+          "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-en-ru/"
         }
       ],
       "driveKey": "c009326acc2c3eeb5d557489370cf7b6de07d35335cb47e9a3e90909f9ac6c44",
@@ -2477,7 +2541,7 @@
       "models": [
         {
           "source": "aws",
-          "path": "qvac_models_compiled/ggml/marian/ggml-opus-ru-en/"
+          "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-ru-en/"
         }
       ],
       "driveKey": "12d0af03637c3902beff9bf6e2d854f103ef4745694587c9a67044ff6accb493",
@@ -2634,7 +2698,7 @@
           "path": " https://huggingface.co/ggml-org/SmolVLM2-500M-Video-Instruct-GGUF/resolve/main/mmproj-SmolVLM2-500M-Video-Instruct-f16.gguf"
         }
       ],
-      "driveKey": "b99c6f5dcadaad827cdcb1a129a3b34aff6ad28056738e0bd559c7ffb807e30f",
+      "driveKey": "f78850af5214d2ecaf9a7f3e4dccd452e20208dd817dc6682b1081f8c061af1b",
       "driveMetadata": [
         {
           "filename": "SmolVLM2-500M-Video-Instruct-f16.gguf",
@@ -2690,7 +2754,7 @@
         "externalVersion": "",
         "params": "",
         "quantization": "",
-        "internalVersion": "1.0.0",
+        "internalVersion": "1.0.1",
         "other": "norwegian"
       },
       "models": [
@@ -2699,12 +2763,47 @@
           "path": "qvac_models_compiled/ggml/whisper-norwegian"
         }
       ],
-      "driveKey": "19aaf2bc2685d2be2e001af0abf2a5d07d13b78f1a234fb75bf9fc2d07ee7f1d",
+      "driveKey": "6d305e0c2e4f86ccc945309b455e4805e20145a9580c67e5616f575264c99faf",
       "driveMetadata": [
         {
           "filename": "nb-tiny-ggml-model.bin",
           "checksum": "2f9dd799ee36b6a9c8d642e9b1df8ecf2135efdd5a91b1d9ca0b3c0decda535f",
           "expectedSize": 77691730
+        }
+      ],
+      "license": [
+        "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "ggml",
+        "name": "whisper-futo",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "",
+        "internalVersion": "1.0.0",
+        "other": ""
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper/ggml-futo/"
+        }
+      ],
+      "driveKey": "cc9773d1c2c09b27a9cc6c640a3e90cb2a8289ecc89461d5f4e290ee9123bd0b",
+      "driveMetadata": [
+        {
+          "filename": "tiny_acft_q8_0.bin",
+          "checksum": "07aa4d514144deacf5ffec5cacb36c93dee272fda9e64ac33a801f8cd5cbd953",
+          "expectedSize": 43537450
+        },
+        {
+          "filename": "tiny_en_acft_q8_0.bin",
+          "checksum": "4b5480aa1b14a7efc5b578ef176510970a898049671c3cd237285b3e3f6bfbfc",
+          "expectedSize": 43550795
         }
       ],
       "license": [

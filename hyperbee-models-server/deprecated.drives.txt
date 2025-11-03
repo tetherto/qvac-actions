@@ -37,6 +37,10 @@ generation:medgemma:it::4B:q4_1:1.0.0:shard 1839dcabe1df8fdf1c83cd3d7a306c6e01e3
 generation:medgemma:it::4B:q8_1:1.0.0:shard c71fb55a090a4a3fe353c2927424ce2da6749a3eb96865d12844393d90eb3657
 embedding:gte-large:bert::335M:Q2_K:1.0.0:shard c3b4c8f54ac3ed3e66323e011d52c88fcb1be8596251fd5457e4faab7b062798
 embedding:gte-large:bert::335M:fp16:1.0.0:shard f72fe66575d59db3fff8d01db7b185f5e30f291ade1dbfba8c4489742b93d4a0
+generation:llama:instruct:3.2:1B:q4_0:1.0.0:shard ecca02e737c36ffbf1fa78b026d0851e686967347ec0628b7d969cdd45a6b405
+generation:qwen:instruct:3:4B:q4:1.0.0:shard 34dc044589d371bfd5fd25feda069a3919180dceadbdf9d32aa80b6745a44a2c
+generation:qwen:instruct:3:1.7B:q4:1.0.0:shard 0a8f8c5230e396458f436be995f1e367bae1783aa80828de41626681078c1a26
+generation:smolVLM2:multimodal:2:500M:f16:1.0.0:video-instruct b99c6f5dcadaad827cdcb1a129a3b34aff6ad28056738e0bd559c7ffb807e30f
 generation:salamandrata:instruct::2B:q4:1.0.0 (with-license) c5db03536237dbca048c9628b4658404899e7ad30e0b44c7096cc4f6e92b961d
 generation:salamandrata:instruct::2B:q8:1.0.0 (with-license) 4dcd100f29f6b5f57e95146fb92423cd12256627cea755619dde4d92e9a83799
 vad:silero-vad-ggml:silero:5.1.2:::1.0.0 (with-license) 9b50840fb32fd69142da36966fd600d484eb1e45261681d6ce1dd6be257fbbe3

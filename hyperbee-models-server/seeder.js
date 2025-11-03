@@ -10,6 +10,7 @@ const logger = require('./logger')
 const b4a = require('b4a')
 const IdEnc = require('hypercore-id-encoding')
 const goodbye = require('graceful-goodbye')
+const process = require('bare-process')
 
 const checkProgressInterval = 10_000
 
