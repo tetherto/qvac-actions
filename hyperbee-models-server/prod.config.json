@@ -445,12 +445,12 @@
           "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-en-it/"
         }
       ],
-      "driveKey": "ac16424b000d6bde2ab717b0aea96b7ec5ae0abd5117ee768cc436d02bb7f298",
+      "driveKey": "757b78203ce9c821bededdac0046f21c7484d2b73b15e04b162302866710d5f1",
       "driveMetadata": [
         {
-          "filename": "ggml-opus-en-it.bin",
-          "checksum": "8b97327ad0c6e73635b21a314428c900434bae2467ee58be7ff24f4af7632368",
-          "expectedSize": 671446753
+          "filename": "model.bin",
+          "checksum": "169d2f4ec0acb9536e5f4faeab041a5ae16d4221f3bcbc7b0b311791a4d4b658",
+          "expectedSize": 673543993
         }
       ],
       "license": [
