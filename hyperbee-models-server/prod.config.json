@@ -297,7 +297,7 @@
           "path": "https://huggingface.co/unsloth/medgemma-4b-it-GGUF/blob/main/medgemma-4b-it-Q4_1.gguf"
         }
       ],
-      "driveKey": "74c6aa6be48f9b83b6f5836c88f1b31d6b88511ee61824cd265e606d6d4217f2", 
+      "driveKey": "74c6aa6be48f9b83b6f5836c88f1b31d6b88511ee61824cd265e606d6d4217f2",
       "driveMetadata": [
         {
           "filename": "medgemma-4b-it-Q4_1.gguf",
@@ -305,7 +305,9 @@
           "expectedSize": 2564052800
         }
       ],
-      "license": ["Apache-2.0"]
+      "license": [
+        "Apache-2.0"
+      ]
     },
     {
       "addon": "@qvac/llm-llamacpp",
@@ -2808,6 +2810,893 @@
       ],
       "license": [
         "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "en-pt"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f16/ggml-opus-en-pt/"
+        }
+      ],
+      "driveKey": "098cc786de52e61b8b543f0e0c2e16e054ff19b9f9aef41ec931191c939f8e12",
+      "driveMetadata": [
+        {
+          "filename": "ggml-opus-mt-en-roa-f16.bin",
+          "checksum": "d1012b5c5864e132a848623535298a1cf87bee44463e4b9c0be25b7812a5e55a",
+          "expectedSize": 267197483
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "pt-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f16/ggml-opus-pt-en/"
+        }
+      ],
+      "driveKey": "821af2699a40bbec2f2fce6276f59c714285f13780cacae3f023cb44c6c6cad1",
+      "driveMetadata": [
+        {
+          "filename": "ggml-opus-mt-roa-en-f16.bin",
+          "checksum": "f5e4e921132df9be5a55c097aa3ba9047e2188bad98304b11d3fea19b5dd7b14",
+          "expectedSize": 292900034
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "en-fr"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-en-fr/"
+        }
+      ],
+      "driveKey": "2957a3e18426d09335d0068efac0726f9945fe72ebbf4161dbc65111c85f6631",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-en-fr.bin",
+          "checksum": "17d7f98fdeab5e56dd381735eb93d12174531043a5394419af481eb48247214f",
+          "expectedSize": 546872758
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "en-fr"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f16/ggml-opus-en-fr/"
+        }
+      ],
+      "driveKey": "5b9b65bd8735f91d45103c0b44530823274534230623957db5839c748ba30bf0",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-en-fr.bin",
+          "checksum": "c0dd1e59316736d3b6358dc343de42d19e39c62f5c23b5fb3983779a39f600d9",
+          "expectedSize": 275965366
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "en-fr"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-en-fr/"
+        }
+      ],
+      "driveKey": "9cf4a27c1ba14f73d1287dc161b7fd9594253b8e8758bddc961984c1e93d6f5e",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-en-fr.bin",
+          "checksum": "d02990f1a9308105dc1303ae0d7d83c8297bf902df959c478e0d21c90d008589",
+          "expectedSize": 81250678
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "de-fr"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-de-fr/"
+        }
+      ],
+      "driveKey": "390d1b4164b46d332a82220d83867e1aa19058fb0ccff6d841de792066f992e5",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-de-fr.bin",
+          "checksum": "8b89ebd06a4c879d0a39967b539912de9cc08ef0214a5bf863642a6dca744f70",
+          "expectedSize": 557103941
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "de-fr"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f16/ggml-opus-de-fr/"
+        }
+      ],
+      "driveKey": "55fe6cf0f6f57e4e5b7ca2b1c544e95f91eb8429d7f056c455e9a8c2677a08fb",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-de-fr.bin",
+          "checksum": "97a69f74ceb39bfb7ebf8d3dc535a0ff5d0ad7e38f9d168003e999cf74b23b60",
+          "expectedSize": 281161541
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "de-fr"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-de-fr/"
+        }
+      ],
+      "driveKey": "3782fc852215514aee043e095c041933bf915f618057035a467f461d844476d3",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-de-fr.bin",
+          "checksum": "fb8a01de8a0815853f57ff7ff122f7406d7d7634c5875882a2080d6c1bc0d8a7",
+          "expectedSize": 82827941
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "es-fr"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-es-fr/"
+        }
+      ],
+      "driveKey": "f43966d16f04b108641de97050563515f699c7426c6aa08f54ee28cbea07a1dd",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-es-fr.bin",
+          "checksum": "dbe0e44e4f8476f617fbc9a6114f24de29180e1735039cc2672705e8f461d42f",
+          "expectedSize": 641478534
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "es-fr"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f16/ggml-opus-es-fr/"
+        }
+      ],
+      "driveKey": "2313996f5c2a6265c202c90d07fcbd7f324d166428109abdb16ca11f66305510",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-es-fr.bin",
+          "checksum": "92d82a864fed409b48940ea3ae8d451bce25d6424f58aca7b54a0383fb59e821",
+          "expectedSize": 323544966
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "es-fr"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-es-fr/"
+        }
+      ],
+      "driveKey": "446daa51a5f037795fce6b0f9b245f53f3f5e601d4dd942b707073bed3586ac4",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-es-fr.bin",
+          "checksum": "471d47e937f8cdb4460e4aecc6348af964ca26b1015dcd8b9467e3762a68f56b",
+          "expectedSize": 95030214
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "fr-es"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-fr-es/"
+        }
+      ],
+      "driveKey": "6ecc35234eafa3578323591a0872d812479b3937c1a10e303475c9d4614f4ac0",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-fr-es.bin",
+          "checksum": "bd5f5707f7cf60eac82b5dec89b70d9b4892837c7cbbf7e8c4b697670a1751b7",
+          "expectedSize": 641478534
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "fr-es"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f16/ggml-opus-fr-es/"
+        }
+      ],
+      "driveKey": "710aeacb0e1a0c938478b1e065b06c58be210a8ddb0bc25edb98a809997d2d14",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-fr-es.bin",
+          "checksum": "6496c0c3500c8fd6cf91b714f6f1ce17fcba4f2852a6815fb7ce626cf5726cd5",
+          "expectedSize": 323544966
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "fr-es"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-fr-es/"
+        }
+      ],
+      "driveKey": "07c3d283e1d22b7a44cb16ed3c733d958885502e293ca75a0b4d87d1aecfc653",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-fr-es.bin",
+          "checksum": "e7e721929e5ae75d2ee7bc26a7c25e5d5b32d478d78d0b92154644677f34594d",
+          "expectedSize": 95030214
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "fr-de"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-fr-de/"
+        }
+      ],
+      "driveKey": "d4defd18e51d55eb20957169b2fdfef18627ce01e06d56d40735c429c980a149",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-fr-de.bin",
+          "checksum": "68279709f256d7634073126c5832e49b11fdb3803e644f2ce4609fef335f226a",
+          "expectedSize": 557103941
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "fr-de"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f16/ggml-opus-fr-de/"
+        }
+      ],
+      "driveKey": "14dbccb2c678d45dbd3bd3d0676be9d869b2b6f2ac3fca870f0dcd5a75a0d0d0",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-fr-de.bin",
+          "checksum": "22cdf37bf886ec9160bdbb18d5d850f8e63ecf0261ef205f8c23e7fe1e8aadfe",
+          "expectedSize": 281161541
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "fr-de"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-fr-de/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "fr-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-fr-en/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "fr-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f16/ggml-opus-fr-en/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "fr-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-fr-en/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "en-pt"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-en-pt/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "en-pt"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-en-pt/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "fr-de"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-fr-de/"
+        }
+      ],
+      "driveKey": "a85185a5747e16cff9db0b2c8ab92b63fbe3c4abc5201c6afa4fd426fabd1cb5",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-fr-de.bin",
+          "checksum": "5a90b47684a43147107724f700c74cf4d367b35969dd445a34f758e31601e7aa",
+          "expectedSize": 82827941
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "fr-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-fr-en/"
+        }
+      ],
+      "driveKey": "c1226000901bf7e25507b414ffb60e0c8f5cf198de115559dc6bd68826033f20",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-fr-en.bin",
+          "checksum": "6f91d4af1bf6a1d9ff1f172204e28ec331379b1f2b960726329705aab4ea370e",
+          "expectedSize": 546872758
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f16",
+        "internalVersion": "1.0.0",
+        "other": "fr-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f16/ggml-opus-fr-en/"
+        }
+      ],
+      "driveKey": "bd1fe00d165a2da2bfb5ea67485602ede700986e40ddd7698b7c37412af01065",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "f5b745ef98087f531e719ee8ca6a96809444573ecc7173c6fa68eaad39b3cc3f",
+          "expectedSize": 18658
+        },
+        {
+          "filename": "ggml-opus-fr-en.bin",
+          "checksum": "b8074032d99d8c3ba392f75032c1eef6a556af68026b545007fda9eb655ef3ec",
+          "expectedSize": 275965354
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "fr-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-fr-en/"
+        }
+      ],
+      "driveKey": "688b8d7e82d33c8dd18e156282a1b11e97247d04327e0f7549694f4433861262",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-fr-en.bin",
+          "checksum": "362daefe06cc36dab7169233cd2dce940e7b656f1da8637c9bc4ba6a405b077b",
+          "expectedSize": 81250678
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q0f32",
+        "internalVersion": "1.0.0",
+        "other": "en-pt"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-en-pt/"
+        }
+      ],
+      "driveKey": "9eb7a478a6e14aef61f618e531061900a2d9a2d55e693dc464560db92861cba4",
+      "driveMetadata": [
+        {
+          "filename": "ggml-opus-en-pt.bin",
+          "checksum": "f03550375663c4592ebff25dc5446d7576270b5caec583fc3bc60de98d9e1bb0",
+          "expectedSize": 1381112644
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus-ggml",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "en-pt"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-en-pt/"
+        }
+      ],
+      "driveKey": "a58825b2dcde4c4701889c20050e025df4d69f1161c9d2d2e6106712d70b2ace",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "f5b745ef98087f531e719ee8ca6a96809444573ecc7173c6fa68eaad39b3cc3f",
+          "expectedSize": 18658
+        },
+        {
+          "filename": "ggml-opus-en-pt.bin",
+          "checksum": "90f32b905c2aa7134c137bd0c9a4ff953b3e6d4c97d45720f49c7c07c60875d4",
+          "expectedSize": 197125444
+        }
+      ],
+      "license": [
+        "Apache-2.0"
       ]
     }
   ]

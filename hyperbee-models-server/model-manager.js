@@ -115,6 +115,14 @@ async function main () {
           driveMetadata: driveConfig.driveMetadata || existingModelRecord?.driveMetadata || []
         }
 
+        logger.info(
+          `Model ${modelKey} record ${existingModelRecord ? 'updated' : 'created'} with provided driveKey: ${JSON.stringify(
+            expectedModelRecord,
+            null,
+            2
+          )}`
+        )
+
         // Check if existing record matches expected record
         if (existingModelRecord &&
           existingModelRecord.key === expectedModelRecord.key &&
@@ -132,13 +140,6 @@ async function main () {
         // Record doesn't exist or doesn't match, so create/update it
         await db.put(modelKey, JSON.stringify(expectedModelRecord))
         driveKeys[modelKey] = driveConfig.driveKey
-        logger.info(
-          `Model ${modelKey} record ${existingModelRecord ? 'updated' : 'created'} with provided driveKey: ${JSON.stringify(
-            expectedModelRecord,
-            null,
-            2
-          )}`
-        )
         continue
       }
 
