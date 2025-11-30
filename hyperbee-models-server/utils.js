@@ -145,9 +145,6 @@ async function calculateDirectoryChecksums (dirPath, excludeFiles = []) {
 
   // Process each file
   for (const relativeFilePath of files) {
-    if (relativeFilePath.startsWith('LICENSE-') && relativeFilePath.endsWith('.txt')) {
-      continue
-    }
     const filePath = path.join(dirPath, relativeFilePath)
 
     // Get file stats for size
