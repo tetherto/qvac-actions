@@ -5,7 +5,7 @@ const { z } = require('zod')
 const LicenseEnum = z.enum(['Apache-2.0', 'GNU-V3', 'Llama-3.2', 'MIT', 'Qwen'])
 
 const ModelTagsSchema = z.object({
-  function: z.enum(['translation', 'generation', 'embedding', 'transcription', 'vad', 'tts']),
+  function: z.enum(['translation', 'generation', 'embedding', 'transcription', 'vad', 'tts', 'ocr']),
   type: z.string().min(1),
   name: z.string().min(1),
   externalVersion: z.string().default(''),

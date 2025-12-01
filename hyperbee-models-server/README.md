@@ -150,7 +150,7 @@ Add your drive configuration to `prod.config.json` in the `drives` array. Each d
 {
   "addon": "@qvac/package-name",
   "tags": {
-    "function": "generation", // generation, translation, transcription, embedding, vad
+    "function": "generation", // generation, translation, transcription, embedding, vad, tts, ocr
     "type": "instruct", // model type (e.g., instruct, base, chat)
     "name": "model-name", // model name
     "externalVersion": "", // external version (optional)
@@ -273,7 +273,29 @@ node scripts/hyperbeeKeyChecker.js <bee-key> <model-key>
 npm run check-model <model-key>
 ```
 
-### 8. Push to Git
+### 8. Update Configuration (Post-Processing)
+
+After running `model-manager.js`, use utility scripts to maintain configuration:
+
+```bash
+# Update driveKeys and metadata from keys.txt and app.log
+node postupdate-records.js
+
+# Generate blind peers request file
+node bp-keet-req.js
+
+# Check for and remove duplicate entries
+node config-cleanup.js --dry-run  # Preview duplicates
+node config-cleanup.js             # Remove duplicates
+```
+
+**`postupdate-records.js`**: Updates `prod.config.json` with driveKeys from `keys.txt` and driveMetadata from `app.log` or local files. Automatically adds missing LICENSE files to metadata.
+
+**`bp-keet-req.js`**: Generates `models-blind.txt` with "request drive" commands for the blind peers bot.
+
+**`config-cleanup.js`**: Finds and removes duplicate entries based on BeeKey. Prefers entries with driveKey and metadata. Use `--dry-run` to preview changes.
+
+### 9. Push to Git
 
 Once reseeding has been confirmed and the model is successfully distributed across the network:
 
@@ -474,6 +496,18 @@ npm run lint:fix
 # Check Hyperbee connection
 npm run check-connection
 ```
+
+## Recent Improvements
+
+### DriveMetadata Enhancement
+- **LICENSE Files**: Now included in `driveMetadata` for all models
+- **Existing Records**: Logged even when skipped (same fingerprint) for tool accessibility
+- **Checksum Calculation**: Fixed to include all LICENSE files (both `LICENSE` and `LICENSE-*.txt`)
+
+### Utility Scripts
+- **`postupdate-records.js`**: Updates `driveKey` and `driveMetadata` from `keys.txt` and `app.log`. Auto-generates missing metadata from local files.
+- **`bp-keet-req.js`**: Generates `models-blind.txt` for blind peers seeding requests.
+- **`config-cleanup.js`**: Detects and removes duplicate entries. Supports `--dry-run` mode.
 
 ## Testing
 

@@ -9,6 +9,7 @@
     "@qvac/llm-llamacpp",
     "@qvac/embed-llamacpp",
     "@qvac/vad-onnx",
+    "@qvac/ocr-onnx",
     "@qvac/tts"
   ],
   "drives": [
@@ -3382,135 +3383,6 @@
       ],
       "license": [
         "Apache-2.0"
-      ]
-    },
-    {
-      "addon": "@qvac/translation-nmtcpp",
-      "tags": {
-        "function": "translation",
-        "type": "opus-ggml",
-        "name": "marian",
-        "externalVersion": "",
-        "params": "",
-        "quantization": "q0f32",
-        "internalVersion": "1.0.0",
-        "other": "fr-en"
-      },
-      "models": [
-        {
-          "source": "aws",
-          "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-fr-en/"
-        }
-      ],
-      "license": [
-        "Apache-2.0"
-      ]
-    },
-    {
-      "addon": "@qvac/translation-nmtcpp",
-      "tags": {
-        "function": "translation",
-        "type": "opus-ggml",
-        "name": "marian",
-        "externalVersion": "",
-        "params": "",
-        "quantization": "q0f16",
-        "internalVersion": "1.0.0",
-        "other": "fr-en"
-      },
-      "models": [
-        {
-          "source": "aws",
-          "path": "qvac_models_compiled/ggml/marian/q0f16/ggml-opus-fr-en/"
-        }
-      ],
-      "license": [
-        "Apache-2.0"
-      ]
-    },
-    {
-      "addon": "@qvac/translation-nmtcpp",
-      "tags": {
-        "function": "translation",
-        "type": "opus-ggml",
-        "name": "marian",
-        "externalVersion": "",
-        "params": "",
-        "quantization": "q4_0",
-        "internalVersion": "1.0.0",
-        "other": "fr-en"
-      },
-      "models": [
-        {
-          "source": "aws",
-          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-fr-en/"
-        }
-      ],
-      "license": [
-        "Apache-2.0"
-      ]
-    },
-    {
-      "addon": "@qvac/translation-nmtcpp",
-      "tags": {
-        "function": "translation",
-        "type": "opus-ggml",
-        "name": "marian",
-        "externalVersion": "",
-        "params": "",
-        "quantization": "q0f32",
-        "internalVersion": "1.0.0",
-        "other": "en-pt"
-      },
-      "models": [
-        {
-          "source": "aws",
-          "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-en-pt/"
-        }
-      ],
-      "license": [
-        "Apache-2.0"
-      ]
-    },
-    {
-      "addon": "@qvac/translation-nmtcpp",
-      "tags": {
-        "function": "translation",
-        "type": "opus-ggml",
-        "name": "marian",
-        "externalVersion": "",
-        "params": "",
-        "quantization": "q4_0",
-        "internalVersion": "1.0.0",
-        "other": "en-pt"
-      },
-      "models": [
-        {
-          "source": "aws",
-          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-en-pt/"
-        }
-      ],
-      "license": [
-        "Apache-2.0"
-      ]
-    },
-    {
-      "addon": "@qvac/translation-nmtcpp",
-      "tags": {
-        "function": "translation",
-        "type": "opus-ggml",
-        "name": "marian",
-        "externalVersion": "",
-        "params": "",
-        "quantization": "q4_0",
-        "internalVersion": "1.0.0",
-        "other": "fr-de"
-      },
-      "models": [
-        {
-          "source": "aws",
-          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-fr-de/"
-        }
       ],
       "driveKey": "a85185a5747e16cff9db0b2c8ab92b63fbe3c4abc5201c6afa4fd426fabd1cb5",
       "driveMetadata": [
@@ -3524,9 +3396,6 @@
           "checksum": "5a90b47684a43147107724f700c74cf4d367b35969dd445a34f758e31601e7aa",
           "expectedSize": 82827941
         }
-      ],
-      "license": [
-        "Apache-2.0"
       ]
     },
     {
@@ -3547,6 +3416,9 @@
           "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-fr-en/"
         }
       ],
+      "license": [
+        "Apache-2.0"
+      ],
       "driveKey": "c1226000901bf7e25507b414ffb60e0c8f5cf198de115559dc6bd68826033f20",
       "driveMetadata": [
         {
@@ -3559,9 +3431,6 @@
           "checksum": "6f91d4af1bf6a1d9ff1f172204e28ec331379b1f2b960726329705aab4ea370e",
           "expectedSize": 546872758
         }
-      ],
-      "license": [
-        "Apache-2.0"
       ]
     },
     {
@@ -3582,6 +3451,9 @@
           "path": "qvac_models_compiled/ggml/marian/q0f16/ggml-opus-fr-en/"
         }
       ],
+      "license": [
+        "Apache-2.0"
+      ],
       "driveKey": "bd1fe00d165a2da2bfb5ea67485602ede700986e40ddd7698b7c37412af01065",
       "driveMetadata": [
         {
@@ -3594,9 +3466,6 @@
           "checksum": "b8074032d99d8c3ba392f75032c1eef6a556af68026b545007fda9eb655ef3ec",
           "expectedSize": 275965354
         }
-      ],
-      "license": [
-        "Apache-2.0"
       ]
     },
     {
@@ -3617,6 +3486,9 @@
           "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-fr-en/"
         }
       ],
+      "license": [
+        "Apache-2.0"
+      ],
       "driveKey": "688b8d7e82d33c8dd18e156282a1b11e97247d04327e0f7549694f4433861262",
       "driveMetadata": [
         {
@@ -3629,9 +3501,6 @@
           "checksum": "362daefe06cc36dab7169233cd2dce940e7b656f1da8637c9bc4ba6a405b077b",
           "expectedSize": 81250678
         }
-      ],
-      "license": [
-        "Apache-2.0"
       ]
     },
     {
@@ -3652,16 +3521,21 @@
           "path": "qvac_models_compiled/ggml/marian/q0f32/ggml-opus-en-pt/"
         }
       ],
+      "license": [
+        "Apache-2.0"
+      ],
       "driveKey": "9eb7a478a6e14aef61f618e531061900a2d9a2d55e693dc464560db92861cba4",
       "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
         {
           "filename": "ggml-opus-en-pt.bin",
           "checksum": "f03550375663c4592ebff25dc5446d7576270b5caec583fc3bc60de98d9e1bb0",
           "expectedSize": 1381112644
         }
-      ],
-      "license": [
-        "Apache-2.0"
       ]
     },
     {
@@ -3682,6 +3556,9 @@
           "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-en-pt/"
         }
       ],
+      "license": [
+        "Apache-2.0"
+      ],
       "driveKey": "a58825b2dcde4c4701889c20050e025df4d69f1161c9d2d2e6106712d70b2ace",
       "driveMetadata": [
         {
@@ -3693,6 +3570,1583 @@
           "filename": "ggml-opus-en-pt.bin",
           "checksum": "90f32b905c2aa7134c137bd0c9a4ff953b3e6d4c97d45720f49c7c07c60875d4",
           "expectedSize": 197125444
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/ocr-onnx",
+      "tags": {
+        "function": "ocr",
+        "type": "recognizer",
+        "name": "craft",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "",
+        "internalVersion": "1.0.0",
+        "other": "english"
+      },
+      "driveKey": "6fccf9d6aaeaf3251bbcb1bc363787def7e2cae4e92b52a5e665e906263b5d6b",
+      "driveMetadata": [
+        {
+          "filename": "detector_craft.onnx",
+          "checksum": "0ca3aed5da83250025bc01eb3ad1fc21482d3cee814fae22343de13c221e02e9",
+          "expectedSize": 83058594
+        },
+        {
+          "filename": "recognizer_english.onnx",
+          "checksum": "d962883812953aaafd165f2a815aa0fb95ff9c35d29807e6ceae7dd4cd5c64aa",
+          "expectedSize": 15143612
+        }
+      ],
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ocr/2025-04-25/recognizer_english.onnx"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ocr/2025-04-25/detector_craft.onnx"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "en-it"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-en-it/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "4aa1a3960f33d6bda61be4810c5e337729daef9f18e0a5e18de135e5be838d7c",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-en-it.bin",
+          "checksum": "8b98e4db3b57ab767fd26e1575fbe855c674b919819dcd8587f9d76403be9d16",
+          "expectedSize": 99571033
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "it-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-it-en/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "925c7e041fc536f4bcd0047e5aca594d49650c6e855b3dfb567e20f08db78262",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-it-en.bin",
+          "checksum": "7328984797f982f9835056efc49197b8076614b1d7aaa14b40fff04bdb29d3a1",
+          "expectedSize": 99875821
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "en-de"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-en-de/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "396f08beaec748cc5ff167ee5d568beda32cef09f6b20658a05e1472185c71c0",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "f5b745ef98087f531e719ee8ca6a96809444573ecc7173c6fa68eaad39b3cc3f",
+          "expectedSize": 18658
+        },
+        {
+          "filename": "ggml-opus-en-de.bin",
+          "checksum": "72d6fbfb11a3e8f15680599d970c9c39c9b61a1b1d7af77e031cb65ec2fa4f29",
+          "expectedSize": 79986254
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "de-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-de-en/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "b7f74bad18de10f86237b2bf523daad7e8274b5ae4a56c072a416311032fe5ba",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-de-en.bin",
+          "checksum": "2cd19ac1421c4f4b3c3640da0391b65eb5d714bebc71973800c2c948e01cadc2",
+          "expectedSize": 79986254
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "en-es"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-en-es/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "3e7ccb4270032fea10a4697fa68ebaf6771ce8f05488dcc679e462276794b53c",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-en-es.bin",
+          "checksum": "cf1916fff3dd797aa15e85adbb165840874e4c63736c043a6785d698cc53ce94",
+          "expectedSize": 86186269
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "es-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-es-en/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "9442ba70fea93cb85f55c44e2859b10c5cc621686ed8a414fb4591bc9634fe47",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-es-en.bin",
+          "checksum": "7c62479e63430b4d4744bd7f35dbe0566501fe0c408b4285b3e9897cdd355aa9",
+          "expectedSize": 86186269
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "en-fr"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-en-fr/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "558bbafecb585d7d436e272cb77f8a8b67fdfddf6d05d0d3fab52080529f6e10",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-en-fr.bin",
+          "checksum": "d02990f1a9308105dc1303ae0d7d83c8297bf902df959c478e0d21c90d008589",
+          "expectedSize": 81250678
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "fr-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-fr-en/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "6a1f15e442ff3b2a4f15690bfe2cf60e2ca5bdcdb56e82446bd7e6b0da6fd139",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE",
+          "checksum": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "expectedSize": 11357
+        },
+        {
+          "filename": "ggml-opus-fr-en.bin",
+          "checksum": "362daefe06cc36dab7169233cd2dce940e7b656f1da8637c9bc4ba6a405b077b",
+          "expectedSize": 81250678
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "en-ar"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-en-ar/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "b407eed23bce20b10f84697ba4582e46bf6ea382afb93f7d6fe00c93d7d4d4a0",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ggml-opus-en-ar.bin",
+          "checksum": "6920f7c46fbadd955cc0ec8ff8625acdf9c03e8611fa18a82264571ce234970f",
+          "expectedSize": 84422166
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "ar-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-ar-en/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "b92b8b3c369a18d3b7b787848b75a0bec6ec76e585b38dc6d7b0d443cd38a25c",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ggml-opus-ar-en.bin",
+          "checksum": "725e6e08b72d09cff4f0d929e862339d9f1bed5ddbdf8948f8153007af5a6b07",
+          "expectedSize": 84462871
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "en-zh"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-en-zh/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "b4d1198162fdc96f303e41046076543ae181a7c87d7ecc05fe98eae2f00481fe",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ggml-opus-en-zh.bin",
+          "checksum": "0e08e1c0428bb99e5b5e5ff393e91edfb11438f9413c6533b224de2cf31da9b7",
+          "expectedSize": 86130069
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "zh-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-zh-en/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "4773c185a8fe1f2a63c686996d1817b0c052e17a8aa6488a39d85c81bb726ef4",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ggml-opus-zh-en.bin",
+          "checksum": "df9d96e85a2d036ff26936390b9e6fbee24586e329a2eef79476af096692561f",
+          "expectedSize": 86130364
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "en-ja"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-en-ja/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "12fd8ee6fd0b69797f21909aeaf27d8dc68ee0ea8894658a3efca9a43291dbc2",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ggml-opus-en-ja.bin",
+          "checksum": "60cdfe826f8ba97735e8eef2e42018b77a7065a67226a553837be1085e3f3fcf",
+          "expectedSize": 84099798
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "ja-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-ja-en/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "abe44f20b5acd6c7b6f581109c6d2e23fe1888ef16494c609e86f44e23055035",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ggml-opus-ja-en.bin",
+          "checksum": "f5325e97c64e79e830bd8d2e1b5a9c4b961e3a2c998b587052e6324fef62374d",
+          "expectedSize": 82325057
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "en-roa"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-en-roa/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "ed894bfc0e3ceb90f35c417283fcdcb191eca5973334cc6691344ecc813f444f",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ggml-opus-en-roa.bin",
+          "checksum": "5b4fd1a2f1683b1e390aa7c62b04bd0a72d54c5881c85bf089d1fd0df50e7322",
+          "expectedSize": 78760139
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "opus",
+        "name": "marian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q4_0",
+        "internalVersion": "1.0.0",
+        "other": "roa-en"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/marian/q4_0/ggml-opus-roa-en/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "fca28b2c128f20292b8c978be88515d9880c35914bae9df2511f4dcb07ad9b6e",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ggml-opus-roa-en.bin",
+          "checksum": "153272a7c2213604c88378ae1f2dc4b683f684af93681a671fd4bfba5c846660",
+          "expectedSize": 86070050
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "newpack": true,
+      "tags": {
+        "function": "transcription",
+        "type": "tiny-ggml",
+        "name": "whisper-french",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "f16",
+        "internalVersion": "1.0.0",
+        "other": "french"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-french/fr-tiny-ggml-model-f16.bin"
+        }
+      ],
+      "driveKey": "9e646770b162c4cf386e47c7916ce07f141af7516ae84a704dad31a7bf2db53f",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-MIT.txt",
+          "checksum": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1",
+          "expectedSize": 1069
+        },
+        {
+          "filename": "fr-tiny-ggml-model-f16.bin",
+          "checksum": "16ea1031e24b40a229ca867b731f515d6e876e4dd14bc637d3ed37029d46648a",
+          "expectedSize": 77691730
+        }
+      ],
+      "license": [
+        "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "tiny-ggml",
+        "name": "whisper-french",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": "french"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-french/fr-tiny-ggml-model-q8_0.bin"
+        }
+      ],
+      "driveKey": "c811258872e14619f8228089d38eedcfe2aa3820870e2a1a361b2fe30256652b",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-MIT.txt",
+          "checksum": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1",
+          "expectedSize": 1069
+        },
+        {
+          "filename": "fr-tiny-ggml-model-q8_0.bin",
+          "checksum": "b5c091603ca9144495005f4ecb461ff912e5aabb2599a240fba636e9b372d29d",
+          "expectedSize": 43537450
+        }
+      ],
+      "license": [
+        "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "tiny-ggml",
+        "name": "whisper-german",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "f16",
+        "internalVersion": "1.0.0",
+        "other": "german"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-german/de-tiny-ggml-model-f16.bin"
+        }
+      ],
+      "driveKey": "3a28878648cd7252853c37f90acb6e3457768bda1cb89600f5c2667f02ef6dde",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-MIT.txt",
+          "checksum": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1",
+          "expectedSize": 1069
+        },
+        {
+          "filename": "de-tiny-ggml-model-f16.bin",
+          "checksum": "3316f360e5bdcbfb61a7cb12c1f81f77c6837006014194f8e7940634b31f75d6",
+          "expectedSize": 77691713
+        }
+      ],
+      "license": [
+        "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "tiny-ggml",
+        "name": "whisper-german",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": "german"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-german/de-tiny-ggml-model-q8_0.bin"
+        }
+      ],
+      "driveKey": "c079ecef2f827b56e8123c430251603eea0bcf20a56b7fa47588c5cefa067e35",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-MIT.txt",
+          "checksum": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1",
+          "expectedSize": 1069
+        },
+        {
+          "filename": "de-tiny-ggml-model-q8_0.bin",
+          "checksum": "5eaa31087e1884d60795ab84dae529961006e8429b31aa24f31ae1757ea63148",
+          "expectedSize": 43537433
+        }
+      ],
+      "license": [
+        "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "tiny-ggml",
+        "name": "whisper-italian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "f16",
+        "internalVersion": "1.0.0",
+        "other": "italian"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-italian/it-tiny-ggml-model-f16.bin"
+        }
+      ],
+      "driveKey": "fc008c243bc00f7c143add9e0b739dd45a87a4fe94eddb3d9a72e9912f2fd93a",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-MIT.txt",
+          "checksum": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1",
+          "expectedSize": 1069
+        },
+        {
+          "filename": "it-tiny-ggml-model-f16.bin",
+          "checksum": "203cfbb3bd247eb08a53fcaf6fb6537d608fc74f4734f49873a524ee29884f2d",
+          "expectedSize": 77691713
+        }
+      ],
+      "license": [
+        "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "tiny-ggml",
+        "name": "whisper-italian",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": "italian"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-italian/it-tiny-ggml-model-q8_0.bin"
+        }
+      ],
+      "driveKey": "39fe255ca6e9aef1613c35352ec410de9b61540b5e4b365f4071a41770a5840c",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-MIT.txt",
+          "checksum": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1",
+          "expectedSize": 1069
+        },
+        {
+          "filename": "it-tiny-ggml-model-q8_0.bin",
+          "checksum": "b894457533d13ef25cd4a5af5e0bc25c102783a041be933c2c1e16f0b5c79ca0",
+          "expectedSize": 43537433
+        }
+      ],
+      "license": [
+        "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "tiny-ggml",
+        "name": "whisper-spanish",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "f16",
+        "internalVersion": "1.0.0",
+        "other": "spanish"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-spanish/es-tiny-ggml-model-f16.bin"
+        }
+      ],
+      "driveKey": "0783c63f7e7017d5f858c475b72710bc601f8f2fce167a8c4fbfb054dcdec445",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-MIT.txt",
+          "checksum": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1",
+          "expectedSize": 1069
+        },
+        {
+          "filename": "es-tiny-ggml-model-f16.bin",
+          "checksum": "263e134a1a40474850a3a7b07871e77f842fce327d2081d87637d43061cdea7f",
+          "expectedSize": 77691713
+        }
+      ],
+      "license": [
+        "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "tiny-ggml",
+        "name": "whisper-spanish",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": "spanish"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-spanish/es-tiny-ggml-model-q8_0.bin"
+        }
+      ],
+      "driveKey": "97d074dbed346f71ff00df39c47721497183effd953295af295e71f0f0ee25b1",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-MIT.txt",
+          "checksum": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1",
+          "expectedSize": 1069
+        },
+        {
+          "filename": "es-tiny-ggml-model-q8_0.bin",
+          "checksum": "066fed776a4209276ccf5a30e1d2f93531313a3917352dd52e2a804725bdcd59",
+          "expectedSize": 43537433
+        }
+      ],
+      "license": [
+        "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "tiny-ggml",
+        "name": "whisper-portuguese",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "f16",
+        "internalVersion": "1.0.0",
+        "other": "portuguese"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-portuguese/pt-tiny-ggml-model-f16.bin"
+        }
+      ],
+      "driveKey": "5ddf82c3a261992439eeb6c6f64c2941df47e749620231e65fa9e84183ec2fb5",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-MIT.txt",
+          "checksum": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1",
+          "expectedSize": 1069
+        },
+        {
+          "filename": "pt-tiny-ggml-model-f16.bin",
+          "checksum": "fbda22897694f9da015f5d9e0a1e4a4e00b4ac696d378c9346088e4db2e77232",
+          "expectedSize": 77691730
+        }
+      ],
+      "license": [
+        "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "tiny-ggml",
+        "name": "whisper-portuguese",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": "portuguese"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-portuguese/pt-tiny-ggml-model-q8_0.bin"
+        }
+      ],
+      "driveKey": "b415cd1eb391b2ab657312b81114e75c2d4ea0897b6e526235a5e6c05bca4010",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-MIT.txt",
+          "checksum": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1",
+          "expectedSize": 1069
+        },
+        {
+          "filename": "pt-tiny-ggml-model-q8_0.bin",
+          "checksum": "d8da034f55bbc7adc33ab337779dce21b663b4c1b13e22bd43d430bbb9818b5e",
+          "expectedSize": 43537450
+        }
+      ],
+      "license": [
+        "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "base-ggml",
+        "name": "whisper-french",
+        "externalVersion": "personalizedrefrigerator/whisper-base-fr",
+        "params": "",
+        "quantization": "f16",
+        "internalVersion": "1.0.0",
+        "other": "french"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-french/fr-base-ggml-model-f16.bin"
+        }
+      ],
+      "driveKey": "a681bed819a0723d426673d5917e53c812ff6ce51309f8817c258b3ef28d46da",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "fr-base-ggml-model-f16.bin",
+          "checksum": "00da0a14c23e5636a4d37b605e9a6c102b546b85bd965c77fe1e5282c151695d",
+          "expectedSize": 147951482
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "base-ggml",
+        "name": "whisper-french",
+        "externalVersion": "personalizedrefrigerator/whisper-base-fr",
+        "params": "",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": "french"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-french/fr-base-ggml-model-q8_0.bin"
+        }
+      ],
+      "driveKey": "f080bb8cfbaebbf788f250ce5a9e62d826da68c1611d96a7b16d87009069f4a9",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "fr-base-ggml-model-q8_0.bin",
+          "checksum": "ac7009de16970e0fb9d181d27bb87e48f483fc4b010f6fe6b99af99a64a25232",
+          "expectedSize": 81768602
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "base-ggml",
+        "name": "whisper-german",
+        "externalVersion": "aware-ai/whisper-base-german",
+        "params": "",
+        "quantization": "f16",
+        "internalVersion": "1.0.0",
+        "other": "german"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-german/de-base-ggml-model-f16.bin"
+        }
+      ],
+      "driveKey": "728b4340e5a62a6fb1f460f917bef869cf7588ae41864dcc85070c7fda07580e",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-MIT.txt",
+          "checksum": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1",
+          "expectedSize": 1069
+        },
+        {
+          "filename": "de-base-ggml-model-f16.bin",
+          "checksum": "66d585a2384cb2cd305848fff06620ff3c03a5dc71d4252d9d8857fe3dbc5734",
+          "expectedSize": 147951465
+        }
+      ],
+      "license": [
+        "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "base-ggml",
+        "name": "whisper-german",
+        "externalVersion": "aware-ai/whisper-base-german",
+        "params": "",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": "german"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-german/de-base-ggml-model-q8_0.bin"
+        }
+      ],
+      "driveKey": "8cc9bf2804f000b14c180f56b302f9d1a3b6b077f920d3b669161e06f357ca81",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-MIT.txt",
+          "checksum": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1",
+          "expectedSize": 1069
+        },
+        {
+          "filename": "de-base-ggml-model-q8_0.bin",
+          "checksum": "8351a34c6d33b5a52dc8fbbbb81e19195b861834541a7f31e4dfce668b0193b9",
+          "expectedSize": 81768585
+        }
+      ],
+      "license": [
+        "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "base-ggml",
+        "name": "whisper-italian",
+        "externalVersion": "gustavv-andrzejewski/distil-whisper-base-it",
+        "params": "",
+        "quantization": "f16",
+        "internalVersion": "1.0.0",
+        "other": "italian"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-italian/it-base-ggml-model-f16.bin"
+        }
+      ],
+      "driveKey": "2c652e0f4e52477f88624d353a0516954108683d1f017563ab449b607f2eeb4e",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "it-base-ggml-model-f16.bin",
+          "checksum": "257d55af89d092bdf2e5916cff534c0b4d30ad303993d8ed990350904b5bfa5f",
+          "expectedSize": 114252906
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "base-ggml",
+        "name": "whisper-italian",
+        "externalVersion": "gustavv-andrzejewski/distil-whisper-base-it",
+        "params": "",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": "italian"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-italian/it-base-ggml-model-q8_0.bin"
+        }
+      ],
+      "driveKey": "4a2583ed6463d3ffbe1831aa4dae2c08e4d2f0e57030754010f30ca73d102457",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "it-base-ggml-model-q8_0.bin",
+          "checksum": "25c685ba42488a70a42e530446e172da1b1853c38546e4dc05eb50d397a2a2da",
+          "expectedSize": 63798666
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "base-ggml",
+        "name": "whisper-portuguese",
+        "externalVersion": "mariana-coelho-9/whisper-base-pt",
+        "params": "",
+        "quantization": "f16",
+        "internalVersion": "1.0.0",
+        "other": "portuguese"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-portuguese/pt-base-ggml-model-f16.bin"
+        }
+      ],
+      "driveKey": "ebe4836a87563ce2b997c046b13e36210f00504632662716e15abd6ed046b117",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "pt-base-ggml-model-f16.bin",
+          "checksum": "cfcfbf9be6981a336ee3ab647bdd8f98b40fac4d91a5c805b8e8eedc313807b1",
+          "expectedSize": 147951482
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "base-ggml",
+        "name": "whisper-portuguese",
+        "externalVersion": "mariana-coelho-9/whisper-base-pt",
+        "params": "",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": "portuguese"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-portuguese/pt-base-ggml-model-q8_0.bin"
+        }
+      ],
+      "driveKey": "a86fd4020a0acf6c154b587b9799317d140cbc599b80bc110297b046c2f1a07d",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "pt-base-ggml-model-q8_0.bin",
+          "checksum": "45098a0c89d36e132d4697048b641000d87c9173d246f3db4baa4e8458c39252",
+          "expectedSize": 81768602
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "base-ggml",
+        "name": "whisper-english",
+        "externalVersion": "openai/whisper-base",
+        "params": "",
+        "quantization": "f16",
+        "internalVersion": "1.0.0",
+        "other": "english"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-english/en-base-ggml-model-f16.bin"
+        }
+      ],
+      "driveKey": "02682538b10e5bbb6a35f038faf138ef0cc572763a169d5a8ad7edbdfdd79040",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-MIT.txt",
+          "checksum": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1",
+          "expectedSize": 1069
+        },
+        {
+          "filename": "en-base-ggml-model-f16.bin",
+          "checksum": "60ed5bc3dd14eea856493d334349b405782ddcaf0028d4b5df4088345fba2efe",
+          "expectedSize": 147951465
+        }
+      ],
+      "license": [
+        "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "base-ggml",
+        "name": "whisper-english",
+        "externalVersion": "openai/whisper-base",
+        "params": "",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": "english"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-english/en-base-ggml-model-q8_0.bin"
+        }
+      ],
+      "driveKey": "3dbccb4bcd148b744a20b55a29c715d1939ad9a933220b3850007b6e52bef8d8",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-MIT.txt",
+          "checksum": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1",
+          "expectedSize": 1069
+        },
+        {
+          "filename": "en-base-ggml-model-q8_0.bin",
+          "checksum": "c577b9a86e7e048a0b7eada054f4dd79a56bbfa911fbdacf900ac5b567cbb7d9",
+          "expectedSize": 81768585
+        }
+      ],
+      "license": [
+        "MIT"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "base-ggml",
+        "name": "whisper-russian",
+        "externalVersion": "CheeLi03/whisper-base-rus-8",
+        "params": "",
+        "quantization": "f16",
+        "internalVersion": "1.0.0",
+        "other": "russian"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-russian/ru-base-ggml-model-f16.bin"
+        }
+      ],
+      "driveKey": "d7d1907cf12d1da65a953687d823ab7a6073b8bd21a36be4cc91ac62833cbc64",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ru-base-ggml-model-f16.bin",
+          "checksum": "676d12da762f52f8fe8201d494945a44f365d03b16f28152c8c13af208ff328a",
+          "expectedSize": 199069379
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "base-ggml",
+        "name": "whisper-russian",
+        "externalVersion": "CheeLi03/whisper-base-rus-8",
+        "params": "",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": "russian"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-russian/ru-base-ggml-model-q8_0.bin"
+        }
+      ],
+      "driveKey": "96107a064c3e0c86270244090beb6020bed90d3da5dc73dd38d04bf8bd608fcb",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ru-base-ggml-model-q8_0.bin",
+          "checksum": "8858e8bbc3503472da7111558dff6bb9fd8f10fcd26dc9a636ad1e9d67c35c2a",
+          "expectedSize": 107056259
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "tiny-ggml",
+        "name": "whisper-russian-tiny",
+        "externalVersion": "yaroslav0530/whisper-tiny-ru",
+        "params": "",
+        "quantization": "f16",
+        "internalVersion": "1.0.0",
+        "other": "russian"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-russian/ru-tiny-ggml-model-f16.bin"
+        }
+      ],
+      "driveKey": "8b440641f460110c10d7f542e6811b71ea0e8b9e55837e01cd2539c0b64fab6e",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ru-tiny-ggml-model-f16.bin",
+          "checksum": "458c6522c1b8466f7c77b76fd8a82c38b566df938aa1b1ceffc4fbfe11e11d6a",
+          "expectedSize": 116029945
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "tiny-ggml",
+        "name": "whisper-russian-tiny",
+        "externalVersion": "yaroslav0530/whisper-tiny-ru",
+        "params": "",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": "russian"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-russian/ru-tiny-ggml-model-q8_0.bin"
+        }
+      ],
+      "driveKey": "6b72a516477cc6383704c40eaef512a43571f9a5b4c22168d4c99ba74be50070",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ru-tiny-ggml-model-q8_0.bin",
+          "checksum": "0780df582b9d29443fe2640f7462e3bf86b342e978feb4dce4518c843c6a67de",
+          "expectedSize": 62502985
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "base-ggml",
+        "name": "whisper-japanese",
+        "externalVersion": "bygreencn/whisper-base-ja",
+        "params": "",
+        "quantization": "f16",
+        "internalVersion": "1.0.0",
+        "other": "japanese"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-japanese/ja-base-ggml-model-f16.bin"
+        }
+      ],
+      "driveKey": "ca6d3e9295121e45cf1e81e97b026d4303ba8851f4c49797285b60437094fee2",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ja-base-ggml-model-f16.bin",
+          "checksum": "d8a0c0cc74464f26c997888bc0c3e0327dcd9732c037bf8639766e254cddbe12",
+          "expectedSize": 199069379
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "base-ggml",
+        "name": "whisper-japanese",
+        "externalVersion": "bygreencn/whisper-base-ja",
+        "params": "",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": "japanese"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-japanese/ja-base-ggml-model-q8_0.bin"
+        }
+      ],
+      "driveKey": "d978adbcb582189ffbe1c6655ef666bd49350f891952f15e9a3595495dd19b55",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ja-base-ggml-model-q8_0.bin",
+          "checksum": "867b6f7d188d0f93389a0b1f6deaecb3b581477ca35951f507565c8a6b6a1ae5",
+          "expectedSize": 107056259
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "tiny-ggml",
+        "name": "whisper-japanese-tiny",
+        "externalVersion": "CheeLi03/whisper-tiny-ja-puct-4k",
+        "params": "",
+        "quantization": "f16",
+        "internalVersion": "1.0.0",
+        "other": "japanese-fleurs"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-japanese/ja-tiny-ggml-model-f16.bin"
+        }
+      ],
+      "driveKey": "6a757fd868de4db688a09198cb13a52553a99cfe234a6a455f9bd19dfa87440f",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ja-tiny-ggml-model-f16.bin",
+          "checksum": "a6eab14d52813b860ecb34ed8aebca07b024c89b7ada7facd2b7b72910bb2fdb",
+          "expectedSize": 116029945
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "addon": "@qvac/transcription-whispercpp",
+      "tags": {
+        "function": "transcription",
+        "type": "tiny-ggml",
+        "name": "whisper-japanese-tiny",
+        "externalVersion": "CheeLi03/whisper-tiny-ja-puct-4k",
+        "params": "",
+        "quantization": "q8_0",
+        "internalVersion": "1.0.0",
+        "other": "japanese-fleurs"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ggml/whisper-japanese/ja-tiny-ggml-model-q8_0.bin"
+        }
+      ],
+      "driveKey": "c7dc9578000bb051b0558823733ffaccdc4eba5d9f870a11d33b4c4af79f96f9",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "ja-tiny-ggml-model-q8_0.bin",
+          "checksum": "825e90cca8970378f0ed5a4e18db8e7c8bb6d4e25fac2798ac562526b41d7d93",
+          "expectedSize": 62502985
         }
       ],
       "license": [

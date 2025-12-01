@@ -219,6 +219,14 @@ async function main () {
             logger.info(
               `Model ${modelKey} already exists locally and on drive with the same fingerprint: ${fingerprint}. Skipping...`
             )
+            // Log the existing record so it's available in app.log for postupdate-records.js
+            logger.info(
+              `Model ${modelKey} existing record: ${JSON.stringify(
+                existingModelRecord,
+                null,
+                2
+              )}`
+            )
             continue
           } else {
             logger.info(
