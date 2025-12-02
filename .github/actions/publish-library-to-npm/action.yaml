@@ -47,7 +47,7 @@ runs:
         GIT_PUSH_TOKEN: ${{ inputs.git-token }}
         CREATE_TAG: ${{ inputs.create-tag }}
       run: |
-        set -euo pipefail
+        set -x
 
         if [ -n "${{ inputs.path }}"  ]; then
           echo "Changing directory to ${{ inputs.path }}"
