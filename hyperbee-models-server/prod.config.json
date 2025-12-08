@@ -254,36 +254,6 @@
       "addon": "@qvac/llm-llamacpp",
       "tags": {
         "function": "generation",
-        "type": "instruct",
-        "name": "qwen3",
-        "externalVersion": "",
-        "params": "4B",
-        "quantization": "q4",
-        "internalVersion": "1.0.0",
-        "other": ""
-      },
-      "models": [
-        {
-          "source": "aws",
-          "path": "qvac_models_compiled/ggml/Qwen3-4B/2025-06-27/Qwen3-4B-Q4_K_M.gguf"
-        }
-      ],
-      "driveKey": "900f1a224acf52ce787bca7bb13d169cefe88876b54cacacc53f0fcb37d34743",
-      "driveMetadata": [
-        {
-          "filename": "model.gguf",
-          "checksum": "7485fe6f11af29433bc51cab58009521f205840f5b4ae3a32fa7f92e8534fdf5",
-          "expectedSize": 2497280256
-        }
-      ],
-      "license": [
-        "Apache-2.0"
-      ]
-    },
-    {
-      "addon": "@qvac/llm-llamacpp",
-      "tags": {
-        "function": "generation",
         "type": "it",
         "name": "medgemma",
         "externalVersion": "",
@@ -2388,36 +2358,6 @@
           "filename": "dolphin-mixtral-2x7b-dop-Q4_K_M.tensors.txt",
           "checksum": "ed622129ba8da77af4fd21976dc442365724cde643fd8cbeadc92c7f047ab245",
           "expectedSize": 7791
-        }
-      ],
-      "license": [
-        "Apache-2.0"
-      ]
-    },
-    {
-      "addon": "@qvac/translation-nmtcpp",
-      "tags": {
-        "function": "translation",
-        "type": "opus-ggml",
-        "name": "marian",
-        "externalVersion": "",
-        "params": "",
-        "quantization": "",
-        "internalVersion": "1.0.0",
-        "other": "en-it"
-      },
-      "models": [
-        {
-          "source": "hf",
-          "path": "https://placeholder.mock"
-        }
-      ],
-      "driveKey": "528eb43b34c57b0fb7116e532cd596a9661b001870bdabf696243e8d079a74ca",
-      "driveMetadata": [
-        {
-          "filename": "model.bin",
-          "checksum": "238044a3ed67f45b82c053a9c5131e1eed51c8aec112d19c42f7ae5948eefd11",
-          "expectedSize": 339071793
         }
       ],
       "license": [
