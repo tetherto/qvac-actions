@@ -508,6 +508,28 @@ npm run check-connection
 - **`postupdate-records.js`**: Updates `driveKey` and `driveMetadata` from `keys.txt` and `app.log`. Auto-generates missing metadata from local files.
 - **`bp-keet-req.js`**: Generates `models-blind.txt` for blind peers seeding requests.
 - **`config-cleanup.js`**: Detects and removes duplicate entries. Supports `--dry-run` mode.
+- **`check-deprecated.js`**: Validates that deprecated drives from `deprecated.drives.txt` have been removed from `prod.config.json`. Reports any deprecated entries still present in the configuration.
+
+### Deprecated Models Tracking
+
+The `deprecated.drives.txt` file maintains a record of deprecated model keys and their associated drive keys. This file:
+
+- **Tracks Deprecated Models**: Contains model keys and drive keys for models that are no longer maintained or have been superseded by newer versions
+- **Format**: Each line contains a model key followed by its corresponding drive key
+- **Purpose**: Useful for historical reference, migration tracking, and identifying old model versions that should be avoided in new deployments
+- **Maintenance**: Update this file when deprecating models or replacing them with newer versions
+
+To verify that deprecated drives have been properly removed from the configuration:
+
+```bash
+# Check for deprecated drives still in prod.config.json
+node check-deprecated.js
+```
+
+This script will:
+- Compare entries in `deprecated.drives.txt` against `prod.config.json`
+- Report which deprecated drives are still present in the configuration
+- Provide indices for easy identification and removal
 
 ## Testing
 

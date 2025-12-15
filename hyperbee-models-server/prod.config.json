@@ -5092,6 +5092,50 @@
       "license": [
         "Apache-2.0"
       ]
+    },
+    {
+      "addon": "@qvac/llm-llamacpp",
+      "tags": {
+        "function": "generation",
+        "type": "multimodal",
+        "name": "qwen3-vl",
+        "externalVersion": "1",
+        "params": "2B",
+        "quantization": "q4_k",
+        "internalVersion": "1.0.0",
+        "other": "video-instruct"
+      },
+      "models": [
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/Qwen/Qwen3-VL-2B-Instruct-GGUF/resolve/main/Qwen3VL-2B-Instruct-Q4_K_M.gguf"
+        },
+        {
+          "source": "hf",
+          "path": "https://huggingface.co/Qwen/Qwen3-VL-2B-Instruct-GGUF/resolve/main/mmproj-Qwen3VL-2B-Instruct-Q8_0.gguf"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "06831a77b464df715ca98cfbbd2f1e1164c8046e681e34b1d44d05b174ed47a9",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "Qwen3VL-2B-Instruct-Q4_K_M.gguf",
+          "checksum": "089d75c52f4b7ffc56ba998ffc50aae89fcafc755f9e7208aacca281dca6c2ae",
+          "expectedSize": 1107409952
+        },
+        {
+          "filename": "mmproj-Qwen3VL-2B-Instruct-Q8_0.gguf",
+          "checksum": "f9a68fabba69c3b81e153367b2c7521030b0fa8bb0de400c9599c8e6725f9c82",
+          "expectedSize": 445053216
+        }
+      ]
     }
   ]
 }
