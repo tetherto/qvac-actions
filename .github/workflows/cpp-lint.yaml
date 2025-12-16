@@ -69,11 +69,13 @@ jobs:
           mkdir -p ~/llvm-debs
           cd ~/llvm-debs
           # Download packages and all dependencies
+          # Note: lld is required as the linker when using clang with -fuse-ld=lld
           apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests \
             --no-conflicts --no-breaks --no-replaces --no-enhances \
             clang-${{ env.LLVM_VERSION }} \
             clang-format-${{ env.LLVM_VERSION }} \
-            clang-tidy-${{ env.LLVM_VERSION }} | grep "^\w" | sort -u)
+            clang-tidy-${{ env.LLVM_VERSION }} \
+            lld-${{ env.LLVM_VERSION }} | grep "^\w" | sort -u)
 
       - name: Install LLVM packages (from cache or download)
         env:
