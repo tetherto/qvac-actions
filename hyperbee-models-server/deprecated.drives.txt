@@ -7,7 +7,6 @@ transcription:whisper:large:3:::1.0.0:silero 76fb36d7f16a430618962d3e78b0e22e61a
 transcription:whisper:tiny-silero::::1.0.0 ebfb94b378276da139554668f1ff737644eadff529c2ea0f2662d7df61fd86ca
 generation:qwen:multimodal:2.5-omni:3B::1.0.0 583f04c31d151b29e02aaf98f80d16aff585714ef9e2806a5067651c0f64ae31
 generation:qwen3:instruct::4B:q4:1.0.0 19ffb75463149955ee24d786dfddd84d41fc872ea813cd4465f5f7299d165adc
-generation:qwen3:instruct::600M:q4:1.0.0 211874c9885f6b88b9926904420e365f5e74e1b6ac47207b7536408539bef4b7
 generation:qwen:instruct:3:1.7B:q4:1.0.0 05d3d7ad9cd650f53c28f85e312ef09a645dd487845897958b3be8a19cb3aab9
 generation:medgemma:it::4B:q4_1:1.0.0 b11388de0e9214d8c2181eae30e31bcd49c48b26d621b353ddc7f01972dddd76
 generation:llama-ggml:instruct:3.2:1B:q4_0:1.0.0 afa79ee07c0a138bb9f11bfaee771fb1bdfca8c82d961cff0474e49827bd1de3

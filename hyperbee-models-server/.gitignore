@@ -7,6 +7,7 @@ drives-storage
 models
 keys.txt
 blind-peers.txt
+blind-peers-hp.txt
 reseeding.txt
 models-blind.txt
 .DS_Store
