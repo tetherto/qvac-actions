@@ -24,7 +24,7 @@ runs:
       with:
         node-version: "18.x"
 
-    - name: Cache npm download cache
+    - name: Restore npm cache
       id: cache-npm
       uses: actions/cache@v4
       with:
@@ -32,15 +32,6 @@ runs:
         key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json', '**/package.json') }}
         restore-keys: |
           npm-${{ runner.os }}-
-
-    - name: Cache node_modules
-      id: cache-node-modules
-      uses: actions/cache@v4
-      with:
-        path: node_modules
-        key: node-modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json', '**/package.json') }}
-        restore-keys: |
-          node-modules-${{ runner.os }}-
 
     - name: Configure .npmrc for both npmjs and GitHub Packages
       run: |
@@ -65,12 +56,7 @@ runs:
       shell: bash
     - name: Install dependencies
       shell: bash
-      run: |
-        if [ "${{ steps.cache-node-modules.outputs.cache-hit }}" == "true" ]; then
-          echo "Cache hit - skipping npm install"
-        else
-          npm install
-        fi
+      run: npm install
     - name: Run linting
       shell: bash
       run: npm run lint
