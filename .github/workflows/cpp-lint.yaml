@@ -106,7 +106,7 @@ jobs:
         with:
           node-version: "18.x"
 
-      - name: Cache npm download cache
+      - name: Restore npm cache
         id: cache-npm
         uses: actions/cache@v4
         with:
@@ -114,17 +114,6 @@ jobs:
           key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json', '**/package.json') }}
           restore-keys: |
             npm-${{ runner.os }}-
-          save-always: true
-
-      - name: Cache node_modules
-        id: cache-node-modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: node-modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json', '**/package.json') }}
-          restore-keys: |
-            node-modules-${{ runner.os }}-
-          save-always: true
 
       - name: Configure npm registries
         run: |
@@ -141,12 +130,7 @@ jobs:
 
       - name: Install npm dependencies
         shell: bash
-        run: |
-          if [ "${{ steps.cache-node-modules.outputs.cache-hit }}" == "true" ]; then
-            echo "Cache hit - skipping npm install"
-          else
-            npm install
-          fi
+        run: npm install
 
       - name: Configure vcpkg
         id: configure_vcpkg
@@ -205,16 +189,29 @@ jobs:
             exit 1
           fi
 
-      - name: Run C++ clang-tidy
+      - name: Run C++ clang-tidy (changed files only)
         id: run_cpp_clang_tidy
         shell: bash
         run: |
-          read -r -a tidy_cmd < <($(find build -name clang-tidy-helper.py) build/compile_commands.json --clang-tidy-cmd)
-          echo "Running: ${tidy_cmd[*]}"
-          if "${tidy_cmd[@]}"; then
+          # Get changed C++ source files
+          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMR "${{ inputs.sha }}" -- '*.c' '*.cc' '*.cpp' '*.cxx')
+          
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No C++ source files changed, skipping clang-tidy"
+            exit 0
+          fi
+          
+          # Get header-filter from helper script (filters out third-party/system headers)
+          HELPER_SCRIPT=$(find build -name clang-tidy-helper.py)
+          read -r -a TIDY_CMD < <($HELPER_SCRIPT build/compile_commands.json --clang-tidy-cmd)
+          HEADER_FILTER=$(printf '%s\n' "${TIDY_CMD[@]}" | grep -E '^--header-filter' || true)
+          
+          echo "Running clang-tidy on changed files: $CHANGED_FILES"
+          if clang-tidy -p build $HEADER_FILTER $CHANGED_FILES; then
             echo "OK: clang-tidy passed without errors."
           else
             echo "::error title=Static analysis failed::clang-tidy found issues."
+            exit 1
           fi
 
       - name: Build
