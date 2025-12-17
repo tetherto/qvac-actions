@@ -193,14 +193,19 @@ jobs:
         id: run_cpp_clang_tidy
         shell: bash
         run: |
-          # Get header-filter from helper script
+          # Get header-filter pattern from helper script
           HELPER_SCRIPT=$(find build -name clang-tidy-helper.py)
           FULL_CMD=$($HELPER_SCRIPT build/compile_commands.json --clang-tidy-cmd)
-          HEADER_FILTER=$(echo "$FULL_CMD" | grep -oP -- "--header-filter='[^']*'" || true)
+          HEADER_PATTERN=$(echo "$FULL_CMD" | grep -oP -- "--header-filter='\K[^']*" || true)
           
           # Use run-clang-tidy wrapper with parallel execution
-          echo "Running: run-clang-tidy -p build -j$(nproc) $HEADER_FILTER"
-          run-clang-tidy -p build -j$(nproc) $HEADER_FILTER
+          TIDY_ARGS="-p build -j$(nproc)"
+          if [ -n "$HEADER_PATTERN" ]; then
+            TIDY_ARGS="$TIDY_ARGS -header-filter=$HEADER_PATTERN"
+          fi
+          
+          echo "Running: run-clang-tidy-${{ env.LLVM_VERSION }} $TIDY_ARGS"
+          run-clang-tidy-${{ env.LLVM_VERSION }} $TIDY_ARGS
 
       - name: Build
         id: bare_make_build
