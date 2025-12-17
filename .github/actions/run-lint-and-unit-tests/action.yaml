@@ -32,7 +32,6 @@ runs:
         key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json', '**/package.json') }}
         restore-keys: |
           npm-${{ runner.os }}-
-        save-always: true
 
     - name: Cache node_modules
       id: cache-node-modules
@@ -42,7 +41,6 @@ runs:
         key: node-modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json', '**/package.json') }}
         restore-keys: |
           node-modules-${{ runner.os }}-
-        save-always: true
 
     - name: Configure .npmrc for both npmjs and GitHub Packages
       run: |
