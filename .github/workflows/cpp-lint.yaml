@@ -193,27 +193,13 @@ jobs:
         id: run_cpp_clang_tidy
         shell: bash
         run: |
-          # Get clang-tidy command from helper script
           HELPER_SCRIPT=$(find build -name clang-tidy-helper.py)
           read -r -a TIDY_CMD < <($HELPER_SCRIPT build/compile_commands.json --clang-tidy-cmd)
           
-          # Try to get only changed files (if base SHA is available)
-          TARGET_REF="${{ inputs.sha }}"
-          if [ -n "$TARGET_REF" ] && git cat-file -e "$TARGET_REF" 2>/dev/null; then
-            CHANGED_FILES=$(git diff --name-only --diff-filter=ACMR "$TARGET_REF" -- '*.c' '*.cc' '*.cpp' '*.cxx')
-            if [ -z "$CHANGED_FILES" ]; then
-              echo "No C++ source files changed, skipping clang-tidy"
-              exit 0
-            fi
-            # Replace file list in command with changed files only
-            HEADER_FILTER=$(printf '%s\n' "${TIDY_CMD[@]}" | grep -E '^--header-filter' || true)
-            echo "Running clang-tidy on changed files: $CHANGED_FILES"
-            TIDY_CMD=(clang-tidy -p build $HEADER_FILTER $CHANGED_FILES)
-          else
-            echo "Base SHA not available, running clang-tidy on all files"
-          fi
+          # Add parallel flag for faster execution
+          TIDY_CMD+=("-j$(nproc)")
           
-          echo "Command: ${TIDY_CMD[*]}"
+          echo "Running: ${TIDY_CMD[*]}"
           if "${TIDY_CMD[@]}"; then
             echo "OK: clang-tidy passed without errors."
           else
