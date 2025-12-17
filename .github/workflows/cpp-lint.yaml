@@ -193,19 +193,14 @@ jobs:
         id: run_cpp_clang_tidy
         shell: bash
         run: |
+          # Get header-filter from helper script
           HELPER_SCRIPT=$(find build -name clang-tidy-helper.py)
-          read -r -a TIDY_CMD < <($HELPER_SCRIPT build/compile_commands.json --clang-tidy-cmd)
+          FULL_CMD=$($HELPER_SCRIPT build/compile_commands.json --clang-tidy-cmd)
+          HEADER_FILTER=$(echo "$FULL_CMD" | grep -oP -- "--header-filter='[^']*'" || true)
           
-          # Add parallel flag for faster execution
-          TIDY_CMD+=("-j$(nproc)")
-          
-          echo "Running: ${TIDY_CMD[*]}"
-          if "${TIDY_CMD[@]}"; then
-            echo "OK: clang-tidy passed without errors."
-          else
-            echo "::error title=Static analysis failed::clang-tidy found issues."
-            exit 1
-          fi
+          # Use run-clang-tidy wrapper with parallel execution
+          echo "Running: run-clang-tidy -p build -j$(nproc) $HEADER_FILTER"
+          run-clang-tidy -p build -j$(nproc) $HEADER_FILTER
 
       - name: Build
         id: bare_make_build
