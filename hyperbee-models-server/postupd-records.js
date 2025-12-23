@@ -232,7 +232,7 @@ async function main() {
             try {
               const modelDir = findModelDirectory(tags, config);
               if (modelDir) {
-                const fullMetadata = await calculateDirectoryChecksums(modelDir, ['inference.config.json', '.s3-fingerprint']);
+                const fullMetadata = await calculateDirectoryChecksums(modelDir, ['inference.config.json', '.s3-fingerprint', '.s3-fingerprints.json']);
                 const licenseFiles = fullMetadata.filter(m => 
                   m.filename === 'LICENSE' || 
                   m.filename.startsWith('LICENSE-')
@@ -266,7 +266,7 @@ async function main() {
             if (modelDir) {
               console.log(`   📂 Found local directory: ${path.relative(baseDir, modelDir)}`);
               // Use existing calculateDirectoryChecksums from utils.js
-              metadata = await calculateDirectoryChecksums(modelDir, ['inference.config.json', '.s3-fingerprint']);
+              metadata = await calculateDirectoryChecksums(modelDir, ['inference.config.json', '.s3-fingerprint', '.s3-fingerprints.json']);
               
               // Smart LICENSE handling to avoid duplicates:
               // - If both "LICENSE" and "LICENSE-*.txt" exist, keep only LICENSE-*.txt
