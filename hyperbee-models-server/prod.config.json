@@ -5136,6 +5136,899 @@
           "expectedSize": 445053216
         }
       ]
+    },
+    {
+      "addon": "@qvac/ocr-onnx",
+      "tags": {
+        "function": "ocr",
+        "type": "recognizer",
+        "name": "craft",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "",
+        "internalVersion": "2.0.0",
+        "other": "latin"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ocr/2025-12-16/recognizer_latin.onnx"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ocr/2025-04-25/detector_craft.onnx"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "6418f508dc832ce1b5e595c9eb5690b4252318d84c08888c5826ce95ee4ccb0d",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "detector_craft.onnx",
+          "checksum": "0ca3aed5da83250025bc01eb3ad1fc21482d3cee814fae22343de13c221e02e9",
+          "expectedSize": 83058594
+        },
+        {
+          "filename": "recognizer_latin.onnx",
+          "checksum": "5ecb59080cd7a087091ff4f56c87659f243be2a84d35dab716ea0e56da182b16",
+          "expectedSize": 15405775
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/translation-nmtcpp",
+      "tags": {
+        "function": "translation",
+        "type": "nmt",
+        "name": "bergamot",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "",
+        "internalVersion": "2.0.0",
+        "other": "all-vocabs"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-aren/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-bgen/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-caen/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-csen/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-deen/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enar/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enbg/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enca/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-encs/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-ende/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enes/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enet/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enfi/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enfr/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enhu/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enis/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enit/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enja/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enko/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enlt/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enlv/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-ennl/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enpl/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enpt/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enru/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-ensk/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-ensl/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enuk/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-enzh/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-esen/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-eten/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-fien/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-fren/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-isen/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-iten/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-jaen/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-koen/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-nlen/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-plen/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-pten/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-slen/"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/bergamot/memory-base/bergamot-zhen/"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "687ddab260d998d2d79592952303cb3bcf813d6575b52fa2de585bb9f1a5892a",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "config.bergamot.yml",
+          "checksum": "38ed307002226c34f709f18e310a3256832f9fbb4472639d0a14bd0db009b1f0",
+          "expectedSize": 704
+        },
+        {
+          "filename": "lex.50.50.aren.s2t.bin",
+          "checksum": "4b45f14dbea40d368093a13563fc1ca48457ee70c1291c82b206f3baff210081",
+          "expectedSize": 4627200
+        },
+        {
+          "filename": "lex.50.50.bgen.s2t.bin",
+          "checksum": "e661dfdd88aa9ff9606f237a60c910d97c2e710960199589579f628c5d8aa899",
+          "expectedSize": 4355920
+        },
+        {
+          "filename": "lex.50.50.caen.s2t.bin",
+          "checksum": "74880047539925630601d61aa6c29a0672046236ca6cf33eeaf6f6f6690e914e",
+          "expectedSize": 4359552
+        },
+        {
+          "filename": "lex.50.50.csen.s2t.bin",
+          "checksum": "eba6bd9575251525f1941640ea0b6527a06e72a46421579eafea04d635ee20a8",
+          "expectedSize": 4990588
+        },
+        {
+          "filename": "lex.50.50.deen.s2t.bin",
+          "checksum": "113b98460468360cca68c042e1cddf49c4e1931cbb975ed04349c9a3bd607010",
+          "expectedSize": 4945796
+        },
+        {
+          "filename": "lex.50.50.enar.s2t.bin",
+          "checksum": "2b7194817c5dd9225ca90c0d908cc92e1d6d1f45625781a5feb037ac568d6a61",
+          "expectedSize": 3139692
+        },
+        {
+          "filename": "lex.50.50.enbg.s2t.bin",
+          "checksum": "93d4ca4412db269cc4164cbfa04c08edd0f65690c8264d6215a0522d4a13ec1a",
+          "expectedSize": 3075948
+        },
+        {
+          "filename": "lex.50.50.enca.s2t.bin",
+          "checksum": "8f2151a7fb75454f5167a8df8758ec02ab02c0302893851bad7caa6b729822fb",
+          "expectedSize": 4344092
+        },
+        {
+          "filename": "lex.50.50.encs.s2t.bin",
+          "checksum": "699b9b59fe3acbcddf831380024b2e139f2cbe225dce96d59ade2b159318f58b",
+          "expectedSize": 3572436
+        },
+        {
+          "filename": "lex.50.50.ende.s2t.bin",
+          "checksum": "7ed39f1cffbd68a27ddf05bbfe068de2060f1d7e69f1a20e27ae923551dd7393",
+          "expectedSize": 4347672
+        },
+        {
+          "filename": "lex.50.50.enes.s2t.bin",
+          "checksum": "7d51237c0a07027dcd61643cfbbb0f8c48597d19907ef53d2cae9d6bec2cf25c",
+          "expectedSize": 4198436
+        },
+        {
+          "filename": "lex.50.50.enet.s2t.bin",
+          "checksum": "259c60582f49449c226a6e5a369481c68322013f367e459e54c595686c05d4d8",
+          "expectedSize": 3488368
+        },
+        {
+          "filename": "lex.50.50.enfi.s2t.bin",
+          "checksum": "26e95a87f87e4b0fa9a35524cf9fea691204504453877ba4ac81ccc66af1488c",
+          "expectedSize": 3490092
+        },
+        {
+          "filename": "lex.50.50.enfr.s2t.bin",
+          "checksum": "2585ed98d3af0bc949865aedeb390493d591f56870814376e73e4144c41ed059",
+          "expectedSize": 4372936
+        },
+        {
+          "filename": "lex.50.50.enhu.s2t.bin",
+          "checksum": "f3d1e61003597d1cc9d87e05d2b398a7ae2b3941e3f96947764aac239df1a808",
+          "expectedSize": 3490288
+        },
+        {
+          "filename": "lex.50.50.enis.s2t.bin",
+          "checksum": "4927d2bed702141b4ddd8a5e7034b27fb17312fdb7e3cc5f455ccf2e2f6670e0",
+          "expectedSize": 3837564
+        },
+        {
+          "filename": "lex.50.50.enit.s2t.bin",
+          "checksum": "8b21914804625b2777dae7fdb636eb78f02a3eb8b7bceaa50f29ac740961da93",
+          "expectedSize": 4133192
+        },
+        {
+          "filename": "lex.50.50.enja.s2t.bin",
+          "checksum": "edfb7eb47b98a2689b804ab3614c31b24f1257aa54b1154da3d85e1ae8152d9f",
+          "expectedSize": 4128360
+        },
+        {
+          "filename": "lex.50.50.enko.s2t.bin",
+          "checksum": "96efba97d4bb93ab362e5569bea0f115184d2f68d63b67305ee663c18e32fbeb",
+          "expectedSize": 6449612
+        },
+        {
+          "filename": "lex.50.50.enlt.s2t.bin",
+          "checksum": "5972c834218c7beea241dc8fe77c2e577a8d8b4eb3d3dc286d10ad890c64d374",
+          "expectedSize": 3421640
+        },
+        {
+          "filename": "lex.50.50.enlv.s2t.bin",
+          "checksum": "d54b9bc278558444c5c25df5ae7339b73eee55cf79705f19fec672b6d55d959c",
+          "expectedSize": 3359096
+        },
+        {
+          "filename": "lex.50.50.ennl.s2t.bin",
+          "checksum": "bb4922718f8ca6d746ad090c0a88110a664dc050ee3f311bce33698b4e1679e9",
+          "expectedSize": 4030624
+        },
+        {
+          "filename": "lex.50.50.enpl.s2t.bin",
+          "checksum": "d7d7b364673f633763c9f8f2e8ee9c7a184e92f4086e8b84abe870a2a8dbe5d5",
+          "expectedSize": 3540052
+        },
+        {
+          "filename": "lex.50.50.enpt.s2t.bin",
+          "checksum": "ccb4c31c9e1899d77a200e71a86958e6ef6c8649627d0bbf3f873b57d9f236bd",
+          "expectedSize": 3970340
+        },
+        {
+          "filename": "lex.50.50.enru.s2t.bin",
+          "checksum": "4d91839726b960e70b6d05c53d0cffd16262832b1c0e1ea99d66f412dcc6a239",
+          "expectedSize": 2774540
+        },
+        {
+          "filename": "lex.50.50.ensk.s2t.bin",
+          "checksum": "f3d1aec4ee5246d6a6ee5dc7ed4c6b18f6071c7baca69bf1344aef675b95515d",
+          "expectedSize": 3356348
+        },
+        {
+          "filename": "lex.50.50.ensl.s2t.bin",
+          "checksum": "2190798297bc12505f917189defcf451ab5bd2e815bc05df244dc291dc2ae63b",
+          "expectedSize": 3428300
+        },
+        {
+          "filename": "lex.50.50.enuk.s2t.bin",
+          "checksum": "dbfd4f8dc95da9c575164f7fc95ef00a2fb5f7d9f51b656559f99eeebdb57c87",
+          "expectedSize": 3054364
+        },
+        {
+          "filename": "lex.50.50.enzh.s2t.bin",
+          "checksum": "4a5e5827788060f1d718a8132b69440929387514a045796e9b77f935db68c055",
+          "expectedSize": 6506248
+        },
+        {
+          "filename": "lex.50.50.esen.s2t.bin",
+          "checksum": "e2610211d3b9577d012638fe7e7e74ed7b4b708ce96b9e792e67c282a6492daa",
+          "expectedSize": 4636248
+        },
+        {
+          "filename": "lex.50.50.eten.s2t.bin",
+          "checksum": "ad9750f3b41cb5686e561608271a0dc935fc827bf43226e579a6f48a3f6b5f11",
+          "expectedSize": 4625968
+        },
+        {
+          "filename": "lex.50.50.fien.s2t.bin",
+          "checksum": "8bad431e07b062ba47f363b76e4656cc743fd608316d8a4830a4315e44ac9abb",
+          "expectedSize": 5195132
+        },
+        {
+          "filename": "lex.50.50.fren.s2t.bin",
+          "checksum": "87c6752ea908f5f0347c10ac0cf7d80d9c2f4f20c81c90168f3e8230b56d4440",
+          "expectedSize": 4824120
+        },
+        {
+          "filename": "lex.50.50.isen.s2t.bin",
+          "checksum": "0655d05ccaf3cd2a01f910ef542455b7b14e66d96f6c95889079b9ca1ee168cf",
+          "expectedSize": 3951884
+        },
+        {
+          "filename": "lex.50.50.iten.s2t.bin",
+          "checksum": "0700d6d70b30490e68ff9deca0b45b80310745b491855bde3a13e1692d0cbce1",
+          "expectedSize": 4713616
+        },
+        {
+          "filename": "lex.50.50.jaen.s2t.bin",
+          "checksum": "525f412f0d210536c2933c78ae395fa0bf2b5ee6cc5dda61ebc2e79410ebaee4",
+          "expectedSize": 9348172
+        },
+        {
+          "filename": "lex.50.50.koen.s2t.bin",
+          "checksum": "b26291f063ce216a74239275f0485534a38111203e59d42a2a56ba62d6eeb196",
+          "expectedSize": 8617516
+        },
+        {
+          "filename": "lex.50.50.nlen.s2t.bin",
+          "checksum": "811ac8f9dcbd12706e2d73a7057a7bbe6b9f0607d15170ffe9439977e8229b41",
+          "expectedSize": 4862412
+        },
+        {
+          "filename": "lex.50.50.plen.s2t.bin",
+          "checksum": "b295dfefa7022a62e105276e8c39fdfd67bffe588f4fd78583edd4e04ee0cb3b",
+          "expectedSize": 4964208
+        },
+        {
+          "filename": "lex.50.50.pten.s2t.bin",
+          "checksum": "2685d8b6530be92a4db4cc61f15a097eb114552be15cb6c1699e9d2d99d24470",
+          "expectedSize": 4634492
+        },
+        {
+          "filename": "lex.50.50.slen.s2t.bin",
+          "checksum": "f456a49e437ccb4a547e4b51480e29c8b83f11e26a3713af35b078cd4dd255cc",
+          "expectedSize": 4320484
+        },
+        {
+          "filename": "lex.50.50.zhen.s2t.bin",
+          "checksum": "8524dd4c93ffd7f0ae7be32f77a7c14fea7cdbbebe34ea6ad0ec368d5ddd8b13",
+          "expectedSize": 9219192
+        },
+        {
+          "filename": "metadata.json",
+          "checksum": "40767965cbc4289fccc7a8dc34fa6d4700ccc0ff36ba382a85acc943fb1b0c03",
+          "expectedSize": 2238
+        },
+        {
+          "filename": "model.aren.intgemm.alphas.bin",
+          "checksum": "7b7af0282dc5f4d8805b9a298c2fa828967e3f09ca10f1942ebeea0b2cfc12fa",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.bgen.intgemm.alphas.bin",
+          "checksum": "78f7e6e1435cc2d4a29cf597f493187fe29ddb9ce9d3766c287e2e6d37052d01",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.caen.intgemm.alphas.bin",
+          "checksum": "b7f9c70823052f60c257eb1c4eff893abea3648aa9d1c23c8774e1e5ef061434",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.csen.intgemm.alphas.bin",
+          "checksum": "c815273b31074492eaab0ccd78d33d7ac16f94088707ab2492abaedcb9ee0b75",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.deen.intgemm.alphas.bin",
+          "checksum": "3e6f7c2c2425d10824797270b382bee718ff34af2cab9308841c82ca46dc6f20",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enar.intgemm.alphas.bin",
+          "checksum": "ae659d7045fc2e5d6ba50583586a5d94ee4358d92c019847e37b57a0e627faa8",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enbg.intgemm.alphas.bin",
+          "checksum": "e2b30db98ac6706efc893067a74e51f36f015a8f820fe8a4f0f5052fa6a22f30",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enca.intgemm.alphas.bin",
+          "checksum": "735881c99ff303e55eb2e92a3b86762523d5dd1a4797b2574b851062051426ee",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.encs.intgemm.alphas.bin",
+          "checksum": "1d7855f91c3e2b8ef79fbea62707d46ceb8a1ad01834ef6dd500f32a7006cc2c",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.ende.intgemm.alphas.bin",
+          "checksum": "8df29d9494d19f47fd5d97c6a73474c6f657e9f81c1a607c431d02befdf3810f",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enes.intgemm.alphas.bin",
+          "checksum": "3b1c399511c01c84c36fae5c0524df44096288efdc8236e182b5c97d7ad2244c",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enet.intgemm.alphas.bin",
+          "checksum": "36bdc87f8d500861a5d286ebd3ea58df530da87e31b8a233f5e9c46c300c281d",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enfi.intgemm.alphas.bin",
+          "checksum": "88b0caa4cc6980d632801cb2b1950748f1dc43ad2ac83678917ad86c720b5cdd",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enfr.intgemm.alphas.bin",
+          "checksum": "6322e296d4fecfe395a8d5723da4ec37ecbe6d7613bb1dfcf4b28e2a47498b68",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enhu.intgemm.alphas.bin",
+          "checksum": "ec0c210d09cd5d8a5edf7a50462db0a8fb5dd78d03bbc6d4d72d91074f0490e4",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enis.intgemm.alphas.bin",
+          "checksum": "459626236a49158aa555facd23e5f594e2f8416f4ebad32e0548af94c5b1ae0c",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enit.intgemm.alphas.bin",
+          "checksum": "248f47568788ecc351da7e5e07064d4153b4f71e011364ae2c931ffeec4d1cc2",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enja.intgemm.alphas.bin",
+          "checksum": "59ae659f9bb63e4f81f474fe3c03d3f4499434b5f9e779fab7c12a45f31fd562",
+          "expectedSize": 43849787
+        },
+        {
+          "filename": "model.enko.intgemm.alphas.bin",
+          "checksum": "ffe5ef2ce3f2e944055e35310bab186f6a70d533a0ee4394adf716a0e383afbb",
+          "expectedSize": 43849787
+        },
+        {
+          "filename": "model.enlt.intgemm.alphas.bin",
+          "checksum": "d27c676d9d761c2abfffec83956e32b2923f3f745b56acdbd84c49d888cdc94e",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enlv.intgemm.alphas.bin",
+          "checksum": "715f9f444dffa0b39e71955c28bffd30afa4cc8300a192ec8fabb766cc5ba11d",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.ennl.intgemm.alphas.bin",
+          "checksum": "7e8402da61972dc2fdcf7147c7f1e12f7916a6d9349514ee7a731288357575a9",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enpl.intgemm.alphas.bin",
+          "checksum": "b0b59716bcc8f46b8dc6ab5c32a2732acaad42a5a6d9ae9b472526a1bb0d71d4",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enpt.intgemm.alphas.bin",
+          "checksum": "07892fd2544ee79dcb643615d8f2debb9793fae16842e87c328e27a3dd26a770",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enru.intgemm.alphas.bin",
+          "checksum": "184cb5cda528eeefc0f75f5d0035d787b71d74af135e3c5608d01ae02ecfb920",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.ensk.intgemm.alphas.bin",
+          "checksum": "e33af359fd58c8958104b1b74b3ea302800ccba2f125c1629e09d7f9dd9a3804",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.ensl.intgemm.alphas.bin",
+          "checksum": "a34fc5cc2f52733f64e37f8512cf1ddc4723c08a7a1a59d01fc2b6e641fc2280",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enuk.intgemm.alphas.bin",
+          "checksum": "ed8bb4a811e1c45a259e91052080d25e5c8b4e2df0e59cb1521c04a57855ef97",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.enzh.intgemm.alphas.bin",
+          "checksum": "4e5accc141373565ddc8fa1565bceaa8d0c3482a82cab8131c719ebcc6c2157c",
+          "expectedSize": 43849787
+        },
+        {
+          "filename": "model.esen.intgemm.alphas.bin",
+          "checksum": "4aed7734152ae0045d1a69ae49c86cfda18f53c61f90e95e1d1de1c7c7c3b033",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.eten.intgemm.alphas.bin",
+          "checksum": "df844b3a6df906b2e0682fb7765694f35b351854db00f964896d9c8c365fbff3",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.fien.intgemm.alphas.bin",
+          "checksum": "e3887341f18bcc7787d9b59eb1229b56eefce18d49b7ebf1e62c55d65a377321",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.fren.intgemm.alphas.bin",
+          "checksum": "15f997bc0d13808b0b0fbd0786e684a3c8a52adcd8071844b76123fdacbf2b90",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.isen.intgemm.alphas.bin",
+          "checksum": "d2c285755d37f710458f1a49db5391a123e4e41ca7bd9829dd87cc61e4907ee6",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.iten.intgemm.alphas.bin",
+          "checksum": "21b70978ce2f3b4da7a06b5de86a09abe3acd30b9eee1b2ebb3582b9bad790bf",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.jaen.intgemm.alphas.bin",
+          "checksum": "3a603e20bfe1be86071913f9e23ab5129075bc0a8490151020ac4821e4f17302",
+          "expectedSize": 43977787
+        },
+        {
+          "filename": "model.koen.intgemm.alphas.bin",
+          "checksum": "7cb30cbc0a86e242084756445268a2346136771c92b884d9b4ebb077f67d5507",
+          "expectedSize": 43977787
+        },
+        {
+          "filename": "model.nlen.intgemm.alphas.bin",
+          "checksum": "ff987741ff15a5d94fff16cbef28f2b0a85a6e9547d982fad60ac09d16d11270",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.plen.intgemm.alphas.bin",
+          "checksum": "06dbab3baa3bbceab746bc6a3bba807878f38536382c03acddf59d3edf3b5d94",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.pten.intgemm.alphas.bin",
+          "checksum": "7b854f1ec5a485dd33efd7c1bc01dd7d5a57f566957c5e47722af333f0ce9157",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.slen.intgemm.alphas.bin",
+          "checksum": "9d15df58b60048366de4f7b6e727157ffdaea3a0fd1c1759ce232b057e2f991c",
+          "expectedSize": 31561787
+        },
+        {
+          "filename": "model.zhen.intgemm.alphas.bin",
+          "checksum": "5cd149601802fc8a18124a1c1306144dbbedc058630c4ddb2d53aa76fa9c7c06",
+          "expectedSize": 43977787
+        },
+        {
+          "filename": "srcvocab.enja.spm",
+          "checksum": "970c98d174fc01e0339fbabbf45af36a4be3f26f819ec1a5ea1189f71e091889",
+          "expectedSize": 796275
+        },
+        {
+          "filename": "srcvocab.enko.spm",
+          "checksum": "8d4e3141868efd410eb86c2b60d41aa6bc6b46e4c4b2c0b85e3792493c69d802",
+          "expectedSize": 791280
+        },
+        {
+          "filename": "srcvocab.enzh.spm",
+          "checksum": "bd9b65504acc6d9726dd281f7defc2adb7c2c22d0688fe2f84697de25197c8c5",
+          "expectedSize": 806952
+        },
+        {
+          "filename": "trgvocab.enja.spm",
+          "checksum": "3b3d9f8f3a034d98d0a476f1794fa79c01e4e98a967ceb6777a66ba2d03ec1e1",
+          "expectedSize": 827144
+        },
+        {
+          "filename": "trgvocab.enko.spm",
+          "checksum": "2ece21b28dd7022d36127d17423a74dabf544787dfc1cf614f7b565f93a4a1d3",
+          "expectedSize": 815353
+        },
+        {
+          "filename": "trgvocab.enzh.spm",
+          "checksum": "aded6993c36e440284d11cec3f6b8aef9c0e43188a772d80be342a713adf223d",
+          "expectedSize": 772004
+        },
+        {
+          "filename": "vocab.aren.spm",
+          "checksum": "51b4ee3f828d10015464523d0b4f5a6c086b0b2a9bde716a581001cf6c260366",
+          "expectedSize": 860035
+        },
+        {
+          "filename": "vocab.bgen.spm",
+          "checksum": "4bafad5fcc0e771ed82233d1e99d69dcb96487b430702f7e688615c8a61f3df4",
+          "expectedSize": 922482
+        },
+        {
+          "filename": "vocab.caen.spm",
+          "checksum": "6d22da90905873c2793d0805e34e5c27901b16e7e7a7a427696696f67dfe1f0e",
+          "expectedSize": 810273
+        },
+        {
+          "filename": "vocab.csen.spm",
+          "checksum": "ee4b8ce15c8e1237c5f7a2d04741341beb0a5d5c09820f7ec08f13ee2b212755",
+          "expectedSize": 815154
+        },
+        {
+          "filename": "vocab.deen.spm",
+          "checksum": "69f730becafa48e3bb2c244eab66456877c08959a02f2bd5519b5a3088b62f9c",
+          "expectedSize": 810073
+        },
+        {
+          "filename": "vocab.enar.spm",
+          "checksum": "8d93c54aa5e2044c416ec680b5ff9af0227bd698521666e8b1a1ea1b041fbae8",
+          "expectedSize": 863591
+        },
+        {
+          "filename": "vocab.enbg.spm",
+          "checksum": "4bafad5fcc0e771ed82233d1e99d69dcb96487b430702f7e688615c8a61f3df4",
+          "expectedSize": 922482
+        },
+        {
+          "filename": "vocab.enca.spm",
+          "checksum": "64ebcb5f6cb5a954ced615e48a44a85e77a644e4910544014b299b8ee0fa1b1f",
+          "expectedSize": 810653
+        },
+        {
+          "filename": "vocab.encs.spm",
+          "checksum": "ee4b8ce15c8e1237c5f7a2d04741341beb0a5d5c09820f7ec08f13ee2b212755",
+          "expectedSize": 815154
+        },
+        {
+          "filename": "vocab.ende.spm",
+          "checksum": "69f730becafa48e3bb2c244eab66456877c08959a02f2bd5519b5a3088b62f9c",
+          "expectedSize": 810073
+        },
+        {
+          "filename": "vocab.enes.spm",
+          "checksum": "5ae254fa9b15aa182e70fd2a6186b1333c63a29a48043a9224c6aa4fcac058ad",
+          "expectedSize": 816054
+        },
+        {
+          "filename": "vocab.enet.spm",
+          "checksum": "89a3deea4ae7d674fb46a4dae39135dd4dfaac9786f2868d0b5bc5c0aca2ef83",
+          "expectedSize": 817574
+        },
+        {
+          "filename": "vocab.enfi.spm",
+          "checksum": "6a866911427f2916609ae89c7f2f04a78de3fdd8aa183039ecba986635d4f246",
+          "expectedSize": 818770
+        },
+        {
+          "filename": "vocab.enfr.spm",
+          "checksum": "783abf3abe075afdf8d85d233994bef2c3a064e935ab1bed946820aff6ac002a",
+          "expectedSize": 814404
+        },
+        {
+          "filename": "vocab.enhu.spm",
+          "checksum": "2eee837cfdcc45c091d025f585d3fcdb293db7794e316b38a0aeff8c47a659e0",
+          "expectedSize": 806121
+        },
+        {
+          "filename": "vocab.enis.spm",
+          "checksum": "61b2ea10edbe4cc61e36c833cacc2f55778ed9ca860cd382729060634d4b0adb",
+          "expectedSize": 809991
+        },
+        {
+          "filename": "vocab.enit.spm",
+          "checksum": "3ef0211d4ae6db21440892f180f2019fe2bfc110a330ffa9d2eca9665e4f2bc5",
+          "expectedSize": 812724
+        },
+        {
+          "filename": "vocab.enlt.spm",
+          "checksum": "5d38fe70ff4a50368af756b715b69519c9ee064c27cbceeabc90d4e1a10f25a8",
+          "expectedSize": 806827
+        },
+        {
+          "filename": "vocab.enlv.spm",
+          "checksum": "63146b49ce46ba1283b6956e38efdd4899d1a409cad9d2b6a06cbd4e32ca0808",
+          "expectedSize": 816287
+        },
+        {
+          "filename": "vocab.ennl.spm",
+          "checksum": "c09588ca5662b230ed65bd39a07f58d9f7dd21c3a19e4aeb1bff39bf3b297c56",
+          "expectedSize": 807708
+        },
+        {
+          "filename": "vocab.enpl.spm",
+          "checksum": "2000f182efa8ce5f69bc3f9e574666b5bc2c0af684eedd32f69d15aa9021ea85",
+          "expectedSize": 821612
+        },
+        {
+          "filename": "vocab.enpt.spm",
+          "checksum": "d9f46182823d5bbc84201252b2dfcac28f63e561f0ec827ed858f241864c9def",
+          "expectedSize": 816726
+        },
+        {
+          "filename": "vocab.enru.spm",
+          "checksum": "56ee63e14e8cb926c394242adc3ed7cc602644c3d33058cff2ce2959d52a6258",
+          "expectedSize": 904455
+        },
+        {
+          "filename": "vocab.ensk.spm",
+          "checksum": "cfa6a9e601d74686b117f041eb1ad9de94c34219110b67367d570a9e27026a46",
+          "expectedSize": 808888
+        },
+        {
+          "filename": "vocab.ensl.spm",
+          "checksum": "7cd295383c46824c05a05db76b543d3595f2516537dd22b77190a45c8919224d",
+          "expectedSize": 803212
+        },
+        {
+          "filename": "vocab.enuk.spm",
+          "checksum": "4dd6a91feff71e745395dcc0d52f885848ca0d843d5f70628ca51b3be1b70b45",
+          "expectedSize": 922077
+        },
+        {
+          "filename": "vocab.esen.spm",
+          "checksum": "5ae254fa9b15aa182e70fd2a6186b1333c63a29a48043a9224c6aa4fcac058ad",
+          "expectedSize": 816054
+        },
+        {
+          "filename": "vocab.eten.spm",
+          "checksum": "89a3deea4ae7d674fb46a4dae39135dd4dfaac9786f2868d0b5bc5c0aca2ef83",
+          "expectedSize": 817574
+        },
+        {
+          "filename": "vocab.fien.spm",
+          "checksum": "6a866911427f2916609ae89c7f2f04a78de3fdd8aa183039ecba986635d4f246",
+          "expectedSize": 818770
+        },
+        {
+          "filename": "vocab.fren.spm",
+          "checksum": "783abf3abe075afdf8d85d233994bef2c3a064e935ab1bed946820aff6ac002a",
+          "expectedSize": 814404
+        },
+        {
+          "filename": "vocab.isen.spm",
+          "checksum": "5c69f0c81f6198f5615ac5aad9d89eb81a46ae8ea396a9e8e274a76409d35e13",
+          "expectedSize": 808315
+        },
+        {
+          "filename": "vocab.iten.spm",
+          "checksum": "3ef0211d4ae6db21440892f180f2019fe2bfc110a330ffa9d2eca9665e4f2bc5",
+          "expectedSize": 812724
+        },
+        {
+          "filename": "vocab.jaen.spm",
+          "checksum": "5cb217758bae05877bb3f0c2f612e4e7c1e4cb03c10db11f4a47098d7ae62919",
+          "expectedSize": 1443222
+        },
+        {
+          "filename": "vocab.koen.spm",
+          "checksum": "1c72b740ab793cdc3a8f16913dd6b4e806c77421077dd2d85edeb7be38418598",
+          "expectedSize": 1410063
+        },
+        {
+          "filename": "vocab.nlen.spm",
+          "checksum": "c09588ca5662b230ed65bd39a07f58d9f7dd21c3a19e4aeb1bff39bf3b297c56",
+          "expectedSize": 807708
+        },
+        {
+          "filename": "vocab.plen.spm",
+          "checksum": "2000f182efa8ce5f69bc3f9e574666b5bc2c0af684eedd32f69d15aa9021ea85",
+          "expectedSize": 821612
+        },
+        {
+          "filename": "vocab.pten.spm",
+          "checksum": "d9f46182823d5bbc84201252b2dfcac28f63e561f0ec827ed858f241864c9def",
+          "expectedSize": 816726
+        },
+        {
+          "filename": "vocab.slen.spm",
+          "checksum": "54ed331d3435e2bdc5b02462180197b77631f466fc0e61897b5469449857dd2b",
+          "expectedSize": 803078
+        },
+        {
+          "filename": "vocab.zhen.spm",
+          "checksum": "dff594318ab7d8b7b60b844ab98ebe6b932ae8045fab15235404c787715965b3",
+          "expectedSize": 1359697
+        }
+      ]
     }
   ]
 }

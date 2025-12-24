@@ -248,7 +248,7 @@ async function main () {
         driveKeys[modelKey] = drive.key
         driveInstances.set(modelKey, drive)
 
-        const driveMetadata = await calculateDirectoryChecksums(modelDirectory, ['inference.config.json', '.s3-fingerprint'])
+        const driveMetadata = await calculateDirectoryChecksums(modelDirectory, ['inference.config.json', '.s3-fingerprint', '.s3-fingerprints.json'])
 
         const modelRecord = {
           key: drive.key.toString('hex'),

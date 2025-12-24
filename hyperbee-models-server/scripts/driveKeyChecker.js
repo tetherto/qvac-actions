@@ -77,7 +77,7 @@ async function downloadAndCalculateChecksums (drive, driveKey, options = {}) {
 
     // Calculate checksums for all downloaded files
     console.log('\n📊 Calculating checksums...')
-    const checksums = await calculateDirectoryChecksums(tmpDir, ['inference.config.json', '.s3-fingerprint'])
+    const checksums = await calculateDirectoryChecksums(tmpDir, ['inference.config.json', '.s3-fingerprint', '.s3-fingerprints.json'])
 
     console.log('\n📋 File Checksums:')
     checksums.forEach((file, index) => {

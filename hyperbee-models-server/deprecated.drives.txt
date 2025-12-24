@@ -78,3 +78,5 @@ generation:medgemma:it::4B:q4_1:1.0.0:shard (with-license) 002b137fdf1a241bc6061
 generation:medgemma:it::4B:q8_1:1.0.0:shard (with-license) 1fd455b8e1f5201d7484e7a9aaf3e75f114400db94ab076ff03d07a2eb956a06
 embedding:gte-large:bert::335M:Q2_K:1.0.0:shard (with-license) d272f10e09b72f7c83dc0fb08d15925d9a0cea2e736e816360f8ddd62d0cb957
 embedding:gte-large:bert::335M:fp16:1.0.0:shard (with-license) 1d217e22f4e7b92c28be331845cfed59d4117a8de10ac7bac3637cf27ecb1395
+ocr:craft:recognizer::::1.0.0:latin 906ace2630689151bfd005e25ce613fcb63916770ef57711cd2a8beb40874bfb
+translation:bergamot:nmt::::1.0.0:all-vocabs 27dcc28c0318e17a0ca6881684ed683c5f6e172f38bb258d62b241f6108c8f59
