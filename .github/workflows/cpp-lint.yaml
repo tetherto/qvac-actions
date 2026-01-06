@@ -18,7 +18,7 @@ env:
 
 jobs:
   cpp-lint:
-    runs-on: ubuntu-24.04
+    runs-on: ai-run-linux
     env:
       VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}/vcpkg/cache,readwrite"
     steps:
