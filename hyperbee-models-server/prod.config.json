@@ -6029,6 +6029,226 @@
           "expectedSize": 1359697
         }
       ]
+    },
+    {
+      "addon": "@qvac/ocr-onnx",
+      "tags": {
+        "function": "ocr",
+        "type": "recognizer",
+        "name": "craft",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "uint8",
+        "internalVersion": "1.0.0",
+        "other": "japanese"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ocr/uint8/2026-01-04/recognizer_japanese.onnx"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ocr/uint8/2026-01-04/detector_craft.onnx"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "3899620942044db4cdd4bc51b34aa36e3ce564e1820afcbe78f8dd30039f6ec9",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "detector_craft.onnx",
+          "checksum": "99fc94e7c1cb76d701e434fcb709f00be0826e898f1efa69f445cc6d3794e166",
+          "expectedSize": 20846609
+        },
+        {
+          "filename": "recognizer_japanese.onnx",
+          "checksum": "ebbb9d5b172f7ba2b5eb50f61d82910c221079d6cfbead0197a0adaef19e95ed",
+          "expectedSize": 4405212
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/ocr-onnx",
+      "tags": {
+        "function": "ocr",
+        "type": "recognizer",
+        "name": "craft",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "uint8",
+        "internalVersion": "1.0.0",
+        "other": "korean"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ocr/uint8/2026-01-04/recognizer_korean.onnx"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ocr/uint8/2026-01-04/detector_craft.onnx"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "0e329d281adf12be904f0a79ecddc0a60845adbc8a2d2e9304493d9e9adb3aa6",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "detector_craft.onnx",
+          "checksum": "99fc94e7c1cb76d701e434fcb709f00be0826e898f1efa69f445cc6d3794e166",
+          "expectedSize": 20846609
+        },
+        {
+          "filename": "recognizer_korean.onnx",
+          "checksum": "141cc40f5591c317177d56a2d5c0301f54f0a1a2ea3b3efee1d2b587d2599933",
+          "expectedSize": 4091650
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/ocr-onnx",
+      "tags": {
+        "function": "ocr",
+        "type": "recognizer",
+        "name": "craft",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "uint8",
+        "internalVersion": "1.0.0",
+        "other": "latin"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ocr/uint8/2026-01-04/recognizer_latin.onnx"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ocr/uint8/2026-01-04/detector_craft.onnx"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "2a1ce7b654ca50a9503bed5cc19b5767e542db7c7e2803f0ce332adfbfac6407",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "detector_craft.onnx",
+          "checksum": "99fc94e7c1cb76d701e434fcb709f00be0826e898f1efa69f445cc6d3794e166",
+          "expectedSize": 20846609
+        },
+        {
+          "filename": "recognizer_latin.onnx",
+          "checksum": "3d80081058b45a7eaccf8c19e65eda635cdfda19cbfcb485ebf4d73f796b5faa",
+          "expectedSize": 3920831
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/ocr-onnx",
+      "tags": {
+        "function": "ocr",
+        "type": "recognizer",
+        "name": "craft",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "uint8",
+        "internalVersion": "1.0.0",
+        "other": "thai"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ocr/uint8/2026-01-04/recognizer_thai.onnx"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ocr/uint8/2026-01-04/detector_craft.onnx"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "08334df5eb79df625e932f6e872fe8c5956865908af1a17737174d81bde5ce40",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "detector_craft.onnx",
+          "checksum": "99fc94e7c1cb76d701e434fcb709f00be0826e898f1efa69f445cc6d3794e166",
+          "expectedSize": 20846609
+        },
+        {
+          "filename": "recognizer_thai.onnx",
+          "checksum": "8c208a4ab4d70e6eadbbc1377d615f1a7b342f9556627f10ea506ff5433fdd53",
+          "expectedSize": 54006886
+        }
+      ]
+    },
+    {
+      "addon": "@qvac/ocr-onnx",
+      "tags": {
+        "function": "ocr",
+        "type": "recognizer",
+        "name": "craft",
+        "externalVersion": "",
+        "params": "",
+        "quantization": "uint8",
+        "internalVersion": "1.0.0",
+        "other": "zh_sim"
+      },
+      "models": [
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ocr/uint8/2026-01-04/recognizer_zh_sim.onnx"
+        },
+        {
+          "source": "aws",
+          "path": "qvac_models_compiled/ocr/uint8/2026-01-04/detector_craft.onnx"
+        }
+      ],
+      "license": [
+        "Apache-2.0"
+      ],
+      "driveKey": "87c223f271504ab6c064e01005a59735f1837f478cbeacd1ba9f35f44f03e184",
+      "driveMetadata": [
+        {
+          "filename": "LICENSE-Apache-2.0.txt",
+          "checksum": "f9946796a8a5bd5981565142fa42e3b0cc36aef6f80e86beaf5905b3c0fef1b5",
+          "expectedSize": 11361
+        },
+        {
+          "filename": "detector_craft.onnx",
+          "checksum": "99fc94e7c1cb76d701e434fcb709f00be0826e898f1efa69f445cc6d3794e166",
+          "expectedSize": 20846609
+        },
+        {
+          "filename": "recognizer_zh_sim.onnx",
+          "checksum": "77d947e7e1c18c214e6b9fa30f4d9888ac926de8caefac20ce1df6e864fc5c37",
+          "expectedSize": 5576253
+        }
+      ]
     }
   ]
 }
