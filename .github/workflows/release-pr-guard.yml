@@ -23,6 +23,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -42,4 +43,3 @@ jobs:
           package-slug: ${{ inputs.package-slug }}
           package-json-path: ${{ inputs.package-json-path }}
           changelog-path: ${{ inputs.changelog-path }}
-

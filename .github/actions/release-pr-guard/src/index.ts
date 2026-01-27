@@ -1,87 +1,36 @@
+import * as core from '@actions/core'
+import * as github from '@actions/github'
 import fs from 'fs'
-import https from 'https'
 import { execSync } from 'child_process'
 
-type ValidationError = string
-
-function getInput(name: string): string {
-  const key = `INPUT_${name.replace(/ /g, '_').toUpperCase()}`
-  return process.env[key] || ''
-}
-
-function parseEvent(): { prNumber?: number } {
-  const eventPath = process.env.GITHUB_EVENT_PATH
-  if (!eventPath || !fs.existsSync(eventPath)) return {}
-  const payload = JSON.parse(fs.readFileSync(eventPath, 'utf8'))
-  return { prNumber: payload.pull_request?.number }
-}
-
 function parseVersion(v: string): [number, number, number] {
-  const match = v.match(/^(\d+)\.(\d+)\.(\d+)$/)
-  if (!match) {
-    throw new Error(`Invalid semver: ${v}`)
-  }
-  return [Number(match[1]), Number(match[2]), Number(match[3])]
+  const m = v.match(/^(\d+)\.(\d+)\.(\d+)$/)
+  if (!m) throw new Error(`Invalid semver: ${v}`)
+  return [Number(m[1]), Number(m[2]), Number(m[3])]
 }
 
 function isGreater(a: string, b: string): boolean {
-  const [am, an, ap] = parseVersion(a)
-  const [bm, bn, bp] = parseVersion(b)
-  if (am !== bm) return am > bm
-  if (an !== bn) return an > bn
-  return ap > bp
+  const pa = parseVersion(a)
+  const pb = parseVersion(b)
+  return pa > pb
 }
 
-function postComment(token: string, owner: string, repo: string, prNumber: number, body: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const data = JSON.stringify({ body })
-    const req = https.request(
-      {
-        hostname: 'api.github.com',
-        path: `/repos/${owner}/${repo}/issues/${prNumber}/comments`,
-        method: 'POST',
-        headers: {
-          'User-Agent': 'release-pr-guard',
-          Authorization: `token ${token}`,
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(data)
-        }
-      },
-      (res) => {
-        const chunks: Buffer[] = []
-        res.on('data', (chunk) => chunks.push(chunk))
-        res.on('end', () => {
-          if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
-            resolve()
-          } else {
-            reject(
-              new Error(`Failed to post PR comment. Status: ${res.statusCode}. Body: ${Buffer.concat(chunks).toString()}`)
-            )
-          }
-        })
-      }
-    )
-    req.on('error', reject)
-    req.write(data)
-    req.end()
-  })
-}
+async function run() {
+  const token = core.getInput('github-token', { required: true })
+  const baseRef = core.getInput('base-ref', { required: true })
+  const baseSha = core.getInput('base-sha', { required: true })
+  const headSha = core.getInput('head-sha', { required: true })
+  const pkgSlug = core.getInput('package-slug', { required: true })
+  const pkgJsonPath = core.getInput('package-json-path', { required: true })
+  const changelogPath = core.getInput('changelog-path', { required: true })
 
-async function run(): Promise<void> {
-  const token = getInput('github-token')
-  const baseRef = getInput('base-ref')
-  const baseSha = getInput('base-sha')
-  const headSha = getInput('head-sha')
-  const pkgSlug = getInput('package-slug')
-  const pkgJsonPath = getInput('package-json-path')
-  const changelogPath = getInput('changelog-path')
+  const octokit = github.getOctokit(token)
+  const { owner, repo } = github.context.repo
+  const prNumber = github.context.payload.pull_request?.number
 
-  const errors: ValidationError[] = []
+  const errors: string[] = []
 
-  if (!baseRef) {
-    errors.push('❌ **Missing base ref**\n`base-ref` input is required for release validation.')
-  }
-
+  // ── Branch name validation
   const match = baseRef.match(/^release-(.+)-(\d+\.\d+\.\d+)$/)
   if (!match) {
     errors.push(
@@ -91,79 +40,58 @@ async function run(): Promise<void> {
 
   let branchPkg = ''
   let branchVersion = ''
+
   if (match) {
     branchPkg = match[1]
     branchVersion = match[2]
 
     if (branchPkg !== pkgSlug) {
-      errors.push(`❌ **Package mismatch**\nBranch targets \`${branchPkg}\`, workflow expects \`${pkgSlug}\``)
+      errors.push(
+        `❌ **Package mismatch**\nBranch targets \`${branchPkg}\`, workflow expects \`${pkgSlug}\``
+      )
     }
   }
 
-  let baseVersion = ''
-  let headVersion = ''
-  try {
-    const basePkg = JSON.parse(execSync(`git show ${baseSha}:${pkgJsonPath}`).toString())
-    baseVersion = basePkg.version
-  } catch (err) {
-    errors.push(`❌ **Unable to read base package.json**\nPath: \`${pkgJsonPath}\``)
-  }
+  // ── Read versions
+  const basePkg = JSON.parse(execSync(`git show ${baseSha}:${pkgJsonPath}`).toString())
+  const headPkg = JSON.parse(execSync(`git show ${headSha}:${pkgJsonPath}`).toString())
 
-  try {
-    const headPkg = JSON.parse(execSync(`git show ${headSha}:${pkgJsonPath}`).toString())
-    headVersion = headPkg.version
-  } catch (err) {
-    errors.push(`❌ **Unable to read head package.json**\nPath: \`${pkgJsonPath}\``)
-  }
-
-  if (branchVersion && headVersion && branchVersion !== headVersion) {
+  if (branchVersion && headPkg.version !== branchVersion) {
     errors.push(
-      `❌ **Version mismatch**\nBranch version: \`${branchVersion}\`\npackage.json: \`${headVersion}\``
+      `❌ **Version mismatch**\nBranch version: \`${branchVersion}\`\npackage.json: \`${headPkg.version}\``
     )
   }
 
-  if (baseVersion && headVersion) {
-    try {
-      if (!isGreater(headVersion, baseVersion)) {
-        errors.push(`❌ **Version not incremented**\nBase: \`${baseVersion}\`\nPR: \`${headVersion}\``)
-      }
-    } catch (err) {
-      errors.push(`❌ **Invalid version format**\nBase: \`${baseVersion}\`\nPR: \`${headVersion}\``)
-    }
+  if (!isGreater(headPkg.version, basePkg.version)) {
+    errors.push(
+      `❌ **Version not incremented**\nBase: \`${basePkg.version}\`\nPR: \`${headPkg.version}\``
+    )
   }
 
-  if (baseSha && headSha) {
-    try {
-      const changedFiles = execSync(`git diff --name-only ${baseSha} ${headSha}`).toString()
-      const changedList = changedFiles.split('\n').filter(Boolean)
-      if (!changedList.includes(changelogPath)) {
-        errors.push(`❌ **Missing CHANGELOG update**\nFile not modified: \`${changelogPath}\``)
-      }
-    } catch (err) {
-      errors.push(`❌ **Unable to read changed files**\nBase: \`${baseSha}\`\nHead: \`${headSha}\``)
-    }
+  // ── Changelog must be modified
+  const changedFiles = execSync(
+    `git diff --name-only ${baseSha} ${headSha}`
+  ).toString()
+
+  if (!changedFiles.includes(changelogPath)) {
+    errors.push(
+      `❌ **Missing CHANGELOG update**\nFile not modified: \`${changelogPath}\``
+    )
   }
 
-  const repoFull = process.env.GITHUB_REPOSITORY || ''
-  const [owner, repo] = repoFull.split('/')
-  const { prNumber } = parseEvent()
-
-  if (errors.length && token && owner && repo && prNumber) {
-    try {
-      await postComment(token, owner, repo, prNumber, `### 🚫 Release PR validation failed\n\n${errors.join('\n\n')}`)
-    } catch (err) {
-      console.error(`Failed to post PR comment: ${(err as Error).message}`)
-    }
+  // ── Report results
+  if (errors.length && prNumber) {
+    await octokit.rest.issues.createComment({
+      owner,
+      repo,
+      issue_number: prNumber,
+      body: `### 🚫 Release PR validation failed\n\n${errors.join('\n\n')}`
+    })
   }
 
   if (errors.length) {
-    console.error(errors.join('\n\n'))
-    process.exit(1)
+    core.setFailed('Release PR validation failed')
   }
 }
 
-run().catch((err) => {
-  console.error(err.message || err)
-  process.exit(1)
-})
-
+run().catch(err => core.setFailed(err.message))
