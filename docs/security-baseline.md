@@ -75,9 +75,16 @@ All inputs are optional.
   override the CodeQL query packs.
 - **`codeql-category-prefix`** _(string, default empty)_ — optional prefix for
   the CodeQL SARIF `category`. Empty default produces the standard
-  `/language:<lang>` category. Set this only when another CodeQL workflow
-  is also uploading SARIF on the same commit (see
+  `/language:<lang>` category. Set this only when another _advanced_ CodeQL
+  workflow is also uploading SARIF on the same commit (see
   [Adopting in a repo that already has CodeQL](#adopting-in-a-repo-that-already-has-codeql)).
+- **`codeql-upload`** _(string, default `always`)_ — whether to upload CodeQL
+  SARIF to the Security tab. One of `always`, `failure-only`, `never`. Set
+  to `never` when the repo has GitHub's "Default setup" for code scanning
+  enabled (default setup rejects SARIF from advanced workflows with
+  `CodeQL analyses from advanced configurations cannot be processed when
+  the default setup is enabled`). Severity gating still runs because SARIF
+  is always written locally for the gate to read.
 - **`enable-pr-comment`** _(boolean, default `true`)_ — post a summary
   comment on PRs when findings exist. The job summary is always written.
 
@@ -133,9 +140,14 @@ Default is `high`, i.e. fail only on `error`-level findings. Choose
 
 ## Adopting in a repo that already has CodeQL
 
+There are two distinct cases — pick the section that matches what's
+currently enabled on your repo.
+
+### Case 1: an existing **advanced** CodeQL workflow (`codeql.yml`)
+
 CodeQL refuses to upload two SARIF runs with overlapping `category` values
 for the same commit. The baseline defaults to `category: /language:<lang>`,
-which matches CodeQL's own default. You have two options:
+which matches CodeQL's own default.
 
 **Option A (recommended) — replace the old workflow:**
 
@@ -145,10 +157,8 @@ which matches CodeQL's own default. You have two options:
 
 **Option B — coexist with the old workflow:**
 
-If you need to keep both workflows running for a transition period (or
-because the old one is the org-default `CodeQL` workflow you can't easily
-remove), set `codeql-category-prefix` so the baseline uploads under a
-distinct category:
+If you need to keep both workflows running for a transition period, set
+`codeql-category-prefix` so the baseline uploads under a distinct category:
 
 ```yaml
 with:
@@ -157,8 +167,44 @@ with:
 
 This produces `/security-baseline/language:<lang>` instead of the default
 `/language:<lang>`, letting both workflows upload SARIF on the same commit
-without collision. The baseline self-test workflow in this repo uses this
-option because the org-wide `CodeQL` workflow runs alongside it.
+without collision.
+
+### Case 2: GitHub's **Default setup** for code scanning is enabled
+
+If your repo has Code scanning configured via *Settings -> Code security ->
+Code scanning -> Set up -> Default*, GitHub will reject SARIF from any
+"advanced" workflow with this error:
+
+```
+CodeQL analyses from advanced configurations cannot be processed when the
+default setup is enabled.
+```
+
+A distinct `codeql-category-prefix` does **not** help here; default setup
+blocks advanced uploads outright. Pick one:
+
+**Option A (recommended) — switch from Default to Advanced:**
+
+Repo *Settings -> Code security -> Code scanning -> Default setup ->
+Switch to advanced*, then adopt the baseline snippet above. You keep
+everything default setup gave you plus the baseline's wider query packs,
+severity gate, TruffleHog, and PR comment.
+
+**Option B — keep Default setup, skip baseline's SARIF upload:**
+
+```yaml
+with:
+  codeql-upload: never
+```
+
+You still get TruffleHog scanning and the CodeQL severity gate
+(enforced from the locally-written SARIF), but Code scanning alerts
+in the Security tab continue to come from default setup only.
+
+This is what `security-self-test.yml` in this repo does — `qvac-devops`
+itself has default setup enabled, and disabling it would disrupt the
+org's existing security posture, so the self-test runs with
+`codeql-upload: never`.
 
 ## Versioning
 

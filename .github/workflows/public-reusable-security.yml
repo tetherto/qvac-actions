@@ -41,10 +41,15 @@ on:
         type: string
         default: "security-extended,security-and-quality"
       codeql-category-prefix:
-        description: "Optional prefix added to the CodeQL SARIF category. Use this to coexist with another CodeQL workflow on the same repo (each workflow needs a distinct category, otherwise SARIF upload collides). Empty default produces the standard '/language:<lang>' category."
+        description: "Optional prefix added to the CodeQL SARIF category. Use this to coexist with another advanced CodeQL workflow on the same repo (each workflow needs a distinct category, otherwise SARIF upload collides). Empty default produces the standard '/language:<lang>' category."
         required: false
         type: string
         default: ""
+      codeql-upload:
+        description: "Whether to upload CodeQL SARIF to the Security tab. One of 'always', 'failure-only', 'never'. Set to 'never' when the repo has GitHub's 'Default setup' for code scanning enabled — default setup rejects SARIF from advanced workflows. Severity gating still works because SARIF is always written locally for the gate to read."
+        required: false
+        type: string
+        default: "always"
       enable-pr-comment:
         description: "Post a summary comment on PRs when findings exist. Job summary is always written."
         required: false
@@ -225,7 +230,7 @@ jobs:
         uses: github/codeql-action/analyze@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
         with:
           category: ${{ inputs.codeql-category-prefix && format('/{0}/language:{1}', inputs.codeql-category-prefix, matrix.language) || format('/language:{0}', matrix.language) }}
-          upload: true
+          upload: ${{ inputs.codeql-upload }}
           output: codeql-sarif
 
       - name: Enforce severity threshold
