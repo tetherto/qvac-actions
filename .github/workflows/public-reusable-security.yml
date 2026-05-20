@@ -1,0 +1,340 @@
+name: Canonical Security Baseline
+# Reusable workflow: TruffleHog secret scanning + CodeQL static analysis.
+# Consumed by Tier-1 repos via `uses:`. See docs/security-baseline.md.
+
+on:
+  workflow_call:
+    inputs:
+      languages:
+        description: "Comma-separated CodeQL languages override (e.g. javascript-typescript,python). Empty = autodetect."
+        required: false
+        type: string
+        default: ""
+      severity-threshold:
+        description: "Lowest CodeQL severity that fails the job (low|medium|high|critical)."
+        required: false
+        type: string
+        default: "high"
+      paths-include:
+        description: "Newline-separated path globs to include (applied to TruffleHog --include-paths and CodeQL paths:)."
+        required: false
+        type: string
+        default: ""
+      paths-exclude:
+        description: "Newline-separated path globs to exclude (applied to TruffleHog --exclude-paths and CodeQL paths-ignore:)."
+        required: false
+        type: string
+        default: ""
+      allowlist-path:
+        description: "Path within the consumer repo to a TruffleHog allowlist YAML (known false positives)."
+        required: false
+        type: string
+        default: ""
+      trufflehog-fail-on-unverified:
+        description: "Fail the job on unverified TruffleHog matches. Default false: only verified secrets fail."
+        required: false
+        type: boolean
+        default: false
+      codeql-queries:
+        description: "CodeQL query packs (comma-separated)."
+        required: false
+        type: string
+        default: "security-extended,security-and-quality"
+      enable-pr-comment:
+        description: "Post a summary comment on PRs when findings exist. Job summary is always written."
+        required: false
+        type: boolean
+        default: true
+    secrets:
+      gh_token:
+        description: "Optional token override for SARIF upload + PR comments. Defaults to github.token."
+        required: false
+
+# These are the permissions the *caller* job must grant for the reusable
+# workflow to function. Documented here for reference; the GitHub runtime
+# enforces them against the caller's `permissions:` block.
+permissions:
+  contents: read
+  security-events: write
+  pull-requests: write
+  actions: read
+
+jobs:
+  trufflehog:
+    name: TruffleHog secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.gh_token || github.token }}
+
+      - name: Compute TruffleHog scan range
+        id: range
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "${{ github.event_name }}" in
+            pull_request|pull_request_target)
+              echo "base=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_OUTPUT"
+              echo "head=${{ github.event.pull_request.head.sha }}" >> "$GITHUB_OUTPUT"
+              ;;
+            push)
+              before="${{ github.event.before }}"
+              if [[ -z "$before" || "$before" == "0000000000000000000000000000000000000000" ]]; then
+                before=""
+              fi
+              echo "base=$before" >> "$GITHUB_OUTPUT"
+              echo "head=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "base=" >> "$GITHUB_OUTPUT"
+              echo "head=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+
+      - name: Materialize path filters
+        id: filters
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -n "${{ inputs.paths-include }}" ]]; then
+            tmp_inc="$(mktemp)"
+            printf '%s\n' "${{ inputs.paths-include }}" > "$tmp_inc"
+            echo "include-file=$tmp_inc" >> "$GITHUB_OUTPUT"
+          fi
+          if [[ -n "${{ inputs.paths-exclude }}" ]]; then
+            tmp_exc="$(mktemp)"
+            printf '%s\n' "${{ inputs.paths-exclude }}" > "$tmp_exc"
+            echo "exclude-file=$tmp_exc" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run TruffleHog
+        id: trufflehog
+        uses: trufflesecurity/trufflehog@37b77001d0174ebec2fcca2bd83ff83a6d45a3ab # v3.95.3
+        with:
+          path: .
+          base: ${{ steps.range.outputs.base }}
+          head: ${{ steps.range.outputs.head }}
+          extra_args: >-
+            ${{ inputs.trufflehog-fail-on-unverified && '--fail' || '--only-verified --fail' }}
+            ${{ steps.filters.outputs.include-file && format('--include-paths={0}', steps.filters.outputs.include-file) || '' }}
+            ${{ steps.filters.outputs.exclude-file && format('--exclude-paths={0}', steps.filters.outputs.exclude-file) || '' }}
+            ${{ inputs.allowlist-path && format('--config={0}', inputs.allowlist-path) || '' }}
+
+  detect-languages:
+    name: Detect CodeQL languages
+    runs-on: ubuntu-latest
+    outputs:
+      languages: ${{ steps.set.outputs.languages }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Determine language matrix
+        id: set
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -n "${{ inputs.languages }}" ]]; then
+            raw="${{ inputs.languages }}"
+          else
+            shopt -s nullglob globstar
+            detected=()
+            files=( **/*.js **/*.jsx **/*.ts **/*.tsx ); (( ${#files[@]} > 0 )) && detected+=("javascript-typescript")
+            files=( **/*.py );                          (( ${#files[@]} > 0 )) && detected+=("python")
+            files=( **/*.go );                          (( ${#files[@]} > 0 )) && detected+=("go")
+            files=( **/*.java **/*.kt );                (( ${#files[@]} > 0 )) && detected+=("java-kotlin")
+            files=( **/*.rb );                          (( ${#files[@]} > 0 )) && detected+=("ruby")
+            files=( **/*.cs );                          (( ${#files[@]} > 0 )) && detected+=("csharp")
+            files=( **/*.swift );                       (( ${#files[@]} > 0 )) && detected+=("swift")
+            files=( **/*.c **/*.cc **/*.cpp **/*.h **/*.hpp ); (( ${#files[@]} > 0 )) && detected+=("c-cpp")
+            if [[ ${#detected[@]} -eq 0 ]]; then
+              detected=("javascript-typescript")
+            fi
+            raw=$(IFS=,; echo "${detected[*]}")
+          fi
+          echo "Detected/overridden languages: $raw"
+          json=$(printf '%s\n' "$raw" | jq -R -c 'split(",") | map(gsub("^\\s+|\\s+$"; "")) | map(select(length > 0))')
+          echo "languages=$json" >> "$GITHUB_OUTPUT"
+
+  codeql:
+    name: CodeQL (${{ matrix.language }})
+    needs: detect-languages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ${{ fromJSON(needs.detect-languages.outputs.languages) }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Build CodeQL config file
+        id: cfg
+        shell: bash
+        run: |
+          set -euo pipefail
+          cfg="$(mktemp --suffix=.yml)"
+          {
+            echo "name: security-baseline"
+            if [[ -n "${{ inputs.paths-include }}" ]]; then
+              echo "paths:"
+              while IFS= read -r p; do
+                [[ -z "$p" ]] && continue
+                echo "  - $p"
+              done <<< "${{ inputs.paths-include }}"
+            fi
+            if [[ -n "${{ inputs.paths-exclude }}" ]]; then
+              echo "paths-ignore:"
+              while IFS= read -r p; do
+                [[ -z "$p" ]] && continue
+                echo "  - $p"
+              done <<< "${{ inputs.paths-exclude }}"
+            fi
+          } > "$cfg"
+          echo "path=$cfg" >> "$GITHUB_OUTPUT"
+          echo "----- generated CodeQL config -----"
+          cat "$cfg"
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: ${{ inputs.codeql-queries }}
+          config-file: ${{ steps.cfg.outputs.path }}
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
+
+      - name: Analyze
+        id: analyze
+        uses: github/codeql-action/analyze@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
+        with:
+          category: /language:${{ matrix.language }}
+          upload: true
+          output: codeql-sarif
+
+      - name: Enforce severity threshold
+        shell: bash
+        env:
+          THRESHOLD: ${{ inputs.severity-threshold }}
+        run: |
+          set -euo pipefail
+          # SARIF level mapping (per CodeQL's standard security-severity buckets):
+          #   critical / high -> error
+          #   medium          -> warning
+          #   low             -> note
+          case "$(echo "$THRESHOLD" | tr '[:upper:]' '[:lower:]')" in
+            critical|high) gate_levels='["error"]' ;;
+            medium)        gate_levels='["error","warning"]' ;;
+            low)           gate_levels='["error","warning","note"]' ;;
+            *) echo "::error::Unknown severity-threshold: $THRESHOLD (expected one of low|medium|high|critical)"; exit 1 ;;
+          esac
+          shopt -s nullglob
+          count=0
+          for sarif in codeql-sarif/*.sarif; do
+            c=$(jq --argjson lvls "$gate_levels" '
+              [ .runs[]?.results[]? | select((.level // "warning") | IN($lvls[])) ] | length
+            ' "$sarif") || {
+              echo "::error::Failed to evaluate SARIF $sarif"
+              exit 1
+            }
+            count=$((count + c))
+          done
+          if (( count > 0 )); then
+            echo "::error title=CodeQL findings at or above ${THRESHOLD}::Found ${count} blocking result(s) for ${{ matrix.language }}"
+            exit 1
+          fi
+          echo "No CodeQL findings at or above severity '${THRESHOLD}' for ${{ matrix.language }}."
+
+  summary:
+    name: Security baseline summary
+    needs: [trufflehog, codeql]
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Write job summary
+        shell: bash
+        env:
+          TH_RESULT: ${{ needs.trufflehog.result }}
+          CQ_RESULT: ${{ needs.codeql.result }}
+          LANG_INPUT: ${{ inputs.languages }}
+          THRESHOLD: ${{ inputs.severity-threshold }}
+        run: |
+          set -euo pipefail
+          lang_label="autodetected"
+          if [[ -n "$LANG_INPUT" ]]; then
+            lang_label="$LANG_INPUT"
+          fi
+          {
+            echo "## Security baseline"
+            echo ""
+            echo "| Check | Result |"
+            echo "| --- | --- |"
+            echo "| TruffleHog (secrets) | \`$TH_RESULT\` |"
+            echo "| CodeQL ($lang_label) | \`$CQ_RESULT\` |"
+            echo ""
+            echo "Severity threshold: \`$THRESHOLD\`"
+            echo ""
+            echo "Detailed CodeQL findings are uploaded to the **Security** tab of this repository."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upsert PR comment when findings exist
+        if: >-
+          (github.event_name == 'pull_request' || github.event_name == 'pull_request_target') &&
+          inputs.enable-pr-comment &&
+          (needs.trufflehog.result == 'failure' || needs.codeql.result == 'failure')
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        with:
+          github-token: ${{ secrets.gh_token || github.token }}
+          script: |
+            const marker = '<!-- security-baseline-summary -->';
+            const th = '${{ needs.trufflehog.result }}';
+            const cq = '${{ needs.codeql.result }}';
+            const threshold = '${{ inputs.severity-threshold }}';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = [
+              marker,
+              '## Security baseline — findings detected',
+              '',
+              `- **TruffleHog**: \`${th}\``,
+              `- **CodeQL**: \`${cq}\``,
+              `- **Severity threshold**: \`${threshold}\``,
+              '',
+              `See the [job summary](${runUrl}) and the repository **Security** tab for details.`,
+              '',
+              '_This comment is updated automatically by the canonical security workflow._',
+            ].join('\n');
+
+            const prNumber = context.payload.pull_request.number;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              per_page: 100,
+            });
+            const existing = comments.find(c =>
+              c.user && c.user.login === 'github-actions[bot]' && c.body && c.body.includes(marker)
+            );
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body,
+              });
+            }

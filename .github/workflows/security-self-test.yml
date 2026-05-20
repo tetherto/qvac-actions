@@ -1,0 +1,36 @@
+name: Security baseline (self-test)
+# Smoke test for the canonical security workflow that lives in this same repo.
+# Proves an end-to-end green run against a real codebase (qvac-devops itself)
+# without needing a separate test repo. See docs/security-baseline.md.
+
+on:
+  push:
+    branches:
+      - main
+      - 'feat/**'
+      - 'fix/**'
+  pull_request:
+
+permissions:
+  contents: read
+  security-events: write
+  pull-requests: write
+  actions: read
+
+jobs:
+  baseline:
+    # Use the local-path form so this self-test always runs against the
+    # in-tree version of the reusable workflow (catches regressions before
+    # they ever reach a consuming repo).
+    uses: ./.github/workflows/public-reusable-security.yml
+    permissions:
+      contents: read
+      security-events: write
+      pull-requests: write
+      actions: read
+    with:
+      languages: javascript-typescript
+      # `critical` keeps the self-test green while still exercising the gate.
+      # Tier-1 consumers should use the default `high` threshold.
+      severity-threshold: critical
+    secrets: inherit
