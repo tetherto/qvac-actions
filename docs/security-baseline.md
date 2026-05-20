@@ -73,6 +73,11 @@ All inputs are optional.
   keeps v0 noise low by only failing on verified secrets.
 - **`codeql-queries`** _(string, default `security-extended,security-and-quality`)_ —
   override the CodeQL query packs.
+- **`codeql-category-prefix`** _(string, default empty)_ — optional prefix for
+  the CodeQL SARIF `category`. Empty default produces the standard
+  `/language:<lang>` category. Set this only when another CodeQL workflow
+  is also uploading SARIF on the same commit (see
+  [Adopting in a repo that already has CodeQL](#adopting-in-a-repo-that-already-has-codeql)).
 - **`enable-pr-comment`** _(boolean, default `true`)_ — post a summary
   comment on PRs when findings exist. The job summary is always written.
 
@@ -129,14 +134,31 @@ Default is `high`, i.e. fail only on `error`-level findings. Choose
 ## Adopting in a repo that already has CodeQL
 
 CodeQL refuses to upload two SARIF runs with overlapping `category` values
-for the same commit. Before wiring this workflow in:
+for the same commit. The baseline defaults to `category: /language:<lang>`,
+which matches CodeQL's own default. You have two options:
+
+**Option A (recommended) — replace the old workflow:**
 
 1. Delete the existing `codeql.yml` (or whatever CodeQL workflow you have).
 2. Verify the old workflow is removed from the default branch.
 3. Add the consumer snippet above.
 
-The baseline uses `category: /language:<lang>`, which matches CodeQL's own
-default category.
+**Option B — coexist with the old workflow:**
+
+If you need to keep both workflows running for a transition period (or
+because the old one is the org-default `CodeQL` workflow you can't easily
+remove), set `codeql-category-prefix` so the baseline uploads under a
+distinct category:
+
+```yaml
+with:
+  codeql-category-prefix: security-baseline
+```
+
+This produces `/security-baseline/language:<lang>` instead of the default
+`/language:<lang>`, letting both workflows upload SARIF on the same commit
+without collision. The baseline self-test workflow in this repo uses this
+option because the org-wide `CodeQL` workflow runs alongside it.
 
 ## Versioning
 

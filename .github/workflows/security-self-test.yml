@@ -33,4 +33,9 @@ jobs:
       # `critical` keeps the self-test green while still exercising the gate.
       # Tier-1 consumers should use the default `high` threshold.
       severity-threshold: critical
+      # qvac-devops also has the org-wide default `CodeQL` workflow attached;
+      # this prefix gives our SARIF a distinct category so both can upload
+      # without colliding. Consumers should leave this empty unless they
+      # also keep an existing CodeQL workflow around.
+      codeql-category-prefix: security-baseline
     secrets: inherit

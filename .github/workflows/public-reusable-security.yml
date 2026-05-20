@@ -40,6 +40,11 @@ on:
         required: false
         type: string
         default: "security-extended,security-and-quality"
+      codeql-category-prefix:
+        description: "Optional prefix added to the CodeQL SARIF category. Use this to coexist with another CodeQL workflow on the same repo (each workflow needs a distinct category, otherwise SARIF upload collides). Empty default produces the standard '/language:<lang>' category."
+        required: false
+        type: string
+        default: ""
       enable-pr-comment:
         description: "Post a summary comment on PRs when findings exist. Job summary is always written."
         required: false
@@ -117,8 +122,11 @@ jobs:
           path: .
           base: ${{ steps.range.outputs.base }}
           head: ${{ steps.range.outputs.head }}
+          # The TruffleHog action passes `--fail` to the underlying CLI automatically,
+          # so do NOT include it here (duplicate flag => "flag 'fail' cannot be repeated").
+          # `--only-verified` is what restricts what triggers that fail.
           extra_args: >-
-            ${{ inputs.trufflehog-fail-on-unverified && '--fail' || '--only-verified --fail' }}
+            ${{ inputs.trufflehog-fail-on-unverified && '' || '--only-verified' }}
             ${{ steps.filters.outputs.include-file && format('--include-paths={0}', steps.filters.outputs.include-file) || '' }}
             ${{ steps.filters.outputs.exclude-file && format('--exclude-paths={0}', steps.filters.outputs.exclude-file) || '' }}
             ${{ inputs.allowlist-path && format('--config={0}', inputs.allowlist-path) || '' }}
@@ -178,7 +186,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cfg="$(mktemp --suffix=.yml)"
+          # CodeQL's init action rejects config-file paths outside $GITHUB_WORKSPACE,
+          # so the temp file must live under the workspace, not /tmp.
+          cfg="${GITHUB_WORKSPACE}/.codeql-baseline-config.yml"
           {
             echo "name: security-baseline"
             if [[ -n "${{ inputs.paths-include }}" ]]; then
@@ -214,7 +224,7 @@ jobs:
         id: analyze
         uses: github/codeql-action/analyze@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
         with:
-          category: /language:${{ matrix.language }}
+          category: ${{ inputs.codeql-category-prefix && format('/{0}/language:{1}', inputs.codeql-category-prefix, matrix.language) || format('/language:{0}', matrix.language) }}
           upload: true
           output: codeql-sarif
 
