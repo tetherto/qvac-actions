@@ -50,13 +50,26 @@ jobs:
 
 That's it — defaults take over.
 
+> **Heads-up for mixed-C/C++ repos.** Language autodetect is conservative
+> and frequently misses C/C++ in repos that also contain JS/TS, Python,
+> Go, etc. If your repo has any C/C++ that you want analyzed, **always
+> set the [`languages`](#inputs) input explicitly** rather than relying on
+> autodetect — otherwise CodeQL will silently skip the C/C++ portion of
+> the scan. Example: `languages: c-cpp,javascript-typescript`.
+
 ## Inputs
 
 All inputs are optional.
 
 - **`languages`** _(string)_ — comma-separated CodeQL languages override
-  (e.g. `javascript-typescript,python`). Empty default uses a file-based
-  autodetect; set explicitly when autodetect misses something (often C/C++).
+  (e.g. `javascript-typescript,python`, `c-cpp,javascript-typescript`).
+  Empty default uses a file-based autodetect.
+  **For mixed repos containing C/C++, set this explicitly.** Autodetect
+  often misses C/C++ when it coexists with another language, and the scan
+  will then silently skip the C/C++ portion — a serious gap given how much
+  C/C++ lives in our mixed repos. Supported values match CodeQL's
+  language identifiers: `c-cpp`, `javascript-typescript`, `python`, `go`,
+  `java-kotlin`, `ruby`, `csharp`, `swift`.
 - **`severity-threshold`** _(string, default `high`)_ — lowest CodeQL
   severity that fails the job. One of `low`, `medium`, `high`, `critical`.
   See [Severity semantics](#severity-semantics).
@@ -222,8 +235,6 @@ switch all consumers to that tag.
 - The `trufflesecurity/trufflehog` action does not publish stable semver
   tags; for v0 it is pinned by SHA with a version comment. Update by SHA,
   not tag, when bumping.
-- CodeQL autodetect can miss C/C++ in mixed repos — use the `languages`
-  input to override.
 - A first run on a fresh repo takes ~5-7 minutes (CodeQL bootstraps a
   database). Subsequent runs use the CodeQL cache.
 - This workflow is orthogonal to the existing
