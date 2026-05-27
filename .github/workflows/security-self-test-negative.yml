@@ -68,35 +68,64 @@ jobs:
             > "$fixture_dir/fake-jwt.js"
 
           # ----- CodeQL fixture: multiple high-severity taint flows -----
-          # Uses process.argv as the taint source (well-recognized by
-          # CodeQL's JS taint tracker — more reliable than http.createServer
-          # which CodeQL is conservative about) flowing into three distinct
-          # high-severity sinks. Any one of these is enough to make the
-          # assertion green; running all three is belt-and-braces against
-          # future query-pack changes.
-          #
-          # Expected findings (all SARIF level=error under security-extended):
-          #   js/command-line-injection  (CWE-078, security-severity 9.8)
-          #   js/code-injection          (CWE-094, security-severity 9.3)
-          #   js/path-injection          (CWE-022, security-severity 7.5)
-          cat > "$fixture_dir/bad-sinks.js" <<'JS'
+          # Previous iterations using process.argv standalone produced
+          # zero taint-flow findings — CodeQL's JS extractor appears to
+          # skip standalone scripts without a package.json anchor.
+          # Now: declare the fixture as a proper Node.js project AND use
+          # the canonical Express-handler pattern from CodeQL's own
+          # documentation, which is the highest-confidence trigger for
+          # the security-extended taint queries.
+          cat > "$fixture_dir/package.json" <<'JSON'
+          {
+            "name": "negative-test-fixtures",
+            "version": "0.0.0",
+            "private": true,
+            "description": "Synthetic fixtures for the security baseline negative self-test."
+          }
+          JSON
+
+          # bad-server.js: canonical CodeQL example shape for
+          #   js/code-injection           (CWE-094, security-severity 9.3)
+          #   js/command-line-injection   (CWE-078, security-severity 9.8)
+          # using an Express handler (taint source CodeQL's JS analyzer
+          # has the strongest models for).
+          cat > "$fixture_dir/bad-server.js" <<'JS'
+          'use strict';
+          const express = require('express');
+          const { execSync } = require('child_process');
+
+          // SYNTHETIC FIXTURE for negative self-test. Do not deploy.
+          const app = express();
+          app.use(express.json());
+
+          app.post('/eval', (req, res) => {
+            // js/code-injection: req.body is a CodeQL-modelled remote source
+            // eslint-disable-next-line no-eval
+            const out = eval(req.body.code);
+            res.send(String(out));
+          });
+
+          app.get('/run', (req, res) => {
+            // js/command-line-injection: req.query is a remote source
+            const r = execSync(req.query.cmd);
+            res.send(r.toString());
+          });
+
+          app.listen(3000);
+          JS
+
+          # bad-argv.js: belt-and-braces secondary fixture using
+          # process.argv directly. Added as a fallback in case the
+          # Express analyzer changes its model.
+          cat > "$fixture_dir/bad-argv.js" <<'JS'
           'use strict';
           const fs = require('fs');
           const { execSync } = require('child_process');
 
           // SYNTHETIC FIXTURE for negative self-test. Do not deploy.
-          // Direct (unconditional, no string concat) taint from
-          // process.argv into multiple high-severity sinks — keeps the
-          // flow trivial for CodeQL to track.
-
-          // 1) js/command-line-injection (security-severity 9.8)
           execSync(process.argv[2]);
-
-          // 2) js/code-injection (security-severity 9.3)
           // eslint-disable-next-line no-eval
           eval(process.argv[3]);
-
-          // 3) js/path-injection (security-severity 7.5)
           fs.readFileSync(process.argv[4]);
           JS
 
@@ -179,7 +208,7 @@ jobs:
           upload: never
           output: codeql-sarif-neg
 
-      - name: Diagnostic - dump SARIF findings by level and ruleId
+      - name: Diagnostic - dump SARIF findings by level, ruleId and file
         if: always()
         shell: bash
         run: |
@@ -192,19 +221,28 @@ jobs:
           fi
           for sarif in "${sarifs[@]}"; do
             echo "----- $sarif -----"
-            echo "  totals by level (effective level, defaulting null to 'warning'):"
+            echo "  totals by effective level (result.level, else rule.defaultConfiguration.level, else 'warning'):"
             jq -r '
-              [ .runs[]?.results[]? | (.level // "warning") ]
-              | group_by(.) | map({level: .[0], count: length})
-              | (.[] | "    \(.level): \(.count)")
-            ' "$sarif" || echo "    (jq failed)"
-            echo "  top 20 ruleIds:"
+              .runs[]? as $run
+              | ( $run.tool.driver.rules // [] | INDEX(.id) ) as $rules
+              | $run.results[]?
+              | (.level // $rules[.ruleId].defaultConfiguration.level // "warning")
+              | .
+            ' "$sarif" | sort | uniq -c | awk '{printf "    %s: %d\n", $2, $1}' || echo "    (no results)"
+            echo "  top 20 ruleIds (count, level, ruleId):"
             jq -r '
-              [ .runs[]?.results[]? | .ruleId // "(no ruleId)" ]
-              | group_by(.) | map({rule: .[0], count: length})
-              | sort_by(-.count) | .[:20]
-              | (.[] | "    \(.count) x \(.rule)")
-            ' "$sarif" || echo "    (jq failed)"
+              .runs[]? as $run
+              | ( $run.tool.driver.rules // [] | INDEX(.id) ) as $rules
+              | $run.results[]?
+              | "\(.level // $rules[.ruleId].defaultConfiguration.level // "warning")\t\(.ruleId)"
+            ' "$sarif" | sort | uniq -c | sort -rn | head -20 | awk '{printf "    %d x %s\n", $1, substr($0, index($0,$2))}' || echo "    (no results)"
+            echo "  findings touching .security-baseline-fixtures (proves CodeQL sees the fixtures):"
+            count=$(jq -r '
+              [ .runs[]?.results[]?.locations[]?.physicalLocation.artifactLocation.uri // empty
+                | select(contains(".security-baseline-fixtures")) ]
+              | length
+            ' "$sarif" 2>/dev/null || echo 0)
+            echo "    $count fixture-located result(s)"
           done
 
       - name: Assert CodeQL flagged the fixtures
@@ -217,21 +255,31 @@ jobs:
             echo "::error title=Negative test regression::CodeQL produced no SARIF output. Cannot assert findings."
             exit 1
           fi
-          # Count error-level results (matches the canonical baseline's
-          # default `severity-threshold: high`).
+          # Count error-level results in the fixtures directory specifically.
+          # Effective level = result.level OR rule.defaultConfiguration.level
+          # OR "warning" (matches the canonical baseline's threshold logic).
+          # Scoping to the fixtures directory avoids false-positive "OK"s
+          # if real qvac-devops code ever introduces a finding.
           error_count=0
           for sarif in "${sarifs[@]}"; do
-            c=$(jq '[ .runs[]?.results[]? | select((.level // "warning") == "error") ] | length' "$sarif") || {
+            c=$(jq '
+              .runs[]? as $run
+              | ( $run.tool.driver.rules // [] | INDEX(.id) ) as $rules
+              | [ $run.results[]?
+                  | select((.level // $rules[.ruleId].defaultConfiguration.level // "warning") == "error")
+                  | select(.locations[]?.physicalLocation.artifactLocation.uri // "" | contains(".security-baseline-fixtures"))
+                ] | length
+            ' "$sarif") || {
               echo "::error::Failed to parse SARIF $sarif"
               exit 1
             }
             error_count=$((error_count + c))
           done
           if (( error_count == 0 )); then
-            echo "::error title=Negative test regression::CodeQL did NOT produce any error-level findings against the planted fixtures. The canonical security baseline has regressed: static analysis is no longer catching js/code-injection / js/command-line-injection."
+            echo "::error title=Negative test regression::CodeQL did NOT produce any error-level findings in .security-baseline-fixtures/. The canonical security baseline has regressed: static analysis is no longer catching js/code-injection / js/command-line-injection / js/path-injection on planted fixtures. See the diagnostic dump above for the full SARIF result distribution."
             exit 1
           fi
-          echo "OK: CodeQL produced $error_count error-level finding(s) against planted fixtures, as expected."
+          echo "OK: CodeQL produced $error_count error-level finding(s) in the fixtures directory, as expected."
 
       # -------------------------------------------------------------------
       # Visible summary for reviewers.
