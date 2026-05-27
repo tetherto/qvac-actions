@@ -67,36 +67,35 @@ jobs:
           printf 'export const FIXTURE_TOKEN = "%s.%s.%s";\n' "$jwt_h" "$jwt_p" "$jwt_s" \
             > "$fixture_dir/fake-jwt.js"
 
-          # ----- CodeQL fixture: js/code-injection (eval of HTTP input) -----
-          # Real Node.js taint flow that security-extended catches as
-          # "error" level. The require/createServer/req chain is what
-          # CodeQL's JS taint tracker recognizes as user-controlled.
-          cat > "$fixture_dir/bad-server.js" <<'JS'
+          # ----- CodeQL fixture: multiple high-severity taint flows -----
+          # Uses process.argv as the taint source (well-recognized by
+          # CodeQL's JS taint tracker — more reliable than http.createServer
+          # which CodeQL is conservative about) flowing into three distinct
+          # high-severity sinks. Any one of these is enough to make the
+          # assertion green; running all three is belt-and-braces against
+          # future query-pack changes.
+          #
+          # Expected findings (all SARIF level=error under security-extended):
+          #   js/command-line-injection  (CWE-078, security-severity 9.8)
+          #   js/code-injection          (CWE-094, security-severity 9.3)
+          #   js/path-injection          (CWE-022, security-severity 7.5)
+          cat > "$fixture_dir/bad-sinks.js" <<'JS'
           'use strict';
-          const http = require('http');
+          const fs = require('fs');
+          const { execSync } = require('child_process');
 
-          // SYNTHETIC FIXTURE for negative self-test.
-          // Triggers CodeQL js/code-injection (error) via eval(taint).
-          http.createServer((req, res) => {
-            const payload = req.url.slice(1);
-            // eslint-disable-next-line no-eval
-            const result = eval(payload);
-            res.end(String(result));
-          }).listen(0);
-          JS
+          // SYNTHETIC FIXTURE for negative self-test. Do not deploy.
+          const tainted = process.argv[2] || '';
 
-          # ----- CodeQL fixture: js/command-line-injection -----
-          cat > "$fixture_dir/bad-exec.js" <<'JS'
-          'use strict';
-          const http = require('http');
-          const { exec } = require('child_process');
+          // 1) js/command-line-injection
+          execSync('echo ' + tainted);
 
-          // SYNTHETIC FIXTURE for negative self-test.
-          // Triggers CodeQL js/command-line-injection (error) via exec(taint).
-          http.createServer((req, res) => {
-            const cmd = req.headers['x-cmd'] || '';
-            exec('ls ' + cmd, (_e, stdout) => res.end(stdout));
-          }).listen(0);
+          // 2) js/code-injection
+          // eslint-disable-next-line no-eval
+          eval(tainted);
+
+          // 3) js/path-injection
+          fs.readFileSync(tainted);
           JS
 
           # Commit so TruffleHog (which scans git history, not the
@@ -183,6 +182,34 @@ jobs:
           category: /security-baseline-negative-test/language:javascript-typescript
           upload: never
           output: codeql-sarif-neg
+
+      - name: Diagnostic - dump SARIF findings by level and ruleId
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          sarifs=( codeql-sarif-neg/*.sarif )
+          if (( ${#sarifs[@]} == 0 )); then
+            echo "::warning::no SARIF files produced"
+            exit 0
+          fi
+          for sarif in "${sarifs[@]}"; do
+            echo "----- $sarif -----"
+            echo "  totals by level (effective level, defaulting null to 'warning'):"
+            jq -r '
+              [ .runs[]?.results[]? | (.level // "warning") ]
+              | group_by(.) | map({level: .[0], count: length})
+              | (.[] | "    \(.level): \(.count)")
+            ' "$sarif" || echo "    (jq failed)"
+            echo "  top 20 ruleIds:"
+            jq -r '
+              [ .runs[]?.results[]? | .ruleId // "(no ruleId)" ]
+              | group_by(.) | map({rule: .[0], count: length})
+              | sort_by(-.count) | .[:20]
+              | (.[] | "    \(.count) x \(.rule)")
+            ' "$sarif" || echo "    (jq failed)"
+          done
 
       - name: Assert CodeQL flagged the fixtures
         shell: bash
