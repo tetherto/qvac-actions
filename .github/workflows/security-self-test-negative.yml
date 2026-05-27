@@ -85,17 +85,19 @@ jobs:
           const { execSync } = require('child_process');
 
           // SYNTHETIC FIXTURE for negative self-test. Do not deploy.
-          const tainted = process.argv[2] || '';
+          // Direct (unconditional, no string concat) taint from
+          // process.argv into multiple high-severity sinks — keeps the
+          // flow trivial for CodeQL to track.
 
-          // 1) js/command-line-injection
-          execSync('echo ' + tainted);
+          // 1) js/command-line-injection (security-severity 9.8)
+          execSync(process.argv[2]);
 
-          // 2) js/code-injection
+          // 2) js/code-injection (security-severity 9.3)
           // eslint-disable-next-line no-eval
-          eval(tainted);
+          eval(process.argv[3]);
 
-          // 3) js/path-injection
-          fs.readFileSync(tainted);
+          // 3) js/path-injection (security-severity 7.5)
+          fs.readFileSync(process.argv[4]);
           JS
 
           # Commit so TruffleHog (which scans git history, not the
@@ -142,26 +144,11 @@ jobs:
           echo "OK: TruffleHog flagged planted fixtures as expected."
 
       # -------------------------------------------------------------------
-      # CodeQL leg: must produce at least one error-level finding scoped
-      # to the fixture directory.
+      # CodeQL leg: must produce at least one error-level finding. Since
+      # the positive self-test is green at severity-threshold: critical,
+      # qvac-devops has no error-level findings of its own, so any
+      # error-level finding here can only come from the planted fixture.
       # -------------------------------------------------------------------
-      - name: Build CodeQL config scoped to fixtures
-        id: cql-cfg
-        shell: bash
-        env:
-          FIXTURE_DIR: ${{ steps.plant.outputs.fixture-dir }}
-        run: |
-          set -euo pipefail
-          cfg="${GITHUB_WORKSPACE}/.codeql-negative-test-config.yml"
-          {
-            echo "name: security-baseline-negative-test"
-            echo "paths:"
-            echo "  - $FIXTURE_DIR"
-          } > "$cfg"
-          echo "path=$cfg" >> "$GITHUB_OUTPUT"
-          echo "----- generated CodeQL config -----"
-          cat "$cfg"
-
       - name: Initialize CodeQL
         uses: github/codeql-action/init@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
         with:
@@ -169,7 +156,16 @@ jobs:
           # Same query packs as the canonical baseline so this test
           # mirrors what a real consumer will run.
           queries: security-extended,security-and-quality
-          config-file: ${{ steps.cql-cfg.outputs.path }}
+          # NOTE: deliberately NOT setting a `config-file` with paths:
+          # scoping. An earlier iteration restricted extraction to just
+          # the fixtures dir, but that also stripped CodeQL's Node.js
+          # library models (fs/child_process/process) so taint flow
+          # through stdlib could not be tracked and the SARIF came back
+          # empty. Analyzing the whole workspace adds the model context
+          # at the cost of ~1m extra runtime; since the positive
+          # self-test is green at severity-threshold: critical, we know
+          # qvac-devops has zero error-level findings of its own, so any
+          # error-level finding here can only come from the fixtures.
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
