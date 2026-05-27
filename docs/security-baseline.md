@@ -219,6 +219,36 @@ itself has default setup enabled, and disabling it would disrupt the
 org's existing security posture, so the self-test runs with
 `codeql-upload: never`.
 
+## Negative self-test (regression guard)
+
+The companion workflow
+[`security-self-test-negative.yml`](../.github/workflows/security-self-test-negative.yml)
+plants known-bad fixtures (a synthetic PEM private key, a synthetic JWT,
+two JS files with `js/code-injection` and `js/command-line-injection`
+sinks) into a runtime-only directory and **asserts that both TruffleHog
+and CodeQL flag them**. A green run here means the canonical baseline
+still catches the classes of malicious code it is supposed to catch; a
+red run means the baseline has silently regressed.
+
+Key properties:
+
+- Fixture strings are constructed at runtime via `printf` and
+  concatenation, so the workflow YAML itself contains nothing that looks
+  like a secret. This avoids GitHub push-protection blocking the
+  workflow file.
+- Fixtures are committed *locally on the runner only* (TruffleHog scans
+  git history, not the working tree) and are never pushed back to
+  `origin`.
+- CodeQL is scoped to the fixture directory via a generated
+  `config-file` with `paths:`, so the assertion is "the fixtures
+  specifically were caught", not "something somewhere was caught".
+- SARIF is `upload: never` so the Security tab is not polluted with
+  fixture findings.
+
+Tier-1 adopters do **not** need to wire this into their own repos — it
+only makes sense for the `qvac-devops` repo that owns the baseline.
+Treat it as a CI test for the workflow itself.
+
 ## Versioning
 
 For v0 ("drafted only"), pin to `@main`:

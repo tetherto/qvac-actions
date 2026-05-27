@@ -1,0 +1,236 @@
+name: Security baseline (negative self-test)
+# Regression guard for the canonical security workflow. Plants known-bad
+# fixtures into a runtime-only directory and asserts that BOTH TruffleHog
+# and CodeQL flag them. Green = baseline still catches malicious code;
+# red = baseline has silently regressed.
+#
+# The fixtures are constructed at runtime via `printf` (not committed to
+# the repo and not embedded in this YAML file) so that GitHub's
+# secret-scanning push protection does not block this workflow itself.
+#
+# This complements security-self-test.yml: that one proves the baseline
+# is green on a clean tree (positive); this one proves it actually fails
+# when there is something to find (negative).
+
+on:
+  push:
+    branches:
+      - main
+      - 'feat/**'
+      - 'fix/**'
+  pull_request:
+
+permissions:
+  contents: read
+  actions: read
+  # NOTE: no `security-events: write` — this workflow intentionally does
+  # NOT upload SARIF (it would pollute the Security tab with planted
+  # fixture findings and on this repo would be rejected by Default setup).
+
+jobs:
+  negative-test:
+    name: Baseline must flag planted fixtures
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Plant malicious fixtures and commit locally
+        id: plant
+        shell: bash
+        run: |
+          set -euo pipefail
+          fixture_dir=".security-baseline-fixtures"
+          mkdir -p "$fixture_dir"
+
+          # ----- TruffleHog fixture: PEM private key block -----
+          # Constructed at runtime so this YAML itself contains nothing
+          # that looks like a key (avoids push-protection on the workflow).
+          # TruffleHog's "PrivateKey" detector triggers on the BEGIN/END
+          # markers regardless of the body, so junk content is fine.
+          {
+            printf -- '-----BEGIN %s PRIVATE KEY-----\n' 'RSA'
+            printf 'MIIEowIBAAKCAQEArandomFakeBase64ContentForNegativeTestNotARealKey0000\n'
+            printf 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0001\n'
+            printf 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0002\n'
+            printf -- '-----END %s PRIVATE KEY-----\n' 'RSA'
+          } > "$fixture_dir/fake-key.pem"
+
+          # ----- TruffleHog fixture: JWT-shaped string -----
+          # TruffleHog's "JWT" detector matches header.payload.signature
+          # base64 segments. Build via concatenation so the literal token
+          # does not appear in source.
+          jwt_h="$(printf '%s' '{"alg":"none","typ":"JWT"}' | base64 -w0 | tr '+/' '-_' | tr -d '=')"
+          jwt_p="$(printf '%s' '{"sub":"fixture","role":"test"}' | base64 -w0 | tr '+/' '-_' | tr -d '=')"
+          jwt_s="$(printf '%s' 'fixture-signature-not-real' | base64 -w0 | tr '+/' '-_' | tr -d '=')"
+          printf 'export const FIXTURE_TOKEN = "%s.%s.%s";\n' "$jwt_h" "$jwt_p" "$jwt_s" \
+            > "$fixture_dir/fake-jwt.js"
+
+          # ----- CodeQL fixture: js/code-injection (eval of HTTP input) -----
+          # Real Node.js taint flow that security-extended catches as
+          # "error" level. The require/createServer/req chain is what
+          # CodeQL's JS taint tracker recognizes as user-controlled.
+          cat > "$fixture_dir/bad-server.js" <<'JS'
+          'use strict';
+          const http = require('http');
+
+          // SYNTHETIC FIXTURE for negative self-test.
+          // Triggers CodeQL js/code-injection (error) via eval(taint).
+          http.createServer((req, res) => {
+            const payload = req.url.slice(1);
+            // eslint-disable-next-line no-eval
+            const result = eval(payload);
+            res.end(String(result));
+          }).listen(0);
+          JS
+
+          # ----- CodeQL fixture: js/command-line-injection -----
+          cat > "$fixture_dir/bad-exec.js" <<'JS'
+          'use strict';
+          const http = require('http');
+          const { exec } = require('child_process');
+
+          // SYNTHETIC FIXTURE for negative self-test.
+          // Triggers CodeQL js/command-line-injection (error) via exec(taint).
+          http.createServer((req, res) => {
+            const cmd = req.headers['x-cmd'] || '';
+            exec('ls ' + cmd, (_e, stdout) => res.end(stdout));
+          }).listen(0);
+          JS
+
+          # Commit so TruffleHog (which scans git history, not the
+          # working tree) can see the fixtures. This commit lives only
+          # on the runner; nothing is pushed back to origin.
+          git config user.email "negative-self-test@local"
+          git config user.name  "negative-self-test"
+          git add "$fixture_dir"
+          git commit -q -m "test: plant negative-test fixtures (runner-local, never pushed)"
+
+          echo "fixture-dir=$fixture_dir"     >> "$GITHUB_OUTPUT"
+          echo "th-base=$(git rev-parse HEAD~1)" >> "$GITHUB_OUTPUT"
+          echo "th-head=$(git rev-parse HEAD)"   >> "$GITHUB_OUTPUT"
+
+          echo "----- planted files -----"
+          ls -la "$fixture_dir"
+
+      # -------------------------------------------------------------------
+      # TruffleHog leg: must fail on the planted fixtures.
+      # -------------------------------------------------------------------
+      - name: Run TruffleHog against planted fixtures (expect failure)
+        id: trufflehog
+        continue-on-error: true
+        uses: trufflesecurity/trufflehog@37b77001d0174ebec2fcca2bd83ff83a6d45a3ab # v3.95.3
+        with:
+          path: .
+          base: ${{ steps.plant.outputs.th-base }}
+          head: ${{ steps.plant.outputs.th-head }}
+          # Do NOT pass --only-verified: fixtures are synthetic and will
+          # not verify against any provider, but their FORMAT must still
+          # trip detectors. --fail and --no-update are added by the action.
+          extra_args: ''
+
+      - name: Assert TruffleHog flagged the fixtures
+        shell: bash
+        env:
+          TH_OUTCOME: ${{ steps.trufflehog.outcome }}
+        run: |
+          set -euo pipefail
+          if [[ "$TH_OUTCOME" != "failure" ]]; then
+            echo "::error title=Negative test regression::TruffleHog did NOT flag the planted fixtures (outcome=$TH_OUTCOME). The canonical security baseline has regressed: secret scanning is no longer catching known-bad inputs."
+            exit 1
+          fi
+          echo "OK: TruffleHog flagged planted fixtures as expected."
+
+      # -------------------------------------------------------------------
+      # CodeQL leg: must produce at least one error-level finding scoped
+      # to the fixture directory.
+      # -------------------------------------------------------------------
+      - name: Build CodeQL config scoped to fixtures
+        id: cql-cfg
+        shell: bash
+        env:
+          FIXTURE_DIR: ${{ steps.plant.outputs.fixture-dir }}
+        run: |
+          set -euo pipefail
+          cfg="${GITHUB_WORKSPACE}/.codeql-negative-test-config.yml"
+          {
+            echo "name: security-baseline-negative-test"
+            echo "paths:"
+            echo "  - $FIXTURE_DIR"
+          } > "$cfg"
+          echo "path=$cfg" >> "$GITHUB_OUTPUT"
+          echo "----- generated CodeQL config -----"
+          cat "$cfg"
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
+        with:
+          languages: javascript-typescript
+          # Same query packs as the canonical baseline so this test
+          # mirrors what a real consumer will run.
+          queries: security-extended,security-and-quality
+          config-file: ${{ steps.cql-cfg.outputs.path }}
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
+
+      - name: Analyze (expect findings, do NOT upload)
+        id: analyze
+        continue-on-error: true
+        uses: github/codeql-action/analyze@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
+        with:
+          category: /security-baseline-negative-test/language:javascript-typescript
+          upload: never
+          output: codeql-sarif-neg
+
+      - name: Assert CodeQL flagged the fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          sarifs=( codeql-sarif-neg/*.sarif )
+          if (( ${#sarifs[@]} == 0 )); then
+            echo "::error title=Negative test regression::CodeQL produced no SARIF output. Cannot assert findings."
+            exit 1
+          fi
+          # Count error-level results (matches the canonical baseline's
+          # default `severity-threshold: high`).
+          error_count=0
+          for sarif in "${sarifs[@]}"; do
+            c=$(jq '[ .runs[]?.results[]? | select((.level // "warning") == "error") ] | length' "$sarif") || {
+              echo "::error::Failed to parse SARIF $sarif"
+              exit 1
+            }
+            error_count=$((error_count + c))
+          done
+          if (( error_count == 0 )); then
+            echo "::error title=Negative test regression::CodeQL did NOT produce any error-level findings against the planted fixtures. The canonical security baseline has regressed: static analysis is no longer catching js/code-injection / js/command-line-injection."
+            exit 1
+          fi
+          echo "OK: CodeQL produced $error_count error-level finding(s) against planted fixtures, as expected."
+
+      # -------------------------------------------------------------------
+      # Visible summary for reviewers.
+      # -------------------------------------------------------------------
+      - name: Write negative-test summary
+        if: always()
+        shell: bash
+        env:
+          TH_OUTCOME: ${{ steps.trufflehog.outcome }}
+          CQ_OUTCOME: ${{ steps.analyze.outcome }}
+        run: |
+          set -euo pipefail
+          {
+            echo "## Security baseline — negative self-test"
+            echo ""
+            echo "Plants known-bad fixtures into the workspace and asserts the baseline catches them."
+            echo ""
+            echo "| Leg | Expected | Observed (raw step outcome) |"
+            echo "| --- | --- | --- |"
+            echo "| TruffleHog must flag synthetic PEM + JWT fixtures | failure | \`$TH_OUTCOME\` |"
+            echo "| CodeQL must flag js/code-injection + js/command-line-injection | failure (with error-level results) | \`$CQ_OUTCOME\` |"
+            echo ""
+            echo "A green job here means the canonical baseline is still catching malicious code."
+            echo "A red job means the baseline has regressed and should be investigated immediately."
+          } >> "$GITHUB_STEP_SUMMARY"
