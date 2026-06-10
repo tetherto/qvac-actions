@@ -78,6 +78,11 @@ jobs:
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           fetch-depth: 0
+          # On pull_request / pull_request_target the default ref is the base
+          # branch; scan the PR HEAD instead so the tree matches the range
+          # computed below (otherwise pull_request_target scans base, not the
+          # proposed changes). Falls back to github.sha for push/other events.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           token: ${{ secrets.gh_token || github.token }}
 
       - name: Compute TruffleHog scan range
@@ -107,16 +112,19 @@ jobs:
       - name: Materialize path filters
         id: filters
         shell: bash
+        env:
+          PATHS_INCLUDE: ${{ inputs.paths-include }}
+          PATHS_EXCLUDE: ${{ inputs.paths-exclude }}
         run: |
           set -euo pipefail
-          if [[ -n "${{ inputs.paths-include }}" ]]; then
+          if [[ -n "$PATHS_INCLUDE" ]]; then
             tmp_inc="$(mktemp)"
-            printf '%s\n' "${{ inputs.paths-include }}" > "$tmp_inc"
+            printf '%s\n' "$PATHS_INCLUDE" > "$tmp_inc"
             echo "include-file=$tmp_inc" >> "$GITHUB_OUTPUT"
           fi
-          if [[ -n "${{ inputs.paths-exclude }}" ]]; then
+          if [[ -n "$PATHS_EXCLUDE" ]]; then
             tmp_exc="$(mktemp)"
-            printf '%s\n' "${{ inputs.paths-exclude }}" > "$tmp_exc"
+            printf '%s\n' "$PATHS_EXCLUDE" > "$tmp_exc"
             echo "exclude-file=$tmp_exc" >> "$GITHUB_OUTPUT"
           fi
 
@@ -143,14 +151,20 @@ jobs:
       languages: ${{ steps.set.outputs.languages }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          # Detect languages from the PR HEAD tree, consistent with the
+          # trufflehog and codeql jobs.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Determine language matrix
         id: set
         shell: bash
+        env:
+          LANGUAGES: ${{ inputs.languages }}
         run: |
           set -euo pipefail
-          if [[ -n "${{ inputs.languages }}" ]]; then
-            raw="${{ inputs.languages }}"
+          if [[ -n "$LANGUAGES" ]]; then
+            raw="$LANGUAGES"
           else
             shopt -s nullglob globstar
             detected=()
@@ -185,10 +199,17 @@ jobs:
         language: ${{ fromJSON(needs.detect-languages.outputs.languages) }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          # Match the trufflehog job: analyze PR HEAD, not the base branch,
+          # on pull_request / pull_request_target.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Build CodeQL config file
         id: cfg
         shell: bash
+        env:
+          PATHS_INCLUDE: ${{ inputs.paths-include }}
+          PATHS_EXCLUDE: ${{ inputs.paths-exclude }}
         run: |
           set -euo pipefail
           # CodeQL's init action rejects config-file paths outside $GITHUB_WORKSPACE,
@@ -196,19 +217,19 @@ jobs:
           cfg="${GITHUB_WORKSPACE}/.codeql-baseline-config.yml"
           {
             echo "name: security-baseline"
-            if [[ -n "${{ inputs.paths-include }}" ]]; then
+            if [[ -n "$PATHS_INCLUDE" ]]; then
               echo "paths:"
               while IFS= read -r p; do
                 [[ -z "$p" ]] && continue
                 echo "  - $p"
-              done <<< "${{ inputs.paths-include }}"
+              done <<< "$PATHS_INCLUDE"
             fi
-            if [[ -n "${{ inputs.paths-exclude }}" ]]; then
+            if [[ -n "$PATHS_EXCLUDE" ]]; then
               echo "paths-ignore:"
               while IFS= read -r p; do
                 [[ -z "$p" ]] && continue
                 echo "  - $p"
-              done <<< "${{ inputs.paths-exclude }}"
+              done <<< "$PATHS_EXCLUDE"
             fi
           } > "$cfg"
           echo "path=$cfg" >> "$GITHUB_OUTPUT"
@@ -237,6 +258,7 @@ jobs:
         shell: bash
         env:
           THRESHOLD: ${{ inputs.severity-threshold }}
+          LANGUAGE: ${{ matrix.language }}
         run: |
           set -euo pipefail
           # SARIF level mapping (per CodeQL's standard security-severity buckets):
@@ -252,8 +274,17 @@ jobs:
           shopt -s nullglob
           count=0
           for sarif in codeql-sarif/*.sarif; do
+            # CodeQL carries severity on rule.defaultConfiguration.level, not on
+            # the individual result. Resolve the effective level as
+            #   result.level OR rule.defaultConfiguration.level OR "warning"
+            # otherwise real error-level findings are bucketed as "warning" and
+            # slip past a high/critical threshold (the gate would never block).
             c=$(jq --argjson lvls "$gate_levels" '
-              [ .runs[]?.results[]? | select((.level // "warning") | IN($lvls[])) ] | length
+              [ .runs[]? as $run
+                | ( $run.tool.driver.rules // [] | INDEX(.id) ) as $rules
+                | $run.results[]?
+                | select((.level // $rules[.ruleId].defaultConfiguration.level // "warning") | IN($lvls[]))
+              ] | length
             ' "$sarif") || {
               echo "::error::Failed to evaluate SARIF $sarif"
               exit 1
@@ -261,10 +292,10 @@ jobs:
             count=$((count + c))
           done
           if (( count > 0 )); then
-            echo "::error title=CodeQL findings at or above ${THRESHOLD}::Found ${count} blocking result(s) for ${{ matrix.language }}"
+            echo "::error title=CodeQL findings at or above ${THRESHOLD}::Found ${count} blocking result(s) for ${LANGUAGE}"
             exit 1
           fi
-          echo "No CodeQL findings at or above severity '${THRESHOLD}' for ${{ matrix.language }}."
+          echo "No CodeQL findings at or above severity '${THRESHOLD}' for ${LANGUAGE}."
 
   summary:
     name: Security baseline summary
@@ -306,14 +337,18 @@ jobs:
           (github.event_name == 'pull_request' || github.event_name == 'pull_request_target') &&
           inputs.enable-pr-comment &&
           (needs.trufflehog.result == 'failure' || needs.codeql.result == 'failure')
+        env:
+          TH_RESULT: ${{ needs.trufflehog.result }}
+          CQ_RESULT: ${{ needs.codeql.result }}
+          THRESHOLD: ${{ inputs.severity-threshold }}
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         with:
           github-token: ${{ secrets.gh_token || github.token }}
           script: |
             const marker = '<!-- security-baseline-summary -->';
-            const th = '${{ needs.trufflehog.result }}';
-            const cq = '${{ needs.codeql.result }}';
-            const threshold = '${{ inputs.severity-threshold }}';
+            const th = process.env.TH_RESULT;
+            const cq = process.env.CQ_RESULT;
+            const threshold = process.env.THRESHOLD;
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             const body = [
               marker,
