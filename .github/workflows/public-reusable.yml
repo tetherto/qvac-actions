@@ -77,7 +77,7 @@ jobs:
 #            exit 1
 #          fi
       - name: Enable Socket Firewall Guard
-        uses: tetherto/qvac-devops/.github/actions/sfw-guard@main
+        uses: tetherto/qvac-actions/.github/actions/sfw-guard@fdb251e37e067497fa409362bdb932d9218829c6 # qvac-actions self-hosted action (pin)
         with:
           firewall-mode: firewall-free
           clear-caches: "false"
@@ -86,7 +86,7 @@ jobs:
       - name: Run unit tests
         id: run_unit_tests
         continue-on-error: true
-        uses: tetherto/qvac-devops/.github/actions/run-lint-and-unit-tests@main
+        uses: tetherto/qvac-actions/.github/actions/run-lint-and-unit-tests@fdb251e37e067497fa409362bdb932d9218829c6 # qvac-actions self-hosted action (pin)
         with:
           gpr-token: ${{ secrets.GITHUB_TOKEN }}
           npm-token: ${{ secrets.NPM_TOKEN }}
@@ -132,7 +132,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Enable Socket Firewall Guard
-        uses: tetherto/qvac-devops/.github/actions/sfw-guard@main
+        uses: tetherto/qvac-actions/.github/actions/sfw-guard@fdb251e37e067497fa409362bdb932d9218829c6 # qvac-actions self-hosted action (pin)
         with:
           firewall-mode: firewall-free
           clear-caches: "false"
@@ -140,7 +140,7 @@ jobs:
 
       - name: Call Publish GPR Action
         id: publish-pr
-        uses: tetherto/qvac-devops/.github/actions/publish-library-to-gpr@main
+        uses: tetherto/qvac-actions/.github/actions/publish-library-to-gpr@fdb251e37e067497fa409362bdb932d9218829c6 # qvac-actions self-hosted action (pin)
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
@@ -173,7 +173,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Enable Socket Firewall Guard
-        uses: tetherto/qvac-devops/.github/actions/sfw-guard@main
+        uses: tetherto/qvac-actions/.github/actions/sfw-guard@fdb251e37e067497fa409362bdb932d9218829c6 # qvac-actions self-hosted action (pin)
         with:
           firewall-mode: firewall-free
           clear-caches: "false"
@@ -181,7 +181,7 @@ jobs:
   
       - name: Publish to GPR
         id: publish-push
-        uses: tetherto/qvac-devops/.github/actions/publish-library-to-gpr@main
+        uses: tetherto/qvac-actions/.github/actions/publish-library-to-gpr@fdb251e37e067497fa409362bdb932d9218829c6 # qvac-actions self-hosted action (pin)
         with:
           secret-token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
