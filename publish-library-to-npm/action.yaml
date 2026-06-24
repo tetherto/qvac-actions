@@ -9,7 +9,7 @@ inputs:
       npm dist-tag. Empty (default) or "latest" on a release-* branch triggers AUTO_DECIDE.
       Any other explicit value (e.g. "next", "release-1.x") is used verbatim — no AUTO_DECIDE.
     required: false
-    default: ""
+    default: "latest"
   workdir:
     description: "Directory containing package.json."
     required: true
