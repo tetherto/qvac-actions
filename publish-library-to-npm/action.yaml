@@ -44,19 +44,12 @@ runs:
         INPUT_TAG:       ${{ inputs.tag }}
         PACKAGE_NAME:    ${{ steps.pkg.outputs.name }}
         PACKAGE_VERSION: ${{ steps.pkg.outputs.version }}
-        GIT_REF:         ${{ github.ref }}
       run: |
         set -euo pipefail
 
         # Explicit tag (not empty, not "latest") → use verbatim
         if [ -n "${INPUT_TAG}" ] && [ "${INPUT_TAG}" != "latest" ]; then
           echo "tag=${INPUT_TAG}" >> "$GITHUB_OUTPUT"
-          exit 0
-        fi
-
-        # Not on release-* → default to tmp
-        if [[ "${GIT_REF}" != refs/heads/release-* ]]; then
-          echo "tag=${INPUT_TAG:-tmp}" >> "$GITHUB_OUTPUT"
           exit 0
         fi
 
