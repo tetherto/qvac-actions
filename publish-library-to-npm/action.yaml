@@ -1,0 +1,88 @@
+name: Publish NPM
+description: >
+  OIDC npm publish for @qvac/* packages with AUTO_DECIDE dist-tag routing.
+  Backward compatible: callers can omit tag and backport routing is handled automatically.
+
+inputs:
+  tag:
+    description: >
+      npm dist-tag. Empty (default) or "latest" on a release-* branch triggers AUTO_DECIDE.
+      Any other explicit value (e.g. "next", "release-1.x") is used verbatim — no AUTO_DECIDE.
+    required: false
+    default: ""
+  workdir:
+    description: "Directory containing package.json."
+    required: true
+
+outputs:
+  npm_published_version:
+    description: "Version published to npm."
+    value: ${{ steps.publish.outputs.npm_published_version }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # 6.3.0
+      with:
+        node-version: "24.14.1" # installs npm version 11.11.0
+        registry-url: https://registry.npmjs.org/
+        scope: "@qvac"
+
+    - name: Read package info
+      id: pkg
+      shell: bash
+      working-directory: ${{ inputs.workdir }}
+      run: |
+        set -euo pipefail
+        echo "name=$(node -p "require('./package.json').name")" >> "$GITHUB_OUTPUT"
+        echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
+    - name: Decide dist-tag (AUTO_DECIDE)
+      id: tag-decision
+      shell: bash
+      env:
+        INPUT_TAG:       ${{ inputs.tag }}
+        PACKAGE_NAME:    ${{ steps.pkg.outputs.name }}
+        PACKAGE_VERSION: ${{ steps.pkg.outputs.version }}
+        GIT_REF:         ${{ github.ref }}
+      run: |
+        set -euo pipefail
+
+        # Explicit tag (not empty, not "latest") → use verbatim
+        if [ -n "${INPUT_TAG}" ] && [ "${INPUT_TAG}" != "latest" ]; then
+          echo "tag=${INPUT_TAG}" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
+        # Not on release-* → default to tmp
+        if [[ "${GIT_REF}" != refs/heads/release-* ]]; then
+          echo "tag=${INPUT_TAG:-tmp}" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
+        # AUTO_DECIDE: compare version vs registry latest
+        CURRENT_LATEST=$(npm view "${PACKAGE_NAME}" dist-tags.latest 2>/dev/null || echo "0.0.0")
+        MAJOR_MINOR=$(echo "${PACKAGE_VERSION}" | awk -F. '{print $1"."$2}')
+        HIGHER=$(node -e '
+          const core = v => v.replace(/^v/, "").split("-")[0].split(".").map(Number);
+          const [a,b,c] = core(process.argv[1]);
+          const [x,y,z] = core(process.argv[2]);
+          console.log((a-x || b-y || c-z) >= 0 ? "yes" : "no");
+        ' "${PACKAGE_VERSION}" "${CURRENT_LATEST}")
+
+        if [ "${HIGHER}" = "yes" ]; then
+          echo "tag=latest" >> "$GITHUB_OUTPUT"
+        else
+          echo "tag=release-${MAJOR_MINOR}" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Publish to npm
+      id: publish
+      shell: bash
+      working-directory: ${{ inputs.workdir }}
+      env:
+        RESOLVED_TAG: ${{ steps.tag-decision.outputs.tag }}
+      run: |
+        set -euo pipefail
+        npm publish --tag "${RESOLVED_TAG}" --access public --provenance
+        echo "npm_published_version=${{ steps.pkg.outputs.version }}" >> "$GITHUB_OUTPUT"
