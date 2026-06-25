@@ -77,16 +77,22 @@ runs:
 
         # Distinguish E404 (first publish) from transient registry errors (5xx, network, rate-limit).
         # Only treat E404 as "not yet published" → fall back to 0.0.0; all other errors must fail.
-        NPM_VIEW_ERR=$(mktemp)
-        NPM_VIEW_OUT=$(npm view "${PACKAGE_NAME}" dist-tags.latest 2>"${NPM_VIEW_ERR}") && NPM_VIEW_EXIT=0 || NPM_VIEW_EXIT=$?
-        if [ "${NPM_VIEW_EXIT}" -eq 0 ]; then
-          CURRENT_LATEST="${NPM_VIEW_OUT}"
-        elif grep -q 'E404' "${NPM_VIEW_ERR}"; then
-          CURRENT_LATEST="0.0.0"
+        set +e
+        NPM_OUT=$(npm view "${PACKAGE_NAME}" dist-tags.latest 2>&1)
+        NPM_RC=$?
+        set -e
+
+        if [ "${NPM_RC}" -ne 0 ]; then
+          if echo "${NPM_OUT}" | grep -q 'E404'; then
+            echo "npm view returned E404 for ${PACKAGE_NAME} -> treating as first publish (current latest = 0.0.0)"
+            CURRENT_LATEST="0.0.0"
+          else
+            echo "::error title=npm view failed::Could not query dist-tags.latest for ${PACKAGE_NAME} (exit ${NPM_RC}). Auto-decide refuses to assume 'latest' on registry errors. Re-run after the registry recovers, or pass an explicit tag." >&2
+            echo "${NPM_OUT}" >&2
+            exit 1
+          fi
         else
-          echo "npm view failed with unexpected error:" >&2
-          cat "${NPM_VIEW_ERR}" >&2
-          exit 1
+          CURRENT_LATEST="${NPM_OUT:-0.0.0}"
         fi
 
         HIGHER=$(node -e '
