@@ -67,14 +67,6 @@ runs:
         fi
 
         # AUTO_DECIDE: compare version vs registry latest
-        MAJOR_MINOR=$(echo "${PACKAGE_VERSION}" | awk -F. '{print $1"."$2}')
-
-        # Pre-release versions (x.y.z-foo) always route to a versioned tag, never latest
-        if echo "${PACKAGE_VERSION}" | grep -q '-'; then
-          echo "tag=release-${MAJOR_MINOR}" >> "$GITHUB_OUTPUT"
-          exit 0
-        fi
-
         # Distinguish E404 (first publish) from transient registry errors (5xx, network, rate-limit).
         # Only treat E404 as "not yet published" → fall back to 0.0.0; all other errors must fail.
         set +e
@@ -95,6 +87,8 @@ runs:
           CURRENT_LATEST="${NPM_OUT:-0.0.0}"
         fi
 
+        IS_PRERELEASE=$(node -e 'console.log(/-/.test(process.argv[1]) ? "yes" : "no")' "${PACKAGE_VERSION}")
+
         HIGHER=$(node -e '
           const core = v => v.replace(/^v/, "").split("-")[0].split(".").map(Number);
           const [a,b,c] = core(process.argv[1]);
@@ -102,7 +96,11 @@ runs:
           console.log((a-x || b-y || c-z) >= 0 ? "yes" : "no");
         ' "${PACKAGE_VERSION}" "${CURRENT_LATEST}")
 
-        if [ "${HIGHER}" = "yes" ]; then
+        MAJOR_MINOR=$(echo "${PACKAGE_VERSION}" | awk -F. '{print $1"."$2}')
+
+        if [ "${IS_PRERELEASE}" = "yes" ]; then
+          echo "tag=release-${MAJOR_MINOR}" >> "$GITHUB_OUTPUT"
+        elif [ "${HIGHER}" = "yes" ]; then
           echo "tag=latest" >> "$GITHUB_OUTPUT"
         else
           echo "tag=release-${MAJOR_MINOR}" >> "$GITHUB_OUTPUT"
