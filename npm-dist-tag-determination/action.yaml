@@ -56,8 +56,9 @@ runs:
         # Query registry with --json for structured error detection.
         # E404 (package not yet published) → baseline 0.0.0.
         # Any other failure (5xx, network, rate-limit) → fail loudly; never assume 0.0.0.
+        # Stderr is kept separate so stray "npm warn" lines don't corrupt the JSON stdout.
         set +e
-        NPM_JSON=$(npm view "${PACKAGE_NAME}" dist-tags.latest --json 2>&1)
+        NPM_JSON=$(npm view "${PACKAGE_NAME}" dist-tags.latest --json 2>/tmp/npm-view-err)
         NPM_RC=$?
         set -e
 
@@ -69,12 +70,14 @@ runs:
             } catch (_) { process.exit(1); }
           ' "${NPM_JSON}" 2>/dev/null; then
             echo "::error title=npm view failed (exit ${NPM_RC})::Could not query dist-tags.latest for ${PACKAGE_NAME}. Re-run after the registry recovers, or pass an explicit tag." >&2
+            cat /tmp/npm-view-err >&2
             echo "${NPM_JSON}" >&2
             exit 1
           fi
           CURRENT_LATEST="0.0.0"
         else
-          CURRENT_LATEST=$(node -p "JSON.parse(process.argv[1])" "${NPM_JSON}")
+          # Default empty string to "0.0.0" in case the package exists but has no "latest" dist-tag.
+          CURRENT_LATEST=$(node -p "JSON.parse(process.argv[1] || '\"0.0.0\"')" "${NPM_JSON}")
         fi
 
         # Single node call: pre-release check + version comparison + tag resolution

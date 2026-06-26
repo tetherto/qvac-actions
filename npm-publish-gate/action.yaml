@@ -28,6 +28,8 @@ runs:
         set -euo pipefail
 
         # Non-production tags → graceful skip (no error).
+        # npm-dist-tag-determination never emits "dev"/"tmp"; this branch fires only when a
+        # caller passes those tags directly (e.g. a PR-event job that hard-codes tag: "dev").
         if [ "${RESOLVED_TAG}" = "dev" ] || [ "${RESOLVED_TAG}" = "tmp" ]; then
           echo "Skipping npm publish: non-production tag '${RESOLVED_TAG}'"
           echo "should_publish=false" >> "$GITHUB_OUTPUT"
