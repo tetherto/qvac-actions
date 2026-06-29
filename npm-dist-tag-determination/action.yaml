@@ -1,0 +1,93 @@
+name: Determine npm dist-tag
+description: >
+  Reads package.json, queries the npm registry, and determines the correct
+  dist-tag via AUTO_DECIDE. Explicit non-empty/non-"latest" tag bypasses AUTO_DECIDE.
+
+inputs:
+  workdir:
+    description: "Directory containing package.json."
+    required: true
+  tag:
+    description: >
+      Explicit dist-tag override. Empty (default) or "latest" triggers AUTO_DECIDE.
+      Any other value (e.g. "release-1.x") is used verbatim.
+    required: false
+    default: ""
+
+outputs:
+  tag:
+    description: "Resolved npm dist-tag."
+    value: ${{ steps.decide.outputs.tag }}
+  name:
+    description: "Package name from package.json."
+    value: ${{ steps.pkg.outputs.name }}
+  version:
+    description: "Package version from package.json."
+    value: ${{ steps.pkg.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    - name: Read package info
+      id: pkg
+      shell: bash
+      working-directory: ${{ inputs.workdir }}
+      run: |
+        set -euo pipefail
+        echo "name=$(node -p "require('./package.json').name")" >> "$GITHUB_OUTPUT"
+        echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
+    - name: Decide dist-tag (AUTO_DECIDE)
+      id: decide
+      shell: bash
+      env:
+        INPUT_TAG:       ${{ inputs.tag }}
+        PACKAGE_NAME:    ${{ steps.pkg.outputs.name }}
+        PACKAGE_VERSION: ${{ steps.pkg.outputs.version }}
+      run: |
+        set -euo pipefail
+
+        # Explicit tag (not empty, not "latest") → use verbatim
+        if [ -n "${INPUT_TAG}" ] && [ "${INPUT_TAG}" != "latest" ]; then
+          echo "tag=${INPUT_TAG}" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
+        # Query registry with --json for structured error detection.
+        # E404 (package not yet published) → baseline 0.0.0.
+        # Any other failure (5xx, network, rate-limit) → fail loudly; never assume 0.0.0.
+        # Stderr is kept separate so stray "npm warn" lines don't corrupt the JSON stdout.
+        set +e
+        NPM_JSON=$(npm view "${PACKAGE_NAME}" dist-tags.latest --json 2>/tmp/npm-view-err)
+        NPM_RC=$?
+        set -e
+
+        if [ "${NPM_RC}" -ne 0 ]; then
+          if ! node -e '
+            try {
+              const e = JSON.parse(process.argv[1]).error;
+              process.exit(e && e.code === "E404" ? 0 : 1);
+            } catch (_) { process.exit(1); }
+          ' "${NPM_JSON}" 2>/dev/null; then
+            echo "::error title=npm view failed (exit ${NPM_RC})::Could not query dist-tags.latest for ${PACKAGE_NAME}. Re-run after the registry recovers, or pass an explicit tag." >&2
+            cat /tmp/npm-view-err >&2
+            echo "${NPM_JSON}" >&2
+            exit 1
+          fi
+          CURRENT_LATEST="0.0.0"
+        else
+          # Default empty string to "0.0.0" in case the package exists but has no "latest" dist-tag.
+          CURRENT_LATEST=$(node -p "JSON.parse(process.argv[1] || '\"0.0.0\"')" "${NPM_JSON}")
+        fi
+
+        # Single node call: pre-release check + version comparison + tag resolution
+        TAG=$(node -e '
+          const ver = process.argv[1], lat = process.argv[2];
+          const core = v => v.replace(/^v/, "").split("-")[0].split(".").map(Number);
+          const [a,b,c] = core(ver);
+          const [x,y,z] = core(lat);
+          const mm = [a,b].join(".");
+          const higher = (a-x || b-y || c-z) >= 0;
+          console.log(!/-/.test(ver) && higher ? "latest" : "release-" + mm);
+        ' "${PACKAGE_VERSION}" "${CURRENT_LATEST}")
+        echo "tag=${TAG}" >> "$GITHUB_OUTPUT"

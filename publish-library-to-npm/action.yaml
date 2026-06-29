@@ -1,0 +1,55 @@
+name: NPM Publish (OIDC)
+description: >
+  OIDC npm publish for @qvac/* packages. Internally runs npm-publish-gate
+  to enforce release-* branch requirements and gracefully skip dev/tmp tags.
+  Callers MUST resolve the dist-tag via npm-dist-tag-determination first.
+
+inputs:
+  workdir:
+    description: "Directory containing package.json."
+    required: true
+  tag:
+    description: "npm dist-tag to publish under (resolved by dist-tag-determination)."
+    required: true
+  npm_package_access:
+    description: "npm publish access: public or restricted."
+    required: false
+    default: "public"
+
+outputs:
+  npm_published_version:
+    description: "Version published to npm. Empty if publishing was skipped by the gate."
+    value: ${{ steps.publish.outputs.npm_published_version }}
+
+runs:
+  using: composite
+  steps:
+    - name: Evaluate publish gate
+      id: gate
+      uses: ./npm-publish-gate
+      with:
+        tag: ${{ inputs.tag }}
+
+    - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # 6.3.0
+      if: steps.gate.outputs.should_publish == 'true'
+      with:
+        node-version: "24.14.1" # installs npm version 11.11.0
+        registry-url: https://registry.npmjs.org/
+        scope: "@qvac"
+
+    - name: Publish to npm
+      id: publish
+      if: steps.gate.outputs.should_publish == 'true'
+      shell: bash
+      working-directory: ${{ inputs.workdir }}
+      env:
+        RESOLVED_TAG: ${{ inputs.tag }}
+        INPUT_ACCESS: ${{ inputs.npm_package_access }}
+      run: |
+        set -euo pipefail
+        if [ "${INPUT_ACCESS}" = "public" ]; then
+          npm publish --tag "${RESOLVED_TAG}" --access "${INPUT_ACCESS}" --provenance
+        else
+          npm publish --tag "${RESOLVED_TAG}" --access "${INPUT_ACCESS}"
+        fi
+        echo "npm_published_version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
