@@ -1,7 +1,8 @@
 name: NPM Publish (OIDC)
 description: >
-  OIDC npm publish for @qvac/* packages. Internally runs npm-publish-gate
-  to enforce release-* branch requirements and gracefully skip dev/tmp tags.
+  OIDC npm publish for @qvac/* packages. Sparse-checks out npm-publish-gate
+  from tetherto/qvac-actions at the same ref this action was called with, so the
+  gate stays as a separate action while working correctly when called externally.
   Callers MUST resolve the dist-tag via npm-dist-tag-determination first.
 
 inputs:
@@ -24,31 +25,25 @@ outputs:
 runs:
   using: composite
   steps:
+    # Capture github.action_ref NOW — before any nested `uses:` can reset it.
+    # This ensures sparse-checkout uses the same ref the caller used to invoke
+    # this action (e.g. 0.1.0), not the ref of an inner action like actions/checkout.
+    - name: Sparse-checkout npm-publish-gate
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # 6.0.2
+      env:
+        ACTION_REF: ${{ github.action_ref }}
+      with:
+        repository: tetherto/qvac-actions
+        ref: ${{ env.ACTION_REF }}
+        path: _qvac-actions-gate
+        sparse-checkout: npm-publish-gate
+        sparse-checkout-cone-mode: false
+
     - name: Evaluate publish gate
       id: gate
-      shell: bash
-      env:
-        RESOLVED_TAG: ${{ inputs.tag }}
-        GHA_REF: ${{ github.ref }}
-      run: |
-        set -euo pipefail
-
-        # Non-production tags → graceful skip (no error).
-        # npm-dist-tag-determination never emits "dev"/"tmp"; this branch fires only when a
-        # caller passes those tags directly (e.g. a PR-event job that hard-codes tag: "dev").
-        if [ "${RESOLVED_TAG}" = "dev" ] || [ "${RESOLVED_TAG}" = "tmp" ]; then
-          echo "Skipping npm publish: non-production tag '${RESOLVED_TAG}'"
-          echo "should_publish=false" >> "$GITHUB_OUTPUT"
-          exit 0
-        fi
-
-        # OIDC npm publish requires a release-* branch.
-        if [[ "${GHA_REF}" != refs/heads/release-* ]]; then
-          echo "::error title=npm-publish-gate::Expected a release-* branch, got '${GHA_REF}'. Callers must gate on release-* refs before calling this action."
-          exit 1
-        fi
-
-        echo "should_publish=true" >> "$GITHUB_OUTPUT"
+      uses: ./_qvac-actions-gate/npm-publish-gate
+      with:
+        tag: ${{ inputs.tag }}
 
     - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # 6.3.0
       if: steps.gate.outputs.should_publish == 'true'
