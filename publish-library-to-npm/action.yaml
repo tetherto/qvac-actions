@@ -24,9 +24,18 @@ outputs:
 runs:
   using: composite
   steps:
+    - name: Checkout qvac-actions at caller ref (sparse)
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4
+      with:
+        repository: ${{ github.action_repository }}
+        ref: ${{ github.action_ref }}
+        path: _qvac-actions-gate
+        sparse-checkout: npm-publish-gate
+        sparse-checkout-cone-mode: true
+
     - name: Evaluate publish gate
       id: gate
-      uses: ./npm-publish-gate
+      uses: ./_qvac-actions-gate/npm-publish-gate
       with:
         tag: ${{ inputs.tag }}
 
