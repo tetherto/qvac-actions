@@ -55,6 +55,11 @@ on:
         required: false
         type: boolean
         default: true
+      codeql-build-mode:
+        description: "CodeQL build mode for compiled languages. Empty default keeps the legacy separate Autobuild step. Set to 'none' for buildless C/C++ extraction (no compilation or submodule checkout needed) or to 'autobuild'/'manual' to let the init action drive the build; when set, the separate Autobuild step is skipped. Use 'none' for C/C++ repos whose autobuild fails (e.g. submodule-based CMake projects)."
+        required: false
+        type: string
+        default: ""
     secrets:
       gh_token:
         description: "Optional token override for SARIF upload + PR comments. Defaults to github.token."
@@ -242,8 +247,16 @@ jobs:
           languages: ${{ matrix.language }}
           queries: ${{ inputs.codeql-queries }}
           config-file: ${{ steps.cfg.outputs.path }}
+          # Empty default leaves build-mode unset, preserving the legacy
+          # Autobuild step below. 'none' selects buildless C/C++ extraction (no
+          # compilation or submodule checkout required); 'autobuild'/'manual'
+          # let the init action drive the build.
+          build-mode: ${{ inputs.codeql-build-mode }}
 
       - name: Autobuild
+        # Skipped when a build-mode is explicitly requested: 'none' needs no
+        # build, and 'autobuild'/'manual' are handled by the init action itself.
+        if: inputs.codeql-build-mode == ''
         uses: github/codeql-action/autobuild@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
 
       - name: Analyze
