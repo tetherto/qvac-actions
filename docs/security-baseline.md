@@ -100,6 +100,16 @@ All inputs are optional.
   is always written locally for the gate to read.
 - **`enable-pr-comment`** _(boolean, default `true`)_ — post a summary
   comment on PRs when findings exist. The job summary is always written.
+- **`codeql-build-mode`** _(string, default empty)_ — CodeQL build mode for
+  compiled languages. Empty keeps the legacy separate Autobuild step (current
+  behavior). Set to `none` for **buildless C/C++ extraction** — no compilation
+  or submodule checkout is needed, which is the fix for C/C++ repos whose
+  autobuild fails (for example submodule-based CMake projects where autobuild
+  errors with `add_subdirectory ... does not contain a CMakeLists.txt file`).
+  `autobuild` / `manual` let the `init` action drive the build instead. When any
+  non-empty value is set, the separate Autobuild step is skipped. Buildless
+  extraction is less precise than a full build, so prefer a working autobuild
+  where you have one and reserve `none` for repos that cannot build in CI.
 
 ## Secrets
 
