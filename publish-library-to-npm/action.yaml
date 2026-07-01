@@ -1,7 +1,8 @@
 name: NPM Publish (OIDC)
 description: >
-  OIDC npm publish for @qvac/* packages. Internally runs npm-publish-gate
-  to enforce release-* branch requirements and gracefully skip dev/tmp tags.
+  OIDC npm publish for @qvac/* packages. Sparse-checks out npm-publish-gate
+  from tetherto/qvac-actions at the same ref this action was called with, so the
+  gate stays as a separate action while working correctly when called externally.
   Callers MUST resolve the dist-tag via npm-dist-tag-determination first.
 
 inputs:
@@ -24,9 +25,23 @@ outputs:
 runs:
   using: composite
   steps:
+    # Capture github.action_ref NOW — before any nested `uses:` can reset it.
+    # This ensures sparse-checkout uses the same ref the caller used to invoke
+    # this action (e.g. 0.1.0), not the ref of an inner action like actions/checkout.
+    - name: Sparse-checkout npm-publish-gate
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # 6.0.2
+      env:
+        ACTION_REF: ${{ github.action_ref }}
+      with:
+        repository: tetherto/qvac-actions
+        ref: ${{ env.ACTION_REF }}
+        path: _qvac-actions-gate
+        sparse-checkout: npm-publish-gate
+        sparse-checkout-cone-mode: false
+
     - name: Evaluate publish gate
       id: gate
-      uses: ./npm-publish-gate
+      uses: ./_qvac-actions-gate/npm-publish-gate
       with:
         tag: ${{ inputs.tag }}
 
