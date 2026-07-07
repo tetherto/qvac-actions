@@ -55,6 +55,11 @@ on:
         required: false
         type: boolean
         default: true
+      codeql-build-mode:
+        description: "CodeQL build mode. Only two values are supported: empty default (keeps the legacy Autobuild step, i.e. current behavior) or 'none' for buildless extraction (no compilation or submodule checkout). 'none' is valid for every CodeQL language and is the fix for C/C++ repos whose autobuild fails (e.g. submodule-based CMake projects). 'autobuild'/'manual' are intentionally NOT accepted: they error on interpreted-language matrix jobs, and 'manual' has no build hook in this workflow. The workflow validates this input and fails fast on any other value."
+        required: false
+        type: string
+        default: ""
     secrets:
       gh_token:
         description: "Optional token override for SARIF upload + PR comments. Defaults to github.token."
@@ -236,14 +241,41 @@ jobs:
           echo "----- generated CodeQL config -----"
           cat "$cfg"
 
+      - name: Validate build-mode
+        shell: bash
+        env:
+          BUILD_MODE: ${{ inputs.codeql-build-mode }}
+        run: |
+          set -euo pipefail
+          # Only '' (legacy autobuild) and 'none' (buildless) are valid here.
+          # 'none' works for every language; 'autobuild'/'manual' would error on
+          # interpreted-language matrix jobs and 'manual' has no build hook in
+          # this workflow, so reject anything else loudly instead of surfacing a
+          # confusing CodeQL init error later.
+          case "$BUILD_MODE" in
+            "" | none) : ;;
+            *)
+              echo "::error::codeql-build-mode must be '' (default: legacy autobuild) or 'none' (buildless). Got: '$BUILD_MODE'."
+              exit 1
+              ;;
+          esac
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
         with:
           languages: ${{ matrix.language }}
           queries: ${{ inputs.codeql-queries }}
           config-file: ${{ steps.cfg.outputs.path }}
+          # Empty default leaves build-mode unset, preserving the legacy
+          # Autobuild step below. 'none' selects buildless extraction (no
+          # compilation or submodule checkout required) and is valid for every
+          # language. Only '' and 'none' are accepted (validated above).
+          build-mode: ${{ inputs.codeql-build-mode }}
 
       - name: Autobuild
+        # Skipped when a build-mode is explicitly requested: 'none' needs no
+        # build, and 'autobuild'/'manual' are handled by the init action itself.
+        if: inputs.codeql-build-mode == ''
         uses: github/codeql-action/autobuild@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
 
       - name: Analyze
