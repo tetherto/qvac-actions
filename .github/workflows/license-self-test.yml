@@ -1,0 +1,36 @@
+name: License compliance (self-test)
+# Smoke test for the canonical license compliance workflow that lives in this
+# same repo. Runs the reusable workflow end-to-end against qvac-devops itself in
+# warn-only mode, exercising the `job.workflow_*` script fetch, the dependency
+# review enumeration, the NOTICE presence check, and the classifier plumbing
+# without a separate test repo. See docs/license-compliance-ci.md.
+
+on:
+  push:
+    branches:
+      - main
+      - 'feat/**'
+      - 'fix/**'
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  license:
+    # Local-path form so the self-test always runs the in-tree version of the
+    # reusable workflow (catches regressions before they reach a consumer).
+    uses: ./.github/workflows/public-reusable-license.yml
+    permissions:
+      contents: read
+      pull-requests: write
+    with:
+      # warn-only keeps the smoke test green while exercising the full gate.
+      # Tier-1 consumers pick warn-only per their rollout stage.
+      warn-only: true
+    secrets: inherit

@@ -2,21 +2,27 @@
 
 This document specifies how the existing license / compliance **SKILL**
 (today: an agent-driven, human-invoked checklist) becomes an automated
-**CI gate** on Tier-1 repos. It is the Q2 deliverable; the gate itself is
-built and rolled out in Q3.
+**CI gate** on Tier-1 repos. It was the Q2 design deliverable; the gate
+itself is built and rolled out in Q3.
 
-> **Status: v0 (design only).** Nothing in this document is implemented
-> yet. It is the spec for the Q3 implementation ticket
-> ("License / compliance enforced in CI on Tier-1 — SKILL becomes
-> fallback"). The reusable workflow, the consumer wiring, and the Tier-1
-> rollout are all owned by that ticket. This doc decides *what* the gate
-> checks, *what fails vs warns*, *how exceptions are granted*, and *how
-> the SKILL plugs in as the fallback* — so the implementation is
-> mechanical.
+> **Status: v0 (implemented).** The reusable workflow
+> [`.github/workflows/public-reusable-license.yml`](../.github/workflows/public-reusable-license.yml)
+> and its classifier [`.github/scripts/license-policy.mjs`](../.github/scripts/license-policy.mjs)
+> are committed, with a negative regression self-test
+> ([`license-self-test-negative.yml`](../.github/workflows/license-self-test-negative.yml))
+> and an end-to-end smoke self-test
+> ([`license-self-test.yml`](../.github/workflows/license-self-test.yml)).
+> The Q3 implementation ticket ("License / compliance enforced in CI on
+> Tier-1 — SKILL becomes fallback") owns this workflow plus the consumer
+> wiring and the telemetry-gated Tier-1 rollout. See
+> [Usage (v0 implementation)](#usage-v0-implementation) for how to consume
+> it. The rest of this document remains the spec that the implementation
+> follows.
 
-> **Sign-off required.** This design is not actionable until **Olu (TL)**
-> signs off below (see [Sign-off](#sign-off)). On sign-off it becomes the
-> spec for the Q3 implementation ticket.
+> **Sign-off.** The v0 rollout is **warn-only** (shadow mode) on the first
+> Tier-1 repo, so it annotates without blocking; flipping any consumer to a
+> required blocking check still needs **Olu (TL)** sign-off (see
+> [Sign-off](#sign-off)) once shadow-mode telemetry is in.
 
 ## Contents
 
@@ -28,6 +34,7 @@ built and rolled out in Q3.
 - [Exception flow](#exception-flow)
 - [Fallback to the SKILL](#fallback-to-the-skill)
 - [Rollout sequencing](#rollout-sequencing)
+- [Usage (v0 implementation)](#usage-v0-implementation)
 - [Implementation outline (Q3 scope)](#implementation-outline-q3-scope)
 - [Out of scope](#out-of-scope)
 - [Open questions](#open-questions)
@@ -394,6 +401,118 @@ Outline only — enough to scope the Q3 ticket, not the implementation.
 - **Self-test (optional, recommended):** a negative self-test in this repo
   that plants a known-disallowed license fixture and asserts the gate
   fails, mirroring `security-self-test-negative.yml`.
+
+## Usage (v0 implementation)
+
+The v0 gate ships as the reusable workflow
+[`public-reusable-license.yml`](../.github/workflows/public-reusable-license.yml).
+It mirrors the security baseline's consumer shape: one `uses:` line, a
+job-summary table, and a single upserted PR comment. On PRs it enumerates
+the dependency diff via
+[`actions/dependency-review-action`](https://github.com/actions/dependency-review-action),
+then classifies every added dependency with
+[`license-policy.mjs`](../.github/scripts/license-policy.mjs) against the
+allow / deny / review policy, the consumer's exception allowlist, and the
+per-PR override label.
+
+### Quick start (warn-only shadow mode)
+
+In the consuming repo, add `.github/workflows/license-compliance.yml`:
+
+```yaml
+name: License compliance
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  license:
+    uses: tetherto/qvac-actions/.github/workflows/public-reusable-license.yml@<sha> # <tag>
+    permissions:
+      contents: read
+      pull-requests: write
+    with:
+      warn-only: true            # shadow mode: annotate, never block
+      allowlist-path: .github/license-allowlist.yml
+```
+
+Flip `warn-only` to `false` (and register the check as required in the
+branch-protection ruleset) once shadow-mode telemetry is acceptable and TL
+sign-off is recorded.
+
+### Inputs
+
+All inputs are optional; sensible org defaults are baked in.
+
+- **`allow-licenses`** — comma-separated permissive SPDX ids that ship
+  freely.
+- **`deny-licenses`** — disallowed SPDX ids; **Critical** (hard block, no
+  override) on a runtime/shipped path, **Medium** (warn) on a dev-only path.
+- **`review-licenses`** — weak-copyleft / community SPDX ids; **High** until
+  allowlisted or overridden.
+- **`allowlist-path`** _(default `.github/license-allowlist.yml`)_ — the
+  exception file (see [Exception flow](#exception-flow)).
+- **`warn-only`** _(default `false`)_ — shadow mode: report findings but
+  never fail the check.
+- **`override-label`** _(default `license-override`)_ — PR label that
+  downgrades **High** findings to warn for that PR only. Critical can never
+  be overridden.
+- **`notice-check`** _(default `true`)_ / **`notice-root`** _(default `.`)_ —
+  the advisory NOTICE presence check (Engine B) and its scan root.
+- **`enable-pr-comment`** _(default `true`)_ — upsert one summary comment on
+  PRs. The job summary is always written.
+
+### Allowlist format
+
+`.github/license-allowlist.yml` in the consumer repo, protected by
+`CODEOWNERS`:
+
+```yaml
+allow:
+  - package: "pkg:npm/some-lib"   # dependency name or package URL
+    license: "LGPL-3.0"           # optional; omit to allow any license for the package
+    reason: "reviewed: links only against our CLI, not shipped"
+    approved-by: "@some-maintainer"
+    pr: "https://github.com/org/repo/pull/123"
+    expires: "2027-06-15"         # optional re-review date; expired entries are ignored
+```
+
+### Severity semantics
+
+`license-policy.mjs` maps each added dependency to a severity per the
+[fail-vs-warn matrix](#fail-vs-warn-matrix): disallowed-on-runtime →
+Critical, unknown/review-required/missing-attribution → High,
+disallowed-on-dev → Medium, allowed → Informational. In `warn-only` mode no
+severity blocks; otherwise Critical and unresolved High block.
+
+### Self-tests
+
+- [`license-self-test-negative.yml`](../.github/workflows/license-self-test-negative.yml)
+  feeds synthetic fixtures to the classifier and asserts the whole matrix
+  (disallowed blocks, Critical is not overridable, warn-only passes,
+  review-required blocks then clears via override/allowlist, permissive is
+  clean). Green = the policy still catches known-bad inputs.
+- [`license-self-test.yml`](../.github/workflows/license-self-test.yml) runs
+  the reusable workflow end-to-end against this repo in warn-only mode.
+
+Tier-1 adopters do **not** wire the self-tests into their own repos — they
+test the gate itself.
+
+### Versioning
+
+Consumers pin the reusable workflow to a released tag's commit SHA (with a
+`# <tag>` comment), never `@main`, matching the security baseline's
+freeze-and-pin convention.
 
 ## Out of scope
 

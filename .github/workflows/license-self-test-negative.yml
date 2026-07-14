@@ -1,0 +1,218 @@
+name: License compliance (negative self-test)
+# Regression guard for the canonical license compliance gate. Feeds synthetic
+# dependency-change fixtures (a disallowed AGPL runtime dep, a review-required
+# LGPL dep, a permissive MIT dep) to the same license-policy.mjs classifier the
+# reusable workflow uses, and asserts the policy matrix holds:
+#
+#   - disallowed license on a runtime path  -> Critical, blocks, NOT overridable
+#   - review-required license               -> High, blocks, overridable / allowlistable
+#   - warn-only                             -> never blocks (shadow mode)
+#   - permissive license                    -> clean, no findings
+#
+# Green = the gate still classifies known-bad inputs correctly; red = the policy
+# has regressed. This tests the deterministic decision engine directly, so it
+# does not depend on the GitHub dependency graph.
+
+on:
+  push:
+    branches:
+      - main
+      - 'feat/**'
+      - 'fix/**'
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  ALLOW: "MIT, Apache-2.0, BSD-3-Clause"
+  DENY: "AGPL-3.0, SSPL-1.0, GPL-3.0"
+  REVIEW: "LGPL-3.0, EPL-2.0"
+
+jobs:
+  negative-test:
+    name: Gate must classify planted fixtures correctly
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - name: Plant fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/fixtures"
+          mkdir -p "$dir"
+
+          # Disallowed license on a runtime path -> Critical.
+          cat > "$dir/agpl.json" <<'JSON'
+          [
+            { "change_type": "added", "name": "evil-agpl-lib", "version": "1.0.0",
+              "license": "AGPL-3.0", "scope": "runtime", "ecosystem": "npm",
+              "package_url": "pkg:npm/evil-agpl-lib@1.0.0", "manifest": "package.json" }
+          ]
+          JSON
+
+          # Review-required license on a runtime path -> High.
+          cat > "$dir/lgpl.json" <<'JSON'
+          [
+            { "change_type": "added", "name": "weakcopyleft-lib", "version": "2.1.0",
+              "license": "LGPL-3.0", "scope": "runtime", "ecosystem": "npm",
+              "package_url": "pkg:npm/weakcopyleft-lib@2.1.0", "manifest": "package.json" }
+          ]
+          JSON
+
+          # Permissive license -> clean.
+          cat > "$dir/mit.json" <<'JSON'
+          [
+            { "change_type": "added", "name": "nice-mit-lib", "version": "3.0.0",
+              "license": "MIT", "scope": "runtime", "ecosystem": "npm",
+              "package_url": "pkg:npm/nice-mit-lib@3.0.0", "manifest": "package.json" }
+          ]
+          JSON
+
+          # Allowlist that resolves the review-required LGPL finding.
+          cat > "$dir/allowlist.json" <<'JSON'
+          { "allow": [
+            { "package": "weakcopyleft-lib", "license": "LGPL-3.0",
+              "reason": "self-test fixture", "approved-by": "@ci", "pr": "self-test" }
+          ] }
+          JSON
+
+          echo "dir=$dir" >> "$GITHUB_OUTPUT"
+        id: plant
+
+      - name: Case 1 - disallowed runtime dep must block
+        id: c1
+        continue-on-error: true
+        shell: bash
+        run: |
+          node .github/scripts/license-policy.mjs \
+            --changes "$RUNNER_TEMP/fixtures/agpl.json" \
+            --allow "$ALLOW" --deny "$DENY" --review "$REVIEW" \
+            --warn-only false --override false
+
+      - name: Case 2 - Critical is NOT overridable
+        id: c2
+        continue-on-error: true
+        shell: bash
+        run: |
+          node .github/scripts/license-policy.mjs \
+            --changes "$RUNNER_TEMP/fixtures/agpl.json" \
+            --allow "$ALLOW" --deny "$DENY" --review "$REVIEW" \
+            --warn-only false --override true
+
+      - name: Case 3 - warn-only never blocks
+        id: c3
+        continue-on-error: true
+        shell: bash
+        run: |
+          node .github/scripts/license-policy.mjs \
+            --changes "$RUNNER_TEMP/fixtures/agpl.json" \
+            --allow "$ALLOW" --deny "$DENY" --review "$REVIEW" \
+            --warn-only true --override false
+
+      - name: Case 4 - review-required dep blocks by default
+        id: c4
+        continue-on-error: true
+        shell: bash
+        run: |
+          node .github/scripts/license-policy.mjs \
+            --changes "$RUNNER_TEMP/fixtures/lgpl.json" \
+            --allow "$ALLOW" --deny "$DENY" --review "$REVIEW" \
+            --warn-only false --override false
+
+      - name: Case 5 - High is overridable by label
+        id: c5
+        continue-on-error: true
+        shell: bash
+        run: |
+          node .github/scripts/license-policy.mjs \
+            --changes "$RUNNER_TEMP/fixtures/lgpl.json" \
+            --allow "$ALLOW" --deny "$DENY" --review "$REVIEW" \
+            --warn-only false --override true
+
+      - name: Case 6 - allowlist resolves the finding
+        id: c6
+        continue-on-error: true
+        shell: bash
+        run: |
+          node .github/scripts/license-policy.mjs \
+            --changes "$RUNNER_TEMP/fixtures/lgpl.json" \
+            --allowlist "$RUNNER_TEMP/fixtures/allowlist.json" \
+            --allow "$ALLOW" --deny "$DENY" --review "$REVIEW" \
+            --warn-only false --override false
+
+      - name: Case 7 - permissive dep is clean
+        id: c7
+        continue-on-error: true
+        shell: bash
+        run: |
+          node .github/scripts/license-policy.mjs \
+            --changes "$RUNNER_TEMP/fixtures/mit.json" \
+            --allow "$ALLOW" --deny "$DENY" --review "$REVIEW" \
+            --warn-only false --override false
+
+      - name: Assert policy matrix
+        shell: bash
+        env:
+          C1: ${{ steps.c1.outcome }}
+          C2: ${{ steps.c2.outcome }}
+          C3: ${{ steps.c3.outcome }}
+          C4: ${{ steps.c4.outcome }}
+          C5: ${{ steps.c5.outcome }}
+          C6: ${{ steps.c6.outcome }}
+          C7: ${{ steps.c7.outcome }}
+          C1_CRIT: ${{ steps.c1.outputs.critical }}
+          C4_HIGH: ${{ steps.c4.outputs.high }}
+        run: |
+          set -euo pipefail
+          fail=0
+          expect () { # name expected actual
+            if [[ "$3" != "$2" ]]; then
+              echo "::error title=License gate regression::$1 expected '$2' but got '$3'"
+              fail=1
+            else
+              echo "OK: $1 ($3)"
+            fi
+          }
+          expect "disallowed runtime dep blocks"        failure "$C1"
+          expect "Critical is not overridable"          failure "$C2"
+          expect "warn-only never blocks"               success "$C3"
+          expect "review-required dep blocks"           failure "$C4"
+          expect "High is overridable"                  success "$C5"
+          expect "allowlist resolves finding"           success "$C6"
+          expect "permissive dep is clean"              success "$C7"
+          expect "Critical count on AGPL fixture"       1 "$C1_CRIT"
+          expect "High count on LGPL fixture"           1 "$C4_HIGH"
+          if [[ "$fail" -ne 0 ]]; then
+            echo "::error::License policy classifier has regressed."
+            exit 1
+          fi
+
+      - name: Summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## License compliance — negative self-test"
+            echo ""
+            echo "Feeds synthetic dependency-change fixtures to license-policy.mjs and asserts the fail-vs-warn matrix."
+            echo ""
+            echo "| Case | Expected |"
+            echo "| --- | --- |"
+            echo "| Disallowed runtime dep | blocks |"
+            echo "| Critical + override | still blocks |"
+            echo "| Disallowed + warn-only | passes |"
+            echo "| Review-required dep | blocks |"
+            echo "| Review-required + override | passes |"
+            echo "| Review-required + allowlist | passes |"
+            echo "| Permissive dep | clean |"
+          } >> "$GITHUB_STEP_SUMMARY"
