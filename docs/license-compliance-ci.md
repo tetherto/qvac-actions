@@ -415,6 +415,19 @@ then classifies every added dependency with
 allow / deny / review policy, the consumer's exception allowlist, and the
 per-PR override label.
 
+> **Known limitation (security-relevant): transitive coverage.** Engine A
+> classifies whatever GitHub's dependency graph reports for the PR diff. In a
+> consumer repo **without committed lockfiles** (e.g. `qvac`, where package
+> lockfiles are gitignored) the graph is **manifest-only**, so the gate sees
+> only direct / declared dependencies — a disallowed license pulled in
+> **transitively** can still pass the gate. This is a deliberate v0 trade-off:
+> full transitive resolution (real `npm install` + license scan) is the
+> compliance **SKILL** fallback's job, run before releases and when the gate
+> punts. Consumers relying on this gate for transitive coverage MUST either
+> commit lockfiles (so the graph is complete) or run the SKILL audit on a
+> schedule. Weigh lockfile adoption per Tier-1 repo before flipping the gate
+> from warn-only to blocking.
+
 ### Quick start (warn-only shadow mode)
 
 In the consuming repo, add `.github/workflows/license-compliance.yml`:

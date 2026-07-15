@@ -7,6 +7,19 @@ name: Canonical License Compliance
 # long tail the policy cannot classify. Findings are surfaced in the job summary
 # and a single upserted PR comment. In `warn-only` mode nothing blocks the merge
 # (the recommended shadow-mode rollout).
+#
+# SECURITY: callers MUST invoke this on `pull_request` (or `push`), never
+# `pull_request_target`. This gate needs no privileged context — it only reads
+# the dependency diff and, for same-repo PRs, upserts one comment — but it
+# requests `pull-requests: write`, so running it under `pull_request_target` on a
+# fork PR would grant write + secret context to untrusted code (the "pwn request"
+# pattern). The `guard` step below fails fast if a caller wires it that way.
+#
+# COVERAGE LIMITATION: Engine A classifies the dependencies GitHub's dependency
+# graph reports for the PR diff. In repos without committed lockfiles the graph
+# is manifest-only, so only direct/declared dependencies are seen — a disallowed
+# *transitive* license can still pass. Full transitive resolution is the
+# compliance SKILL's job (the documented fallback). See docs/license-compliance-ci.md.
 
 on:
   workflow_call:
@@ -74,6 +87,16 @@ jobs:
       contents: read
       pull-requests: write
     steps:
+      - name: Guard against pull_request_target
+        # Fail fast if a caller wires this gate under pull_request_target: it
+        # requests pull-requests: write, so on a fork PR that would hand write +
+        # secret context to untrusted code. This gate only needs pull_request.
+        if: github.event_name == 'pull_request_target'
+        shell: bash
+        run: |
+          echo "::error title=Unsupported trigger::public-reusable-license.yml must be called on 'pull_request' (or 'push'), never 'pull_request_target'. See the workflow header."
+          exit 1
+
       - name: Checkout consumer repo
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
@@ -142,7 +165,7 @@ jobs:
 
       - name: Dependency license review
         id: review
-        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
+        if: github.event_name == 'pull_request'
         # warn-only:true here always: dependency-review only *enumerates* the PR
         # dependency diff for us; severity gating is decided by license-policy.mjs
         # against the full policy (allow/deny/review + allowlist + override).
@@ -185,7 +208,7 @@ jobs:
 
       - name: Detect override label
         id: labels
-        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
+        if: github.event_name == 'pull_request'
         shell: bash
         env:
           LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
@@ -226,7 +249,7 @@ jobs:
         if: >-
           always() &&
           inputs.enable-pr-comment &&
-          (github.event_name == 'pull_request' || github.event_name == 'pull_request_target')
+          github.event_name == 'pull_request'
         continue-on-error: true
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         with:
