@@ -1,0 +1,295 @@
+name: Canonical License Compliance
+# Reusable workflow: license policy (allow/deny/review) + lockfile drift on the
+# PR dependency diff, plus an advisory NOTICE/attribution presence check.
+# Consumed by Tier-1 repos via `uses:`. See docs/license-compliance-ci.md.
+#
+# The gate is deterministic; the compliance SKILL is the human fallback for the
+# long tail the policy cannot classify. Findings are surfaced in the job summary
+# and a single upserted PR comment. In `warn-only` mode nothing blocks the merge
+# (the recommended shadow-mode rollout).
+#
+# SECURITY: callers MUST invoke this on `pull_request` (or `push`), never
+# `pull_request_target`. This gate needs no privileged context — it only reads
+# the dependency diff and, for same-repo PRs, upserts one comment — but it
+# requests `pull-requests: write`, so running it under `pull_request_target` on a
+# fork PR would grant write + secret context to untrusted code (the "pwn request"
+# pattern). The `guard` step below fails fast if a caller wires it that way.
+#
+# COVERAGE LIMITATION: Engine A classifies the dependencies GitHub's dependency
+# graph reports for the PR diff. In repos without committed lockfiles the graph
+# is manifest-only, so only direct/declared dependencies are seen — a disallowed
+# *transitive* license can still pass. Full transitive resolution is the
+# compliance SKILL's job (the documented fallback). See docs/license-compliance-ci.md.
+
+on:
+  workflow_call:
+    inputs:
+      allow-licenses:
+        description: "Comma-separated permissive SPDX ids that ship freely (safe list)."
+        required: false
+        type: string
+        default: "MIT, MIT-CMU, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MPL-2.0, CC-BY-4.0, CC0-1.0, LGPL-2.1, 0BSD, Unlicense, Zlib, Python-2.0, llama3.2, gemma, health-ai-developer-foundations, openrail, openrail++"
+      deny-licenses:
+        description: "Comma-separated disallowed SPDX ids. On a runtime/shipped path these are Critical (hard block, no override)."
+        required: false
+        type: string
+        default: "AGPL-1.0, AGPL-1.0-only, AGPL-1.0-or-later, AGPL-3.0, AGPL-3.0-only, AGPL-3.0-or-later, SSPL-1.0, GPL-2.0, GPL-2.0-only, GPL-2.0-or-later, GPL-3.0, GPL-3.0-only, GPL-3.0-or-later, BUSL-1.1, CC-BY-NC-4.0, CC-BY-NC-SA-4.0, CC-BY-NC-ND-4.0"
+      review-licenses:
+        description: "Comma-separated weak-copyleft / community SPDX ids that need a human review (High until allowlisted)."
+        required: false
+        type: string
+        default: "LGPL-3.0, LGPL-3.0-only, LGPL-3.0-or-later, EPL-2.0, CDDL-1.0, qwen-research"
+      allowlist-path:
+        description: "Path within the consumer repo to the exception allowlist YAML."
+        required: false
+        type: string
+        default: ".github/license-allowlist.yml"
+      warn-only:
+        description: "Shadow mode: report findings but never fail the check. Recommended for the initial rollout."
+        required: false
+        type: boolean
+        default: false
+      override-label:
+        description: "PR label that downgrades High findings to warn for this PR only (Critical can never be overridden)."
+        required: false
+        type: string
+        default: "license-override"
+      notice-check:
+        description: "Run the advisory NOTICE/attribution presence check (Engine B)."
+        required: false
+        type: boolean
+        default: true
+      notice-root:
+        description: "Root directory scanned for package manifests that must carry a sibling NOTICE file."
+        required: false
+        type: string
+        default: "."
+      enable-pr-comment:
+        description: "Upsert a single summary comment on PRs. The job summary is always written."
+        required: false
+        type: boolean
+        default: true
+    secrets:
+      gh_token:
+        description: "Optional token override for the PR comment. Defaults to github.token."
+        required: false
+
+# Permissions the *caller* job must grant for this reusable workflow to work.
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  license:
+    name: License compliance
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Guard against pull_request_target
+        # Fail fast if a caller wires this gate under pull_request_target: it
+        # requests pull-requests: write, so on a fork PR that would hand write +
+        # secret context to untrusted code. This gate only needs pull_request.
+        if: github.event_name == 'pull_request_target'
+        shell: bash
+        run: |
+          echo "::error title=Unsupported trigger::public-reusable-license.yml must be called on 'pull_request' (or 'push'), never 'pull_request_target'. See the workflow header."
+          exit 1
+
+      - name: Checkout consumer repo
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Fetch gate scripts
+        # Pull license-policy.mjs from the exact commit this reusable workflow
+        # was pinned at, so the classifier always matches the pinned workflow
+        # version. Uses the GitHub-canonical `job.workflow_*` context (the
+        # reliable replacement for github.job_workflow_sha) so it also works
+        # when the repo is forked or renamed.
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          repository: ${{ job.workflow_repository }}
+          ref: ${{ job.workflow_sha }}
+          path: .license-gate
+          sparse-checkout: |
+            .github/scripts
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - name: NOTICE presence check (advisory)
+        id: notice
+        if: inputs.notice-check
+        shell: bash
+        env:
+          NOTICE_ROOT: ${{ inputs.notice-root }}
+        run: |
+          set -euo pipefail
+          missing=()
+          # Every manifest that declares runtime third-party deps should ship a
+          # sibling NOTICE. Presence/consistency only — generation is a separate
+          # concern (the compliance SKILL / NOTICE auto-gen ticket).
+          while IFS= read -r -d '' pkg; do
+            dir="$(dirname "$pkg")"
+            has_deps="$(node -e 'const p=require(process.argv[1]);const d=Object.keys(p.dependencies||{}).length+Object.keys(p.bundleDependencies||{}).length;process.stdout.write(d>0?"1":"0")' "$pkg" 2>/dev/null || echo 0)"
+            if [[ "$has_deps" == "1" && ! -f "$dir/NOTICE" ]]; then
+              missing+=("$dir")
+            fi
+          done < <(find "$NOTICE_ROOT" -type d -name node_modules -prune -o -type f -name package.json -print0)
+
+          {
+            echo "## License compliance — NOTICE presence (advisory)"
+            echo ""
+            if [[ ${#missing[@]} -eq 0 ]]; then
+              echo "All dependency-bearing manifests carry a NOTICE file."
+            else
+              echo "Manifests declaring dependencies but missing a sibling NOTICE (advisory):"
+              echo ""
+              for d in "${missing[@]}"; do echo "- \`$d\`"; done
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          {
+            echo "### NOTICE presence (advisory)"
+            if [[ ${#missing[@]} -eq 0 ]]; then
+              echo "All dependency-bearing manifests carry a NOTICE file."
+            else
+              echo "Missing NOTICE (advisory, does not block):"
+              for d in "${missing[@]}"; do echo "- \`$d\`"; done
+            fi
+            echo ""
+          } > "$RUNNER_TEMP/notice.md"
+          echo "missing-count=${#missing[@]}" >> "$GITHUB_OUTPUT"
+
+      - name: Dependency license review
+        id: review
+        if: github.event_name == 'pull_request'
+        # warn-only:true here always: dependency-review only *enumerates* the PR
+        # dependency diff for us; severity gating is decided by license-policy.mjs
+        # against the full policy (allow/deny/review + allowlist + override).
+        # continue-on-error so a missing dependency graph never reds the check.
+        continue-on-error: true
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+        with:
+          license-check: true
+          vulnerability-check: false
+          deny-licenses: ${{ inputs.deny-licenses }}
+          comment-summary-in-pr: never
+          warn-only: true
+
+      - name: Materialize dependency changes
+        id: changes
+        if: steps.review.outcome == 'success' || steps.review.outcome == 'failure'
+        shell: bash
+        env:
+          CHANGES: ${{ steps.review.outputs.dependency-changes }}
+        run: |
+          set -euo pipefail
+          if [[ -n "${CHANGES:-}" ]]; then
+            printf '%s' "$CHANGES" > "$RUNNER_TEMP/changes.json"
+          else
+            printf '[]' > "$RUNNER_TEMP/changes.json"
+          fi
+
+      - name: Prepare allowlist
+        id: allowlist
+        shell: bash
+        env:
+          ALLOWLIST_PATH: ${{ inputs.allowlist-path }}
+        run: |
+          set -euo pipefail
+          if [[ -n "${ALLOWLIST_PATH:-}" && -f "$ALLOWLIST_PATH" ]]; then
+            yq -o=json '.' "$ALLOWLIST_PATH" > "$RUNNER_TEMP/allowlist.json"
+          else
+            printf '{}' > "$RUNNER_TEMP/allowlist.json"
+          fi
+
+      - name: Detect override label
+        id: labels
+        if: github.event_name == 'pull_request'
+        shell: bash
+        env:
+          LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+          OVERRIDE_LABEL: ${{ inputs.override-label }}
+        run: |
+          set -euo pipefail
+          override=false
+          IFS=',' read -ra arr <<< "${LABELS:-}"
+          for l in "${arr[@]}"; do
+            if [[ "$l" == "$OVERRIDE_LABEL" ]]; then override=true; fi
+          done
+          echo "override=$override" >> "$GITHUB_OUTPUT"
+
+      - name: Classify license findings
+        id: classify
+        shell: bash
+        env:
+          ALLOW_LICENSES: ${{ inputs.allow-licenses }}
+          DENY_LICENSES: ${{ inputs.deny-licenses }}
+          REVIEW_LICENSES: ${{ inputs.review-licenses }}
+          WARN_ONLY: ${{ inputs.warn-only }}
+          OVERRIDE: ${{ steps.labels.outputs.override || 'false' }}
+        run: |
+          set -euo pipefail
+          changes="$RUNNER_TEMP/changes.json"
+          [[ -f "$changes" ]] || printf '[]' > "$changes"
+          node .license-gate/.github/scripts/license-policy.mjs \
+            --changes "$changes" \
+            --allowlist "$RUNNER_TEMP/allowlist.json" \
+            --allow "$ALLOW_LICENSES" \
+            --deny "$DENY_LICENSES" \
+            --review "$REVIEW_LICENSES" \
+            --warn-only "$WARN_ONLY" \
+            --override "$OVERRIDE" \
+            --comment-out "$RUNNER_TEMP/comment.md"
+
+      - name: Upsert PR comment
+        if: >-
+          always() &&
+          inputs.enable-pr-comment &&
+          github.event_name == 'pull_request'
+        continue-on-error: true
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        with:
+          github-token: ${{ secrets.gh_token || github.token }}
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- license-compliance-summary -->';
+            const tmp = process.env.RUNNER_TEMP;
+            let body = '';
+            try { body += fs.readFileSync(`${tmp}/comment.md`, 'utf8'); } catch {}
+            let notice = '';
+            try { notice = fs.readFileSync(`${tmp}/notice.md`, 'utf8'); } catch {}
+            if (!body) {
+              body = `${marker}\n## License compliance\n\nNo dependency license findings.\n`;
+            }
+            if (notice) body += `\n${notice}`;
+            if (!body.startsWith(marker)) body = `${marker}\n${body}`;
+
+            const prNumber = context.payload.pull_request.number;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              per_page: 100,
+            });
+            const existing = comments.find(c =>
+              c.user && c.user.login === 'github-actions[bot]' && c.body && c.body.includes(marker)
+            );
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body,
+              });
+            }
