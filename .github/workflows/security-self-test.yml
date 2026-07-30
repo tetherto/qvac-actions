@@ -10,6 +10,11 @@ on:
       - 'feat/**'
       - 'fix/**'
   pull_request:
+  schedule:
+    # Weekly self-test of the canonical baseline (QVAC-19056 rollout). Staggered
+    # per repo across weekdays to spread scheduled-run load.
+    - cron: "0 8 * * 5"
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
