@@ -60,6 +60,16 @@ on:
         required: false
         type: string
         default: ""
+      export-report:
+        description: "Upload a downloadable scan-results artifact: per-language CodeQL SARIF plus a consolidated findings.json/findings.md report (designed to be fed into an LLM for ticket drafting). Never includes raw secret values. true/false."
+        required: false
+        type: boolean
+        default: true
+      report-retention-days:
+        description: "Retention (in days) for the security-scan-report and codeql-sarif-* artifacts."
+        required: false
+        type: number
+        default: 90
     secrets:
       gh_token:
         description: "Optional token override for SARIF upload + PR comments. Defaults to github.token."
@@ -328,6 +338,103 @@ jobs:
             exit 1
           fi
           echo "No CodeQL findings at or above severity '${THRESHOLD}' for ${LANGUAGE}."
+
+      - name: Upload CodeQL SARIF artifact
+        # Runs even when the severity gate above fails, so findings are always
+        # exportable. Gated on export-report so opt-out callers see no change.
+        if: ${{ always() && inputs.export-report }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # 7.0.0
+        with:
+          name: codeql-sarif-${{ matrix.language }}
+          path: codeql-sarif/*.sarif
+          retention-days: ${{ inputs.report-retention-days }}
+          if-no-files-found: ignore
+
+  report:
+    name: Export scan report
+    # Consolidates the per-language CodeQL SARIF into a single downloadable
+    # artifact (findings.json + findings.md) intended to be fed to an LLM for
+    # ticket drafting. Never includes secret material (see below).
+    needs: [trufflehog, detect-languages, codeql]
+    if: ${{ always() && inputs.export-report }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Download CodeQL SARIF artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # 8.0.1
+        with:
+          pattern: codeql-sarif-*
+          path: sarif
+          merge-multiple: true
+
+      - name: Build consolidated findings report
+        shell: bash
+        env:
+          TH_RESULT: ${{ needs.trufflehog.result }}
+          CQ_RESULT: ${{ needs.codeql.result }}
+          THRESHOLD: ${{ inputs.severity-threshold }}
+          LANGUAGES: ${{ needs.detect-languages.outputs.languages }}
+        run: |
+          set -euo pipefail
+          mkdir -p report
+          shopt -s nullglob
+          sarifs=(sarif/*.sarif)
+          # Flatten every SARIF result into findings.json. Only CodeQL code
+          # locations + messages are exported here; no secret material ever
+          # enters this file (TruffleHog matches are deliberately excluded).
+          if (( ${#sarifs[@]} > 0 )); then
+            jq -s '
+              [ .[] | .runs[]? as $run
+                | ($run.tool.driver.rules // [] | INDEX(.id)) as $rules
+                | $run.results[]?
+                | {
+                    tool: ($run.tool.driver.name // "CodeQL"),
+                    ruleId: .ruleId,
+                    level: (.level // $rules[.ruleId].defaultConfiguration.level // "warning"),
+                    securitySeverity: ($rules[.ruleId].properties["security-severity"] // null),
+                    message: (.message.text // ""),
+                    file: (.locations[0].physicalLocation.artifactLocation.uri // null),
+                    startLine: (.locations[0].physicalLocation.region.startLine // null),
+                    endLine: (.locations[0].physicalLocation.region.endLine // null)
+                  }
+              ]' "${sarifs[@]}" > report/findings.json
+          else
+            echo "[]" > report/findings.json
+          fi
+          total=$(jq 'length' report/findings.json)
+          {
+            echo "# Security scan findings — ${GITHUB_REPOSITORY}"
+            echo ""
+            echo "- Commit: \`${GITHUB_SHA}\`"
+            echo "- Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+            echo "- Event: \`${GITHUB_EVENT_NAME}\`"
+            echo "- TruffleHog (secrets): \`${TH_RESULT}\` — raw matches excluded by design (they contain secret values)"
+            echo "- CodeQL (${LANGUAGES}): \`${CQ_RESULT}\` — severity gate \`${THRESHOLD}\`"
+            echo "- Total CodeQL findings exported: ${total}"
+            echo ""
+            if (( total > 0 )); then
+              echo "| Sev (score) | Rule | Location | Message |"
+              echo "| --- | --- | --- | --- |"
+              jq -r '
+                sort_by((.securitySeverity // "0") | tonumber? // 0) | reverse
+                | .[]
+                | "| \(.level) (\(.securitySeverity // "n/a")) | `\(.ruleId)` | \(.file // "n/a"):\(.startLine // "") | \((.message // "") | gsub("[\r\n]+"; " ") | gsub("\\|"; "\\\\|")) |"
+              ' report/findings.json
+            else
+              echo "_No CodeQL findings were reported by this run._"
+            fi
+          } > report/findings.md
+          echo "----- findings.md -----"
+          cat report/findings.md
+
+      - name: Upload security scan report
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # 7.0.0
+        with:
+          name: security-scan-report
+          path: report/
+          retention-days: ${{ inputs.report-retention-days }}
+          if-no-files-found: warn
 
   summary:
     name: Security baseline summary

@@ -24,6 +24,12 @@ On every `push` and `pull_request` in the consuming repository:
    `severity-threshold`.
 3. A **summary** step writes a result table to the job summary and (on PR
    events) upserts a single bot comment on the PR when findings exist.
+4. An **export** step (enabled by default, see
+   [`export-report`](#inputs)) consolidates the per-language CodeQL SARIF
+   into a single downloadable `security-scan-report` artifact
+   (`findings.json` + `findings.md`) for offline triage and LLM-assisted
+   ticket drafting. It never includes secret material — TruffleHog matches
+   are deliberately excluded, only their pass/fail status is recorded.
 
 ## Quick start
 
@@ -112,6 +118,21 @@ All inputs are optional.
   than `` (empty) or `none`. Buildless extraction is less precise than a full
   build, so prefer the default (autobuild) where it works and reserve `none` for
   repos that cannot build in CI.
+- **`export-report`** _(boolean, default `true`)_ — upload a downloadable
+  scan-results artifact for each run: per-language CodeQL SARIF
+  (`codeql-sarif-<language>`) plus a consolidated `security-scan-report`
+  artifact containing `findings.json` (a flat array of every CodeQL result
+  with rule, level, `security-severity`, file and line) and a human/LLM
+  readable `findings.md`. Intended to be downloaded and fed to Claude /
+  Cursor for remediation-ticket drafting. This is **additive** — it never
+  changes the job's pass/fail result — and is especially useful on repos
+  running `codeql-upload: never`, where the Security tab would otherwise be
+  empty. **No secret values are ever written to any artifact**: TruffleHog
+  matches are excluded by design and only the pass/fail status is reported.
+  Set to `false` to opt out.
+- **`report-retention-days`** _(number, default `90`)_ — retention period for
+  the `security-scan-report` and `codeql-sarif-*` artifacts. Only relevant
+  when `export-report` is `true`.
 
 ## Secrets
 
