@@ -19,7 +19,10 @@ inputs:
 
 outputs:
   npm_published_version:
-    description: "Version published to npm. Empty if publishing was skipped by the gate."
+    description: >
+      Version published to npm. Empty when the gate skipped publishing — including
+      when this exact version is already on npm (idempotent re-run) — so downstream
+      jobs can branch on a non-empty value.
     value: ${{ steps.publish.outputs.npm_published_version }}
 
 runs:
@@ -44,6 +47,7 @@ runs:
       uses: ./_qvac-actions-gate/npm-publish-gate
       with:
         tag: ${{ inputs.tag }}
+        workdir: ${{ inputs.workdir }}
 
     - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # 6.3.0
       if: steps.gate.outputs.should_publish == 'true'
