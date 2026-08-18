@@ -19,7 +19,10 @@ inputs:
 
 outputs:
   npm_published_version:
-    description: "Version published to npm. Empty if publishing was skipped by the gate."
+    description: >
+      Version published to npm. Empty when publishing was skipped — the gate skipped
+      (non-release branch / dev|tmp tag) or this exact version is already on npm
+      (idempotent re-run) — so downstream jobs can branch on a non-empty value.
     value: ${{ steps.publish.outputs.npm_published_version }}
 
 runs:
@@ -52,9 +55,69 @@ runs:
         registry-url: https://registry.npmjs.org/
         scope: "@qvac"
 
+    - name: Skip if version already published to npm
+      id: exists
+      if: steps.gate.outputs.should_publish == 'true'
+      shell: bash
+      working-directory: ${{ inputs.workdir }}
+      run: |
+        set -euo pipefail
+
+        # Idempotency guard: a re-run on release-* (e.g. a follow-up pin/fix merge that
+        # re-fires the publish job) must not `npm publish` over an existing version — that
+        # hard-fails with "cannot publish over previously published versions" and aborts
+        # downstream jobs. Runs AFTER setup-node so it uses the pinned npm (known
+        # --json/stdout behavior), not the runner's ambient toolchain.
+        PKG_NAME=$(node -p "require('./package.json').name")
+        PKG_VERSION=$(node -p "require('./package.json').version")
+
+        # Query the registry with --json for structured error detection.
+        # Stderr is kept separate so stray "npm warn" lines don't corrupt the JSON stdout.
+        set +e
+        NPM_JSON=$(npm view "${PKG_NAME}" versions --json 2>/tmp/npm-view-err)
+        NPM_RC=$?
+        set -e
+
+        if [ "${NPM_RC}" -ne 0 ]; then
+          # Non-zero rc: distinguish "never published yet" from a real registry error.
+          # Empty stdout OR an E404 error body → package not on npm → nothing to collide
+          # with → publish (never block a package's first-ever publish). Any other
+          # populated error (5xx / network / rate-limit) → fail loudly; never publish blind.
+          if [ -z "$(printf '%s' "${NPM_JSON}" | tr -d '[:space:]')" ]; then
+            echo "already_published=false" >> "$GITHUB_OUTPUT"
+          elif node -e '
+            try {
+              const e = JSON.parse(process.argv[1]).error;
+              process.exit(e && e.code === "E404" ? 0 : 1);
+            } catch (_) { process.exit(1); }
+          ' "${NPM_JSON}" 2>/dev/null; then
+            echo "already_published=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error title=npm view failed (exit ${NPM_RC})::Could not query published versions for ${PKG_NAME}. Re-run after the registry recovers." >&2
+            cat /tmp/npm-view-err >&2
+            echo "${NPM_JSON}" >&2
+            exit 1
+          fi
+        else
+          # `npm view <pkg> versions --json` returns a JSON array, or a bare JSON string
+          # when the package has exactly one published version.
+          ALREADY_PUBLISHED=$(node -e '
+            const target = process.argv[1];
+            let versions;
+            try { versions = JSON.parse(process.argv[2]); } catch (_) { versions = []; }
+            if (typeof versions === "string") versions = [versions];
+            if (!Array.isArray(versions)) versions = [];
+            process.stdout.write(versions.includes(target) ? "true" : "false");
+          ' "${PKG_VERSION}" "${NPM_JSON}")
+          echo "already_published=${ALREADY_PUBLISHED}" >> "$GITHUB_OUTPUT"
+          if [ "${ALREADY_PUBLISHED}" = "true" ]; then
+            echo "Skipping npm publish: ${PKG_NAME}@${PKG_VERSION} is already published to npm."
+          fi
+        fi
+
     - name: Publish to npm
       id: publish
-      if: steps.gate.outputs.should_publish == 'true'
+      if: steps.gate.outputs.should_publish == 'true' && steps.exists.outputs.already_published != 'true'
       shell: bash
       working-directory: ${{ inputs.workdir }}
       env:
