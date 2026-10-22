@@ -1,0 +1,58 @@
+name: Setup Clang
+description: LLVM/Clang from apt.llvm.org on Linux (key checked against a fingerprint, trusted for that repository only) and chocolatey on Windows, first on PATH. macOS uses Apple Clang.
+
+inputs:
+  version:
+    description: LLVM major for Linux, e.g. "22"; must match windows-version's major
+    required: true
+  windows-version:
+    description: Exact chocolatey llvm version, e.g. "22.1.0"
+    required: true
+  apt-key-fingerprint:
+    description: Fingerprint the apt.llvm.org signing key must have
+    default: 6084F3CF814B57C1CF12EFD515CF4D18AF4F7421
+
+runs:
+  using: composite
+  steps:
+    - if: runner.os == 'Linux'
+      shell: bash
+      env:
+        LLVM_VERSION: ${{ inputs.version }}
+        KEY_FINGERPRINT: ${{ inputs.apt-key-fingerprint }}
+      run: |
+        set -euo pipefail
+        [[ "$LLVM_VERSION" =~ ^[0-9]+$ ]] || { echo "::error::version must be an LLVM major, got '$LLVM_VERSION'"; exit 1; }
+
+        key=/etc/apt/keyrings/apt.llvm.org.gpg
+        curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor > "$RUNNER_TEMP/llvm.gpg"
+        actual=$(gpg --show-keys --with-colons "$RUNNER_TEMP/llvm.gpg" | awk -F: '$1 == "fpr" { print $10; exit }')
+        if [ "$actual" != "$KEY_FINGERPRINT" ]; then
+          echo "::error::apt.llvm.org key fingerprint is '$actual', expected '$KEY_FINGERPRINT'"
+          exit 1
+        fi
+        sudo install -D -m 644 "$RUNNER_TEMP/llvm.gpg" "$key"
+
+        codename=$(. /etc/os-release && echo "$VERSION_CODENAME")
+        echo "deb [signed-by=$key] https://apt.llvm.org/$codename/ llvm-toolchain-$codename-$LLVM_VERSION main" | sudo tee /etc/apt/sources.list.d/apt.llvm.org.list > /dev/null
+        sudo apt-get update
+
+        # The package set llvm.sh installs for "all".
+        v=$LLVM_VERSION
+        sudo apt-get install -y \
+          clang-$v lldb-$v lld-$v clangd-$v clang-tidy-$v clang-format-$v clang-tools-$v llvm-$v-dev llvm-$v-tools \
+          libomp-$v-dev libc++-$v-dev libc++abi-$v-dev libclang-common-$v-dev libclang-$v-dev libclang-cpp$v-dev \
+          liblldb-$v-dev libunwind-$v-dev libclang-rt-$v-dev libpolly-$v-dev
+
+        bin="/usr/lib/llvm-$v/bin"
+        test -d "$bin" || { echo "::error::$bin missing after install"; exit 1; }
+        echo "$bin" >> "$GITHUB_PATH"
+    - if: runner.os == 'Windows'
+      shell: powershell
+      env:
+        LLVM_WINDOWS_VERSION: ${{ inputs.windows-version }}
+      run: |
+        $ErrorActionPreference = 'Stop'
+        if ($env:LLVM_WINDOWS_VERSION -notmatch '^\d+(\.\d+){1,3}$') { throw "windows-version must be a version number, got '$env:LLVM_WINDOWS_VERSION'" }
+        choco upgrade llvm --version="$env:LLVM_WINDOWS_VERSION" -y --allow-downgrade
+        Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files\LLVM\bin"

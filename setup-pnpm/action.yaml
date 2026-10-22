@@ -1,0 +1,15 @@
+name: Setup pnpm
+description: pnpm/action-setup, pinned once. Puts the pnpm the repository's packageManager names on PATH; installs nothing.
+
+inputs:
+  package-json-file:
+    description: The root package.json whose packageManager picks the version, relative to the workspace
+    default: package.json
+
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # 4.1.0
+      with:
+        package_json_file: ${{ inputs.package-json-file }}
+        run_install: false

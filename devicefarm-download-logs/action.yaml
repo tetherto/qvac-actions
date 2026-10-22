@@ -1,0 +1,36 @@
+name: Download Device Farm logs
+description: Download each device's Device Farm logs and Customer_Artifacts.zip, keep the zip's files the caller names (regular files only), and copy them with presigned credentials redacted into one directory per device to upload. The job holds the AWS credentials.
+
+inputs:
+  platform:
+    description: Label for the output directories, e.g. Android or iOS
+    required: true
+  run-arns:
+    description: JSON array of run ARNs
+    required: true
+  files:
+    description: Files to keep from Customer_Artifacts.zip, space or newline separated; a name matches anywhere, a/b matches the last path segments, * and ? glob
+    required: true
+  skip-extensions:
+    description: Device Farm artifact extensions not to download, e.g. mp4
+    default: ""
+
+outputs:
+  log-dir:
+    description: Raw downloads, <device>/<run>/...
+    value: devicefarm-logs/${{ inputs.platform }}
+  console-dir:
+    description: Scrubbed logs ready to upload, <device>/<run>_<file>
+    value: console-logs/${{ inputs.platform }}
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        RUN_ARNS: ${{ inputs.run-arns }}
+        FILES: ${{ inputs.files }}
+        SKIP_EXTENSIONS: ${{ inputs.skip-extensions }}
+        LOG_DIR: devicefarm-logs/${{ inputs.platform }}
+        CONSOLE_DIR: console-logs/${{ inputs.platform }}
+      run: node "$GITHUB_ACTION_PATH/devicefarm-download-logs.mjs"

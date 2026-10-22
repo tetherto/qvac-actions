@@ -1,0 +1,80 @@
+name: Setup AWS CLI
+description: Put the AWS CLI on PATH where the image lacks it, installing it user-local only after its signature checks out. A no-op where it is already present.
+
+inputs:
+  linux-key-fingerprint:
+    description: Full PGP fingerprint of the AWS CLI signing key, from AWS's install guide; needed only to install on Linux
+    default: ""
+  macos-team-id:
+    description: Apple team id the macOS installer must be signed by; empty accepts any notarized Developer ID
+    default: ""
+  keyserver:
+    description: Keyserver the Linux signing key is fetched from by fingerprint
+    default: hkps://keyserver.ubuntu.com
+
+runs:
+  using: composite
+  steps:
+    - if: runner.os == 'Linux'
+      shell: bash
+      env:
+        KEY_FINGERPRINT: ${{ inputs.linux-key-fingerprint }}
+        KEYSERVER: ${{ inputs.keyserver }}
+      run: |
+        set -euo pipefail
+        command -v aws >/dev/null 2>&1 && exit 0
+        if [ -x "$HOME/.local/bin/aws" ]; then echo "$HOME/.local/bin" >> "$GITHUB_PATH"; exit 0; fi
+        # Nothing in the OS vouches for this zip, so the caller's fingerprint is the only trust anchor.
+        fpr=$(tr -d ' ' <<< "$KEY_FINGERPRINT")
+        [[ "$fpr" =~ ^[0-9A-F]{40}$ ]] || { echo "::error::the AWS CLI is missing and linux-key-fingerprint is not a 40-character fingerprint, so its installer cannot be verified"; exit 1; }
+        dir="$RUNNER_TEMP/awscli"
+        rm -rf "$dir" && mkdir -p "$dir/gnupg" && chmod 700 "$dir/gnupg"
+        export GNUPGHOME="$dir/gnupg"
+        url="https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip"
+        curl -fsSL "$url" -o "$dir/awscliv2.zip"
+        curl -fsSL "$url.sig" -o "$dir/awscliv2.sig"
+        gpg --batch --keyserver "$KEYSERVER" --recv-keys "$fpr"
+        # VALIDSIG's last field is the primary key's fingerprint.
+        gpg --batch --status-fd 1 --verify "$dir/awscliv2.sig" "$dir/awscliv2.zip" | awk -v want="$fpr" '$2 == "VALIDSIG" && $NF == want { ok = 1 } END { exit !ok }' \
+          || { echo "::error::awscliv2.zip is not signed by key $fpr"; exit 1; }
+        unzip -q "$dir/awscliv2.zip" -d "$dir"
+        "$dir/aws/install" --install-dir "$HOME/.local/aws-cli" --bin-dir "$HOME/.local/bin" --update
+        echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+    - if: runner.os == 'macOS'
+      shell: bash
+      env:
+        TEAM_ID: ${{ inputs.macos-team-id }}
+      run: |
+        set -euo pipefail
+        command -v aws >/dev/null 2>&1 && exit 0
+        for p in /opt/homebrew/bin/aws /usr/local/bin/aws "$HOME/.local/aws-cli/aws"; do
+          if [ -x "$p" ]; then dirname "$p" >> "$GITHUB_PATH"; exit 0; fi
+        done
+        pkg="$RUNNER_TEMP/AWSCLIV2.pkg"
+        curl -fsSL https://awscli.amazonaws.com/AWSCLIV2.pkg -o "$pkg"
+        # Gatekeeper accepts only a notarized Developer ID installer; a team id narrows that to one developer.
+        signature=$(pkgutil --check-signature "$pkg")
+        echo "$signature"
+        if [ -n "$TEAM_ID" ]; then
+          [[ "$TEAM_ID" =~ ^[A-Z0-9]{10}$ ]] || { echo "::error::macos-team-id '$TEAM_ID' is not an Apple team id"; exit 1; }
+          grep -q "Developer ID Installer: .*($TEAM_ID)" <<< "$signature" || { echo "::error::AWSCLIV2.pkg is not signed by team $TEAM_ID"; exit 1; }
+        fi
+        spctl --assess --type install --verbose "$pkg"
+        # User-local, since installer -target / needs sudo.
+        rm -rf "$RUNNER_TEMP/awscli" "$HOME/.local/aws-cli"
+        pkgutil --expand-full "$pkg" "$RUNNER_TEMP/awscli"
+        mkdir -p "$HOME/.local"
+        mv "$RUNNER_TEMP/awscli/aws-cli.pkg/Payload/aws-cli" "$HOME/.local/aws-cli"
+        echo "$HOME/.local/aws-cli" >> "$GITHUB_PATH"
+    - if: runner.os == 'Windows'
+      shell: powershell
+      run: |
+        $ErrorActionPreference = 'Stop'
+        if (Get-Command aws -ErrorAction SilentlyContinue) { exit 0 }
+        $msi = "$env:RUNNER_TEMP\AWSCLIV2.msi"
+        Invoke-WebRequest -Uri https://awscli.amazonaws.com/AWSCLIV2.msi -OutFile $msi
+        $sig = Get-AuthenticodeSignature $msi
+        if ($sig.Status -ne 'Valid') { throw "AWSCLIV2.msi signature is $($sig.Status), not Valid" }
+        Write-Output "Signed by: $($sig.SignerCertificate.Subject)"
+        Start-Process msiexec.exe -Wait -ArgumentList '/I', $msi, '/qn'
+        echo "C:\Program Files\Amazon\AWSCLIV2" >> $env:GITHUB_PATH

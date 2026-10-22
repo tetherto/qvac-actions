@@ -1,0 +1,38 @@
+name: npm release publish
+description: Publish a package to npm with provenance over OIDC, only from a release ref, skipping prerelease tags and any version npm already has.
+
+inputs:
+  workdir:
+    description: Package directory, ready to publish
+    required: true
+  tag:
+    description: Dist-tag, e.g. from npm-release-dist-tag
+    required: true
+  access:
+    description: public or restricted
+    default: public
+  release-ref-prefix:
+    description: The ref must start with this to publish
+    default: refs/heads/release-
+  skip-tags:
+    description: Space-separated tags that never publish, skipped without failing
+    default: dev tmp
+
+outputs:
+  version:
+    description: Published version; empty when the tag or an existing version skipped the publish
+    value: ${{ steps.publish.outputs.version }}
+
+# The job runs setup-node with the npm registry first; OIDC trusted publishing needs npm 11.5 or newer.
+runs:
+  using: composite
+  steps:
+    - id: publish
+      shell: bash
+      env:
+        WORKDIR: ${{ inputs.workdir }}
+        TAG: ${{ inputs.tag }}
+        ACCESS: ${{ inputs.access }}
+        RELEASE_REF_PREFIX: ${{ inputs.release-ref-prefix }}
+        SKIP_TAGS: ${{ inputs.skip-tags }}
+      run: node "$GITHUB_ACTION_PATH/npm-release-publish.mjs"

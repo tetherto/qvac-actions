@@ -1,0 +1,21 @@
+name: Free disk space
+description: Remove toolchains a Linux build never uses. No-op elsewhere.
+
+inputs:
+  keep-android:
+    description: Keep the Android SDK, for Android builds
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - if: runner.os == 'Linux'
+      shell: bash
+      env:
+        KEEP_ANDROID: ${{ inputs.keep-android }}
+      run: |
+        df -h /
+        sudo docker image prune --all --force
+        sudo rm -rf /opt/hostedtoolcache/CodeQL /opt/ghc /usr/share/dotnet /usr/share/swift /opt/hostedtoolcache/go
+        if [ "$KEEP_ANDROID" != "true" ]; then sudo rm -rf /usr/local/lib/android; fi
+        df -h /

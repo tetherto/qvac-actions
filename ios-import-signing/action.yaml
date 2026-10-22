@@ -1,0 +1,27 @@
+name: Import iOS signing
+description: Import a signing certificate into a throwaway keychain only codesign may use, and install a provisioning profile checked against the bundle id. A post step deletes both and restores the keychain search list.
+
+inputs:
+  certificate-base64:
+    description: Base64 .p12 signing certificate
+    required: true
+  certificate-password:
+    description: Password of the certificate
+    required: true
+  profile-base64:
+    description: Base64 provisioning profile
+    required: true
+  bundle-id:
+    description: Bundle id the profile must be for
+    required: true
+
+outputs:
+  profile-uuid:
+    description: UUID of the installed profile
+  export-method:
+    description: development, ad-hoc, enterprise or app-store, from the profile
+
+runs:
+  using: node24
+  main: import.js
+  post: cleanup.js

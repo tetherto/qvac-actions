@@ -1,0 +1,35 @@
+name: Cache restore
+description: actions/cache/restore, pinned once. Restore only, so untrusted runs never write a cache.
+
+inputs:
+  path:
+    description: Newline-separated paths to restore
+    required: true
+  key:
+    description: Cache key
+    required: true
+  restore-keys:
+    description: Newline-separated prefixes to fall back to
+    default: ""
+  enable-cross-os-archive:
+    description: Let Windows restore an entry saved on Linux or macOS
+    default: "false"
+
+outputs:
+  cache-hit:
+    description: Whether the exact key was found
+    value: ${{ steps.restore.outputs.cache-hit }}
+  cache-primary-key:
+    description: The key that was looked up, for a later cache-save
+    value: ${{ steps.restore.outputs.cache-primary-key }}
+
+runs:
+  using: composite
+  steps:
+    - id: restore
+      uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7 # 5.0.4
+      with:
+        path: ${{ inputs.path }}
+        key: ${{ inputs.key }}
+        restore-keys: ${{ inputs.restore-keys }}
+        enableCrossOsArchive: ${{ inputs.enable-cross-os-archive }}

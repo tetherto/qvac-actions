@@ -1,0 +1,42 @@
+name: Cache
+description: actions/cache, pinned once. Refuses pull_request_target, where a save would poison the base branch's cache.
+
+inputs:
+  path:
+    description: Newline-separated paths to cache
+    required: true
+  key:
+    description: Cache key
+    required: true
+  restore-keys:
+    description: Newline-separated prefixes to fall back to
+    default: ""
+  lookup-only:
+    description: Check for an entry without downloading it
+    default: "false"
+  enable-cross-os-archive:
+    description: Let Windows restore an entry saved on Linux or macOS
+    default: "false"
+
+outputs:
+  cache-hit:
+    description: Whether the exact key was found
+    value: ${{ steps.cache.outputs.cache-hit }}
+
+runs:
+  using: composite
+  steps:
+    # On pull_request_target a save lands in the base branch's scope, where every later run restores it.
+    - if: github.event_name == 'pull_request_target'
+      shell: bash
+      run: |
+        echo "::error::cache refuses pull_request_target; use cache-restore there"
+        exit 1
+    - id: cache
+      uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # 5.0.4
+      with:
+        path: ${{ inputs.path }}
+        key: ${{ inputs.key }}
+        restore-keys: ${{ inputs.restore-keys }}
+        enableCrossOsArchive: ${{ inputs.enable-cross-os-archive }}
+        lookup-only: ${{ inputs.lookup-only }}

@@ -1,0 +1,31 @@
+name: Setup Xcode
+description: Select the first installed Xcode of the given versions and install brew packages and gems on hosted runners; on self-hosted Macs only check the tools are there.
+
+inputs:
+  xcode-versions:
+    description: Space-separated Xcode versions to try in order, e.g. "16.1 16.2"; hosted images ship several side by side
+    required: true
+  brew-packages:
+    description: Space-separated Homebrew formulae to install on hosted runners
+    default: ""
+  gems:
+    description: Space-separated gems to install on hosted runners, each name or name:version
+    default: ""
+  require-tools:
+    description: Space-separated commands that must be on PATH afterwards
+    default: xcodebuild
+  sdk:
+    description: An SDK xcodebuild -showsdks must list, e.g. iphoneos; empty skips the check
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        XCODE_VERSIONS: ${{ inputs.xcode-versions }}
+        BREW_PACKAGES: ${{ inputs.brew-packages }}
+        GEMS: ${{ inputs.gems }}
+        REQUIRE_TOOLS: ${{ inputs.require-tools }}
+        SDK: ${{ inputs.sdk }}
+      run: node "$GITHUB_ACTION_PATH/setup-xcode.mjs"

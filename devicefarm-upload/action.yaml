@@ -1,0 +1,40 @@
+name: Upload to Device Farm
+description: Upload an app, test package or test specs to a Device Farm project and wait until each is usable. The job holds the AWS credentials.
+
+inputs:
+  project-arn:
+    description: Device Farm project
+    required: true
+  type:
+    description: Device Farm upload type, e.g. ANDROID_APP, IOS_APP, APPIUM_NODE_TEST_PACKAGE, APPIUM_NODE_TEST_SPEC
+    required: true
+  files:
+    description: One path, or a JSON array of objects with a file field
+    required: true
+  name:
+    description: Upload name for a single path; defaults to its file name
+    default: ""
+  max-wait-seconds:
+    description: How long to wait for each upload to become usable
+    default: "300"
+
+outputs:
+  arn:
+    description: ARN of the first upload
+    value: ${{ steps.upload.outputs.arn }}
+  uploads:
+    description: The input objects, each with its arn added
+    value: ${{ steps.upload.outputs.uploads }}
+
+runs:
+  using: composite
+  steps:
+    - id: upload
+      shell: bash
+      env:
+        PROJECT_ARN: ${{ inputs.project-arn }}
+        TYPE: ${{ inputs.type }}
+        FILES: ${{ inputs.files }}
+        NAME: ${{ inputs.name }}
+        MAX_WAIT: ${{ inputs.max-wait-seconds }}
+      run: node "$GITHUB_ACTION_PATH/devicefarm-upload.mjs"

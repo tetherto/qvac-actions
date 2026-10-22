@@ -1,0 +1,45 @@
+name: Wait for Device Farm runs
+description: Poll Device Farm runs until they finish, report each device, and fail when any device failed. The job holds the AWS credentials.
+
+inputs:
+  run-arns:
+    description: JSON array of run ARNs
+    required: true
+  specs:
+    description: JSON [{name, grep, tests}] the runs were scheduled from, for the run legend
+    default: "[]"
+  max-wait-seconds:
+    description: Ceiling on the wait
+    default: "7200"
+  poll-seconds:
+    description: Seconds between status checks
+    default: "30"
+
+outputs:
+  test-result:
+    description: PASSED or FAILED
+    value: ${{ steps.wait.outputs.test-result }}
+  test-total:
+    description: Test cases across all runs
+    value: ${{ steps.wait.outputs.test-total }}
+  test-passed:
+    description: Test cases passed
+    value: ${{ steps.wait.outputs.test-passed }}
+  test-failed:
+    description: Test cases failed
+    value: ${{ steps.wait.outputs.test-failed }}
+  devices-failed:
+    description: Devices whose job did not pass
+    value: ${{ steps.wait.outputs.devices-failed }}
+
+runs:
+  using: composite
+  steps:
+    - id: wait
+      shell: bash
+      env:
+        RUN_ARNS: ${{ inputs.run-arns }}
+        SPECS: ${{ inputs.specs }}
+        MAX_WAIT: ${{ inputs.max-wait-seconds }}
+        POLL: ${{ inputs.poll-seconds }}
+      run: node "$GITHUB_ACTION_PATH/devicefarm-wait-runs.mjs"
