@@ -14,6 +14,9 @@ inputs:
   fetch-depth:
     description: Commits to fetch, 0 for full history
     default: "1"
+  filter:
+    description: Partial clone filter, e.g. blob:none; overrides sparse-checkout
+    default: ""
   sparse-checkout:
     description: Newline-separated paths to check out
     default: ""
@@ -36,6 +39,7 @@ runs:
         repository: ${{ inputs.repository }}
         path: ${{ inputs.path }}
         fetch-depth: ${{ inputs.fetch-depth }}
+        filter: ${{ inputs.filter }}
         sparse-checkout: ${{ inputs.sparse-checkout }}
         sparse-checkout-cone-mode: ${{ inputs.sparse-checkout-cone-mode }}
         token: ${{ inputs.token }}
