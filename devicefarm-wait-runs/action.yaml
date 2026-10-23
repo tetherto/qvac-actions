@@ -14,6 +14,9 @@ inputs:
   poll-seconds:
     description: Seconds between status checks
     default: "30"
+  accept-stopped:
+    description: Pass a device Device Farm stopped on its job timeout when every test it counted passed; the count misses tests that never ran
+    default: "false"
 
 outputs:
   test-result:
@@ -42,4 +45,5 @@ runs:
         SPECS: ${{ inputs.specs }}
         MAX_WAIT: ${{ inputs.max-wait-seconds }}
         POLL: ${{ inputs.poll-seconds }}
+        ACCEPT_STOPPED: ${{ inputs.accept-stopped }}
       run: node "$GITHUB_ACTION_PATH/devicefarm-wait-runs.mjs"

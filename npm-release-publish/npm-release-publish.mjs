@@ -46,7 +46,7 @@ function alreadyPublished({ status, stdout }) {
     try {
       code = JSON.parse(stdout).error?.code
     } catch {}
-    if (!stdout.trim() || code === 'E404') return false
+    if (code === 'E404') return false
     throw new Error(`npm view failed (exit ${status}); re-run after the registry recovers`)
   }
   return [JSON.parse(stdout || '[]')].flat().includes(version)

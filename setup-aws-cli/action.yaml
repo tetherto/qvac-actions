@@ -8,6 +8,9 @@ inputs:
   macos-team-id:
     description: Apple team id the macOS installer must be signed by; empty accepts any notarized Developer ID
     default: ""
+  windows-signer-organization:
+    description: Organization (O=) the Windows installer's Authenticode certificate must name
+    default: Amazon Web Services, Inc.
   keyserver:
     description: Keyserver the Linux signing key is fetched from by fingerprint
     default: hkps://keyserver.ubuntu.com
@@ -68,6 +71,8 @@ runs:
         echo "$HOME/.local/aws-cli" >> "$GITHUB_PATH"
     - if: runner.os == 'Windows'
       shell: powershell
+      env:
+        SIGNER_ORG: ${{ inputs.windows-signer-organization }}
       run: |
         $ErrorActionPreference = 'Stop'
         if (Get-Command aws -ErrorAction SilentlyContinue) { exit 0 }
@@ -75,6 +80,9 @@ runs:
         Invoke-WebRequest -Uri https://awscli.amazonaws.com/AWSCLIV2.msi -OutFile $msi
         $sig = Get-AuthenticodeSignature $msi
         if ($sig.Status -ne 'Valid') { throw "AWSCLIV2.msi signature is $($sig.Status), not Valid" }
+        # Any valid Authenticode signature passes Status, so the publisher is pinned too; a value with a comma is quoted.
+        $subject = $sig.SignerCertificate.Subject
+        if (-not ($subject.Contains("O=`"$env:SIGNER_ORG`"") -or $subject.Contains("O=$env:SIGNER_ORG,"))) { throw "AWSCLIV2.msi is signed by $subject, not $env:SIGNER_ORG" }
         Write-Output "Signed by: $($sig.SignerCertificate.Subject)"
         Start-Process msiexec.exe -Wait -ArgumentList '/I', $msi, '/qn'
         echo "C:\Program Files\Amazon\AWSCLIV2" >> $env:GITHUB_PATH

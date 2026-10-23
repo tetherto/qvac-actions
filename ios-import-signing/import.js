@@ -21,13 +21,11 @@ const cert = join(tmp, `signing-${id}.p12`)
 const pp = join(tmp, `signing-${id}.mobileprovision`)
 const plist = join(tmp, `signing-${id}.plist`)
 const keychain = join(tmp, `signing-${id}.keychain-db`)
-// Nobody needs this password after the job, so it never leaves the action.
+// Nobody needs this password after the job, and it only ever reaches security as an argument.
 const password = randomBytes(24).toString('hex')
-console.log(`::add-mask::${password}`)
 
 // Everything cleanup.js must undo, recorded before it is created.
 const searchList = keychainsInSearchList()
-save('search-list', JSON.stringify(searchList))
 save('keychain', keychain)
 save('files', JSON.stringify([cert, pp, plist]))
 

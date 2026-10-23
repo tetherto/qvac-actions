@@ -1,4 +1,4 @@
-// Post step: restores the keychain search list and deletes the keychain, profile and key files import.js made.
+// Post step: takes its keychain off the search list and deletes the keychain, profile and key files import.js made.
 // Each step runs even if an earlier one fails, and none fails the job.
 
 const { rmSync } = require('node:fs')
@@ -14,16 +14,15 @@ const attempt = (what, fn) => {
   }
 }
 
-if (state('search-list')) {
-  attempt('restore keychain search list', () =>
-    execFileSync('security', [
-      'list-keychains',
-      '-d',
-      'user',
-      '-s',
-      ...JSON.parse(state('search-list'))
-    ])
-  )
+// Drops only this job's keychain from the list as it is now, so another job's keychain added meanwhile stays.
+if (state('keychain')) {
+  attempt('remove signing keychain from the search list', () => {
+    const current = execFileSync('security', ['list-keychains', '-d', 'user'], { encoding: 'utf8' })
+      .split('\n')
+      .map((line) => line.trim().replace(/^"|"$/g, ''))
+      .filter((k) => k && k !== state('keychain'))
+    execFileSync('security', ['list-keychains', '-d', 'user', '-s', ...current])
+  })
 }
 if (state('keychain'))
   attempt('delete signing keychain', () =>

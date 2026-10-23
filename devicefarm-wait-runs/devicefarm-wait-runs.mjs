@@ -54,14 +54,15 @@ export async function wait({ arns, aws, sleep, maxWait, poll, log = console.log 
   }
 }
 
-// A device stopped by Device Farm's own timeout after every test passed counts as passed.
-export function judge(job) {
+// STOPPED counts only the tests that ran, so it passes only when the caller accepts a device stopped by Device
+// Farm's timeout after every counted test passed.
+export function judge(job, acceptStopped = false) {
   const c = job.counters || {}
   if (['PASSED', 'WARNED'].includes(job.result)) return true
-  return job.result === 'STOPPED' && !c.failed && !c.errored && c.passed > 0
+  return acceptStopped && job.result === 'STOPPED' && !c.failed && !c.errored && c.passed > 0
 }
 
-export async function report({ arns, aws, specs }) {
+export async function report({ arns, aws, specs, acceptStopped = false }) {
   const r = {
     total: 0,
     passed: 0,
@@ -83,7 +84,7 @@ export async function report({ arns, aws, specs }) {
     const jobs = (await aws(['list-jobs', '--arn', arn]).catch(() => ({ jobs: [] }))).jobs || []
     for (const job of jobs) {
       const c = job.counters || {}
-      const ok = judge(job)
+      const ok = judge(job, acceptStopped)
       console.log(
         `  ${ok ? 'PASS' : 'FAIL'} ${job.device?.name || 'unknown device'}: ${job.result} (${c.passed || 0}/${c.total || 0} passed, ${c.failed || 0} failed, ${c.errored || 0} errored)`
       )
@@ -126,6 +127,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   if (!arns.length) throw new Error('no run ARNs to wait for')
   if (!arns.every((a) => /^arn:aws[\w-]*:devicefarm:[a-z0-9-]+:\d+:run:[\w-]+\/[\w-]+$/.test(a)))
     throw new Error('run-arns must be Device Farm run ARNs')
+  if (!['true', 'false'].includes(env.ACCEPT_STOPPED))
+    throw new Error(`accept-stopped '${env.ACCEPT_STOPPED}' is not true or false`)
   for (const [name, value] of [
     ['max-wait-seconds', env.MAX_WAIT],
     ['poll-seconds', env.POLL]
@@ -157,7 +160,12 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     maxWait: Number(env.MAX_WAIT),
     poll: Number(env.POLL)
   })
-  const r = await report({ arns, aws, specs: JSON.parse(env.SPECS || '[]') })
+  const r = await report({
+    arns,
+    aws,
+    specs: JSON.parse(env.SPECS || '[]'),
+    acceptStopped: env.ACCEPT_STOPPED === 'true'
+  })
   appendFileSync(
     env.GITHUB_OUTPUT,
     Object.entries({

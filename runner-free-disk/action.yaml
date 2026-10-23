@@ -1,5 +1,5 @@
 name: Free disk space
-description: Remove toolchains a Linux build never uses. No-op elsewhere.
+description: Remove toolchains a Linux build never uses, on GitHub-hosted runners only. No-op elsewhere.
 
 inputs:
   keep-android:
@@ -9,7 +9,8 @@ inputs:
 runs:
   using: composite
   steps:
-    - if: runner.os == 'Linux'
+    # Self-hosted runners keep their images and SDKs.
+    - if: runner.os == 'Linux' && runner.environment == 'github-hosted'
       shell: bash
       env:
         KEEP_ANDROID: ${{ inputs.keep-android }}

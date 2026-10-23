@@ -26,6 +26,9 @@ runs:
 
         key=/etc/apt/keyrings/apt.llvm.org.gpg
         curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor > "$RUNNER_TEMP/llvm.gpg"
+        # The keyring trusts every key in the file, so it must hold only the pinned one.
+        count=$(gpg --show-keys --with-colons "$RUNNER_TEMP/llvm.gpg" | awk -F: '$1 == "pub"' | wc -l)
+        [ "$count" -eq 1 ] || { echo "::error::expected one key in llvm-snapshot.gpg.key, got $count"; exit 1; }
         actual=$(gpg --show-keys --with-colons "$RUNNER_TEMP/llvm.gpg" | awk -F: '$1 == "fpr" { print $10; exit }')
         if [ "$actual" != "$KEY_FINGERPRINT" ]; then
           echo "::error::apt.llvm.org key fingerprint is '$actual', expected '$KEY_FINGERPRINT'"
