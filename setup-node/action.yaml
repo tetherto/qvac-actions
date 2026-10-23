@@ -1,10 +1,13 @@
 name: Setup Node
-description: actions/setup-node, pinned once. No package-manager cache unless asked.
+description: actions/setup-node, pinned once. Checks for the newest matching Node so a runner's tool cache never serves a stale one. No package-manager cache unless asked.
 
 inputs:
   node-version:
     description: Node.js version or alias
     default: lts/*
+  check-latest:
+    description: Resolve the version against the Node.js manifest before any cached copy; self-hosted caches persist
+    default: "true"
   registry-url:
     description: Registry to write into .npmrc
     default: ""
@@ -21,6 +24,7 @@ runs:
     - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # 6.3.0
       with:
         node-version: ${{ inputs.node-version }}
+        check-latest: ${{ inputs.check-latest }}
         registry-url: ${{ inputs.registry-url }}
         scope: ${{ inputs.scope }}
         package-manager-cache: ${{ inputs.package-manager-cache }}
