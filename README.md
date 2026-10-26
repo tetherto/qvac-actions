@@ -25,8 +25,8 @@ uses: tetherto/qvac-actions/setup-clang@<commit sha>
 |---|---|
 | `checkout`, `setup-node`, `setup-pnpm`, `setup-java`, `setup-android`, `upload-artifact`, `download-artifact`, `configure-aws-credentials` | The upstream action, pinned by SHA in one place; `checkout` does not persist credentials unless asked; `setup-node` defaults to `lts/*` with `check-latest` |
 | `cache`, `cache-restore`, `cache-save` | `actions/cache`, pinned; `cache` and `cache-save` save only on `push`, `workflow_dispatch`, `merge_group`, `schedule` and `pull_request` |
-| `setup-clang` | LLVM from apt.llvm.org (key checked against a fingerprint) or chocolatey |
-| `setup-android-ndk` | The given NDK revision, installed if missing |
+| `setup-clang` | LLVM from apt.llvm.org (key checked against a fingerprint) on Linux, or Chocolatey on Windows, which GitHub-hosted images ship |
+| `setup-android-ndk` | The given NDK revision, installed if missing; Linux x64 hosts only |
 | `setup-aws-cli` | The AWS CLI where missing, only from a signed installer |
 | `setup-xcode` | The first installed Xcode of the given versions, plus brew packages and gems |
 | `runner-free-disk`, `runner-apt-install` | Free space on Linux runners; install validated apt packages |
