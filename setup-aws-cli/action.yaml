@@ -7,7 +7,7 @@ inputs:
     default: ""
   macos-team-id:
     description: Apple team id the macOS installer must be signed by; empty accepts any notarized Developer ID
-    default: ""
+    default: 94KV3E626L
   windows-signer-organization:
     description: Organization (O=) the Windows installer's Authenticode certificate must name
     default: Amazon Web Services, Inc.
@@ -84,5 +84,6 @@ runs:
         $subject = $sig.SignerCertificate.Subject
         if (-not ($subject.Contains("O=`"$env:SIGNER_ORG`"") -or $subject.Contains("O=$env:SIGNER_ORG,"))) { throw "AWSCLIV2.msi is signed by $subject, not $env:SIGNER_ORG" }
         Write-Output "Signed by: $($sig.SignerCertificate.Subject)"
-        Start-Process msiexec.exe -Wait -ArgumentList '/I', $msi, '/qn'
-        echo "C:\Program Files\Amazon\AWSCLIV2" >> $env:GITHUB_PATH
+        $p = Start-Process msiexec.exe -Wait -PassThru -ArgumentList '/I', $msi, '/qn'
+        if ($p.ExitCode -ne 0) { throw "msiexec exited $($p.ExitCode)" }
+        Add-Content -Path $env:GITHUB_PATH -Value 'C:\Program Files\Amazon\AWSCLIV2'

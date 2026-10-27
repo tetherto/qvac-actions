@@ -3,8 +3,8 @@ description: actions/setup-node, pinned once. Checks for the newest matching Nod
 
 inputs:
   node-version:
-    description: Node.js version or alias
-    default: lts/*
+    description: Node.js version or alias, e.g. 24 or lts/*
+    required: true
   check-latest:
     description: Resolve the version against the Node.js manifest before any cached copy; self-hosted caches persist
     default: "true"

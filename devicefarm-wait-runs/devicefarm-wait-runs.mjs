@@ -82,6 +82,13 @@ export async function report({ arns, aws, specs, acceptStopped = false }) {
       `--- Run ${i + 1}: ${run.name || arn} (${run.result || 'UNKNOWN'})${spec ? ` [${spec.tests || spec.grep || spec.name}]` : ''}`
     )
     const jobs = (await aws(['list-jobs', '--arn', arn]).catch(() => ({ jobs: [] }))).jobs || []
+    // A run that lists no jobs is judged by its own result, so a failed one still counts.
+    if (!jobs.length && !['PASSED', 'SKIPPED'].includes(run.result)) {
+      r.devicesFailed++
+      r.failures.push(
+        `${run.name || arn}: ${run.result || 'UNKNOWN'} with no jobs listed ${consoleLink(arn)}`
+      )
+    }
     for (const job of jobs) {
       const c = job.counters || {}
       const ok = judge(job, acceptStopped)
@@ -181,5 +188,5 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       .join('')
   )
   appendFileSync(env.GITHUB_STEP_SUMMARY, summary(r, arns))
-  if (r.devicesFailed || (!r.devicesPassed && !r.allRunsPassed)) process.exit(1)
+  if (r.result !== 'PASSED') process.exit(1)
 }

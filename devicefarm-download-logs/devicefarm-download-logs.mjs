@@ -9,6 +9,7 @@ import {
   readFileSync,
   readdirSync,
   realpathSync,
+  rmSync,
   writeFileSync
 } from 'node:fs'
 import { execFileSync } from 'node:child_process'
@@ -56,6 +57,9 @@ async function download() {
       console.log(`::warning::could not unzip ${zip}`)
     }
   }
+  // The app under test writes the zip, so its symlinks go before anyone uploads log-dir.
+  for (const e of readdirSync(env.LOG_DIR, { recursive: true, withFileTypes: true }))
+    if (e.isSymbolicLink()) rmSync(join(e.parentPath ?? e.path, e.name))
 }
 
 async function save(artifact, dir) {

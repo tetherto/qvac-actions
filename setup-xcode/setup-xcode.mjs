@@ -34,6 +34,13 @@ if (env.RUNNER_ENVIRONMENT === 'github-hosted') {
 for (const tool of words(env.REQUIRE_TOOLS)) {
   if (!onPath(tool)) throw new Error(`${tool} is not on PATH; self-hosted Macs must ship it`)
 }
+// A self-hosted Mac keeps the Xcode it has, so it must already be one of the versions asked for; "16" accepts any 16.x.
+if (env.RUNNER_ENVIRONMENT !== 'github-hosted') {
+  const out = execFileSync('xcodebuild', ['-version'], { encoding: 'utf8' })
+  const installed = out.match(/^Xcode (\S+)/m)?.[1] ?? 'unknown'
+  if (!versions.some((v) => `${installed}.`.startsWith(`${v}.`)))
+    throw new Error(`this Mac has Xcode ${installed}, not one of ${versions.join(', ')}`)
+}
 if (env.SDK) {
   const sdks = execFileSync('xcodebuild', ['-showsdks'], { encoding: 'utf8' })
   if (!sdks.toLowerCase().includes(env.SDK.toLowerCase()))

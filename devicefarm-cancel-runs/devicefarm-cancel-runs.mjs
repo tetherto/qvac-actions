@@ -4,14 +4,8 @@
 import { execFileSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
 
-const LIVE = [
-  'RUNNING',
-  'PENDING',
-  'PENDING_CONCURRENCY',
-  'PENDING_DEVICE',
-  'SCHEDULING',
-  'PREPARING'
-]
+// Any other status, an unreadable one included, gets a stop-run; on a run that has just finished it only fails.
+const DONE = ['COMPLETED', 'STOPPING']
 
 export function cancel(arns, aws) {
   const tally = { stopped: 0, finished: 0, failed: 0 }
@@ -20,7 +14,7 @@ export function cancel(arns, aws) {
     try {
       status = aws(['get-run', '--arn', arn]).run.status
     } catch {}
-    if (!LIVE.includes(status)) {
+    if (DONE.includes(status)) {
       tally.finished++
       continue
     }

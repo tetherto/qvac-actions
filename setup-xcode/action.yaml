@@ -1,5 +1,5 @@
 name: Setup Xcode
-description: Select the first installed Xcode of the given versions and install brew packages and gems on hosted runners; on self-hosted Macs only check the tools are there.
+description: Select the first installed Xcode of the given versions and install brew packages and gems on hosted runners; on self-hosted Macs only check the installed Xcode is one of them and the tools are there.
 
 inputs:
   xcode-versions:
