@@ -1,3 +1,4 @@
+# npm-release-publish carries the same publish rule; a fix to it goes in both until callers move there.
 name: npm Publish Gate
 description: >
   Single-responsibility gate: decides whether npm publishing should proceed.

@@ -1,0 +1,64 @@
+name: Schedule Device Farm runs
+description: Schedule one Device Farm run per test spec and device, each pinned to that device, stopping any already created if scheduling fails. The job holds the AWS credentials.
+
+inputs:
+  platform:
+    description: Android or iOS
+    required: true
+  project-arn:
+    description: Device Farm project
+    required: true
+  app-arn:
+    description: Uploaded app
+    required: true
+  test-type:
+    description: Device Farm test type, e.g. APPIUM_NODE
+    required: true
+  test-package-arn:
+    description: Uploaded test package
+    required: true
+  specs:
+    description: JSON [{name, arn}] of uploaded test specs
+    required: true
+  devices:
+    description: Comma-separated device models
+    required: true
+  device-model-operator:
+    description: EQUALS or CONTAINS
+    default: CONTAINS
+  job-timeout-minutes:
+    description: Device Farm timeout per run
+    default: "120"
+  max-devices:
+    description: Refuse to schedule on more devices than this
+    default: "10"
+  max-runs:
+    description: Refuse to schedule more runs (specs x devices) than this
+    default: "40"
+
+outputs:
+  run-arns:
+    description: JSON array of scheduled run ARNs
+    value: ${{ steps.schedule.outputs.run-arns }}
+  run-count:
+    description: Number of scheduled runs
+    value: ${{ steps.schedule.outputs.run-count }}
+
+runs:
+  using: composite
+  steps:
+    - id: schedule
+      shell: bash
+      env:
+        PLATFORM: ${{ inputs.platform }}
+        PROJECT_ARN: ${{ inputs.project-arn }}
+        APP_ARN: ${{ inputs.app-arn }}
+        TEST_TYPE: ${{ inputs.test-type }}
+        TEST_PACKAGE_ARN: ${{ inputs.test-package-arn }}
+        SPECS: ${{ inputs.specs }}
+        DEVICES: ${{ inputs.devices }}
+        OPERATOR: ${{ inputs.device-model-operator }}
+        TIMEOUT: ${{ inputs.job-timeout-minutes }}
+        MAX_DEVICES: ${{ inputs.max-devices }}
+        MAX_RUNS: ${{ inputs.max-runs }}
+      run: node "$GITHUB_ACTION_PATH/devicefarm-schedule-runs.mjs"

@@ -1,0 +1,38 @@
+name: Download artifact
+description: actions/download-artifact, pinned once. Reads from this run, or another when run-id is set.
+
+inputs:
+  name:
+    description: Artifact name; leave empty to use pattern
+    default: ""
+  pattern:
+    description: Glob of artifact names, used when name is empty
+    default: ""
+  artifact-ids:
+    description: Artifact ids, used when name is empty; a re-run can leave two artifacts under one name
+    default: ""
+  path:
+    description: Destination directory
+    default: ""
+  merge-multiple:
+    description: Merge every matched artifact into path
+    default: "false"
+  run-id:
+    description: Run to download from; empty means this run
+    default: ""
+  github-token:
+    description: Token for reading another run's artifacts
+    default: ${{ github.token }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # 8.0.1
+      with:
+        name: ${{ inputs.name }}
+        pattern: ${{ inputs.pattern }}
+        artifact-ids: ${{ inputs.artifact-ids }}
+        path: ${{ inputs.path }}
+        merge-multiple: ${{ inputs.merge-multiple }}
+        run-id: ${{ inputs.run-id }}
+        github-token: ${{ inputs.run-id != '' && inputs.github-token || '' }}

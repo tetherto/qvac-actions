@@ -1,0 +1,18 @@
+name: GitHub script
+description: actions/github-script, pinned once.
+
+inputs:
+  script:
+    description: JavaScript to run, with github, context and core in scope
+    required: true
+  github-token:
+    description: Token for the github client
+    default: ${{ github.token }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # 8.0.0
+      with:
+        script: ${{ inputs.script }}
+        github-token: ${{ inputs.github-token }}

@@ -1,0 +1,35 @@
+name: Check C++ format
+description: Fail when a directory's changed C and C++ lines are not clang-formatted.
+
+inputs:
+  repo-dir:
+    description: Checkout holding the change, with its history
+    required: true
+  workdir:
+    description: Directory inside repo-dir to check
+    required: true
+  base:
+    description: Commit the change is compared with
+    required: true
+  extensions:
+    description: Comma-separated file extensions to check
+    default: c,cc,cpp,cxx,h,hh,hpp,hxx
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      working-directory: ${{ inputs.repo-dir }}
+      env:
+        BASE: ${{ inputs.base }}
+        WORKDIR: ${{ inputs.workdir }}
+        EXTENSIONS: ${{ inputs.extensions }}
+      run: |
+        set -euo pipefail
+        # A value starting with "-" would reach git-clang-format as an option.
+        [[ "$BASE" =~ ^[A-Za-z0-9][A-Za-z0-9._/~^-]*$ ]] || { echo "::error::base '$BASE' is not a commit"; exit 1; }
+        [[ "$EXTENSIONS" =~ ^[A-Za-z0-9]+(,[A-Za-z0-9]+)*$ ]] || { echo "::error::extensions '$EXTENSIONS' is not a comma-separated list"; exit 1; }
+        if ! git-clang-format --binary clang-format --extensions "$EXTENSIONS" --diff "$BASE" -- "$WORKDIR"; then
+          echo "::error title=Unformatted C++ files::Run git-clang-format --binary clang-format --extensions $EXTENSIONS $BASE -- $WORKDIR"
+          exit 1
+        fi

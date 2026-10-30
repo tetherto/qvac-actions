@@ -1,3 +1,4 @@
+# npm-release-dist-tag carries the same release rule; a fix to it goes in both until callers move there.
 name: Determine npm dist-tag
 description: >
   Reads package.json, queries the npm registry, and determines the correct

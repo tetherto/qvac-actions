@@ -1,0 +1,26 @@
+name: Cache save
+description: actions/cache/save, pinned once. Saves only on push, workflow_dispatch, merge_group, schedule and pull_request; any other event would write into the base branch's cache.
+
+inputs:
+  path:
+    description: Newline-separated paths to save
+    required: true
+  key:
+    description: Cache key
+    required: true
+
+runs:
+  using: composite
+  steps:
+    # Any other event (pull_request_target, workflow_run, issue_comment, ...) saves into the base branch's scope.
+    - if: ${{ !contains(fromJSON('["push","workflow_dispatch","merge_group","schedule","pull_request"]'), github.event_name) }}
+      shell: bash
+      env:
+        EVENT: ${{ github.event_name }}
+      run: |
+        echo "::error::cache-save does not save on $EVENT; use cache-restore there"
+        exit 1
+    - uses: actions/cache/save@668228422ae6a00e4ad889ee87cd7109ec5666a7 # 5.0.4
+      with:
+        path: ${{ inputs.path }}
+        key: ${{ inputs.key }}

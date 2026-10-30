@@ -1,0 +1,27 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    # "/" scans only .github/workflows, so the actions that pin upstream actions are listed.
+    directories:
+      - "/"
+      - "/checkout"
+      - "/setup-node"
+      - "/setup-pnpm"
+      - "/setup-java"
+      - "/setup-python"
+      - "/setup-android"
+      - "/cache"
+      - "/cache-restore"
+      - "/cache-save"
+      - "/upload-artifact"
+      - "/download-artifact"
+      - "/configure-aws-credentials"
+      - "/github-script"
+      - "/pypi-publish"
+      - "/publish-library-to-npm"
+      - "/.github/actions/*"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions:
+        patterns: ["*"]

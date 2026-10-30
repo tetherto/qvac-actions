@@ -1,0 +1,23 @@
+name: Setup Android
+description: android-actions/setup-android, pinned once. A runner with the SDK already licensed only gets it on PATH.
+
+inputs:
+  packages:
+    description: sdkmanager packages to install when the runner has no SDK
+    default: platform-tools
+
+runs:
+  using: composite
+  steps:
+    - id: sdk
+      shell: bash
+      run: |
+        if [ -n "${ANDROID_HOME:-}" ] && [ -x "$ANDROID_HOME/platform-tools/adb" ] && [ -e "$ANDROID_HOME/licenses/android-sdk-license" ]; then
+          echo "$ANDROID_HOME/platform-tools" >> "$GITHUB_PATH"
+          find "$ANDROID_HOME/cmdline-tools" -mindepth 2 -maxdepth 2 -type d -name bin | sort -V | tail -1 >> "$GITHUB_PATH"
+          echo "preprovisioned=true" >> "$GITHUB_OUTPUT"
+        fi
+    - if: steps.sdk.outputs.preprovisioned != 'true'
+      uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # 3.2.2
+      with:
+        packages: ${{ inputs.packages }}

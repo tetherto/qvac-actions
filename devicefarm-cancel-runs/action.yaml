@@ -1,0 +1,15 @@
+name: Cancel Device Farm runs
+description: Stop Device Farm runs still in flight when the job is cancelled. The job holds the AWS credentials.
+
+inputs:
+  run-arns:
+    description: JSON array of run ARNs
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        RUN_ARNS: ${{ inputs.run-arns }}
+      run: node "$GITHUB_ACTION_PATH/devicefarm-cancel-runs.mjs"

@@ -1,0 +1,46 @@
+name: Checkout
+description: actions/checkout, pinned once. Credentials are not persisted unless asked.
+
+inputs:
+  ref:
+    description: Branch, tag or SHA to check out
+    default: ""
+  repository:
+    description: Repository to check out
+    default: ${{ github.repository }}
+  path:
+    description: Path under the workspace to check out into
+    default: ""
+  fetch-depth:
+    description: Commits to fetch, 0 for full history
+    default: "1"
+  filter:
+    description: Partial clone filter, e.g. blob:none; overrides sparse-checkout
+    default: ""
+  sparse-checkout:
+    description: Newline-separated paths to check out
+    default: ""
+  sparse-checkout-cone-mode:
+    description: Use cone mode for sparse-checkout
+    default: "true"
+  token:
+    description: Token used to fetch
+    default: ${{ github.token }}
+  persist-credentials:
+    description: Keep the token in the local git config
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # 6.0.2
+      with:
+        ref: ${{ inputs.ref }}
+        repository: ${{ inputs.repository }}
+        path: ${{ inputs.path }}
+        fetch-depth: ${{ inputs.fetch-depth }}
+        filter: ${{ inputs.filter }}
+        sparse-checkout: ${{ inputs.sparse-checkout }}
+        sparse-checkout-cone-mode: ${{ inputs.sparse-checkout-cone-mode }}
+        token: ${{ inputs.token }}
+        persist-credentials: ${{ inputs.persist-credentials }}

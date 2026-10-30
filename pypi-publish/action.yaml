@@ -1,0 +1,18 @@
+name: PyPI publish
+description: pypa/gh-action-pypi-publish, pinned once. Publishes over the job's OIDC token as a trusted publisher.
+
+inputs:
+  packages-dir:
+    description: Directory holding the distributions to upload
+    default: dist
+  skip-existing:
+    description: Skip files PyPI already has instead of failing
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+      with:
+        packages-dir: ${{ inputs.packages-dir }}
+        skip-existing: ${{ inputs.skip-existing }}
