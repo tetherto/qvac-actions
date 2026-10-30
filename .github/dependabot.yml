@@ -8,6 +8,7 @@ updates:
       - "/setup-node"
       - "/setup-pnpm"
       - "/setup-java"
+      - "/setup-python"
       - "/setup-android"
       - "/cache"
       - "/cache-restore"
@@ -15,6 +16,8 @@ updates:
       - "/upload-artifact"
       - "/download-artifact"
       - "/configure-aws-credentials"
+      - "/github-script"
+      - "/pypi-publish"
       - "/publish-library-to-npm"
       - "/.github/actions/*"
     schedule:
