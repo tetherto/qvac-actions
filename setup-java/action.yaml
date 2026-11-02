@@ -9,10 +9,25 @@ inputs:
     description: JDK distribution
     default: temurin
 
+outputs:
+  distribution:
+    description: The installed JDK distribution
+    value: ${{ steps.java.outputs.distribution }}
+  version:
+    description: The installed JDK version
+    value: ${{ steps.java.outputs.version }}
+  path:
+    description: Path to the installed JDK
+    value: ${{ steps.java.outputs.path }}
+  cache-hit:
+    description: Whether the dependency cache was restored
+    value: ${{ steps.java.outputs.cache-hit }}
+
 runs:
   using: composite
   steps:
-    - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # 5.2.0
+    - id: java
+      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # 5.2.0
       with:
         java-version: ${{ inputs.java-version }}
         distribution: ${{ inputs.distribution }}

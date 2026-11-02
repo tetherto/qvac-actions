@@ -18,10 +18,19 @@ inputs:
     description: Let setup-node cache the package manager store
     default: "false"
 
+outputs:
+  node-version:
+    description: The installed Node.js version
+    value: ${{ steps.node.outputs.node-version }}
+  cache-hit:
+    description: Whether the package manager cache was restored
+    value: ${{ steps.node.outputs.cache-hit }}
+
 runs:
   using: composite
   steps:
-    - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # 6.3.0
+    - id: node
+      uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # 6.3.0
       with:
         node-version: ${{ inputs.node-version }}
         check-latest: ${{ inputs.check-latest }}

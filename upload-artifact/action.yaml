@@ -22,6 +22,12 @@ outputs:
   artifact-id:
     description: Id of the uploaded artifact
     value: ${{ steps.upload.outputs.artifact-id }}
+  artifact-url:
+    description: URL to download the uploaded artifact
+    value: ${{ steps.upload.outputs.artifact-url }}
+  artifact-digest:
+    description: SHA-256 digest of the uploaded artifact
+    value: ${{ steps.upload.outputs.artifact-digest }}
 
 runs:
   using: composite

@@ -30,10 +30,19 @@ inputs:
     description: Keep the token in the local git config
     default: "false"
 
+outputs:
+  ref:
+    description: The branch, tag or SHA that was checked out
+    value: ${{ steps.checkout.outputs.ref }}
+  commit:
+    description: The commit SHA that was checked out
+    value: ${{ steps.checkout.outputs.commit }}
+
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # 6.0.2
+    - id: checkout
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # 6.0.2
       with:
         ref: ${{ inputs.ref }}
         repository: ${{ inputs.repository }}

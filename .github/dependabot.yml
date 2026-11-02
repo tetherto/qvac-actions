@@ -17,7 +17,6 @@ updates:
       - "/download-artifact"
       - "/configure-aws-credentials"
       - "/github-script"
-      - "/pypi-publish"
       - "/publish-library-to-npm"
       - "/.github/actions/*"
     schedule:

@@ -9,10 +9,19 @@ inputs:
     description: pnpm version, only for a repository whose package.json has no packageManager field; pnpm/action-setup fails when both name a version and they differ
     default: ""
 
+outputs:
+  dest:
+    description: Directory pnpm was installed into
+    value: ${{ steps.pnpm.outputs.dest }}
+  bin_dest:
+    description: Directory holding the pnpm binaries
+    value: ${{ steps.pnpm.outputs.bin_dest }}
+
 runs:
   using: composite
   steps:
-    - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # 4.1.0
+    - id: pnpm
+      uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # 4.1.0
       with:
         package_json_file: ${{ inputs.package-json-file }}
         version: ${{ inputs.version }}
