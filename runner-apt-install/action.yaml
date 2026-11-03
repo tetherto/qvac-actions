@@ -1,0 +1,23 @@
+name: Install apt packages
+description: apt-get update and install a space-separated package list, each checked to be a package name. No-op off Linux or for an empty list.
+
+inputs:
+  packages:
+    description: Space-separated apt packages
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - if: runner.os == 'Linux' && inputs.packages != ''
+      shell: bash
+      env:
+        PKGS: ${{ inputs.packages }}
+      run: |
+        set -euo pipefail
+        read -d "" -ra pkgs <<< "$PKGS" || true
+        for p in "${pkgs[@]}"; do
+          [[ "$p" =~ ^[a-z0-9][a-z0-9+.-]*(=[A-Za-z0-9.+~:-]+)?$ ]] || { echo "::error::'$p' is not an apt package name"; exit 1; }
+        done
+        sudo apt-get update
+        sudo apt-get install -y "${pkgs[@]}"

@@ -1,0 +1,29 @@
+name: npm release dist-tag
+description: The dist-tag a release goes out under, latest unless it is a prerelease or older than npm's latest, which get <fallback-prefix><major>.<minor>.
+
+inputs:
+  workdir:
+    description: Package directory holding package.json
+    required: true
+  tag:
+    description: Explicit tag; empty or latest lets the version decide
+    default: ""
+  fallback-prefix:
+    description: Prefix of the tag a prerelease or older version gets, before <major>.<minor>
+    default: release-
+
+outputs:
+  tag:
+    description: Resolved dist-tag
+    value: ${{ steps.decide.outputs.tag }}
+
+runs:
+  using: composite
+  steps:
+    - id: decide
+      shell: bash
+      env:
+        WORKDIR: ${{ inputs.workdir }}
+        TAG: ${{ inputs.tag }}
+        FALLBACK_PREFIX: ${{ inputs.fallback-prefix }}
+      run: node "$GITHUB_ACTION_PATH/npm-release-dist-tag.mjs"

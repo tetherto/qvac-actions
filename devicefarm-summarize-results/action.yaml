@@ -1,0 +1,31 @@
+name: Summarize Device Farm results
+description: Tabulate runner and TAP test results per device from devicefarm-download-logs output, into test-case-details.json and the step summary.
+
+inputs:
+  title:
+    description: Heading for the tables, e.g. the package name and platform
+    required: true
+  console-dir:
+    description: console-dir from devicefarm-download-logs, one directory per device; the JSON is written here
+    required: true
+  tap-files:
+    description: Space-separated log names to read TAP lines (ok N - name) from
+    required: true
+  results-file:
+    description: Name of a JSON report with {tests:[{title, status, duration}]} per device; empty skips the runner table
+    default: ""
+  min-pass-ms:
+    description: A runner that passed in less time than this counts as skipped
+    default: "0"
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        TITLE: ${{ inputs.title }}
+        CONSOLE_DIR: ${{ inputs.console-dir }}
+        TAP_FILES: ${{ inputs.tap-files }}
+        RESULTS_FILE: ${{ inputs.results-file }}
+        MIN_PASS_MS: ${{ inputs.min-pass-ms }}
+      run: node "$GITHUB_ACTION_PATH/devicefarm-summarize-results.mjs"

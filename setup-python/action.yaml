@@ -1,0 +1,30 @@
+name: Setup Python
+description: actions/setup-python, pinned once.
+
+inputs:
+  python-version:
+    description: Python version, e.g. 3.10
+    required: true
+  cache:
+    description: Package manager whose downloads setup-python caches, e.g. pip; empty caches nothing
+    default: ""
+
+outputs:
+  python-version:
+    description: The installed Python version
+    value: ${{ steps.python.outputs.python-version }}
+  cache-hit:
+    description: Whether the package cache was restored
+    value: ${{ steps.python.outputs.cache-hit }}
+  python-path:
+    description: Path to the Python executable
+    value: ${{ steps.python.outputs.python-path }}
+
+runs:
+  using: composite
+  steps:
+    - id: python
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # 6.2.0
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: ${{ inputs.cache }}
