@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
         with:
           fetch-depth: 0
           # On pull_request / pull_request_target the default ref is the base
@@ -145,7 +145,7 @@ jobs:
 
       - name: Run TruffleHog
         id: trufflehog
-        uses: trufflesecurity/trufflehog@37b77001d0174ebec2fcca2bd83ff83a6d45a3ab # v3.95.3
+        uses: trufflesecurity/trufflehog@31ce31ee1abbcc7dc8eee5764c17121c3044c8b2 # v3.99.7
         with:
           path: .
           base: ${{ steps.range.outputs.base }}
@@ -165,7 +165,7 @@ jobs:
     outputs:
       languages: ${{ steps.set.outputs.languages }}
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
         with:
           # Detect languages from the PR HEAD tree, consistent with the
           # trufflehog and codeql jobs.
@@ -213,7 +213,7 @@ jobs:
       matrix:
         language: ${{ fromJSON(needs.detect-languages.outputs.languages) }}
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
         with:
           # Match the trufflehog job: analyze PR HEAD, not the base branch,
           # on pull_request / pull_request_target.
@@ -271,7 +271,7 @@ jobs:
           esac
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
+        uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v3
         with:
           languages: ${{ matrix.language }}
           queries: ${{ inputs.codeql-queries }}
@@ -286,11 +286,11 @@ jobs:
         # Skipped when a build-mode is explicitly requested: 'none' needs no
         # build, and 'autobuild'/'manual' are handled by the init action itself.
         if: inputs.codeql-build-mode == ''
-        uses: github/codeql-action/autobuild@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
+        uses: github/codeql-action/autobuild@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v3
 
       - name: Analyze
         id: analyze
-        uses: github/codeql-action/analyze@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
+        uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v3
         with:
           category: ${{ inputs.codeql-category-prefix && format('/{0}/language:{1}', inputs.codeql-category-prefix, matrix.language) || format('/language:{0}', matrix.language) }}
           upload: ${{ inputs.codeql-upload }}
@@ -343,7 +343,7 @@ jobs:
         # Runs even when the severity gate above fails, so findings are always
         # exportable. Gated on export-report so opt-out callers see no change.
         if: ${{ always() && inputs.export-report }}
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # 7.0.0
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # 7.0.2
         with:
           name: codeql-sarif-${{ matrix.language }}
           path: codeql-sarif/*.sarif
@@ -362,7 +362,7 @@ jobs:
       contents: read
     steps:
       - name: Download CodeQL SARIF artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # 8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # 8.0.2
         with:
           pattern: codeql-sarif-*
           path: sarif
@@ -429,7 +429,7 @@ jobs:
           cat report/findings.md
 
       - name: Upload security scan report
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # 7.0.0
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # 7.0.2
         with:
           name: security-scan-report
           path: report/
@@ -480,7 +480,7 @@ jobs:
           TH_RESULT: ${{ needs.trufflehog.result }}
           CQ_RESULT: ${{ needs.codeql.result }}
           THRESHOLD: ${{ inputs.severity-threshold }}
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.gh_token || github.token }}
           script: |
