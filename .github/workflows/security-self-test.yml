@@ -42,6 +42,12 @@ jobs:
       # `critical` keeps the self-test green while still exercising the gate.
       # Tier-1 consumers should use the default `high` threshold.
       severity-threshold: critical
+      # Exercise both path-filter consumers end to end. The leading ** also
+      # guards the CodeQL YAML quoting regression from issue #11.
+      paths-include: |
+        hyperbee-models-server/**
+      paths-exclude: |
+        **/node_modules/**
       # qvac-devops has GitHub's "Default setup" enabled for code scanning,
       # which refuses SARIF from advanced workflows. Skip the upload here
       # so the smoke test passes; the severity gate still runs against the
