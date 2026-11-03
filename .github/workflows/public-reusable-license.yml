@@ -98,7 +98,7 @@ jobs:
           exit 1
 
       - name: Checkout consumer repo
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
@@ -109,7 +109,7 @@ jobs:
         # version. Uses the GitHub-canonical `job.workflow_*` context (the
         # reliable replacement for github.job_workflow_sha) so it also works
         # when the repo is forked or renamed.
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
         with:
           repository: ${{ job.workflow_repository }}
           ref: ${{ job.workflow_sha }}
@@ -251,7 +251,7 @@ jobs:
           inputs.enable-pr-comment &&
           github.event_name == 'pull_request'
         continue-on-error: true
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.gh_token || github.token }}
           script: |

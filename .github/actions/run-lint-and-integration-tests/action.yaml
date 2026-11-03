@@ -16,14 +16,14 @@ runs:
   using: composite
   steps:
     - name: Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         node-version: lts/*
         check-latest: true
 
     - name: Restore npm cache
       id: cache-npm
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ~/.npm
         key: npm-${{ runner.os }}-${{ hashFiles('**/package.json') }}
