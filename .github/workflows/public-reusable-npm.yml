@@ -28,7 +28,7 @@ jobs:
           echo "repository: ${{ github.event.pull_request.head.repo.full_name }}"
           echo "ref: ${{ github.event.pull_request.head.ref }}"
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           token: ${{ secrets.PAT_TOKEN }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -86,7 +86,7 @@ jobs:
       packages: write
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Enable Socket Firewall Guard
         uses: tetherto/qvac-actions/.github/actions/sfw-guard@fdb251e37e067497fa409362bdb932d9218829c6 # qvac-actions self-hosted action (pin)
