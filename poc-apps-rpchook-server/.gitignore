@@ -1,6 +1,0 @@
-node_modules
-.env
-.env.docker
-package-lock.json
-storage
-app.log
