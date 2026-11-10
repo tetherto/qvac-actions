@@ -36,7 +36,7 @@ jobs:
     name: Baseline must flag planted fixtures
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
         with:
           fetch-depth: 0
 
@@ -154,7 +154,7 @@ jobs:
       - name: Run TruffleHog against planted fixtures (expect failure)
         id: trufflehog
         continue-on-error: true
-        uses: trufflesecurity/trufflehog@37b77001d0174ebec2fcca2bd83ff83a6d45a3ab # v3.95.3
+        uses: trufflesecurity/trufflehog@ea68ca03c865c5f324e86e849ced20ed3cf9dbbb # v3.99.8
         with:
           path: .
           base: ${{ steps.plant.outputs.th-base }}
@@ -187,7 +187,7 @@ jobs:
       # error-level finding here can only come from the planted fixture.
       # -------------------------------------------------------------------
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
+        uses: github/codeql-action/init@33d7b85da1a04171e211befe2c739303b9a4c066 # v3
         with:
           languages: javascript-typescript
           # Same query packs as the canonical baseline so this test
@@ -205,12 +205,12 @@ jobs:
           # error-level finding here can only come from the fixtures.
 
       - name: Autobuild
-        uses: github/codeql-action/autobuild@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
+        uses: github/codeql-action/autobuild@33d7b85da1a04171e211befe2c739303b9a4c066 # v3
 
       - name: Analyze (expect findings, do NOT upload)
         id: analyze
         continue-on-error: true
-        uses: github/codeql-action/analyze@458d36d7d4f47d0dd16ca424c1d3cda0060f1360 # v3
+        uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v3
         with:
           category: /security-baseline-negative-test/language:javascript-typescript
           upload: never
