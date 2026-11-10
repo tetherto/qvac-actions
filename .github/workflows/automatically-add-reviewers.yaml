@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Check for existing comment
         id: check-comment
-        uses: actions/github-script@v6
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -54,7 +54,7 @@ jobs:
 
       - name: Comment to notify potential reviewers
         if: steps.check-comment.outputs.result == 0
-        uses: actions/github-script@v6
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |

@@ -28,21 +28,21 @@ jobs:
           echo "repository: ${{ github.event.pull_request.head.repo.full_name }}"
           echo "ref: ${{ github.event.pull_request.head.ref }}"
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           token: ${{ secrets.PAT_TOKEN }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Enable Socket Firewall Guard
-        uses: tetherto/qvac-actions/.github/actions/sfw-guard@fdb251e37e067497fa409362bdb932d9218829c6 # qvac-actions self-hosted action (pin)
+        uses: tetherto/qvac-actions/.github/actions/sfw-guard@f8e0afb2e5c51b94abdef6bea77caa4a9fb3adaf # qvac-actions self-hosted action (pin)
         with:
           firewall-mode: firewall-free
           clear-caches: "false"
           managers: npm,pip,pip3,uv,cargo
 
       - name: Run lint and unit tests
-        uses: tetherto/qvac-actions/.github/actions/run-lint-and-unit-tests@fdb251e37e067497fa409362bdb932d9218829c6 # qvac-actions self-hosted action (pin)
+        uses: tetherto/qvac-actions/.github/actions/run-lint-and-unit-tests@f8e0afb2e5c51b94abdef6bea77caa4a9fb3adaf # qvac-actions self-hosted action (pin)
         with:
           gpr-token: ${{ secrets.GITHUB_TOKEN }}
           npm-token: ${{ secrets.NPM_TOKEN }}
@@ -50,7 +50,7 @@ jobs:
 
       - name: Run integration tests if labeled
         if: contains(github.event.pull_request.labels.*.name, 'verify')
-        uses: tetherto/qvac-actions/.github/actions/run-lint-and-integration-tests@fdb251e37e067497fa409362bdb932d9218829c6 # qvac-actions self-hosted action (pin)
+        uses: tetherto/qvac-actions/.github/actions/run-lint-and-integration-tests@f8e0afb2e5c51b94abdef6bea77caa4a9fb3adaf # qvac-actions self-hosted action (pin)
         with:
           gpr-token: ${{ secrets.GITHUB_TOKEN }}
           npm-token: ${{ secrets.NPM_TOKEN }}
@@ -73,7 +73,7 @@ jobs:
 
       - name: Call Publish NPM Action
         if: ${{ github.event.pull_request.head.repo.full_name != 'tetherto/qvac-devops' }}
-        uses: tetherto/qvac-actions/.github/actions/publish-library-to-npm@fdb251e37e067497fa409362bdb932d9218829c6 # qvac-actions self-hosted action (pin)
+        uses: tetherto/qvac-actions/.github/actions/publish-library-to-npm@f8e0afb2e5c51b94abdef6bea77caa4a9fb3adaf # qvac-actions self-hosted action (pin)
         with:
           secret-token: ${{ secrets.NPM_TOKEN }}
           tag: "dev"
@@ -86,10 +86,10 @@ jobs:
       packages: write
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Enable Socket Firewall Guard
-        uses: tetherto/qvac-actions/.github/actions/sfw-guard@fdb251e37e067497fa409362bdb932d9218829c6 # qvac-actions self-hosted action (pin)
+        uses: tetherto/qvac-actions/.github/actions/sfw-guard@f8e0afb2e5c51b94abdef6bea77caa4a9fb3adaf # qvac-actions self-hosted action (pin)
         with:
           firewall-mode: firewall-free
           clear-caches: "false"
@@ -97,7 +97,7 @@ jobs:
           
       - name: Publish to NPM
         if: ${{ github.event.pull_request.head.repo.full_name != 'tetherto/qvac-devops' }}
-        uses: tetherto/qvac-actions/.github/actions/publish-library-to-npm@fdb251e37e067497fa409362bdb932d9218829c6 # qvac-actions self-hosted action (pin)
+        uses: tetherto/qvac-actions/.github/actions/publish-library-to-npm@f8e0afb2e5c51b94abdef6bea77caa4a9fb3adaf # qvac-actions self-hosted action (pin)
         with:
           secret-token: ${{ secrets.NPM_TOKEN }}
 
