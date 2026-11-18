@@ -29,6 +29,9 @@ inputs:
   persist-credentials:
     description: Keep the token in the local git config
     default: "false"
+  allow-unsafe-pr-checkout:
+    description: Allow checking out fork PR code under pull_request_target or workflow_run; set only behind an approval gate
+    default: "false"
 
 outputs:
   ref:
@@ -42,7 +45,7 @@ runs:
   using: composite
   steps:
     - id: checkout
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # 6.0.2
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # 7.0.1
       with:
         ref: ${{ inputs.ref }}
         repository: ${{ inputs.repository }}
@@ -53,3 +56,4 @@ runs:
         sparse-checkout-cone-mode: ${{ inputs.sparse-checkout-cone-mode }}
         token: ${{ inputs.token }}
         persist-credentials: ${{ inputs.persist-credentials }}
+        allow-unsafe-pr-checkout: ${{ inputs.allow-unsafe-pr-checkout }}
