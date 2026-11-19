@@ -6,7 +6,7 @@ inputs:
     description: Python version, e.g. 3.10
     required: true
   cache:
-    description: Package manager whose downloads setup-python caches, e.g. pip; empty caches nothing
+    description: Package manager whose downloads setup-python caches, e.g. pip; empty caches nothing, and so does any event cache-save refuses
     default: ""
 
 outputs:
@@ -27,4 +27,6 @@ runs:
       uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # 6.2.0
       with:
         python-version: ${{ inputs.python-version }}
-        cache: ${{ inputs.cache }}
+        # The cache saves after the job, so it is off on any event cache-save refuses (pull_request_target,
+        # workflow_run, ...): those would write into the base branch's cache.
+        cache: ${{ contains(fromJSON('["push","workflow_dispatch","merge_group","schedule","pull_request"]'), github.event_name) && inputs.cache || '' }}
