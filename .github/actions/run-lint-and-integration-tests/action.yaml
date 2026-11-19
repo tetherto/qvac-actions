@@ -21,9 +21,21 @@ runs:
         node-version: lts/*
         check-latest: true
 
+    # Saves only on the events cache-save allows; any other event (pull_request_target, workflow_run, ...) would
+    # write into the base branch's cache, so it restores only.
     - name: Restore npm cache
       id: cache-npm
+      if: contains(fromJSON('["push","workflow_dispatch","merge_group","schedule","pull_request"]'), github.event_name)
       uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: npm-${{ runner.os }}-${{ hashFiles('**/package.json') }}
+        restore-keys: |
+          npm-${{ runner.os }}-
+    - name: Restore npm cache (restore only)
+      id: cache-npm-restore
+      if: ${{ !contains(fromJSON('["push","workflow_dispatch","merge_group","schedule","pull_request"]'), github.event_name) }}
+      uses: actions/cache/restore@v4
       with:
         path: ~/.npm
         key: npm-${{ runner.os }}-${{ hashFiles('**/package.json') }}

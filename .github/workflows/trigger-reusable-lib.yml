@@ -7,7 +7,7 @@ on:
   push:
     # TODO: uncomment this when using this workflow in other repos
     # branches: [main]
-  pull_request_target:
+  pull_request:
     types: [opened, reopened, synchronize, labeled]
   workflow_dispatch:
     inputs:

@@ -15,7 +15,7 @@ inputs:
     description: Scope for the registry
     default: ""
   package-manager-cache:
-    description: Let setup-node cache the package manager store
+    description: Let setup-node cache the package manager store; ignored on events cache-save refuses
     default: "false"
 
 outputs:
@@ -36,4 +36,6 @@ runs:
         check-latest: ${{ inputs.check-latest }}
         registry-url: ${{ inputs.registry-url }}
         scope: ${{ inputs.scope }}
-        package-manager-cache: ${{ inputs.package-manager-cache }}
+        # The cache saves after the job, so it is off on any event cache-save refuses (pull_request_target,
+        # workflow_run, ...): those would write into the base branch's cache.
+        package-manager-cache: ${{ contains(fromJSON('["push","workflow_dispatch","merge_group","schedule","pull_request"]'), github.event_name) && inputs.package-manager-cache || 'false' }}
