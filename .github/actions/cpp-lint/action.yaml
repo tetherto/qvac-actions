@@ -123,6 +123,7 @@ runs:
         sudo apt install vulkan-sdk
 
     - name: Generate build system
+      id: generate
       continue-on-error: true
       shell: bash
       run: |
@@ -185,15 +186,22 @@ runs:
         fi
         bare-make test
 
-    # The checks above continue on error so each one runs; this fails the action if any of them failed.
+    # The steps above continue on error so each one runs; this fails the action if any of them failed. A failed
+    # bare-make install counts too: without it, generate, build and tests skip as if there were nothing to do.
     - name: Report failed checks
-      if: steps.format.outcome == 'failure' || steps.build.outcome == 'failure' || steps.tests.outcome == 'failure'
+      if: >-
+        steps.install_bare_make.outcome == 'failure' || steps.generate.outcome == 'failure' ||
+        steps.format.outcome == 'failure' || steps.build.outcome == 'failure' || steps.tests.outcome == 'failure'
       shell: bash
       env:
+        INSTALL: ${{ steps.install_bare_make.outcome }}
+        GENERATE: ${{ steps.generate.outcome }}
         FORMAT: ${{ steps.format.outcome }}
         BUILD: ${{ steps.build.outcome }}
         TESTS: ${{ steps.tests.outcome }}
       run: |
+        [ "$INSTALL" != failure ] || echo "::error::Install bare-make failed"
+        [ "$GENERATE" != failure ] || echo "::error::Generate build system failed"
         [ "$FORMAT" != failure ] || echo "::error::Check C++ files format failed"
         [ "$BUILD" != failure ] || echo "::error::Build failed"
         [ "$TESTS" != failure ] || echo "::error::Run C++ tests failed"
