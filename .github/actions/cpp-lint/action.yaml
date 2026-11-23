@@ -25,7 +25,7 @@ runs:
   using: composite
   steps:
     - name: Checkout PR head and target
-      uses: actions/checkout@v4
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # 4.3.1
       with:
         fetch-depth: 0
         token: ${{ inputs.pat-token }}
@@ -37,7 +37,7 @@ runs:
       run: git config --global --add url."https://${{ inputs.pat-token }}:x-oauth-basic@github.com/".insteadOf "git@github.com:"
 
     - name: Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # 4.4.0
       with:
         node-version: lts/*
         check-latest: true
@@ -47,7 +47,7 @@ runs:
     - name: Restore npm cache
       id: cache-npm
       if: contains(fromJSON('["push","workflow_dispatch","merge_group","schedule","pull_request"]'), github.event_name)
-      uses: actions/cache@v4
+      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # 4.3.0
       with:
         path: ~/.npm
         key: npm-${{ runner.os }}-${{ hashFiles('**/package.json') }}
@@ -56,7 +56,7 @@ runs:
     - name: Restore npm cache (restore only)
       id: cache-npm-restore
       if: ${{ !contains(fromJSON('["push","workflow_dispatch","merge_group","schedule","pull_request"]'), github.event_name) }}
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # 4.3.0
       with:
         path: ~/.npm
         key: npm-${{ runner.os }}-${{ hashFiles('**/package.json') }}
@@ -93,14 +93,14 @@ runs:
     # write into the base branch's cache, so it restores only.
     - name: Get vcpkg cache
       if: contains(fromJSON('["push","workflow_dispatch","merge_group","schedule","pull_request"]'), github.event_name)
-      uses: actions/cache@v4
+      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # 4.3.0
       with:
         path: vcpkg/cache
         key: linux-x64-${{ hashFiles( 'vcpkg.json', 'vcpkg-configuration.json', 'vcpkg/ports/**' ) }}
         restore-keys: linux-x64-
     - name: Get vcpkg cache (restore only)
       if: ${{ !contains(fromJSON('["push","workflow_dispatch","merge_group","schedule","pull_request"]'), github.event_name) }}
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # 4.3.0
       with:
         path: vcpkg/cache
         key: linux-x64-${{ hashFiles( 'vcpkg.json', 'vcpkg-configuration.json', 'vcpkg/ports/**' ) }}
@@ -135,6 +135,7 @@ runs:
         bare-make generate
 
     - name: Check C++ files format
+      id: format
       continue-on-error: true
       shell: bash
       run: |
@@ -163,6 +164,7 @@ runs:
         fi
 
     - name: Build
+      id: build
       continue-on-error: true
       shell: bash
       run: |
@@ -173,6 +175,7 @@ runs:
         bare-make build
 
     - name: Run C++ tests
+      id: tests
       shell: bash
       continue-on-error: true
       run: |
@@ -181,3 +184,17 @@ runs:
           exit 0
         fi
         bare-make test
+
+    # The checks above continue on error so each one runs; this fails the action if any of them failed.
+    - name: Report failed checks
+      if: steps.format.outcome == 'failure' || steps.build.outcome == 'failure' || steps.tests.outcome == 'failure'
+      shell: bash
+      env:
+        FORMAT: ${{ steps.format.outcome }}
+        BUILD: ${{ steps.build.outcome }}
+        TESTS: ${{ steps.tests.outcome }}
+      run: |
+        [ "$FORMAT" != failure ] || echo "::error::Check C++ files format failed"
+        [ "$BUILD" != failure ] || echo "::error::Build failed"
+        [ "$TESTS" != failure ] || echo "::error::Run C++ tests failed"
+        exit 1
