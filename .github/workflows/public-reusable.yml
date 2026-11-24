@@ -29,7 +29,7 @@ jobs:
           echo "repository: ${{ github.event.pull_request.head.repo.full_name }}"
           echo "ref: ${{ github.event.pull_request.head.ref }}"
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0  # Fetch full history for accurate ancestry checks
           token: ${{ secrets.PAT_TOKEN }}
@@ -125,7 +125,7 @@ jobs:
     outputs:
       published_version: ${{ steps.publish-pr.outputs.npm_published_version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           token: ${{ secrets.PAT_TOKEN }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -166,7 +166,7 @@ jobs:
       contents: write
       packages: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           token: ${{ secrets.PAT_TOKEN }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
