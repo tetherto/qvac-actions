@@ -25,7 +25,7 @@ runs:
   using: composite
   steps:
     - name: Checkout PR head and target
-      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # 4.3.1
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # 7.0.1
       with:
         fetch-depth: 0
         token: ${{ inputs.pat-token }}
@@ -37,7 +37,7 @@ runs:
       run: git config --global --add url."https://${{ inputs.pat-token }}:x-oauth-basic@github.com/".insteadOf "git@github.com:"
 
     - name: Setup Node.js
-      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # 4.4.0
+      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # 7.1.0
       with:
         node-version: lts/*
         check-latest: true
@@ -47,7 +47,7 @@ runs:
     - name: Restore npm cache
       id: cache-npm
       if: contains(fromJSON('["push","workflow_dispatch","merge_group","schedule","pull_request"]'), github.event_name)
-      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # 4.3.0
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # 6.1.0
       with:
         path: ~/.npm
         key: npm-${{ runner.os }}-${{ hashFiles('**/package.json') }}
@@ -56,7 +56,7 @@ runs:
     - name: Restore npm cache (restore only)
       id: cache-npm-restore
       if: ${{ !contains(fromJSON('["push","workflow_dispatch","merge_group","schedule","pull_request"]'), github.event_name) }}
-      uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # 4.3.0
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # 6.1.0
       with:
         path: ~/.npm
         key: npm-${{ runner.os }}-${{ hashFiles('**/package.json') }}
@@ -93,14 +93,14 @@ runs:
     # write into the base branch's cache, so it restores only.
     - name: Get vcpkg cache
       if: contains(fromJSON('["push","workflow_dispatch","merge_group","schedule","pull_request"]'), github.event_name)
-      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # 4.3.0
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # 6.1.0
       with:
         path: vcpkg/cache
         key: linux-x64-${{ hashFiles( 'vcpkg.json', 'vcpkg-configuration.json', 'vcpkg/ports/**' ) }}
         restore-keys: linux-x64-
     - name: Get vcpkg cache (restore only)
       if: ${{ !contains(fromJSON('["push","workflow_dispatch","merge_group","schedule","pull_request"]'), github.event_name) }}
-      uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # 4.3.0
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # 6.1.0
       with:
         path: vcpkg/cache
         key: linux-x64-${{ hashFiles( 'vcpkg.json', 'vcpkg-configuration.json', 'vcpkg/ports/**' ) }}
