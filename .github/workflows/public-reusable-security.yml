@@ -132,16 +132,69 @@ jobs:
           PATHS_EXCLUDE: ${{ inputs.paths-exclude }}
         run: |
           set -euo pipefail
-          if [[ -n "$PATHS_INCLUDE" ]]; then
-            tmp_inc="$(mktemp)"
-            printf '%s\n' "$PATHS_INCLUDE" > "$tmp_inc"
-            echo "include-file=$tmp_inc" >> "$GITHUB_OUTPUT"
-          fi
-          if [[ -n "$PATHS_EXCLUDE" ]]; then
-            tmp_exc="$(mktemp)"
-            printf '%s\n' "$PATHS_EXCLUDE" > "$tmp_exc"
-            echo "exclude-file=$tmp_exc" >> "$GITHUB_OUTPUT"
-          fi
+          # The TruffleHog action starts a Docker container with the checkout
+          # mounted as /tmp. Host files from $RUNNER_TEMP (including mktemp's
+          # default /tmp location) are therefore invisible to the scanner.
+          # Keep the files in the checkout and expose workspace-relative paths
+          # so they resolve inside that container as well as on the host.
+          #
+          # This workflow's public inputs are CodeQL-style globs, whereas
+          # TruffleHog's path files contain RE2-compatible regular expressions.
+          # Translate the documented glob syntax instead of passing globs that
+          # can be invalid regexes (for example **/node_modules/**).
+          python3 <<'PY'
+          import os
+          import re
+          import tempfile
+          from pathlib import Path
+
+          workspace = Path(os.environ["GITHUB_WORKSPACE"])
+
+          def glob_to_re2(pattern: str) -> str:
+              parts = ["^"]
+              index = 0
+              while index < len(pattern):
+                  if pattern.startswith("**/", index):
+                      parts.append("(?:.*/)?")
+                      index += 3
+                  elif pattern.startswith("**", index):
+                      parts.append(".*")
+                      index += 2
+                  elif pattern[index] == "*":
+                      parts.append("[^/]*")
+                      index += 1
+                  else:
+                      parts.append(re.escape(pattern[index]))
+                      index += 1
+
+              # CodeQL treats a matched directory as including its contents.
+              parts.append("(?:/.*)?$")
+              return "".join(parts)
+
+          def write_filter(env_name: str, output_name: str) -> None:
+              patterns = [
+                  line for line in os.environ[env_name].splitlines() if line
+              ]
+              if not patterns:
+                  return
+
+              with tempfile.NamedTemporaryFile(
+                  mode="w",
+                  encoding="utf-8",
+                  dir=workspace,
+                  prefix=f".qvac-security-{output_name}-",
+                  delete=False,
+              ) as filter_file:
+                  for pattern in patterns:
+                      filter_file.write(f"{glob_to_re2(pattern)}\n")
+                  relative_path = Path(filter_file.name).relative_to(workspace)
+
+              with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+                  output.write(f"{output_name}-file={relative_path.as_posix()}\n")
+
+          write_filter("PATHS_INCLUDE", "include")
+          write_filter("PATHS_EXCLUDE", "exclude")
+          PY
 
       - name: Run TruffleHog
         id: trufflehog
@@ -236,14 +289,16 @@ jobs:
               echo "paths:"
               while IFS= read -r p; do
                 [[ -z "$p" ]] && continue
-                echo "  - $p"
+                # JSON strings are valid YAML scalars and safely preserve
+                # leading *, quotes, backslashes, #, and other path content.
+                jq -Rn --arg path "$p" '$path' | sed 's/^/  - /'
               done <<< "$PATHS_INCLUDE"
             fi
             if [[ -n "$PATHS_EXCLUDE" ]]; then
               echo "paths-ignore:"
               while IFS= read -r p; do
                 [[ -z "$p" ]] && continue
-                echo "  - $p"
+                jq -Rn --arg path "$p" '$path' | sed 's/^/  - /'
               done <<< "$PATHS_EXCLUDE"
             fi
           } > "$cfg"

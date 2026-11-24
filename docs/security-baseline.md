@@ -80,10 +80,13 @@ All inputs are optional.
   severity that fails the job. One of `low`, `medium`, `high`, `critical`.
   See [Severity semantics](#severity-semantics).
 - **`paths-include`** _(string, multiline)_ — newline-separated path globs
-  scoped into the scan, applied to both TruffleHog (`--include-paths`) and
-  the generated CodeQL `paths:` config.
+  scoped into the scan. They are written directly to the generated CodeQL
+  `paths:` config and translated to anchored regular expressions for
+  TruffleHog (`--include-paths`).
 - **`paths-exclude`** _(string, multiline)_ — newline-separated path globs
-  excluded from the scan (`--exclude-paths` / CodeQL `paths-ignore:`).
+  excluded from the scan. They are written directly to CodeQL
+  `paths-ignore:` and translated to anchored regular expressions for
+  TruffleHog (`--exclude-paths`).
 - **`allowlist-path`** _(string)_ — path within the consumer repo to a
   TruffleHog allowlist YAML (known false positives). See
   [Allowlist format](#allowlist-format).
