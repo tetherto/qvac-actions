@@ -7,7 +7,7 @@ on:
   push:
   # TODO: uncomment this when using this workflow in other repos
   # branches: [main]
-  pull_request_target:
+  pull_request:
     types: [opened, reopened, synchronize, labeled]
   workflow_dispatch:
     inputs:
@@ -21,7 +21,18 @@ on:
         required: false
         type: string
 
+# Covers the called jobs: npm publish with provenance (packages, id-token).
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+# Publishes mutate state, so runs on one ref queue instead of cancelling.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   call-devops-lib:
-    uses: tetherto/qvac-devops/.github/workflows/public-reusable-npm.yml@v1.1.1
+    uses: tetherto/qvac-devops/.github/workflows/public-reusable-npm.yml@bc74b700619e8746bf553dd9914f1aec9b354286 # v1.1.1
     secrets: inherit
